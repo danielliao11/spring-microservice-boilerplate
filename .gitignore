@@ -1,0 +1,38 @@
+# Folder view configuration files
+.DS_Store
+Desktop.ini
+
+# Thumbnail cache files
+Thumbs.db
+
+# Eclipse Files
+.settings/
+.project
+.classpath
+
+# Idea Files
+.idea/
+.iml/
+*.iml
+*.ipr
+*.iws
+*.idea
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# build dir
+.gradle/
+build/
+target/
+bin/
+
+# Others
+hs_err_pid*
+*.sw?
+.#*
+*#
+*~
+*.sublime-*

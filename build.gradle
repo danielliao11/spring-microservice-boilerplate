@@ -1,0 +1,85 @@
+description = 'spring-rest-oauth2-sample'
+group = 'com.github.saintdan'
+version = '0.0.1-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'spring-boot'
+apply plugin: 'war'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "https://repo.spring.io/plugins-release" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE")
+    }
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "https://repo.spring.io/libs-release" }
+    }
+}
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+compileTestJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+ext {
+    springBootVersion = '1.2.4.RELEASE'
+    springOAuth2Version = '2.0.7.RELEASE'
+    jacksonVersion = '2.5.4'
+    commonsCodecVersion = '1.10'
+    commonsLang3Version = '3.4'
+
+    hsqldbVersion = '1.8.0.10'
+    mysqlVersion = '5.1.35'
+
+    jsonPathVersion = '2.0.0'
+    junitVersion = '4.12'
+}
+
+dependencies {
+    // Spring boot dependencies.
+    compile group: "org.springframework.boot", name: "spring-boot-starter-web", version: "${springBootVersion}"
+    compile group: "org.springframework.boot", name: "spring-boot-starter-security", version: "${springBootVersion}"
+    compile group: "org.springframework.boot", name: "spring-boot-starter-data-jpa", version: "${springBootVersion}"
+
+    // Spring oauth2 dependency.
+    compile group: "org.springframework.security.oauth", name: "spring-security-oauth2", version: "${springOAuth2Version}"
+
+    // Other dependencies.
+    compile group: "com.fasterxml.jackson.core", name: "jackson-databind", version: "${jacksonVersion}"
+    compile group: "commons-codec", name: "commons-codec", version: "${commonsCodecVersion}"
+    compile group: "org.apache.commons", name: "commons-lang3", version: "${commonsLang3Version}"
+
+    // DB dependencies.
+    compile group: "org.hsqldb", name: "hsqldb", version: "${hsqldbVersion}"
+    // comment above profile and uncomment line below to operate persistence.
+//    compile group: "mysql", name: "mysql-connector-java", version: "${mysqlVersion}"
+
+    // Provide runtime dependencies.
+    providedRuntime group: "org.springframework.boot", name: "spring-boot-starter-tomcat", version: "${springBootVersion}"
+
+    // Test dependencies.
+    testCompile group: "org.springframework.boot", name: "spring-boot-starter-test", version: "${springBootVersion}"
+    testCompile group: "com.jayway.jsonpath", name: "json-path", version: "${jsonPathVersion}"
+    testCompile group: "com.jayway.jsonpath", name: "json-path-assert", version: "${jsonPathVersion}"
+    testCompile group: "junit", name: "junit", version: "${junitVersion}"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.4'
+}
