@@ -35,9 +35,6 @@ public class User {
 	@NotEmpty
 	private String pwd;
 
-    @NotEmpty
-    private String salt;
-
     private String description;
 
 	@JsonIgnore
@@ -56,7 +53,6 @@ public class User {
 		this.name = user.getName();
 		this.usr = user.getUsr();
 		this.pwd = user.getPwd();
-        this.salt = user.getSalt();
 		this.roles = user.getRoles();
 	}
 
@@ -86,18 +82,6 @@ public class User {
 
     public String getPwd() {
         return pwd;
-    }
-
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
     }
 
     public String getDescription() {

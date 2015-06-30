@@ -1,8 +1,8 @@
 -- users
-INSERT INTO users (id, name, usr, pwd, salt, description) VALUES (1, 'root', 'root', 'root', '123', 'root account');
-INSERT INTO users (id, name, usr, pwd, salt, description) VALUES (2, 'admin', 'admin', 'admin', '123', 'admin account');
-INSERT INTO users (id, name, usr, pwd, salt, description) VALUES (3, 'user', 'user', 'user', '123', 'user account');
-INSERT INTO users (id, name, usr, pwd, salt, description) VALUES (4, 'guest', 'guest', 'guest', '123', 'guest account');
+INSERT INTO users (id, name, usr, pwd, description) VALUES (1, 'root', 'root', '$2a$10$.7skSXpnyzAF117vv8yWkOma96BgSj5.m/OsVQaoVDAaw.XwaorIu', 'root account');
+INSERT INTO users (id, name, usr, pwd, description) VALUES (2, 'admin', 'admin', '$2a$10$6EPOpTYNgn9RyluFnOD49.HuvUmijFJJV/R2t8nzM/exJVuzHSD5y', 'admin account');
+INSERT INTO users (id, name, usr, pwd, description) VALUES (3, 'user', 'user', '$2a$10$VxrOW3ml1ySPi.rB8CQaaOeXIqbU21/acTvIYHsVN..v4.4JXHb2G', 'user account');
+INSERT INTO users (id, name, usr, pwd, description) VALUES (4, 'guest', 'guest', '$2a$10$RbkJJzX5CG9Kg0ZkSpbfieS7SXqpXS2jQ7/JdbBpKn7ODSIKcyIWW', 'guest account');
 
 -- roles
 INSERT INTO roles (id, name, description) VALUES (1, 'ROLE_ROOT', 'root role');

@@ -1,6 +1,6 @@
 package com.github.saintdan.controller;
 
-import com.github.saintdan.vo.Welcome;
+import com.github.saintdan.vo.WelcomeVO;
 import com.github.saintdan.po.User;
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -24,8 +24,8 @@ public class WelcomeController {
 	private final AtomicLong counter = new AtomicLong();
 
 	@RequestMapping("/welcome")
-	public Welcome welcome(@AuthenticationPrincipal User user) {
-		return new Welcome(user.getId(), String.format(template, user.getName()));
+	public WelcomeVO welcome(@AuthenticationPrincipal User user) {
+		return new WelcomeVO(user.getId(), String.format(template, user.getName()));
 	}
 
 }

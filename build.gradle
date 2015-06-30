@@ -1,6 +1,6 @@
 description = 'spring-rest-oauth2-sample'
 group = 'com.github.saintdan'
-version = '0.0.1-SNAPSHOT'
+version = '0.1.0-RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -41,11 +41,8 @@ ext {
     springBootVersion = '1.2.4.RELEASE'
     springOAuth2Version = '2.0.7.RELEASE'
     jacksonVersion = '2.5.4'
-    commonsCodecVersion = '1.10'
-    commonsLang3Version = '3.4'
 
     hsqldbVersion = '1.8.0.10'
-    mysqlVersion = '5.1.35'
 
     jsonPathVersion = '2.0.0'
     junitVersion = '4.12'
@@ -62,13 +59,9 @@ dependencies {
 
     // Other dependencies.
     compile group: "com.fasterxml.jackson.core", name: "jackson-databind", version: "${jacksonVersion}"
-    compile group: "commons-codec", name: "commons-codec", version: "${commonsCodecVersion}"
-    compile group: "org.apache.commons", name: "commons-lang3", version: "${commonsLang3Version}"
 
     // DB dependencies.
     compile group: "org.hsqldb", name: "hsqldb", version: "${hsqldbVersion}"
-    // comment above profile and uncomment line below to operate persistence.
-//    compile group: "mysql", name: "mysql-connector-java", version: "${mysqlVersion}"
 
     // Provide runtime dependencies.
     providedRuntime group: "org.springframework.boot", name: "spring-boot-starter-tomcat", version: "${springBootVersion}"

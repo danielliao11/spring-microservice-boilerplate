@@ -1,6 +1,7 @@
 package com.github.saintdan.config;
 
 import com.github.saintdan.service.CustomUserDetailsService;
+import com.github.saintdan.tools.CustomPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,10 +26,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private CustomPasswordEncoder passwordEncoder;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		 auth.userDetailsService(userDetailsService);
+		 auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 	}
 
 	@Override

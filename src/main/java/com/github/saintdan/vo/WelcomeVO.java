@@ -7,7 +7,7 @@ package com.github.saintdan.vo;
  * @date 6/25/15
  * @since JDK1.8
  */
-public class Welcome {
+public class WelcomeVO {
 
 	private final long id;
 
@@ -21,7 +21,7 @@ public class Welcome {
 		return content;
 	}
 
-	public Welcome(long id, String content) {
+	public WelcomeVO(long id, String content) {
 		this.id = id;
 		this.content = content;
 	}
