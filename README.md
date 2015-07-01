@@ -2,6 +2,13 @@
 
 This is REST service sample that protected by [Spring OAuth 2](http://projects.spring.io/spring-security-oauth/).
 
+## Build and Run
+
+```
+$ cd <spring-rest-oauth2-sample root path>
+$ ./gradlew clean build bootRun
+```
+
 ## Usage
 
 1. Take your token from `oauth/token` in terminal:
