@@ -4,7 +4,6 @@ version = '0.1.0-RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 
