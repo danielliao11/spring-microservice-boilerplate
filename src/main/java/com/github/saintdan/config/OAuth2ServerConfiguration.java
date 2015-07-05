@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -58,8 +59,8 @@ public class OAuth2ServerConfiguration {
                     .and()
                     .authorizeRequests()
                             // Since resources can be used as its authorities, therefore, hasRole utilize resource as its' param.
-                            .antMatchers(USER_URL).access("hasAnyRole('/.*', '/(?!root/).*', '/info/.*', '/info/users/.*')")
-                    .antMatchers("/welcome").access("#oauth2.hasScope('read')");
+                            .antMatchers(HttpMethod.GET, USER_URL).access("hasAnyRole('/.*', '/(?!root/).*', '/info/.*', '/info/users/.*')")
+                            .antMatchers(HttpMethod.GET, "/welcome").access("#oauth2.hasScope('read')");
         }
 
     }
