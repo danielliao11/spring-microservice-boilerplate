@@ -25,8 +25,6 @@ INSERT INTO resources (id, path, priority, description) VALUES (4, '/info/.*', 1
 INSERT INTO resources (id, path, priority, description) VALUES (5, '/action/.*', 10, 'actions');
 INSERT INTO resources (id, path, priority, description) VALUES (6, '/welcome/.*', 10, 'welcome resource');
 
-INSERT INTO resources (id, path, priority, description) VALUES (7, '/info/users/.*', 1, 'user information resources');
-
 -- user_roles
 INSERT INTO user_roles (user_id, role_id) VALUES (1, 1);
 INSERT INTO user_roles (user_id, role_id) VALUES (2, 2);

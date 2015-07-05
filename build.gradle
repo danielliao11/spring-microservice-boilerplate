@@ -1,6 +1,6 @@
 description = 'spring-rest-oauth2-sample'
 group = 'com.github.saintdan'
-version = '0.1.0-RELEASE'
+version = '0.2.0-RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'

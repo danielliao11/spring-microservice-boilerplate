@@ -1,5 +1,6 @@
 package com.github.saintdan.controller;
 
+import com.github.saintdan.constant.Info;
 import com.github.saintdan.po.User;
 import com.github.saintdan.repo.UserRepository;
 import com.github.saintdan.vo.UserVO;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since JDK1.8
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping(Info.INFO)
 public class UserController {
 
 	private final UserRepository userRepository;
@@ -28,7 +29,7 @@ public class UserController {
 		this.userRepository = userRepository;
 	}
 
-    @RequestMapping(value = "/{usr}", method = RequestMethod.GET)
+    @RequestMapping(value = Info.USER +"/{usr}", method = RequestMethod.GET)
     public UserVO getUserByUsr(@PathVariable String usr) {
 
         User user = userRepository.findByUsr(usr);

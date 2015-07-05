@@ -11,5 +11,5 @@ public class Info {
 
     public static final String INFO = "/info";
 
-    public static final String USER = INFO + "/user/**";
+    public static final String USER = "/user/**";
 }

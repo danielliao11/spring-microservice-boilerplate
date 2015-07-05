@@ -33,7 +33,7 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 public class OAuth2ServerConfiguration {
 
     private static final String RESOURCE_ID = "rest_api";
-    private static final String USER_URL = Info.USER;
+    private static final String USER_URL = Info.INFO + Info.USER;
 
     /**
      * OAuth2 resource server configuration.
@@ -59,7 +59,7 @@ public class OAuth2ServerConfiguration {
                     .and()
                     .authorizeRequests()
                             // Since resources can be used as its authorities, therefore, hasRole utilize resource as its' param.
-                            .antMatchers(HttpMethod.GET, USER_URL).access("hasAnyRole('/.*', '/(?!root/).*', '/info/.*', '/info/users/.*')")
+                            .antMatchers(HttpMethod.GET, USER_URL).access("hasAnyRole('/.*', '/(?!root/).*', '/info/.*')")
                             .antMatchers(HttpMethod.GET, "/welcome").access("#oauth2.hasScope('read')");
         }
 
