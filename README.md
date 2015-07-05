@@ -77,3 +77,6 @@ headers: Authorization: bearer <access_token_returned>
   - Initial version.
 - 0.1.0-RELEASE
   - Release version.
+- 0.2.0-RELEASE
+  - Change authorities to resources.
+  - Add https.

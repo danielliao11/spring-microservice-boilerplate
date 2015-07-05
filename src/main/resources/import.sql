@@ -15,12 +15,17 @@ INSERT INTO groups (id, name, description) VALUES (1, 'GROUP_ROOT', 'root privil
 INSERT INTO groups (id, name, description) VALUES (2, 'GROUP_ADMIN', 'admin privileges');
 INSERT INTO groups (id, name, description) VALUES (3, 'GROUP_MESSAGE', 'message privileges');
 INSERT INTO groups (id, name, description) VALUES (4, 'GROUP_INFO', 'information privileges');
+INSERT INTO groups (id, name, description) VALUES (5, 'GROUP_ACTION', 'action privileges');
 
 -- resources
 INSERT INTO resources (id, path, priority, description) VALUES (1, '/.*', 10000, 'all resources');
 INSERT INTO resources (id, path, priority, description) VALUES (2, '/(?!root/).*', 1000, 'admin resources');
 INSERT INTO resources (id, path, priority, description) VALUES (3, '/message/.*', 10, 'message resources');
 INSERT INTO resources (id, path, priority, description) VALUES (4, '/info/.*', 10, 'information resources');
+INSERT INTO resources (id, path, priority, description) VALUES (5, '/action/.*', 10, 'actions');
+INSERT INTO resources (id, path, priority, description) VALUES (6, '/welcome/.*', 10, 'welcome resource');
+
+INSERT INTO resources (id, path, priority, description) VALUES (7, '/info/users/.*', 1, 'user information resources');
 
 -- user_roles
 INSERT INTO user_roles (user_id, role_id) VALUES (1, 1);
@@ -33,7 +38,9 @@ INSERT INTO role_groups (role_id, group_id) VALUES (1, 1);
 INSERT INTO role_groups (role_id, group_id) VALUES (2, 2);
 INSERT INTO role_groups (role_id, group_id) VALUES (3, 3);
 INSERT INTO role_groups (role_id, group_id) VALUES (3, 4);
-INSERT INTO role_groups (role_id, group_id) VALUES (4, 4);
+INSERT INTO role_groups (role_id, group_id) VALUES (3, 5);
+INSERT INTO role_groups (role_id, group_id) VALUES (3, 6);
+INSERT INTO role_groups (role_id, group_id) VALUES (4, 3);
 
 -- group_resources
 INSERT INTO group_resources (group_id, resource_id) VALUES (1, 1);
