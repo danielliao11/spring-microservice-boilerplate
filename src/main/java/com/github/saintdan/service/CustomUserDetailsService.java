@@ -62,7 +62,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 for (Group group : groups) {
                     Set<Resource> resources = group.getResources();
                     for (Resource resource : resources) {
-                        GrantedAuthority authority = new SimpleGrantedAuthority(resource.getPath());
+                        GrantedAuthority authority = new SimpleGrantedAuthority(resource.getName());
                         authorities.add(authority);
                     }
                 }

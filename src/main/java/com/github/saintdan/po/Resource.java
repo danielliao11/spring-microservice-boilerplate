@@ -24,6 +24,9 @@ public class Resource {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @NotEmpty
+    private String name;
+
     /**
      * The resource path
      * <p><b>NOTE: Using ANT path mode</b></p>
@@ -51,6 +54,14 @@ public class Resource {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPath() {

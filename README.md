@@ -81,3 +81,7 @@ headers: Authorization: bearer <access_token_returned>
   - Change authorities to resources.
   - Add https.
   - Fix some bugs.
+- 0.2.1-RELEASE
+  - Add name to Resource PO.
+  - Change getAuthorities().
+  - Change import.sql.

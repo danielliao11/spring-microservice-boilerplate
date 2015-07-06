@@ -18,12 +18,12 @@ INSERT INTO groups (id, name, description) VALUES (4, 'GROUP_INFO', 'information
 INSERT INTO groups (id, name, description) VALUES (5, 'GROUP_ACTION', 'action privileges');
 
 -- resources
-INSERT INTO resources (id, path, priority, description) VALUES (1, '/.*', 10000, 'all resources');
-INSERT INTO resources (id, path, priority, description) VALUES (2, '/(?!root/).*', 1000, 'admin resources');
-INSERT INTO resources (id, path, priority, description) VALUES (3, '/message/.*', 10, 'message resources');
-INSERT INTO resources (id, path, priority, description) VALUES (4, '/info/.*', 10, 'information resources');
-INSERT INTO resources (id, path, priority, description) VALUES (5, '/action/.*', 10, 'actions');
-INSERT INTO resources (id, path, priority, description) VALUES (6, '/welcome/.*', 10, 'welcome resource');
+INSERT INTO resources (id, name, path, priority, description) VALUES (1, 'root', '/.*', 10000, 'all resources');
+INSERT INTO resources (id, name, path, priority, description) VALUES (2, 'admin', '/(?!root/).*', 1000, 'admin resources');
+INSERT INTO resources (id, name, path, priority, description) VALUES (3, 'message', '/message/.*', 10, 'message resources');
+INSERT INTO resources (id, name, path, priority, description) VALUES (4, 'info', '/info/.*', 10, 'information resources');
+INSERT INTO resources (id, name, path, priority, description) VALUES (5, 'action', '/action/.*', 10, 'actions');
+INSERT INTO resources (id, name, path, priority, description) VALUES (6, 'welcome', '/welcome/.*', 10, 'welcome resource');
 
 -- user_roles
 INSERT INTO user_roles (user_id, role_id) VALUES (1, 1);
