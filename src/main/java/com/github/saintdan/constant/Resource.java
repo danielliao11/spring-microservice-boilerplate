@@ -7,9 +7,9 @@ package com.github.saintdan.constant;
  * @date 7/5/15
  * @since JDK1.8
  */
-public class Info {
+public class Resource {
 
-    public static final String INFO = "/info";
+    public static final String RESOURCES = "/resources";
 
-    public static final String USER = "/user/**";
+    public static final String USERS = "/users/**";
 }

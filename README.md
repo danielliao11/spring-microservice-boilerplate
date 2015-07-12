@@ -51,7 +51,7 @@ headers: Authorization: bearer <access_token_returned>
 3. Get user information:
 
 ```
-$ curl http://localhost:8080/info/user/admin -H "Authorization: Bearer <access_token_returned>"
+$ curl http://localhost:8080/resources/users/admin -H "Authorization: Bearer <access_token_returned>"
 ```
 
 If the request is successful, you will see the following JSON response:
@@ -66,7 +66,7 @@ If the request is successful, you will see the following JSON response:
 or use Advanced REST Client:
 
 ```
-url: http://localhost:8080/info/user/admin
+url: http://localhost:8080/resources/users/admin
 GET
 headers: Authorization: bearer <access_token_returned>
 ```

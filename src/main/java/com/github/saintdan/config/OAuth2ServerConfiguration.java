@@ -1,6 +1,6 @@
 package com.github.saintdan.config;
 
-import com.github.saintdan.constant.Info;
+import com.github.saintdan.constant.Resource;
 import com.github.saintdan.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,7 +35,7 @@ public class OAuth2ServerConfiguration {
     private static final String RESOURCE_ID = "rest_api";
 
     private static final String WELCOME_URL = "/welcome";
-    private static final StringBuilder USER_URL = new StringBuilder(Info.INFO).append(Info.USER);
+    private static final StringBuilder USER_URL = new StringBuilder(Resource.RESOURCES).append(Resource.USERS);
 
     /**
      * OAuth2 resource server configuration.
@@ -58,7 +58,7 @@ public class OAuth2ServerConfiguration {
                     .and()
                         .authorizeRequests()
                             // Since resources can be used as its authorities, therefore, hasRole utilize resource as its' param.
-                            .antMatchers(HttpMethod.GET, USER_URL.toString()).access("hasAnyRole('root', 'admin', 'info')")
+                            .antMatchers(HttpMethod.GET, USER_URL.toString()).access("hasAnyRole('root', 'admin', 'resources')")
                             .antMatchers(HttpMethod.GET, WELCOME_URL).access("#oauth2.hasScope('read')");
         }
 
