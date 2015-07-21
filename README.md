@@ -85,3 +85,6 @@ headers: Authorization: bearer <access_token_returned>
   - Add name to Resource PO.
   - Change getAuthorities().
   - Change import.sql.
+- 0.3.0-RELEASE
+  - Add /bo, /enums, /exception.
+  - Add UserService and its implement.
