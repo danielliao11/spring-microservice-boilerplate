@@ -2,6 +2,8 @@ package com.github.saintdan.exception;
 
 import com.github.saintdan.enums.ErrorType;
 
+import java.io.Serializable;
+
 /**
  * Abstract superclass for all exceptions related to an
  * {@link SystemException} object being invalid for whatever reason.
@@ -10,7 +12,9 @@ import com.github.saintdan.enums.ErrorType;
  * @date 7/21/15
  * @since JDK1.8
  */
-public abstract class SystemException extends Exception {
+public abstract class SystemException extends Exception implements Serializable {
+
+    private static final long serialVersionUID = 3327217472962035232L;
 
     /**
      * Error Type
@@ -21,11 +25,11 @@ public abstract class SystemException extends Exception {
      * Constructs an {@code SystemException} with the specified message and root cause.
      *
      * @param msg the {@link ErrorType}
-     * @param t the root cause
+     * @param t   the root cause
      */
     public SystemException(ErrorType msg, Throwable t) {
-        super(msg.name()+": "+msg.value(), t);
-        this.errorType=msg;
+        super(msg.name() + ": " + msg.value(), t);
+        this.errorType = msg;
     }
 
     /**
@@ -34,20 +38,20 @@ public abstract class SystemException extends Exception {
      * @param msg the {@link ErrorType}
      */
     public SystemException(ErrorType msg) {
-        super(msg.name()+": "+msg.value());
-        this.errorType=msg;
+        super(msg.name() + ": " + msg.value());
+        this.errorType = msg;
     }
 
     /**
      * Constructs an {@code SystemException}
      */
-    public SystemException(){
+    public SystemException() {
         this(ErrorType.SYS0001);
     }
 
 
-    private ErrorType obtainErrorType(){
-        if(errorType==null){
+    private ErrorType obtainErrorType() {
+        if (errorType == null) {
             return ErrorType.SYS0001;
         }
         return errorType;
@@ -56,14 +60,16 @@ public abstract class SystemException extends Exception {
 
     /**
      * Get error type
+     *
      * @return {@link ErrorType}
      */
-    public ErrorType getErrorType(){
+    public ErrorType getErrorType() {
         return obtainErrorType();
     }
 
     /**
      * Get error code
+     *
      * @return error code
      */
     public String getErrorCode() {
@@ -72,6 +78,7 @@ public abstract class SystemException extends Exception {
 
     /**
      * Get error msg
+     *
      * @return error msg
      */
     public String getErrorMsg() {

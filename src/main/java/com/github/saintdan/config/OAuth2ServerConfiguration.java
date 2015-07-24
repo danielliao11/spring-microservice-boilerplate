@@ -102,6 +102,17 @@ public class OAuth2ServerConfiguration {
                     .scopes("read")
                     .resourceIds(RESOURCE_ID)
                     .secret("123456");
+            // You can add other clients like:
+            /*
+            clients
+                    .inMemory()
+                    .withClient("android_app")
+                    .authorizedGrantTypes("password", "refresh_token")
+                    .authorities("USER")
+                    .scopes("read")
+                    .resourceIds(RESOURCE_ID)
+                    .secret("654321");
+            */
         }
 
         @Bean

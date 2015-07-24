@@ -11,7 +11,7 @@ $ ./gradlew clean build bootRun
 
 ## Usage
 
-1. Take your token from `oauth/token` in terminal:
+1. Take your token from `oauth/token` in terminal, if you use ssl remember add `-k`:
 
 ```
 $ curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app"
@@ -22,8 +22,8 @@ or [Advanced REST Client](https://github.com/jarrodek/advanced-rest-client) in y
 ```
 url: http://localhost:8080/oauth/token
 POST
-headers: Authorization: Basic aW9zX2FwcDoxMjM0NTY=
-playload: password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app
+headers: Authorization: Basic <Encrypt client_id:client_secret by HTTP Basic>
+playload: password=admin&username=admin&grant_type=password&scope=read
 ```
 
 2. Use the **'access_json'** returned to make the authorized request to the protected endpoint:
@@ -71,6 +71,21 @@ GET
 headers: Authorization: bearer <access_token_returned>
 ```
 
+4. Refresh token:
+
+```
+curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "grant_type=refresh_token&refresh_token=<refresh_token_returned>&client_secret=123456&client_id=ios_app"
+```
+
+or use Advanced REST Client:
+
+```
+url: http://localhost:8080/oauth/token
+POST
+headers: Authorization: Basic <Encrypt client_id:client_secret by HTTP Basic>
+playload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
+```
+
 ## Version History:
 
 - 0.0.1-SNAPSHOT
@@ -88,3 +103,6 @@ headers: Authorization: bearer <access_token_returned>
 - 0.3.0-RELEASE
   - Add /bo, /enums, /exception.
   - Add UserService and its implement.
+- 0.3.1-RELEASE
+  - Modify build.gradle.
+  - Add refresh token usage.
