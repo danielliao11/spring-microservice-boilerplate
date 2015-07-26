@@ -12,7 +12,10 @@ public enum ErrorType implements IntentState {
     SYS0001("System error."),
 
     // User
-    USR0001("User find error.");
+    USR0001("User find error."),
+
+    // Unknown error.
+    UNKNOWN("unknown error.");
 
     /**
      * Value

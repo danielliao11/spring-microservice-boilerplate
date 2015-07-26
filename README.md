@@ -108,3 +108,4 @@ playload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
   - Add refresh token usage.
 - 0.3.2-RELEASE
   - Fix some hidden bugs.
+  - Add SystemRuntimeException and UnknownException.
