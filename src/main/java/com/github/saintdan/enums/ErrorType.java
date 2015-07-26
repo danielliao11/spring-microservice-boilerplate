@@ -24,7 +24,7 @@ public enum ErrorType implements IntentState {
      *
      * @param val value
      */
-    private ErrorType(String val) {
+    ErrorType(String val) {
         this.val = val;
     }
 

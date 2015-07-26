@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,9 +17,9 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "resources")
-public class Resource {
+public class Resource implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 6298843159549723556L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,7 +47,7 @@ public class Resource {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources")
-    private Set<Group> groups = new HashSet<Group>();
+    private Set<Group> groups = new HashSet<>();
 
     public Integer getId() {
         return id;

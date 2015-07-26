@@ -1,5 +1,6 @@
 package com.github.saintdan.po;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,50 +12,52 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Authorized users, provide for spring security oauth2.
- * @see {@link org.springframework.security.core.userdetails.UserDetails}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/23/15
+ * @see {@link org.springframework.security.core.userdetails.UserDetails}
  * @since JDK1.8
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+    private static final long serialVersionUID = 2680591198337929454L;
 
-	@NotEmpty
-	private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
-	@NotEmpty
-	@Column(unique = true, nullable = false)
-	private String usr;
+    @NotEmpty
+    private String name;
 
-	@NotEmpty
-	private String pwd;
+    @NotEmpty
+    @Column(unique = true, nullable = false)
+    private String usr;
+
+    @NotEmpty
+    private String pwd;
 
     private String description;
 
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_roles",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "role_id") })
-	private Set<Role> roles = new HashSet<Role>();
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private Set<Role> roles = new HashSet<>();
 
-	public User() {
-	}
+    public User() {
+    }
 
-	public User(User user) {
-		super();
-		this.id = user.getId();
-		this.name = user.getName();
-		this.usr = user.getUsr();
-		this.pwd = user.getPwd();
-		this.roles = user.getRoles();
-	}
+    public User(User user) {
+        super();
+        this.id = user.getId();
+        this.name = user.getName();
+        this.usr = user.getUsr();
+        this.pwd = user.getPwd();
+        this.roles = user.getRoles();
+    }
 
     public Integer getId() {
         return id;

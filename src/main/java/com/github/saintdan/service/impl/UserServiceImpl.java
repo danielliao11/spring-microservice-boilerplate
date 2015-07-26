@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUsr(UserParam param) throws UserException {
-        User user = null;
+        User user;
         try {
             user = userRepository.findByUsr(param.getUsr());
         } catch (Exception e) {

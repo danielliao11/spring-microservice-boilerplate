@@ -37,8 +37,10 @@ public class UserController {
             e.printStackTrace();
         }
         UserVO vo = new UserVO();
-        vo.setName(user.getName());
-        vo.setUsername(user.getUsr());
+        if (user != null) {
+            vo.setName(user.getName());
+            vo.setUsername(user.getUsr());
+        }
 
         return vo;
     }

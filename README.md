@@ -106,3 +106,5 @@ playload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
 - 0.3.1-RELEASE
   - Modify build.gradle.
   - Add refresh token usage.
+- 0.3.2-RELEASE
+  - Fix some hidden bugs.

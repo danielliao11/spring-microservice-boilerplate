@@ -40,7 +40,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String usr) throws UsernameNotFoundException {
 		User user = userRepository.findByUsr(usr);
 		if (user == null) {
-			throw new UsernameNotFoundException(String.format("User %s does not exist!", user.getName()));
+			throw new UsernameNotFoundException(String.format("User %s does not exist!", usr));
 		}
 		return new UserRepositoryUserDetails(user);
 	}
@@ -55,7 +55,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 		@Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
-            Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+            Collection<GrantedAuthority> authorities = new ArrayList<>();
             Set<Role> roles = getRoles();
             for (Role role : roles) {
                 Set<Group> groups = role.getGroups();
