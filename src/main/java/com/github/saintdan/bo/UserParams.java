@@ -1,5 +1,7 @@
 package com.github.saintdan.bo;
 
+import com.github.saintdan.annotation.ParamField;
+
 /**
  * User service param bo.
  *
@@ -7,15 +9,16 @@ package com.github.saintdan.bo;
  * @date 7/21/15
  * @since JDK1.8
  */
-public class UserParam {
+public class UserParams extends BaseParams {
 
     private int id;
 
+    @ParamField
     private String usr;
 
     private String name;
 
-    public UserParam(String usr) {
+    public UserParams(String usr) {
         this.usr = usr;
     }
 

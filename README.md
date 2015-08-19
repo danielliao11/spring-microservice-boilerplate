@@ -51,7 +51,7 @@ headers: Authorization: bearer <access_token_returned>
 3. Get user information:
 
 ```
-$ curl http://localhost:8080/resources/users/admin -H "Authorization: Bearer <access_token_returned>"
+$ curl http://localhost:8080/resources/users/usr=admin&sign=TEtjbkozTWVXNUxxOUJTYmxubUNJQkhqN0dPeE1RUzdqM0tURThsVXlJd29sQXMvZ01NVno1a05JaUwwNmVQTHRMSS9lOEtZSnRqL1JDN3JockhkYm9GaHVFeUZZcHB2MEhwVTJ2OEoxYVoyYXJHZm1jWitQUSt0QVVDTXp3Zm9JWEVXbmYwbXN6UnExc1AybjcxVGtaeHUyKzdrb1BQamNlL05sNkV2UnVqZm92NWJ4dCtnZG1Mc0ZSWURIVVlBTTg0cE51RGg2aW9hYzJuUU91cUZ4eFJ5c0hNcmRiSUtCeGlhcWRxVUljc1VDUm8wOElNWm1pcUhWY28vWXNTRnRRMU4weFJvNjRaS2JxK293WUZHb09XMUQ5eE9CdzM3VjFGMXpTZUZuSmRMTjYwUDVsMEpYNlRrS3hMNzNCakp0VnA2b2lNVWRCYXQ4MkgxRWNzekdBPT0= -H "Authorization: Bearer <access_token_returned>"
 ```
 
 If the request is successful, you will see the following JSON response:
@@ -66,7 +66,7 @@ If the request is successful, you will see the following JSON response:
 or use Advanced REST Client:
 
 ```
-url: http://localhost:8080/resources/users/admin
+url: http://localhost:8080/resources/users/usr=admin&sign=TEtjbkozTWVXNUxxOUJTYmxubUNJQkhqN0dPeE1RUzdqM0tURThsVXlJd29sQXMvZ01NVno1a05JaUwwNmVQTHRMSS9lOEtZSnRqL1JDN3JockhkYm9GaHVFeUZZcHB2MEhwVTJ2OEoxYVoyYXJHZm1jWitQUSt0QVVDTXp3Zm9JWEVXbmYwbXN6UnExc1AybjcxVGtaeHUyKzdrb1BQamNlL05sNkV2UnVqZm92NWJ4dCtnZG1Mc0ZSWURIVVlBTTg0cE51RGg2aW9hYzJuUU91cUZ4eFJ5c0hNcmRiSUtCeGlhcWRxVUljc1VDUm8wOElNWm1pcUhWY28vWXNTRnRRMU4weFJvNjRaS2JxK293WUZHb09XMUQ5eE9CdzM3VjFGMXpTZUZuSmRMTjYwUDVsMEpYNlRrS3hMNzNCakp0VnA2b2lNVWRCYXQ4MkgxRWNzekdBPT0=
 GET
 headers: Authorization: bearer <access_token_returned>
 ```
@@ -109,3 +109,5 @@ playload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
 - 0.3.2-RELEASE
   - Fix some hidden bugs.
   - Add SystemRuntimeException and UnknownException.
+- 0.4.0-RELEASE
+  - Add RSA signature.(You can generate your own RSA key pair with ssh-keygen, or get it in [GenerateRSAKeyPair](/src/test/java/com/github/saintdan/GenerateRSAKeyPair.java).)

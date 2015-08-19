@@ -39,7 +39,9 @@ compileTestJava {
 ext {
     springBootVersion = '1.2.5.RELEASE'
     springOAuth2Version = '2.0.7.RELEASE'
-    jacksonVersion = '2.5.4'
+
+    fastJsonVersion = '1.2.6'
+    commonsLang3Version = '3.4'
 
     hsqldbVersion = '1.8.0.10'
 
@@ -57,7 +59,8 @@ dependencies {
     compile "org.springframework.security.oauth:spring-security-oauth2:${springOAuth2Version}"
 
     // Other dependencies.
-    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    compile "com.alibaba:fastjson:${fastJsonVersion}"
 
     // DB dependencies.
     compile "org.hsqldb:hsqldb:${hsqldbVersion}"

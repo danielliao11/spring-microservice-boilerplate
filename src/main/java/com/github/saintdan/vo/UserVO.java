@@ -1,11 +1,15 @@
 package com.github.saintdan.vo;
 
+import java.io.Serializable;
+
 /**
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/30/15
  * @since JDK1.8
  */
-public class UserVO {
+public class UserVO extends ResultVO implements Serializable {
+
+    private static final long serialVersionUID = 6597728015488383528L;
 
     private String name;
 

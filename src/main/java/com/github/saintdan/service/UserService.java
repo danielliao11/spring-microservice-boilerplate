@@ -1,6 +1,6 @@
 package com.github.saintdan.service;
 
-import com.github.saintdan.bo.UserParam;
+import com.github.saintdan.bo.UserParams;
 import com.github.saintdan.exception.UserException;
 import com.github.saintdan.po.User;
 
@@ -13,5 +13,5 @@ import com.github.saintdan.po.User;
  */
 public interface UserService {
 
-    User getUserByUsr(UserParam param) throws UserException;
+    User getUserByUsr(UserParams param) throws UserException;
 }

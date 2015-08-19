@@ -11,5 +11,5 @@ public class Resource {
 
     public static final String RESOURCES = "/resources";
 
-    public static final String USERS = "/users/**";
+    public static final String USERS = "/users";
 }

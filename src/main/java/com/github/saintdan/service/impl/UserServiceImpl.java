@@ -1,6 +1,6 @@
 package com.github.saintdan.service.impl;
 
-import com.github.saintdan.bo.UserParam;
+import com.github.saintdan.bo.UserParams;
 import com.github.saintdan.enums.ErrorType;
 import com.github.saintdan.exception.UserException;
 import com.github.saintdan.po.User;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByUsr(UserParam param) throws UserException {
+    public User getUserByUsr(UserParams param) throws UserException {
         User user;
         try {
             user = userRepository.findByUsr(param.getUsr());

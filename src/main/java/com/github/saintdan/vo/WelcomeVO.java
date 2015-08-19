@@ -1,5 +1,7 @@
 package com.github.saintdan.vo;
 
+import java.io.Serializable;
+
 /**
  * Welcome controller vo.
  *
@@ -7,9 +9,11 @@ package com.github.saintdan.vo;
  * @date 6/25/15
  * @since JDK1.8
  */
-public class WelcomeVO {
+public class WelcomeVO implements Serializable {
 
-	private final long id;
+    private static final long serialVersionUID = -7734398342573960351L;
+
+    private final long id;
 
 	private final String content;
 
