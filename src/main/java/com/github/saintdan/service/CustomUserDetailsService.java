@@ -1,12 +1,18 @@
 package com.github.saintdan.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
+import com.github.saintdan.po.Group;
+import com.github.saintdan.po.Resource;
+import com.github.saintdan.po.Role;
 import com.github.saintdan.repo.UserRepository;
 import com.github.saintdan.po.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,7 +40,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String usr) throws UsernameNotFoundException {
 		User user = userRepository.findByUsr(usr);
 		if (user == null) {
-			throw new UsernameNotFoundException(String.format("User %s does not exist!", user.getName()));
+			throw new UsernameNotFoundException(String.format("User %s does not exist!", usr));
 		}
 		return new UserRepositoryUserDetails(user);
 	}
@@ -48,9 +54,21 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 
 		@Override
-		public Collection<? extends GrantedAuthority> getAuthorities() {
-			return getRoles();
-		}
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            Collection<GrantedAuthority> authorities = new ArrayList<>();
+            Set<Role> roles = getRoles();
+            for (Role role : roles) {
+                Set<Group> groups = role.getGroups();
+                for (Group group : groups) {
+                    Set<Resource> resources = group.getResources();
+                    for (Resource resource : resources) {
+                        GrantedAuthority authority = new SimpleGrantedAuthority(resource.getName());
+                        authorities.add(authority);
+                    }
+                }
+            }
+            return authorities;
+        }
 
 		@Override
 		public String getUsername() {

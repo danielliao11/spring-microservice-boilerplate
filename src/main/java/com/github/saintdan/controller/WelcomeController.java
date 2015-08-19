@@ -20,10 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class WelcomeController {
 
 	private static final String template = "Hello, %s!";
-	
-	private final AtomicLong counter = new AtomicLong();
 
-	@RequestMapping("/welcome")
+    @RequestMapping("/welcome")
 	public WelcomeVO welcome(@AuthenticationPrincipal User user) {
 		return new WelcomeVO(user.getId(), String.format(template, user.getName()));
 	}

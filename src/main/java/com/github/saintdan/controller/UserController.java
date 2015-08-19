@@ -1,7 +1,11 @@
 package com.github.saintdan.controller;
 
+import com.github.saintdan.bo.UserParam;
+import com.github.saintdan.constant.Resource;
+import com.github.saintdan.exception.UserException;
 import com.github.saintdan.po.User;
 import com.github.saintdan.repo.UserRepository;
+import com.github.saintdan.service.UserService;
 import com.github.saintdan.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,23 +22,25 @@ import org.springframework.web.bind.annotation.RestController;
  * @since JDK1.8
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping(Resource.RESOURCES)
 public class UserController {
 
-	private final UserRepository userRepository;
+    @Autowired
+    UserService userService;
 
-	@Autowired
-	public UserController(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
-
-    @RequestMapping(value = "/{usr}", method = RequestMethod.GET)
+    @RequestMapping(value = Resource.USERS +"/{usr}", method = RequestMethod.GET)
     public UserVO getUserByUsr(@PathVariable String usr) {
-
-        User user = userRepository.findByUsr(usr);
+        User user = null;
+        try {
+            user = userService.getUserByUsr(new UserParam(usr));
+        } catch (UserException e) {
+            e.printStackTrace();
+        }
         UserVO vo = new UserVO();
-        vo.setName(user.getName());
-        vo.setUsername(user.getUsr());
+        if (user != null) {
+            vo.setName(user.getName());
+            vo.setUsername(user.getUsr());
+        }
 
         return vo;
     }

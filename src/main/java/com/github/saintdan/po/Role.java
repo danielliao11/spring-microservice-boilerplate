@@ -1,5 +1,6 @@
 package com.github.saintdan.po;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,11 +20,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name = "roles")
-public class Role implements GrantedAuthority {
+public class Role implements GrantedAuthority,Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -5193344128221526323L;
 
-	@Id
+    @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
@@ -34,14 +35,14 @@ public class Role implements GrantedAuthority {
 
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
-	private Set<User> users = new HashSet<User>();
+	private Set<User> users = new HashSet<>();
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_groups",
             joinColumns = { @JoinColumn(name = "role_id") },
             inverseJoinColumns = { @JoinColumn(name = "group_id") })
-    private Set<Group> groups = new HashSet<Group>();
+    private Set<Group> groups = new HashSet<>();
 
 	@Override
 	public String getAuthority() {
