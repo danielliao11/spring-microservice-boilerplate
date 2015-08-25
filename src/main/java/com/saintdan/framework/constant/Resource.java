@@ -7,9 +7,9 @@ package com.saintdan.framework.constant;
  * @date 7/5/15
  * @since JDK1.8
  */
-public class Resource {
+public interface Resource {
 
-    public static final String RESOURCES = "/resources";
+    String RESOURCES = "/resources";
 
-    public static final String USERS = "/users";
+    String USERS = "/users";
 }

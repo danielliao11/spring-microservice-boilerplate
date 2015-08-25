@@ -7,13 +7,13 @@ package com.saintdan.framework.constant;
  * @date 8/19/15
  * @since JDK1.8
  */
-public class SignConstant {
+public interface SignConstant {
 
-    public static final String SIGN_TYPE_RSA = "RSA";
+    String SIGN_TYPE_RSA = "RSA";
 
-    public static final String SIGN_TYPE_MD5 = "MD5";
+    String SIGN_TYPE_MD5 = "MD5";
 
-    public static final String SIGN_ALGORITHMS = "SHA1WithRSA";
+    String SIGN_ALGORITHMS = "SHA1WithRSA";
 
-    public static final String CHARSET_UTF8 = "UTF-8";
+    String CHARSET_UTF8 = "UTF-8";
 }
