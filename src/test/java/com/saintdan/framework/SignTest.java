@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
+ * Test signature.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 8/19/15
  * @since JDK1.8

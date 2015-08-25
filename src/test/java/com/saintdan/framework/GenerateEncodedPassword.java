@@ -3,11 +3,13 @@ package com.saintdan.framework;
 import com.saintdan.framework.tools.CustomPasswordEncoder;
 
 /**
+ * Generate encode password.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/29/15
  * @since JDK1.8
  */
-public class GetEncodedPassword {
+public class GenerateEncodedPassword {
 
     private static final String RAW_PASSWORD = "root";
 

@@ -10,6 +10,8 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.HashMap;
 
 /**
+ * You can use this to generate your own key pair.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 8/19/15
  * @since JDK1.8
