@@ -1,19 +1,21 @@
 package com.saintdan.framework.controller;
 
 import com.saintdan.framework.bo.UserParams;
-import com.saintdan.framework.constant.Resource;
+import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
-import com.saintdan.framework.exception.SignException;
+import com.saintdan.framework.exception.SignatureException;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.vo.ResultVO;
 import com.saintdan.framework.vo.UserVO;
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -32,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @PropertySource("classpath:api.properties")
 @RestController
-@RequestMapping(Resource.RESOURCES)
+@RequestMapping(ResourceURL.RESOURCES)
 public class UserController {
 
     @Autowired
@@ -41,12 +43,13 @@ public class UserController {
     @Value("${opposite.end1.publicKey}")
     private String PUBLIC_KEY;
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Log log = LogFactory.getLog(UserController.class);
 
-    @RequestMapping(value = Resource.USERS +"/usr={usr}&sign={sign}", method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.USERS +"/usr={usr}&sign={sign}", method = RequestMethod.GET)
     public ResultVO getUserByUsr(@PathVariable String usr, @PathVariable String sign) {
-        if (usr == null || sign == null) {
-            return new ResultVO(ErrorType.SYS0002.name(), OperationStatus.FAILURE, ErrorType.SYS0002.value());
+        // If usr or sign is empty, return SYS0002.
+        if (StringUtils.isEmpty(usr) || StringUtils.isEmpty(sign)) {
+            return logAndReturn(ErrorType.SYS0002);
         }
         // Prepare to validate signature.
         UserParams userParams = new UserParams(usr);
@@ -54,7 +57,7 @@ public class UserController {
         try {
             // If validate the signature failed, return SGN0020.
             if(!userParams.isSignValid(PUBLIC_KEY)) {
-                return new ResultVO(ErrorType.SGN0020.name(), OperationStatus.FAILURE, ErrorType.SGN0020.value());
+                return logAndReturn(ErrorType.SGN0020);
             }
             User user = userService.getUserByUsr(new UserParams(usr));
             UserVO vo = new UserVO();
@@ -62,30 +65,52 @@ public class UserController {
                 vo = userPO2VO(user);
             }
             return vo;
-        } catch (SignException e) {
+        } catch (SignatureException e) {
             // Return sign error.
-            log.debug("RSA validate signature failed.", e);
-            return new ResultVO(ErrorType.SGN0001.name(), OperationStatus.FAILURE, ErrorType.SGN0001.value());
+            return logAndReturn(ErrorType.SGN0021, e);
         } catch (UserException e) {
             // Return user find error.
-            log.debug("Get user by usr failed.", e);
-            return new ResultVO(ErrorType.USR0001.name(), OperationStatus.FAILURE, ErrorType.USR0001.value());
+            return logAndReturn(ErrorType.USR0011, e);
         }
     }
 
     /**
      * Transform the user po to vo.
      *
-     * @param user
-     *                  user po
-     * @return
-     *                  user vo
+     * @param user      user po
+     * @return          user vo
      */
     private UserVO userPO2VO(User user) {
         UserVO vo = new UserVO();
         vo.setName(user.getName());
         vo.setUsername(user.getUsr());
         return vo;
+    }
+
+    /**
+     * Log debug message and return result.
+     *
+     * @param errorType     error type
+     * @return              result vo
+     */
+    private ResultVO logAndReturn(ErrorType errorType) {
+        return logAndReturn(errorType, null);
+    }
+
+    /**
+     * Log debug message and e, and return result.
+     *
+     * @param errorType     error type
+     * @param e             e
+     * @return              result vo
+     */
+    private ResultVO logAndReturn(ErrorType errorType, Throwable e) {
+        LogUtils.traceError(log, e ,errorType.value());
+        return new ResultVO(
+                errorType.name(),
+                OperationStatus.FAILURE,
+                errorType.value()
+        );
     }
 
 }

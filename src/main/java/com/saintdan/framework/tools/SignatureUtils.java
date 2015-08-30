@@ -1,8 +1,8 @@
 package com.saintdan.framework.tools;
 
-import com.saintdan.framework.constant.SignConstant;
+import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.exception.SignException;
+import com.saintdan.framework.exception.SignatureException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,16 +36,16 @@ public class SignatureUtils {
      *                      charset
      * @return
      *                      true/false
-     * @throws SignException
+     * @throws SignatureException
      */
     public static boolean rsaCheckContent(String content, String sign, String publicKey, String charset)
-            throws SignException {
+            throws SignatureException {
         try {
-            PublicKey pubKey = getPublicKeyFromX509(SignConstant.SIGN_TYPE_RSA, new ByteArrayInputStream(publicKey
+            PublicKey pubKey = getPublicKeyFromX509(SignatureConstant.SIGN_TYPE_RSA, new ByteArrayInputStream(publicKey
                     .getBytes()));
 
             java.security.Signature signature = java.security.Signature
-                    .getInstance(SignConstant.SIGN_ALGORITHMS);
+                    .getInstance(SignatureConstant.SIGN_ALGORITHMS);
 
             signature.initVerify(pubKey);
 
@@ -57,31 +57,27 @@ public class SignatureUtils {
 
             return signature.verify(Base64.decodeBase64(sign.getBytes()));
         } catch (Exception e) {
-            throw new SignException(ErrorType.SGN0020);
+            throw new SignatureException(ErrorType.SGN0020);
         }
     }
 
     /**
      * Signature by local private key.
      *
-     * @param content
-     *                          src
-     * @param privateKey
-     *                          local private key
-     * @param charset
-     *                          charset
-     * @return
-     *                          signature
-     * @throws SignException
+     * @param content           src
+     * @param privateKey        local private key
+     * @param charset           charset
+     * @return                  signature
+     * @throws SignatureException
      */
     public static String rsaSign(String content, String privateKey, String charset)
-            throws SignException {
+            throws SignatureException {
         try {
-            PrivateKey priKey = getPrivateKeyFromPKCS8(SignConstant.SIGN_TYPE_RSA,
+            PrivateKey priKey = getPrivateKeyFromPKCS8(SignatureConstant.SIGN_TYPE_RSA,
                     new ByteArrayInputStream(privateKey.getBytes()));
 
             java.security.Signature signature = java.security.Signature
-                    .getInstance(SignConstant.SIGN_ALGORITHMS);
+                    .getInstance(SignatureConstant.SIGN_ALGORITHMS);
 
             signature.initSign(priKey);
 
@@ -95,7 +91,7 @@ public class SignatureUtils {
 
             return new String(Base64.encodeBase64(signed));
         } catch (Exception e) {
-            throw new SignException(ErrorType.SGN0010);
+            throw new SignatureException(ErrorType.SGN0010);
         }
     }
 

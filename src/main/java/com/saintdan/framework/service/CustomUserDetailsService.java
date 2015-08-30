@@ -53,6 +53,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 			super(user);
 		}
 
+        /**
+         * Get the authorities.
+         *
+         * @return      GrantedAuthorities
+         */
 		@Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
             Collection<GrantedAuthority> authorities = new ArrayList<>();

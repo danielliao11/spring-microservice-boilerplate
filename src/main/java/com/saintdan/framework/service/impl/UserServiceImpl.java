@@ -9,8 +9,6 @@ import com.saintdan.framework.service.UserService;
 import com.saintdan.framework.tools.LogUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +32,13 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Get user po by param
+     *
+     * @param param     user params
+     * @return          user po
+     * @throws UserException
+     */
     @Override
     public User getUserByUsr(UserParams param) throws UserException {
         User user;

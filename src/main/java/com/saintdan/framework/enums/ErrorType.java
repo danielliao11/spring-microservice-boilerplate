@@ -1,7 +1,8 @@
 package com.saintdan.framework.enums;
 
 /**
- * Error type enum.
+ * Error type enums.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 7/21/15
  * @since JDK1.8
@@ -13,12 +14,15 @@ public enum ErrorType implements IntentState {
     SYS0002("Param could not be null."),
 
     // User
-    USR0001("User find error."),
+    USR0001("User error."),
+    USR0010("User find error."),
+    USR0011("Can not find User by the usr param."),
 
     // Sign
-    SGN0001("Sign error."),
-    SGN0010("Sign failed"),
-    SGN0020("Check sign failed."),
+    SGN0001("Signature error."),
+    SGN0010("Signature failed"),
+    SGN0020("Signature verification failed."),
+    SGN0021("RSA signature verification failed."),
 
     // Unknown error.
     UNKNOWN("unknown error.");

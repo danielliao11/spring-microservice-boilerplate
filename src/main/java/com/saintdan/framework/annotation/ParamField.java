@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * Param field for signature.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 8/19/15
  * @since JDK1.8

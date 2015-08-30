@@ -7,7 +7,7 @@ package com.saintdan.framework.constant;
  * @date 8/19/15
  * @since JDK1.8
  */
-public interface SignConstant {
+public interface SignatureConstant {
 
     String SIGN_TYPE_RSA = "RSA";
 

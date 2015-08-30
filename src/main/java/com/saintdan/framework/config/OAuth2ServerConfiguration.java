@@ -1,6 +1,6 @@
 package com.saintdan.framework.config;
 
-import com.saintdan.framework.constant.Resource;
+import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,7 +35,7 @@ public class OAuth2ServerConfiguration {
     private static final String RESOURCE_ID = "rest_api";
 
     private static final String WELCOME_URL = "/welcome";
-    private static final StringBuilder USER_URL = new StringBuilder(Resource.RESOURCES).append(Resource.USERS);
+    private static final StringBuilder USER_URL = new StringBuilder(ResourceURL.RESOURCES).append(ResourceURL.USERS);
 
     /**
      * OAuth2 resource server configuration.

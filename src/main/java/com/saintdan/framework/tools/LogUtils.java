@@ -46,10 +46,8 @@ public class LogUtils {
     /**
      * Generate stack trace.
      *
-     * @param msg
-     *                      message
-     * @return
-     *                      stack trace
+     * @param msg       message
+     * @return          stack trace
      */
     public static String generateStackTrace(String msg) {
         StringBuffer sb = new StringBuffer();
@@ -65,12 +63,9 @@ public class LogUtils {
     /**
      * Generate trace string.
      *
-     * @param errorMsg
-     *                      error message
-     * @param e
-     *                      exception
-     * @return
-     *                      trace string
+     * @param errorMsg      error message
+     * @param e             exception
+     * @return              trace string
      */
     public static String generateTraceString(String errorMsg, Throwable e) {
         StringWriter w = new StringWriter();

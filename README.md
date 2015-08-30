@@ -113,3 +113,5 @@ playload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
   - Add RSA signature.(You can generate your own RSA key pair with ssh-keygen, or get it in [GenerateRSAKeyPair](/src/test/java/com/saintdan/framework/GenerateRSAKeyPair.java)
 - 0.4.1-RELEASE
   - Add [LogUtils](/src/main/java/com/saintdan/framework/tools/LogUtils.java) to trace info, warn, debug, error.
+- 0.4.2-RELEASE
+  - Optimize some codes.

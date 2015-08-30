@@ -1,9 +1,9 @@
 package com.saintdan.framework.bo;
 
 import com.saintdan.framework.annotation.ParamField;
-import com.saintdan.framework.constant.SignConstant;
+import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.exception.SignException;
+import com.saintdan.framework.exception.SignatureException;
 import com.saintdan.framework.tools.SignatureUtils;
 
 import javax.validation.constraints.NotNull;
@@ -39,37 +39,33 @@ public class BaseParams {
     /**
      * Validate the signature.
      *
-     * @param publicKey
-     *                      Opposite end public key
-     * @return
-     *                      true/false
-     * @throws SignException
+     * @param publicKey     Opposite end public key
+     * @return              true/false
+     * @throws SignatureException
      */
-    public boolean isSignValid(String publicKey) throws SignException {
+    public boolean isSignValid(String publicKey) throws SignatureException {
         String content = getSignContent();
-        return SignatureUtils.rsaCheckContent(content, this.getSign(), publicKey, SignConstant.CHARSET_UTF8);
+        return SignatureUtils.rsaCheckContent(content, this.getSign(), publicKey, SignatureConstant.CHARSET_UTF8);
     }
 
     /**
      * Signature.
      *
-     * @param privateKey
-     *                      Local private key.
-     * @throws SignException
+     * @param privateKey    Local private key.
+     * @throws SignatureException
      */
-    public void sign(String privateKey) throws SignException {
+    public void sign(String privateKey) throws SignatureException {
         String content = getSignContent();//JsonConverter.convertToJSON(this).toString();
-        this.sign = SignatureUtils.rsaSign(content, privateKey, SignConstant.CHARSET_UTF8);
+        this.sign = SignatureUtils.rsaSign(content, privateKey, SignatureConstant.CHARSET_UTF8);
     }
 
     /**
      * Get the signature string.
      *
-     * @return
-     *                      signature string
-     * @throws SignException
+     * @return              signature string
+     * @throws SignatureException
      */
-    public String getSignContent() throws SignException {
+    public String getSignContent() throws SignatureException {
         StringBuffer sb = new StringBuffer();
         try{
             BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
@@ -113,7 +109,7 @@ public class BaseParams {
 
             return sb.toString();
         } catch (Exception e) {
-            throw new SignException(ErrorType.UNKNOWN);
+            throw new SignatureException(ErrorType.UNKNOWN);
         }
 
     }

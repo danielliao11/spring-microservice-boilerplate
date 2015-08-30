@@ -1,13 +1,13 @@
 package com.saintdan.framework.constant;
 
 /**
- * Info url.
+ * Resource url.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 7/5/15
  * @since JDK1.8
  */
-public interface Resource {
+public interface ResourceURL {
 
     String RESOURCES = "/resources";
 
