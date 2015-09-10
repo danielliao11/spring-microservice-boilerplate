@@ -13,6 +13,10 @@ public enum ErrorType implements IntentState {
     SYS0001("System error."),
     SYS0002("Param could not be null."),
 
+    // Format
+    FMT0001("Format error."),
+    FMT0010("Format error, unknown format."),
+
     // User
     USR0001("User error."),
     USR0010("User find error."),

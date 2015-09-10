@@ -115,3 +115,5 @@ playload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
   - Add [LogUtils](/src/main/java/com/saintdan/framework/tools/LogUtils.java) to trace info, warn, debug, error.
 - 0.4.2-RELEASE
   - Optimize some codes.
+- 0.4.3-RELEASE
+  - Add [Base64ImageHelper](/src/main/java/com/saintdan/framework/tools/Base64ImageHelper.java).
