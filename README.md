@@ -86,6 +86,10 @@ headers: Authorization: Basic <Encrypt client_id:client_secret by HTTP Basic>
 playload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
 ```
 
+## The MIT License (MIT)
+
+Copyright (c) [2015] [saintdan]
+
 ## Version History:
 
 - 0.0.1-SNAPSHOT
