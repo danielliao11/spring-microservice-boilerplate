@@ -123,3 +123,7 @@ Copyright (c) 2015 saintdan
   - Optimize some codes.
 - 0.4.3-RELEASE
   - Add [Base64ImageHelper](/src/main/java/com/saintdan/framework/tools/Base64ImageHelper.java).
+- 0.4.4-RELEASE
+  - Fix the error: "Could not find or load main class org.gradle.wrapper.GradleWrapperMain."  
+    Add gradle-wrapper.jar
+    Thanks [cbweixin](https://github.com/cbweixin) for reminding me.
