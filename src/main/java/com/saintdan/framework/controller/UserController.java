@@ -1,7 +1,10 @@
 package com.saintdan.framework.controller;
 
-import com.saintdan.framework.bo.UserParams;
+import com.saintdan.framework.bo.UserBO;
+import com.saintdan.framework.component.ResultHelper;
+import com.saintdan.framework.component.SignHelper;
 import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.SignatureException;
@@ -9,7 +12,6 @@ import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.service.UserService;
-import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.vo.ResultVO;
 import com.saintdan.framework.vo.UserVO;
 import org.apache.commons.codec.binary.Base64;
@@ -37,40 +39,52 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(ResourceURL.RESOURCES)
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private static final Log log = LogFactory.getLog(UserController.class);
 
     @Value("${opposite.end1.publicKey}")
     private String PUBLIC_KEY;
 
-    private static final Log log = LogFactory.getLog(UserController.class);
+    @Autowired
+    private ResultHelper resultHelper;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private SignHelper signHelper;
+
+    /**
+     * Show user information with param usr.
+     *
+     * @param usr       usr
+     * @param sign      signature
+     * @return          user result
+     */
     @RequestMapping(value = ResourceURL.USERS +"/usr={usr}&sign={sign}", method = RequestMethod.GET)
-    public ResultVO getUserByUsr(@PathVariable String usr, @PathVariable String sign) {
-        // If usr or sign is empty, return SYS0002.
-        if (StringUtils.isEmpty(usr) || StringUtils.isEmpty(sign)) {
-            return logAndReturn(ErrorType.SYS0002);
+    public ResultVO show(@PathVariable String usr, @PathVariable String sign) {
+        // If usr or sign is empty, return SYS0002, params error.
+        if (StringUtils.isEmpty(usr)) {
+            return resultHelper.infoResp(ErrorType.SYS0002, "Usr cannot be null.");
         }
         // Prepare to validate signature.
-        UserParams userParams = new UserParams(usr);
-        userParams.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+        UserBO userBO = new UserBO(usr);
+        userBO.setSign(new String(Base64.decodeBase64(sign.getBytes())));
         try {
-            // If validate the signature failed, return SGN0020.
-            if(!userParams.isSignValid(PUBLIC_KEY)) {
-                return logAndReturn(ErrorType.SGN0020);
+            // Sign verification.
+            if (ResultConstant.OK.equals(signHelper.signCheck(PUBLIC_KEY, userBO, sign).getCode())) {
+                return signHelper.signCheck(PUBLIC_KEY, userBO, sign);
             }
-            User user = userService.getUserByUsr(new UserParams(usr));
-            UserVO vo = new UserVO();
-            if (user != null) {
-                vo = userPO2VO(user);
+            User user = userService.getUserWithUsr(new UserBO(usr));
+            if (user == null) {
+                return resultHelper.infoResp(ErrorType.USR0011);
             }
-            return vo;
-        } catch (SignatureException e) {
-            // Return sign error.
-            return logAndReturn(ErrorType.SGN0021, e);
-        } catch (UserException e) {
-            // Return user find error.
-            return logAndReturn(ErrorType.USR0011, e);
+            return userPO2VO(user);
+        } catch (SignatureException | UserException e) {
+            // Return error information.
+            return resultHelper.errorResp(log, e, e.getErrorType());
+        } catch (Exception e) {
+            // Return unknown error.
+            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN);
         }
     }
 
@@ -81,36 +95,14 @@ public class UserController {
      * @return          user vo
      */
     private UserVO userPO2VO(User user) {
+        final String msg = "Get user data successfully.";
         UserVO vo = new UserVO();
         vo.setName(user.getName());
         vo.setUsername(user.getUsr());
+        vo.setCode(ResultConstant.OK);
+        vo.setOperationStatus(OperationStatus.SUCCESS);
+        vo.setMessage(msg);
         return vo;
-    }
-
-    /**
-     * Log debug message and return result.
-     *
-     * @param errorType     error type
-     * @return              result vo
-     */
-    private ResultVO logAndReturn(ErrorType errorType) {
-        return logAndReturn(errorType, null);
-    }
-
-    /**
-     * Log debug message and e, and return result.
-     *
-     * @param errorType     error type
-     * @param e             e
-     * @return              result vo
-     */
-    private ResultVO logAndReturn(ErrorType errorType, Throwable e) {
-        LogUtils.traceError(log, e ,errorType.value());
-        return new ResultVO(
-                errorType.name(),
-                OperationStatus.FAILURE,
-                errorType.value()
-        );
     }
 
 }

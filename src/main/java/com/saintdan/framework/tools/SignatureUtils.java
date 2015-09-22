@@ -17,6 +17,8 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 /**
+ * Signature utilities.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 8/19/15
  * @since JDK1.8
@@ -26,16 +28,11 @@ public class SignatureUtils {
     /**
      * Check the sign content.
      *
-     * @param content
-     *                      src content
-     * @param sign
-     *                      signature content
-     * @param publicKey
-     *                      opposite end public key
-     * @param charset
-     *                      charset
-     * @return
-     *                      true/false
+     * @param content       src content
+     * @param sign          signature content
+     * @param publicKey     opposite end public key
+     * @param charset       charset
+     * @return              true/false
      * @throws SignatureException
      */
     public static boolean rsaCheckContent(String content, String sign, String publicKey, String charset)

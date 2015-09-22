@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Log util.
+ * Log utilities.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 8/25/15
@@ -35,8 +35,12 @@ public class LogUtils {
         log.debug(generateTraceString(errorMsg, e));
     }
 
+    public static void traceError(Log log, String errorMsg) {
+        traceError(log, null, errorMsg);
+    }
+
     public static void traceError(Log log, Throwable e) {
-        log.error(generateTraceString(null, e));
+        traceError(log, e, null);
     }
 
     public static void traceError(Log log, Throwable e, String errorMsg) {

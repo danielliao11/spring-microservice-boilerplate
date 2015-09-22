@@ -1,5 +1,5 @@
 /**
- * Enums.
+ * Package of enums.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 7/21/15

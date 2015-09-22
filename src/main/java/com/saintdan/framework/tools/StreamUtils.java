@@ -3,7 +3,7 @@ package com.saintdan.framework.tools;
 import java.io.*;
 
 /**
- * Stream util.
+ * Stream utilities.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 8/19/15

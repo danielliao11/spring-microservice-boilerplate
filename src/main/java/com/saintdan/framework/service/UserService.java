@@ -1,6 +1,6 @@
 package com.saintdan.framework.service;
 
-import com.saintdan.framework.bo.UserParams;
+import com.saintdan.framework.bo.UserBO;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.po.User;
 
@@ -13,5 +13,5 @@ import com.saintdan.framework.po.User;
  */
 public interface UserService {
 
-    User getUserByUsr(UserParams param) throws UserException;
+    User getUserWithUsr(UserBO param) throws UserException;
 }

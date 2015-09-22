@@ -127,3 +127,8 @@ Copyright (c) 2015 saintdan
   - Fix the error: "Could not find or load main class org.gradle.wrapper.GradleWrapperMain."  
     Add gradle-wrapper.jar
     Thanks [cbweixin](https://github.com/cbweixin) for reminding me.
+- 0.5.0-RELEASE
+  - Extract the elements with similar return results and integrate them into one -> [ResultHelper](/src/main/java/saintdan/framework/component/ResultHelper.java);
+  - Extract the elements with similar signature and integrate them into one -> [SignHelper](/src/main/java/saintdan/framework/component/SignHelper.java);
+  - Add package of RESTFul parameters.
+  - Optimize code of services, implements, controllers.

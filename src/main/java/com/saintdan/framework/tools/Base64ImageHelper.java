@@ -5,7 +5,7 @@ import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.FormatException;
 
 /**
- * decode base64 image.
+ * decode base64 image utilities.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 9/10/15

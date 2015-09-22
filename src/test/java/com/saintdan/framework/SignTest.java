@@ -1,6 +1,6 @@
 package com.saintdan.framework;
 
-import com.saintdan.framework.bo.UserParams;
+import com.saintdan.framework.bo.UserBO;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
 import org.junit.Test;
@@ -22,18 +22,18 @@ public class SignTest {
 
     @Test
     public void testSign() throws Exception {
-        UserParams userParams = new UserParams(USR);
-        userParams.sign(PRIVATE_KEY);
-        String sign = userParams.getSign();
+        UserBO userBO = new UserBO(USR);
+        userBO.sign(PRIVATE_KEY);
+        String sign = userBO.getSign();
         System.out.println(sign);
         System.out.println(new String(Base64.encodeBase64(sign.getBytes())));
-        Assert.assertTrue(userParams.isSignValid(PUBLIC_KEY));
+        Assert.assertTrue(userBO.isSignValid(PUBLIC_KEY));
     }
 
     @Test
     public void testZxSign() throws Exception {
-        UserParams userParams = new UserParams(USR);
-        userParams.setSign(SIGN);
-        Assert.assertTrue(userParams.isSignValid(OPP_KEY));
+        UserBO userBO = new UserBO(USR);
+        userBO.setSign(SIGN);
+        Assert.assertTrue(userBO.isSignValid(OPP_KEY));
     }
 }

@@ -1,6 +1,6 @@
 package com.saintdan.framework.service.impl;
 
-import com.saintdan.framework.bo.UserParams;
+import com.saintdan.framework.bo.UserBO;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.po.User;
@@ -23,8 +23,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final Log log = LogFactory.getLog(UserServiceImpl.class);
-
     private final UserRepository userRepository;
 
     @Autowired
@@ -40,12 +38,11 @@ public class UserServiceImpl implements UserService {
      * @throws UserException
      */
     @Override
-    public User getUserByUsr(UserParams param) throws UserException {
+    public User getUserWithUsr(UserBO param) throws UserException {
         User user;
         try {
-            user = userRepository.findByUsr(param.getUsr());
+            user = userRepository.findWithUsr(param.getUsr());
         } catch (Exception e) {
-            LogUtils.traceError(log, e, "Can not find User by the usr param.");
             throw new UserException(ErrorType.USR0001);
         }
         return user;

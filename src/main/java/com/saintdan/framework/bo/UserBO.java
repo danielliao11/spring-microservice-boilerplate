@@ -9,7 +9,7 @@ import com.saintdan.framework.annotation.ParamField;
  * @date 7/21/15
  * @since JDK1.8
  */
-public class UserParams extends BaseParams {
+public class UserBO extends BaseBO {
 
     private int id;
 
@@ -18,7 +18,7 @@ public class UserParams extends BaseParams {
 
     private String name;
 
-    public UserParams(String usr) {
+    public UserBO(String usr) {
         this.usr = usr;
     }
 

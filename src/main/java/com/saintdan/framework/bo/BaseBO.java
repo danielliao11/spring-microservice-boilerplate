@@ -21,7 +21,7 @@ import java.util.*;
  * @date 8/19/15
  * @since JDK1.8
  */
-public class BaseParams {
+public class BaseBO {
 
     private static final Set<String> baseFields = new HashSet<>();
 
@@ -84,7 +84,7 @@ public class BaseParams {
                 String itemName = pd.getName();
                 try{
                     if (baseFields.contains(itemName)) {
-                        field = BaseParams.class.getDeclaredField(itemName);
+                        field = BaseBO.class.getDeclaredField(itemName);
                     } else {
                         field = this.getClass().getDeclaredField(itemName);
                     }

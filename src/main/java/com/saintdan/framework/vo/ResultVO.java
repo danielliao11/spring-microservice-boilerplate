@@ -25,6 +25,10 @@ public class ResultVO implements Serializable {
 
     }
 
+    public ResultVO(String code) {
+        this.code = code;
+    }
+
     public ResultVO(String code, OperationStatus operationStatus, String message) {
         this.code = code;
         this.operationStatus = operationStatus;

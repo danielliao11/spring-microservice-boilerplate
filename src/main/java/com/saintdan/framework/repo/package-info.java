@@ -1,5 +1,5 @@
 /**
- * Repository.
+ * Package of repositories.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/25/15

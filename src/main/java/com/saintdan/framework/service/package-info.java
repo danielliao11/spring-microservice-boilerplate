@@ -1,5 +1,5 @@
 /**
- * Services.
+ * Package of service interface.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/25/15

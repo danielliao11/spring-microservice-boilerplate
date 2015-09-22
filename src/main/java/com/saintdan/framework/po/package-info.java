@@ -1,5 +1,5 @@
 /**
- * Po.
+ * Package of persistence objects.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/23/15
