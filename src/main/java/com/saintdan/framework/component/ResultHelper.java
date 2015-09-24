@@ -1,5 +1,6 @@
 package com.saintdan.framework.component;
 
+import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.tools.LogUtils;
@@ -18,7 +19,22 @@ import org.springframework.stereotype.Component;
 public class ResultHelper {
 
     /**
-     * return error information.
+     * Return success result.
+     *
+     * @param vo        some vo extends result vo.
+     * @return          result vo.
+     */
+    public ResultVO sucessResp(ResultVO vo) {
+        vo.setCode(ResultConstant.OK);
+        vo.setOperationStatus(OperationStatus.SUCCESS);
+        if (vo.getMessage() == null) {
+            vo.setMessage(ResultConstant.SUCCESS);
+        }
+        return vo;
+    }
+
+    /**
+     * Return error information.
      *
      * @param errorType     error type
      * @return              result vo
@@ -28,7 +44,7 @@ public class ResultHelper {
     }
 
     /**
-     * return error information.
+     * Return error information.
      *
      * @param errorType     error type
      * @param msg           error message
@@ -43,7 +59,7 @@ public class ResultHelper {
     }
 
     /**
-     * return error information,
+     * Return error information,
      * and log it to error.
      *
      * @param log           Log
@@ -56,7 +72,7 @@ public class ResultHelper {
     }
 
     /**
-     * return error information,
+     * Return error information,
      * and log it to error.
      *
      * @param log           Log

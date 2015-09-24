@@ -51,22 +51,25 @@ headers: Authorization: bearer <access_token_returned>
 3. Get user information:
 
 ```
-$ curl http://localhost:8080/resources/users/usr=admin&sign=TEtjbkozTWVXNUxxOUJTYmxubUNJQkhqN0dPeE1RUzdqM0tURThsVXlJd29sQXMvZ01NVno1a05JaUwwNmVQTHRMSS9lOEtZSnRqL1JDN3JockhkYm9GaHVFeUZZcHB2MEhwVTJ2OEoxYVoyYXJHZm1jWitQUSt0QVVDTXp3Zm9JWEVXbmYwbXN6UnExc1AybjcxVGtaeHUyKzdrb1BQamNlL05sNkV2UnVqZm92NWJ4dCtnZG1Mc0ZSWURIVVlBTTg0cE51RGg2aW9hYzJuUU91cUZ4eFJ5c0hNcmRiSUtCeGlhcWRxVUljc1VDUm8wOElNWm1pcUhWY28vWXNTRnRRMU4weFJvNjRaS2JxK293WUZHb09XMUQ5eE9CdzM3VjFGMXpTZUZuSmRMTjYwUDVsMEpYNlRrS3hMNzNCakp0VnA2b2lNVWRCYXQ4MkgxRWNzekdBPT0= -H "Authorization: Bearer <access_token_returned>"
+$ curl "http://localhost:8080/resources/users/usr=admin&sign=TEtjbkozTWVXNUxxOUJTYmxubUNJQkhqN0dPeE1RUzdqM0tURThsVXlJd29sQXMlMkZnTU1WejVrTklpTDA2ZVBMdExJJTJGZThLWUp0aiUyRlJDN3JockhkYm9GaHVFeUZZcHB2MEhwVTJ2OEoxYVoyYXJHZm1jWiUyQlBRJTJCdEFVQ016d2ZvSVhFV25mMG1zelJxMXNQMm43MVRrWnh1MiUyQjdrb1BQamNlJTJGTmw2RXZSdWpmb3Y1Ynh0JTJCZ2RtTHNGUllESFVZQU04NHBOdURoNmlvYWMyblFPdXFGeHhSeXNITXJkYklLQnhpYXFkcVVJY3NVQ1JvMDhJTVptaXFIVmNvJTJGWXNTRnRRMU4weFJvNjRaS2JxJTJCb3dZRkdvT1cxRDl4T0J3MzdWMUYxelNlRm5KZExONjBQNWwwSlg2VGtLeEw3M0JqSnRWcDZvaU1VZEJhdDgySDFFY3N6R0ElM0QlM0Q=" -H "Authorization: Bearer <access_token_returned>"
 ```
 
 If the request is successful, you will see the following JSON response:
 
 ```
 {
-	"name":"admin",
-	"username":"admin"
+	code: "200"
+	operationStatus: "SUCCESS"
+	message: "Get user data successfully."
+	name: "admin"
+	username: "admin"
 }
 ```
 
 or use Advanced REST Client:
 
 ```
-url: http://localhost:8080/resources/users/usr=admin&sign=TEtjbkozTWVXNUxxOUJTYmxubUNJQkhqN0dPeE1RUzdqM0tURThsVXlJd29sQXMvZ01NVno1a05JaUwwNmVQTHRMSS9lOEtZSnRqL1JDN3JockhkYm9GaHVFeUZZcHB2MEhwVTJ2OEoxYVoyYXJHZm1jWitQUSt0QVVDTXp3Zm9JWEVXbmYwbXN6UnExc1AybjcxVGtaeHUyKzdrb1BQamNlL05sNkV2UnVqZm92NWJ4dCtnZG1Mc0ZSWURIVVlBTTg0cE51RGg2aW9hYzJuUU91cUZ4eFJ5c0hNcmRiSUtCeGlhcWRxVUljc1VDUm8wOElNWm1pcUhWY28vWXNTRnRRMU4weFJvNjRaS2JxK293WUZHb09XMUQ5eE9CdzM3VjFGMXpTZUZuSmRMTjYwUDVsMEpYNlRrS3hMNzNCakp0VnA2b2lNVWRCYXQ4MkgxRWNzekdBPT0=
+url: http://localhost:8080/resources/users/usr=admin&sign=TEtjbkozTWVXNUxxOUJTYmxubUNJQkhqN0dPeE1RUzdqM0tURThsVXlJd29sQXMlMkZnTU1WejVrTklpTDA2ZVBMdExJJTJGZThLWUp0aiUyRlJDN3JockhkYm9GaHVFeUZZcHB2MEhwVTJ2OEoxYVoyYXJHZm1jWiUyQlBRJTJCdEFVQ016d2ZvSVhFV25mMG1zelJxMXNQMm43MVRrWnh1MiUyQjdrb1BQamNlJTJGTmw2RXZSdWpmb3Y1Ynh0JTJCZ2RtTHNGUllESFVZQU04NHBOdURoNmlvYWMyblFPdXFGeHhSeXNITXJkYklLQnhpYXFkcVVJY3NVQ1JvMDhJTVptaXFIVmNvJTJGWXNTRnRRMU4weFJvNjRaS2JxJTJCb3dZRkdvT1cxRDl4T0J3MzdWMUYxelNlRm5KZExONjBQNWwwSlg2VGtLeEw3M0JqSnRWcDZvaU1VZEJhdDgySDFFY3N6R0ElM0QlM0Q=
 GET
 headers: Authorization: bearer <access_token_returned>
 ```
@@ -132,3 +135,8 @@ Copyright (c) 2015 saintdan
   - Extract the elements with similar signature and integrate them into one -> [SignHelper](/src/main/java/saintdan/framework/component/SignHelper.java);
   - Add package of RESTFul parameters.
   - Optimize code of services, implements, controllers.
+- 0.5.1-RELEASE
+  - Add success result response to [ResultHelper](/src/main/java/saintdan/framework/component/ResultHelper.java);
+  - Optimize code of user service and controller.
+  - Update Spring Boot to 2.0.7.RELEASE
+  - Fix the signature bugs, and changes the test sign.

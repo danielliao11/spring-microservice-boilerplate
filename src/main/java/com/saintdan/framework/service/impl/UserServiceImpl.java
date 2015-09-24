@@ -6,9 +6,6 @@ import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.service.UserService;
-import com.saintdan.framework.tools.LogUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,15 +32,14 @@ public class UserServiceImpl implements UserService {
      *
      * @param param     user params
      * @return          user po
-     * @throws UserException
+     * @throws UserException        User cannot find by usr parameter exception.
      */
     @Override
-    public User getUserWithUsr(UserBO param) throws UserException {
-        User user;
-        try {
-            user = userRepository.findWithUsr(param.getUsr());
-        } catch (Exception e) {
-            throw new UserException(ErrorType.USR0001);
+    public User getUserByUsr(UserBO param) throws UserException {
+        User user = userRepository.findByUsr(param.getUsr());
+        if (user == null) {
+            // Throw user cannot find by usr parameter exception.
+            throw new UserException(ErrorType.USR0011);
         }
         return user;
     }

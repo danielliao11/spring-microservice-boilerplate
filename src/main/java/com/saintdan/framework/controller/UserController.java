@@ -6,7 +6,6 @@ import com.saintdan.framework.component.SignHelper;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.SignatureException;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.po.User;
@@ -54,7 +53,7 @@ public class UserController {
     private SignHelper signHelper;
 
     /**
-     * Show user information with param usr.
+     * Show user information by param usr.
      *
      * @param usr       usr
      * @param sign      signature
@@ -71,14 +70,10 @@ public class UserController {
         userBO.setSign(new String(Base64.decodeBase64(sign.getBytes())));
         try {
             // Sign verification.
-            if (ResultConstant.OK.equals(signHelper.signCheck(PUBLIC_KEY, userBO, sign).getCode())) {
+            if (!ResultConstant.OK.equals(signHelper.signCheck(PUBLIC_KEY, userBO, sign).getCode())) {
                 return signHelper.signCheck(PUBLIC_KEY, userBO, sign);
             }
-            User user = userService.getUserWithUsr(new UserBO(usr));
-            if (user == null) {
-                return resultHelper.infoResp(ErrorType.USR0011);
-            }
-            return userPO2VO(user);
+            return userPO2VO(userService.getUserByUsr(new UserBO(usr)));
         } catch (SignatureException | UserException e) {
             // Return error information.
             return resultHelper.errorResp(log, e, e.getErrorType());
@@ -99,10 +94,9 @@ public class UserController {
         UserVO vo = new UserVO();
         vo.setName(user.getName());
         vo.setUsername(user.getUsr());
-        vo.setCode(ResultConstant.OK);
-        vo.setOperationStatus(OperationStatus.SUCCESS);
         vo.setMessage(msg);
-        return vo;
+        // Return success result.
+        return (UserVO) resultHelper.sucessResp(vo);
     }
 
 }

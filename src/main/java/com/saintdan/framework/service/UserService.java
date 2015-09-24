@@ -13,5 +13,12 @@ import com.saintdan.framework.po.User;
  */
 public interface UserService {
 
-    User getUserWithUsr(UserBO param) throws UserException;
+    /**
+     * Get user po by param
+     *
+     * @param param     user params
+     * @return          user po
+     * @throws UserException        User cannot find by usr parameter exception.
+     */
+    User getUserByUsr(UserBO param) throws UserException;
 }

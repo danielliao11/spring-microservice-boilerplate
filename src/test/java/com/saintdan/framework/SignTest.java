@@ -1,9 +1,13 @@
 package com.saintdan.framework;
 
 import com.saintdan.framework.bo.UserBO;
+import com.saintdan.framework.constant.SignatureConstant;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 /**
  * Test signature.
@@ -19,6 +23,7 @@ public class SignTest {
     private static final String OPP_KEY = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvpO6M1Ghv4YeEeOFHB41FtzwDLB49ovrjfYU4+YvTvXvwL1AdVlJhKfp/MveMK8tzL5Prya11nsIQnyz/dVdiWhu7xqC6fE/xbWswEskBRa/QUvOFaKZS6ZRenGsst7YTQmiEWlhZwduDvCcPrz4pEusRg+GtETdbWqO3D0O+NF9bmkEGcKvHB1BHKv6Nj8PSL0Zt8h2fbZLWNSEYWPLCA+onhtGL7pAkpGQxAtZLJTYhrTw4oo7+bcSjha/2AHfnsCcMa65EoU1BSjD18bjG+AAE6JNURH5Nl2NgRL7wT4LH1/0vJpUnCxjkWWN46648k22ogciDSr73msJuAzp9wIDAQAB";
     private static final String USR = "admin";
     private static final String SIGN = "LKcnJ3MeW5Lq9BSblnmCIBHj7GOxMQS7j3KTE8lUyIwolAs/gMMVz5kNIiL06ePLtLI/e8KYJtj/RC7rhrHdboFhuEyFYppv0HpU2v8J1aZ2arGfmcZ+PQ+tAUCMzwfoIXEWnf0mszRq1sP2n71TkZxu2+7koPPjce/Nl6EvRujfov5bxt+gdmLsFRYDHUYAM84pNuDh6ioac2nQOuqFxxRysHMrdbIKBxiaqdqUIcsUCRo08IMZmiqHVco/YsSFtQ1N0xRo64ZKbq+owYFGoOW1D9xOBw37V1F1zSeFnJdLN60P5l0JX6TkKxL73BjJtVp6oiMUdBat82H1EcszGA==";
+    private static final String ENCODE_SIGN = "TEtjbkozTWVXNUxxOUJTYmxubUNJQkhqN0dPeE1RUzdqM0tURThsVXlJd29sQXMlMkZnTU1WejVrTklpTDA2ZVBMdExJJTJGZThLWUp0aiUyRlJDN3JockhkYm9GaHVFeUZZcHB2MEhwVTJ2OEoxYVoyYXJHZm1jWiUyQlBRJTJCdEFVQ016d2ZvSVhFV25mMG1zelJxMXNQMm43MVRrWnh1MiUyQjdrb1BQamNlJTJGTmw2RXZSdWpmb3Y1Ynh0JTJCZ2RtTHNGUllESFVZQU04NHBOdURoNmlvYWMyblFPdXFGeHhSeXNITXJkYklLQnhpYXFkcVVJY3NVQ1JvMDhJTVptaXFIVmNvJTJGWXNTRnRRMU4weFJvNjRaS2JxJTJCb3dZRkdvT1cxRDl4T0J3MzdWMUYxelNlRm5KZExONjBQNWwwSlg2VGtLeEw3M0JqSnRWcDZvaU1VZEJhdDgySDFFY3N6R0ElM0QlM0Q=";
 
     @Test
     public void testSign() throws Exception {
@@ -26,14 +31,25 @@ public class SignTest {
         userBO.sign(PRIVATE_KEY);
         String sign = userBO.getSign();
         System.out.println(sign);
-        System.out.println(new String(Base64.encodeBase64(sign.getBytes())));
+        // Encode the sign.
+        String encodeSign = new String(Base64.encodeBase64(URLEncoder.encode(sign, SignatureConstant.CHARSET_UTF8).getBytes()));
+        System.out.println(encodeSign);
         Assert.assertTrue(userBO.isSignValid(PUBLIC_KEY));
     }
 
     @Test
-    public void testZxSign() throws Exception {
+    public void testOppSign() throws Exception {
         UserBO userBO = new UserBO(USR);
         userBO.setSign(SIGN);
+        Assert.assertTrue(userBO.isSignValid(OPP_KEY));
+    }
+
+    @Test
+    public void testEncodeOppSign() throws Exception {
+        // Decode the encoded sign.
+        String decodeSign = URLDecoder.decode(new String(Base64.decodeBase64(ENCODE_SIGN.getBytes())), SignatureConstant.CHARSET_UTF8);
+        UserBO userBO = new UserBO(USR);
+        userBO.setSign(decodeSign);
         Assert.assertTrue(userBO.isSignValid(OPP_KEY));
     }
 }
