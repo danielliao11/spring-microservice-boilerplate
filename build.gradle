@@ -6,6 +6,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
+apply plugin: 'maven'
 
 buildscript {
     repositories {
@@ -77,4 +78,8 @@ dependencies {
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.7'
+}
+
+task generatePom << {
+    pom{}.writeTo("pom.xml")
 }

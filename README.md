@@ -140,3 +140,5 @@ Copyright (c) 2015 saintdan
   - Optimize code of user service and controller.
   - Update Spring Boot to 2.0.7.RELEASE
   - Fix the signature bugs, and changes the test sign.
+- 0.6.0-RELEASE
+  - Add Maven support.
