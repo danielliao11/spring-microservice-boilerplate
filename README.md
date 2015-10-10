@@ -1,6 +1,9 @@
 # Spring Rest OAuth2 Sample
 
-This is REST service sample that protected by [Spring OAuth 2](http://projects.spring.io/spring-security-oauth/).
+This is REST service sample that protected by:
+- [Spring Boot](http://projects.spring.io/spring-boot/);
+- [Spring OAuth 2](http://projects.spring.io/spring-security-oauth/);
+- [Spring Security](http://projects.spring.io/spring-security/)
 
 ## Build and Run
 
@@ -8,7 +11,7 @@ This is REST service sample that protected by [Spring OAuth 2](http://projects.s
 $ cd <spring-rest-oauth2-sample root path>
 $ ./gradlew clean build bootRun
 ```
-
+ll
 ## Usage
 
 1. Take your token from `oauth/token` in terminal, if you use ssl remember add `-k`:
