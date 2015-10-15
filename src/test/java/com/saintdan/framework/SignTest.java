@@ -1,6 +1,6 @@
 package com.saintdan.framework;
 
-import com.saintdan.framework.bo.UserBO;
+import com.saintdan.framework.bo.UserParam;
 import com.saintdan.framework.constant.SignatureConstant;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
@@ -27,7 +27,7 @@ public class SignTest {
 
     @Test
     public void testSign() throws Exception {
-        UserBO userBO = new UserBO(USR);
+        UserParam userBO = new UserParam(USR);
         userBO.sign(PRIVATE_KEY);
         String sign = userBO.getSign();
         System.out.println(sign);
@@ -39,7 +39,7 @@ public class SignTest {
 
     @Test
     public void testOppSign() throws Exception {
-        UserBO userBO = new UserBO(USR);
+        UserParam userBO = new UserParam(USR);
         userBO.setSign(SIGN);
         Assert.assertTrue(userBO.isSignValid(OPP_KEY));
     }
@@ -48,7 +48,7 @@ public class SignTest {
     public void testEncodeOppSign() throws Exception {
         // Decode the encoded sign.
         String decodeSign = URLDecoder.decode(new String(Base64.decodeBase64(ENCODE_SIGN.getBytes())), SignatureConstant.CHARSET_UTF8);
-        UserBO userBO = new UserBO(USR);
+        UserParam userBO = new UserParam(USR);
         userBO.setSign(decodeSign);
         Assert.assertTrue(userBO.isSignValid(OPP_KEY));
     }

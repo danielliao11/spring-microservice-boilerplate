@@ -1,6 +1,6 @@
 package com.saintdan.framework.component;
 
-import com.saintdan.framework.bo.BaseBO;
+import com.saintdan.framework.param.BaseParam;
 import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
@@ -27,7 +27,7 @@ public class SignHelper {
     @Autowired
     private ResultHelper resultHelper;
 
-    public ResultVO signCheck(String publicKey, BaseBO params, String sign)
+    public ResultVO signCheck(String publicKey, BaseParam params, String sign)
             throws UnsupportedEncodingException, SignatureException {
         // Prepare to validate signature.
         if (StringUtils.isEmpty(sign)) {

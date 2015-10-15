@@ -1,13 +1,14 @@
 package com.saintdan.framework.controller;
 
-import com.saintdan.framework.bo.UserBO;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.SignHelper;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.SignatureException;
 import com.saintdan.framework.exception.UserException;
+import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.service.UserService;
@@ -60,20 +61,22 @@ public class UserController {
      * @return          user result
      */
     @RequestMapping(value = ResourceURL.USERS +"/usr={usr}&sign={sign}", method = RequestMethod.GET)
-    public ResultVO show(@PathVariable String usr, @PathVariable String sign) {
+    public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign) {
         // If usr or sign is empty, return SYS0002, params error.
         if (StringUtils.isEmpty(usr)) {
             return resultHelper.infoResp(ErrorType.SYS0002, "Usr cannot be null.");
         }
         // Prepare to validate signature.
-        UserBO userBO = new UserBO(usr);
-        userBO.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+        UserParam param = new UserParam();
+        param.setUsr(usr);
+        param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
         try {
             // Sign verification.
-            if (!ResultConstant.OK.equals(signHelper.signCheck(PUBLIC_KEY, userBO, sign).getCode())) {
-                return signHelper.signCheck(PUBLIC_KEY, userBO, sign);
+            if (!ResultConstant.OK.equals(signHelper.signCheck(PUBLIC_KEY, param, sign).getCode())) {
+                return signHelper.signCheck(PUBLIC_KEY, param, sign);
             }
-            return userPO2VO(userService.getUserByUsr(new UserBO(usr)));
+            // Return result and message.
+            return userPO2VO(userService.getUserByUsr(param), "Get user data successfully.");
         } catch (SignatureException | UserException e) {
             // Return error information.
             return resultHelper.errorResp(log, e, e.getErrorType());
@@ -84,14 +87,41 @@ public class UserController {
     }
 
     /**
-     * Transform the user po to vo.
+     * Create new user.
      *
-     * @param user      user po
-     * @return          user vo
+     * @param param     user param
+     * @return          user result
      */
-    private UserVO userPO2VO(User user) {
-        final String msg = "Get user data successfully.";
+    @RequestMapping(value = ResourceURL.USERS , method = RequestMethod.POST)
+    public ResultVO create(UserParam param) {
+        try {
+            // Get incorrect params.
+            String validateContent = param.getIncorrectParams();
+            if (!StringUtils.isBlank(validateContent)) {
+                // If validate failed, return error message.
+                return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
+                        String.format("Params: %s could not be null.", validateContent));
+            }
+            return userPO2VO(userService.create(param), "Create user successfully.");
+        } catch (UserException e) {
+            // Return error information.
+            return resultHelper.errorResp(log, e, e.getErrorType());
+        } catch (Exception e) {
+            // Return unknown error.
+            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN);
+        }
+    }
+
+    /**
+     * Transform user PO to VO.
+     *
+     * @param user      user PO
+     * @param msg       return message
+     * @return          user VO
+     */
+    private UserVO userPO2VO(User user, String msg) {
         UserVO vo = new UserVO();
+        vo.setUserId(user.getId());
         vo.setName(user.getName());
         vo.setUsername(user.getUsr());
         vo.setMessage(msg);

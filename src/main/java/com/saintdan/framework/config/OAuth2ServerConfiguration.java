@@ -58,7 +58,8 @@ public class OAuth2ServerConfiguration {
                     .and()
                         .authorizeRequests()
                             // Since resources can be used as its authorities, therefore, hasRole utilize resource as its' param.
-                            .antMatchers(HttpMethod.GET, USER_URL.toString()).access("hasAnyRole('root', 'admin', 'resources')")
+                            .antMatchers(HttpMethod.GET, USER_URL.toString()).permitAll()//access("hasAnyRole('root', 'admin', 'resources')")
+                            .antMatchers(HttpMethod.POST, USER_URL.toString()).permitAll()
                             .antMatchers(HttpMethod.GET, WELCOME_URL).access("#oauth2.hasScope('read')");
         }
 

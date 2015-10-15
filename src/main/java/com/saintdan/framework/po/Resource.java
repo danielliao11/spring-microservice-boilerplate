@@ -26,6 +26,7 @@ public class Resource implements Serializable {
     private Integer id;
 
     @NotEmpty
+    @Column(nullable = false, length = 20)
     private String name;
 
     /**
@@ -43,6 +44,7 @@ public class Resource implements Serializable {
     @Column(nullable = false)
     private Integer priority;
 
+    @Column(length = 500)
     private String description;
 
     @JsonIgnore

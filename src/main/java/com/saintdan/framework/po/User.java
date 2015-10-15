@@ -29,15 +29,18 @@ public class User implements Serializable {
     private Integer id;
 
     @NotEmpty
+    @Column(length = 50)
     private String name;
 
     @NotEmpty
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 20)
     private String usr;
 
     @NotEmpty
+    @Column(nullable = false, length = 30)
     private String pwd;
 
+    @Column(length = 500)
     private String description;
 
     @JsonIgnore
@@ -85,6 +88,10 @@ public class User implements Serializable {
 
     public String getPwd() {
         return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
     public String getDescription() {

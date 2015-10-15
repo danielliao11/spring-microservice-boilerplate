@@ -11,9 +11,19 @@ public class UserVO extends ResultVO implements Serializable {
 
     private static final long serialVersionUID = 6597728015488383528L;
 
+    private Integer userId;
+
     private String name;
 
     private String username;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public String getName() {
         return name;

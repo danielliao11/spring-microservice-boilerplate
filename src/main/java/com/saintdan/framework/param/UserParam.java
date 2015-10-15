@@ -1,5 +1,7 @@
 package com.saintdan.framework.param;
 
+import com.saintdan.framework.annotation.ParamField;
+
 /**
  * User RESTFul param bean.
  *
@@ -7,10 +9,18 @@ package com.saintdan.framework.param;
  * @date 9/22/15
  * @since JDK1.8
  */
-public class UserParam {
+public class UserParam extends BaseParam {
 
-    private String usr;
-    private String sign;
+    @ParamField
+    private String usr; // Username
+
+    @ParamField
+    private String pwd; // Password
+
+    @ParamField
+    private String name; // The user's name
+
+    private String description;
 
     public String getUsr() {
         return usr;
@@ -20,11 +30,27 @@ public class UserParam {
         this.usr = usr;
     }
 
-    public String getSign() {
-        return sign;
+    public String getPwd() {
+        return pwd;
     }
 
-    public void setSign(String sign) {
-        this.sign = sign;
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
