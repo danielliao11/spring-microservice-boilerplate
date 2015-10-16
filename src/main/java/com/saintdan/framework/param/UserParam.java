@@ -11,6 +11,8 @@ import com.saintdan.framework.annotation.ParamField;
  */
 public class UserParam extends BaseParam {
 
+    private Long id; // User's ID.
+
     @ParamField
     private String usr; // Username
 
@@ -21,6 +23,26 @@ public class UserParam extends BaseParam {
     private String name; // The user's name
 
     private String description;
+
+    public UserParam() {
+
+    }
+
+    public UserParam(Long id) {
+        this.id = id;
+    }
+
+    public UserParam(String usr) {
+        this.usr = usr;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsr() {
         return usr;

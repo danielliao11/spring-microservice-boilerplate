@@ -58,6 +58,15 @@ public class ResultHelper {
         );
     }
 
+    public ResultVO infoResp(Log log, ErrorType errorType) {
+        LogUtils.trackInfo(log, errorType.value());
+        return new ResultVO(
+                errorType.name(),
+                OperationStatus.FAILURE,
+                errorType.value()
+        );
+    }
+
     /**
      * Return error information,
      * and log it to error.

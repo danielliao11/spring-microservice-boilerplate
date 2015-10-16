@@ -20,13 +20,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name = "roles")
-public class Role implements GrantedAuthority,Serializable {
+public class Role implements GrantedAuthority, Serializable {
 
     private static final long serialVersionUID = -5193344128221526323L;
 
     @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Long id;
 
 	@NotEmpty
     @Column(nullable = false, length = 20)
@@ -51,11 +51,11 @@ public class Role implements GrantedAuthority,Serializable {
 		return name;
 	}
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

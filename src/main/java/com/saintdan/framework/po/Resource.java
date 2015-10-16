@@ -2,6 +2,7 @@ package com.saintdan.framework.po;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,13 +18,13 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "resources")
-public class Resource implements Serializable {
+public class Resource implements GrantedAuthority, Serializable {
 
     private static final long serialVersionUID = 6298843159549723556L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @NotEmpty
     @Column(nullable = false, length = 20)
@@ -51,11 +52,16 @@ public class Resource implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources")
     private Set<Group> groups = new HashSet<>();
 
-    public Integer getId() {
+    @Override
+    public String getAuthority() {
+        return name;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

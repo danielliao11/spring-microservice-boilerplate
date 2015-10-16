@@ -73,14 +73,14 @@ public class LogUtils {
      */
     public static String generateTraceString(String errorMsg, Throwable e) {
         StringWriter w = new StringWriter();
-        w.append("Time: ").append(DATE_FORMAT.format(new Date()))
-                .append("Function: ").append(Thread.currentThread().getName())
-                .append("Message: ").append(errorMsg);
+        w.append("Message is: ").append(errorMsg);
         PrintWriter out = new PrintWriter(w);
         if (!StringUtils.isEmpty(errorMsg)) {
             out.println(errorMsg);
         }
-        e.printStackTrace(out);
+        if (e != null) {
+            e.printStackTrace(out);
+        }
         return w.toString();
     }
 

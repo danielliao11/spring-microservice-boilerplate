@@ -1,10 +1,9 @@
 -- users
-DROP TABLE users;
 CREATE TABLE users (
-  id          INT          NOT NULL,
+  id          LONG         PRIMARY KEY,
   name        VARCHAR(50)  NOT NULL,
   usr         VARCHAR(20)  NOT NULL,
-  pwd         VARCHAR(30)  NOT NULL,
+  pwd         VARCHAR(100)  NOT NULL,
   description VARCHAR(500)
 );
 INSERT INTO users (id, name, usr, pwd, description) VALUES (1, 'root', 'root', '$2a$10$.7skSXpnyzAF117vv8yWkOma96BgSj5.m/OsVQaoVDAaw.XwaorIu', 'root account');
@@ -15,7 +14,7 @@ INSERT INTO users (id, name, usr, pwd, description) VALUES (4, 'guest', 'guest',
 -- roles
 DROP TABLE roles;
 CREATE TABLE roles (
-  id          INT          NOT NULL,
+  id          LONG         PRIMARY KEY,
   name        VARCHAR(20)  NOT NULL,
   description VARCHAR(500)
 );
@@ -27,7 +26,7 @@ INSERT INTO roles (id, name, description) VALUES (4, 'ROLE_GUEST', 'guest role')
 -- groups
 DROP TABLE groups;
 CREATE TABLE groups (
-  id          INT         NOT NULL,
+  id          LONG        PRIMARY KEY,
   name        VARCHAR(20) NOT NULL,
   description VARCHAR(500)
 );
@@ -40,7 +39,7 @@ INSERT INTO groups (id, name, description) VALUES (5, 'GROUP_ACTION', 'action pr
 -- resources
 DROP TABLE resources;
 CREATE TABLE resources (
-  id          INT         NOT NULL,
+  id          LONG        PRIMARY KEY,
   name        VARCHAR(20) NOT NULL,
   path        VARCHAR(1024) NOT NULL,
   priority    INT         NOT NULL,

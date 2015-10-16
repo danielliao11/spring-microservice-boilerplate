@@ -20,10 +20,13 @@ public enum ErrorType implements IntentState {
     // User
     USR0001("User error."),
     USR0010("User find error."),
-    USR0011("Cannot find User by the usr param."),
+    USR0011("Cannot find any user by this usr param."),
+    USR0012("Cannot find any user by this id param."),
+    USR0013("Cannot find any user, no user yet."),
     USR0020("Create user failed."),
     USR0030("User already existing."),
-    USR0031("User already existing, username taken."),
+    USR0031("User already existing, usr taken."),
+
 
     // Sign
     SGN0001("Signature error."),
