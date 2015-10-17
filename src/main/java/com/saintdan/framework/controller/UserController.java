@@ -2,15 +2,14 @@ package com.saintdan.framework.controller;
 
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.SignHelper;
+import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
-import com.saintdan.framework.constant.UserConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.SignatureException;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.param.UserParam;
-import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.service.UserService;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.codec.binary.Base64;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * User controller.
- * see {@link UserRepository}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/25/15
@@ -38,19 +36,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(ResourceURL.RESOURCES)
 public class UserController {
 
-    private static final Log log = LogFactory.getLog(UserController.class);
-
-    @Value("${opposite.end1.publicKey}")
-    private String PUBLIC_KEY;
-
-    @Autowired
-    private ResultHelper resultHelper;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private SignHelper signHelper;
+    // ------------------------
+    // PUBLIC METHODS
+    // ------------------------
 
     /**
      * Create new user.
@@ -66,7 +54,7 @@ public class UserController {
             if (!StringUtils.isBlank(validateContent)) {
                 // If validate failed, return error message.
                 return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
-                        String.format("Params: %s could not be null.", validateContent));
+                        String.format(ControllerConstant.PARAM_BLANK, validateContent));
             }
             // Return result and message.
             return userService.create(param);
@@ -107,7 +95,7 @@ public class UserController {
     public ResultVO show(@PathVariable String id) {
         try {
             if (StringUtils.isBlank(id)) {
-                return resultHelper.infoResp(ErrorType.SYS0002, UserConstant.ID_BLANK);
+                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, "id"));
             }
             UserParam param = new UserParam(Long.valueOf(id));
             return userService.getUserById(param);
@@ -132,7 +120,7 @@ public class UserController {
         try {
             // If usr or sign is empty, return SYS0002, params error.
             if (StringUtils.isBlank(usr)) {
-                return resultHelper.infoResp(ErrorType.SYS0002, UserConstant.USR_BLANK);
+                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, "usr"));
             }
             // Prepare to validate signature.
             UserParam param = new UserParam(usr);
@@ -157,13 +145,13 @@ public class UserController {
      *
      * @param id        user's id
      * @param param     user params
-     * @return          user VO
+     * @return          user result
      */
     @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.POST)
     public ResultVO update(@PathVariable String id, UserParam param) {
         try {
             if (StringUtils.isBlank(id)) {
-                return resultHelper.infoResp(ErrorType.SYS0002, UserConstant.ID_BLANK);
+                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, "id"));
             }
             // Set user's ID.
             param.setId(Long.valueOf(id));
@@ -178,15 +166,21 @@ public class UserController {
         }
     }
 
+    /**
+     * Delete user.
+     *
+     * @param id        user's id
+     * @return          result
+     */
     @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.DELETE)
     public ResultVO delete(@PathVariable String id) {
         try {
             if (StringUtils.isBlank(id)) {
-                return resultHelper.infoResp(ErrorType.SYS0002, UserConstant.ID_BLANK);
+                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, "id"));
             }
             // Delete user.
             userService.delete(new UserParam(Long.valueOf(id)));
-            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, UserConstant.DELETE_USER);
+            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.INDEX, "user"));
         } catch (UserException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
@@ -195,5 +189,23 @@ public class UserController {
             return resultHelper.errorResp(log, e, ErrorType.UNKNOWN);
         }
     }
+
+    // ------------------------
+    // PRIVATE FIELDS
+    // ------------------------
+
+    private static final Log log = LogFactory.getLog(UserController.class);
+
+    @Value("${opposite.end1.publicKey}")
+    private String PUBLIC_KEY;
+
+    @Autowired
+    private ResultHelper resultHelper;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private SignHelper signHelper;
 
 }

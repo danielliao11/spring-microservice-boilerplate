@@ -1,6 +1,6 @@
 package com.saintdan.framework;
 
-import com.saintdan.framework.tools.CustomPasswordEncoder;
+import com.saintdan.framework.component.CustomPasswordEncoder;
 
 /**
  * Generate encode password.

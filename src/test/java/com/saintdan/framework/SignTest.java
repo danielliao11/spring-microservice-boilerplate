@@ -1,7 +1,7 @@
 package com.saintdan.framework;
 
-import com.saintdan.framework.bo.UserParam;
 import com.saintdan.framework.constant.SignatureConstant;
+import com.saintdan.framework.param.UserParam;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
 import org.junit.Test;

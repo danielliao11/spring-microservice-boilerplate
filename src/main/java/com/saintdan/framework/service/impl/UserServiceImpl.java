@@ -1,14 +1,14 @@
 package com.saintdan.framework.service.impl;
 
+import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.ResultHelper;
-import com.saintdan.framework.constant.UserConstant;
+import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.service.UserService;
-import com.saintdan.framework.tools.CustomPasswordEncoder;
 import com.saintdan.framework.vo.UserVO;
 import com.saintdan.framework.vo.UsersVO;
 import org.apache.commons.lang3.StringUtils;
@@ -30,18 +30,9 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-
-    @Autowired
-    private CustomPasswordEncoder passwordEncoder;
-
-    @Autowired
-    private ResultHelper resultHelper;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    // ------------------------
+    // PUBLIC METHODS
+    // ------------------------
 
     /**
      * Create new user.
@@ -57,55 +48,58 @@ public class UserServiceImpl implements UserService {
             // Throw user already existing exception, username taken.
             throw new UserException(ErrorType.USR0031);
         }
-        return userPO2VO(userRepository.save(userParam2PO(param)), UserConstant.CREATE_USER);
+        return userPO2VO(userRepository.save(userParam2PO(param)),
+                String.format(ControllerConstant.CREATE, USER));
     }
 
     /**
      * Show all users VO.
      *
      * @return          users
-     * @throws UserException        USR0013 No user yet
+     * @throws UserException        USR0011 No user yet.
      */
     @Override
     public UsersVO getAllUsers() throws UserException {
         List<User> users = (List<User>) userRepository.findAll();
         if (users.isEmpty()) {
-            throw new UserException(ErrorType.USR0013);
+            // Throw no user yet exception.
+            throw new UserException(ErrorType.USR0011);
         }
-        return usersPO2VO(users, UserConstant.GET_ALL_USERS);
+        return usersPO2VO(users, String.format(ControllerConstant.INDEX, USER));
     }
 
     /**
-     * Show user VO.
-     *
-     * @param param     user params
-     * @return          user VO
-     * @throws UserException
-     */
-    @Override
-    public UserVO getUserById(UserParam param) throws UserException {
-        User user = userRepository.findOne(param.getId());
-        if (user == null) {
-            throw new UserException(ErrorType.USR0012);
-        }
-        return userPO2VO(user, UserConstant.GET_USER);
-    }
-
-    /**
-     * Get user VO by param
+     * Show user VO by user's id.
      *
      * @param param     user params
      * @return          user VO
      * @throws UserException        USR0012 Cannot find any user by this id param.
      */
     @Override
+    public UserVO getUserById(UserParam param) throws UserException {
+        User user = userRepository.findOne(param.getId());
+        if (user == null) {
+            // Throw user cannot find by id parameter exception.
+            throw new UserException(ErrorType.USR0012);
+        }
+        return userPO2VO(user, String.format(ControllerConstant.SHOW, USER));
+    }
+
+    /**
+     * Get user VO by usr.
+     *
+     * @param param     user params
+     * @return          user VO
+     * @throws UserException        USR0012 Cannot find any user by this usr param.
+     */
+    @Override
     public UserVO getUserByUsr(UserParam param) throws UserException {
         User user = userRepository.findByUsr(param.getUsr());
         if (user == null) {
             // Throw user cannot find by usr parameter exception.
-            throw new UserException(ErrorType.USR0011);
+            throw new UserException(ErrorType.USR0013);
         }
-        return userPO2VO(user, UserConstant.GET_USER);
+        return userPO2VO(user, String.format(ControllerConstant.SHOW, USER));
     }
 
     /**
@@ -119,9 +113,11 @@ public class UserServiceImpl implements UserService {
     public UserVO update(UserParam param) throws UserException {
         User user = userRepository.findOne(param.getId());
         if (user == null) {
+            // Throw user cannot find by usr parameter exception.
             throw new UserException(ErrorType.USR0012);
         }
-        return userPO2VO(userRepository.save(userParam2PO(param)), UserConstant.UPDATE_USER);
+        return userPO2VO(userRepository.save(userParam2PO(param)),
+                String.format(ControllerConstant.UPDATE, USER));
     }
 
     /**
@@ -134,10 +130,31 @@ public class UserServiceImpl implements UserService {
     public void delete(UserParam param) throws UserException {
         User user = userRepository.findOne(param.getId());
         if (user == null) {
+            // Throw user cannot find by usr parameter exception.
             throw new UserException(ErrorType.USR0012);
         }
         userRepository.delete(user);
     }
+
+    // ------------------------
+    // PRIVATE FIELDS AND METHODS
+    // ------------------------
+
+    @Autowired
+    private final UserRepository userRepository;
+
+    @Autowired
+    private CustomPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ResultHelper resultHelper;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    private final static String USER = "user";
 
     /**
      * Transform user param to PO.
@@ -145,7 +162,7 @@ public class UserServiceImpl implements UserService {
      * @param param     user param
      * @return          user PO
      */
-    private User userParam2PO(UserParam param) {
+    public User userParam2PO(UserParam param) {
         User user = new User();
         BeanUtils.copyProperties(param, user);
         user.setPwd(passwordEncoder.encode(param.getPwd()));
@@ -161,9 +178,7 @@ public class UserServiceImpl implements UserService {
      */
     private UserVO userPO2VO(User user, String msg) {
         UserVO vo = new UserVO();
-        vo.setUserId(user.getId());
-        vo.setName(user.getName());
-        vo.setUsername(user.getUsr());
+        BeanUtils.copyProperties(user, vo);
         if (StringUtils.isBlank(msg)) {
             return vo;
         }

@@ -17,8 +17,6 @@ import java.util.Date;
  */
 public class LogUtils {
 
-    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
     public static void trackInfo(Log log, String msg) {
         log.info(generateTraceString(msg, null));
     }
@@ -83,5 +81,7 @@ public class LogUtils {
         }
         return w.toString();
     }
+
+    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 }

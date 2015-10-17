@@ -20,13 +20,21 @@ public enum ErrorType implements IntentState {
     // User
     USR0001("User error."),
     USR0010("User find error."),
-    USR0011("Cannot find any user by this usr param."),
+    USR0011("Cannot find any user, no user yet."),
     USR0012("Cannot find any user by this id param."),
-    USR0013("Cannot find any user, no user yet."),
+    USR0013("Cannot find any user by this usr param."),
     USR0020("Create user failed."),
     USR0030("User already existing."),
     USR0031("User already existing, usr taken."),
 
+    // Role
+    ROL0001("Role error."),
+    ROL0010("Role find error."),
+    ROL0011("Cannot find any role, no role yet."),
+    ROL0012("Cannot find any role by this id param."),
+    ROL0020("Create role failed."),
+    ROL0030("Role already existing."),
+    ROL0031("Role already existing, name taken."),
 
     // Sign
     SGN0001("Signature error."),
@@ -35,7 +43,7 @@ public enum ErrorType implements IntentState {
     SGN0021("RSA signature verification failed."),
 
     // Unknown error.
-    UNKNOWN("unknown error.");
+    UNKNOWN("unknown error."),;
 
     /**
      * Value

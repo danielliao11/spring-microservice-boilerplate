@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -29,13 +30,15 @@ import java.util.*;
  * @date 8/19/15
  * @since JDK1.8
  */
-public class BaseParam {
+public class BaseParam implements Serializable {
 
     private static final Set<String> baseFields = new HashSet<>();
 
     private static final String COMMA = ",";
 
     private static final String EQUAL = "=";
+
+    private static final long serialVersionUID = -103658650614029839L;
 
     @NotNull(message = "sign could not be null.")
     private String sign;

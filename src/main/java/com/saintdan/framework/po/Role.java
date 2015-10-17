@@ -29,7 +29,7 @@ public class Role implements GrantedAuthority, Serializable {
 	private Long id;
 
 	@NotEmpty
-    @Column(nullable = false, length = 20)
+    @Column(unique = true, nullable = false, length = 20)
 	private String name;
 
     @Column(length = 500)

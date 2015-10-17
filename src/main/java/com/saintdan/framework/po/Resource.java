@@ -27,7 +27,7 @@ public class Resource implements GrantedAuthority, Serializable {
     private Long id;
 
     @NotEmpty
-    @Column(nullable = false, length = 20)
+    @Column(unique = true, nullable = false, length = 20)
     private String name;
 
     /**
@@ -35,7 +35,7 @@ public class Resource implements GrantedAuthority, Serializable {
      * <p><b>NOTE: Using ANT path mode</b></p>
      */
     @NotEmpty
-    @Column(length = 1024, nullable = false)
+    @Column(unique = true, length = 1024, nullable = false)
     private String path;
 
     /**

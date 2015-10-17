@@ -27,7 +27,7 @@ public interface UserService {
      * Show all users VO.
      *
      * @return          users VO
-     * @throws UserException        USR0013 No user yet
+     * @throws UserException        USR0011 No user yet
      */
     UsersVO getAllUsers() throws UserException;
 
@@ -45,7 +45,7 @@ public interface UserService {
      *
      * @param param     user params
      * @return          user VO
-     * @throws UserException        USR0011 Cannot find any user by this usr param.
+     * @throws UserException        USR0013 Cannot find any user by this usr param.
      */
     UserVO getUserByUsr(UserParam param) throws UserException;
 

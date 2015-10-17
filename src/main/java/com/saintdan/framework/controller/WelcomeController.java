@@ -17,11 +17,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WelcomeController {
 
-	private static final String template = "Hello, %s!";
+    // ------------------------
+    // PUBLIC METHODS
+    // ------------------------
 
+    /**
+     * Welcome somebody.
+     *
+     * @param user      user
+     * @return          user's name
+     */
     @RequestMapping("/welcome")
 	public WelcomeVO welcome(@AuthenticationPrincipal User user) {
 		return new WelcomeVO(user.getId(), String.format(template, user.getName()));
 	}
+
+    // ------------------------
+    // PRIVATE FIELDS
+    // ------------------------
+
+    private static final String template = "Hello, %s!";
 
 }
