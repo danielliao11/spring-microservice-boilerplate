@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * User controller.
+ * User's controller.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/25/15
@@ -43,8 +43,8 @@ public class UserController {
     /**
      * Create new user.
      *
-     * @param param     user param
-     * @return          user result
+     * @param param     user's param
+     * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS , method = RequestMethod.POST)
     public ResultVO create(UserParam param) {
@@ -68,9 +68,9 @@ public class UserController {
     }
 
     /**
-     * Show all users VO.
+     * Show all users' VO.
      *
-     * @return          users result
+     * @return          users' result
      */
     @RequestMapping(value = ResourceURL.USERS, method = RequestMethod.GET)
     public ResultVO index() {
@@ -89,7 +89,7 @@ public class UserController {
      * Show user by ID.
      *
      * @param id        user's id
-     * @return          user result
+     * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id) {
@@ -113,7 +113,7 @@ public class UserController {
      *
      * @param usr       usr
      * @param sign      signature
-     * @return          user result
+     * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS + "/{usr},{sign}", method = RequestMethod.GET)
     public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign) {
@@ -144,8 +144,8 @@ public class UserController {
      * Update user.
      *
      * @param id        user's id
-     * @param param     user params
-     * @return          user result
+     * @param param     user's params
+     * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.POST)
     public ResultVO update(@PathVariable String id, UserParam param) {
@@ -170,7 +170,7 @@ public class UserController {
      * Delete user.
      *
      * @param id        user's id
-     * @return          result
+     * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.DELETE)
     public ResultVO delete(@PathVariable String id) {

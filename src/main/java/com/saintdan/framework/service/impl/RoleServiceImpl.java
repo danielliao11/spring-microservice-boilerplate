@@ -34,8 +34,8 @@ public class RoleServiceImpl implements RoleService {
     /**
      * Create new role.
      *
-     * @param param         role params
-     * @return              role VO
+     * @param param         role's params
+     * @return              role's VO
      * @throws RoleException        ROL0031 Role already existing, name taken.
      */
     @Override
@@ -50,9 +50,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
-     * Show all roles VO.
+     * Show all roles' VO.
      *
-     * @return              roles VO
+     * @return              roles' VO
      * @throws RoleException        ROL0011 No role yet.
      */
     @Override
@@ -66,11 +66,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
-     * Show role VO by role id.
+     * Show role's VO by role's id.
      *
-     * @param param         role params
-     * @return              role VO
-     * @throws RoleException
+     * @param param         role's params
+     * @return              role's VO
+     * @throws RoleException        ROL0012 Cannot find any user by this id param.
      */
     @Override
     public RoleVO getRoleById(RoleParam param) throws RoleException {
@@ -82,14 +82,55 @@ public class RoleServiceImpl implements RoleService {
         return rolePO2VO(role, String.format(ControllerConstant.SHOW, ROLE));
     }
 
+    /**
+     * Show role's VO by role's name.
+     *
+     * @param param         role's params
+     * @return              role's VO
+     * @throws RoleException        ROL0011 Cannot find any user by this name param.
+     */
     @Override
-    public RoleVO update(RoleParam param) throws RoleException {
-        return null;
+    public RoleVO getRoleByName(RoleParam param) throws RoleException {
+        Role role = roleRepository.findByName(param.getName());
+        if (role == null) {
+            // Throw role cannot find by name parameter exception.
+            throw new RoleException(ErrorType.ROL0013);
+        }
+        return rolePO2VO(role, String.format(ControllerConstant.SHOW, ROLE));
     }
 
+    /**
+     * Update role.
+     *
+     * @param param         role's params
+     * @return              role's VO
+     * @throws RoleException        ROL0012 Cannot find any user by this id param.
+     */
+    @Override
+    public RoleVO update(RoleParam param) throws RoleException {
+        Role role = roleRepository.findOne(param.getId());
+        if (role == null) {
+            // Throw role cannot find by id parameter exception.
+            throw new RoleException(ErrorType.ROL0012);
+        }
+        return rolePO2VO(roleRepository.save(roleParam2PO(param)),
+                String.format(ControllerConstant.UPDATE, ROLE));
+    }
+
+    /**
+     * Delete role.
+     *
+     * @param param         role's params.
+     * @throws RoleException        ROL0012 Cannot find any user by this id param.
+     */
     @Override
     public void delete(RoleParam param) throws RoleException {
-
+        Role role = roleRepository.findOne(param.getId());
+        if (role == null) {
+            // Throw role cannot find by id parameter exception.
+            throw new RoleException(ErrorType.ROL0012);
+        }
+        roleRepository.delete(role);
     }
 
     // ------------------------
@@ -105,10 +146,10 @@ public class RoleServiceImpl implements RoleService {
     private final static String ROLE = "role";
 
     /**
-     * Transform role param to PO.
+     * Transform role's param to PO.
      *
-     * @param param         role param
-     * @return              role PO
+     * @param param         role's param
+     * @return              role's PO
      */
     private Role roleParam2PO(RoleParam param) {
         Role role = new Role();
@@ -117,11 +158,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
-     * Transform role PO to VO.
+     * Transform role's PO to VO.
      *
-     * @param role          role PO
+     * @param role          role's PO
      * @param msg           return message
-     * @return              role VO
+     * @return              role's VO
      */
     private RoleVO rolePO2VO(Role role, String msg) {
         RoleVO vo = new RoleVO();
@@ -135,11 +176,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
-     * Transform roles PO to roles VO
+     * Transform roles' PO to roles VO
      *
-     * @param roles     roles PO
+     * @param roles     roles' PO
      * @param msg       return message
-     * @return          roles VO
+     * @return          roles' VO
      */
     private RolesVO rolesPO2VO(Iterable<Role> roles, String msg) {
         RolesVO vos = new RolesVO();

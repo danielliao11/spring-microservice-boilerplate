@@ -6,7 +6,7 @@ import com.saintdan.framework.vo.RoleVO;
 import com.saintdan.framework.vo.RolesVO;
 
 /**
- * Role Service.
+ * Role's Service.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/16/15
@@ -19,6 +19,8 @@ public interface RoleService {
     RolesVO getAllRoles() throws RoleException;
 
     RoleVO getRoleById(RoleParam param) throws RoleException;
+
+    RoleVO getRoleByName(RoleParam param) throws RoleException;
 
     RoleVO update(RoleParam param) throws RoleException;
 

@@ -3,7 +3,7 @@ package com.saintdan.framework.vo;
 import java.io.Serializable;
 
 /**
- * Role VO.
+ * Role's VO.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/16/15

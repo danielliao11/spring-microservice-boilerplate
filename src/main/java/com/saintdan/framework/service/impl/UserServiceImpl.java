@@ -37,8 +37,8 @@ public class UserServiceImpl implements UserService {
     /**
      * Create new user.
      *
-     * @param param     user params
-     * @return          user VO
+     * @param param     user's params
+     * @return          user's VO
      * @throws UserException        USR0031 User already existing exception, usr taken
      */
     @Override
@@ -53,10 +53,10 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Show all users VO.
+     * Show all users' VO.
      *
      * @return          users
-     * @throws UserException        USR0011 No user yet.
+     * @throws UserException        USR0011 No user exists.
      */
     @Override
     public UsersVO getAllUsers() throws UserException {
@@ -71,8 +71,8 @@ public class UserServiceImpl implements UserService {
     /**
      * Show user VO by user's id.
      *
-     * @param param     user params
-     * @return          user VO
+     * @param param     user's params
+     * @return          user's VO
      * @throws UserException        USR0012 Cannot find any user by this id param.
      */
     @Override
@@ -86,10 +86,10 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Get user VO by usr.
+     * Get user's VO by usr.
      *
-     * @param param     user params
-     * @return          user VO
+     * @param param     user's params
+     * @return          user's VO
      * @throws UserException        USR0012 Cannot find any user by this usr param.
      */
     @Override
@@ -105,8 +105,8 @@ public class UserServiceImpl implements UserService {
     /**
      * Update user.
      *
-     * @param param     user params
-     * @return          user VO
+     * @param param     user's params
+     * @return          user's VO
      * @throws UserException        USR0012 Cannot find any user by this id param.
      */
     @Override
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
     /**
      * Delete user.
      *
-     * @param param     user params
+     * @param param     user's params
      * @throws UserException        USR0012 Cannot find any user by this id param.
      */
     @Override
@@ -157,10 +157,10 @@ public class UserServiceImpl implements UserService {
     private final static String USER = "user";
 
     /**
-     * Transform user param to PO.
+     * Transform user's param to PO.
      *
-     * @param param     user param
-     * @return          user PO
+     * @param param     user's param
+     * @return          user's PO
      */
     public User userParam2PO(UserParam param) {
         User user = new User();
@@ -170,11 +170,11 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Transform user PO to VO.
+     * Transform user's PO to VO.
      *
-     * @param user      user PO
+     * @param user      user's PO
      * @param msg       return message
-     * @return          user VO
+     * @return          user's VO
      */
     private UserVO userPO2VO(User user, String msg) {
         UserVO vo = new UserVO();
@@ -188,11 +188,11 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Transform users PO to users VO
+     * Transform users' PO to users VO
      *
-     * @param users     users PO
+     * @param users     users' PO
      * @param msg       return message
-     * @return          users VO
+     * @return          users' VO
      */
     private UsersVO usersPO2VO(Iterable<User> users, String msg) {
         UsersVO vos = new UsersVO();

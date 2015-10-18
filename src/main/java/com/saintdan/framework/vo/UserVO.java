@@ -3,6 +3,8 @@ package com.saintdan.framework.vo;
 import java.io.Serializable;
 
 /**
+ * User's VO.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/30/15
  * @since JDK1.8

@@ -6,7 +6,7 @@ import com.saintdan.framework.vo.RoleVO;
 import com.saintdan.framework.vo.RolesVO;
 
 /**
- * Group Service.
+ * Group's Service.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/16/15
