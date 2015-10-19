@@ -201,7 +201,7 @@ public class ResourceServiceImpl implements ResourceService {
         BeanUtils.copyProperties(param, resource);
         if (!StringUtils.isBlank(param.getGroupIds())) {
             Iterable<Group> groups = groupService.getGroupsByIds(transformer.idsStr2Iterable(param.getGroupIds()));
-            resource.setGroups((Set<Group>) groups);
+            resource.setGroups(transformer.iterable2Set(groups));
         }
         return resource;
     }

@@ -192,7 +192,7 @@ public class RoleServiceImpl implements RoleService {
         BeanUtils.copyProperties(param, role);
         if (!StringUtils.isBlank(param.getUserIds())) {
             Iterable<User> users = userService.getUsersByIds(transformer.idsStr2Iterable(param.getUserIds()));
-            role.setUsers((Set<User>) users);
+            role.setUsers(transformer.iterable2Set(users));
         }
         if (!StringUtils.isBlank(param.getGroupIds())) {
             Iterable<Group> groups = groupService.getGroupsByIds(transformer.idsStr2Iterable(param.getGroupIds()));

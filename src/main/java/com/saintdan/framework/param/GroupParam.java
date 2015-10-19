@@ -1,5 +1,7 @@
 package com.saintdan.framework.param;
 
+import com.saintdan.framework.annotation.ParamField;
+
 import java.io.Serializable;
 
 /**
@@ -15,6 +17,7 @@ public class GroupParam extends BaseParam implements Serializable {
 
     private Long id; // role's ID.
 
+    @ParamField
     private String name; // role's name
 
     private String description;

@@ -1,5 +1,7 @@
 package com.saintdan.framework.param;
 
+import com.saintdan.framework.annotation.ParamField;
+
 import java.io.Serializable;
 
 /**
@@ -15,10 +17,13 @@ public class ResourceParam extends BaseParam implements Serializable {
 
     private Long id; // role's ID.
 
+    @ParamField
     private String name; // role's name
 
+    @ParamField
     private String path;
 
+    @ParamField
     private Integer priority;
 
     private String description;

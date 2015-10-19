@@ -1,13 +1,20 @@
 package com.saintdan.framework.service.impl;
 
 import com.saintdan.framework.component.ResultHelper;
+import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.GroupException;
+import com.saintdan.framework.exception.ResourceException;
+import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.param.GroupParam;
 import com.saintdan.framework.po.Group;
+import com.saintdan.framework.po.Resource;
+import com.saintdan.framework.po.Role;
 import com.saintdan.framework.repo.GroupRepository;
 import com.saintdan.framework.service.GroupService;
+import com.saintdan.framework.service.ResourceService;
+import com.saintdan.framework.service.RoleService;
 import com.saintdan.framework.vo.GroupVO;
 import com.saintdan.framework.vo.GroupsVO;
 import org.apache.commons.lang3.StringUtils;
@@ -39,9 +46,11 @@ public class GroupServiceImpl implements GroupService {
      * @param param         group's params
      * @return              group's VO
      * @throws GroupException        GRP0031 Group already existing, name taken.
+     * @throws ResourceException     RSC0012 Cannot find any resource by this id param.
+     * @throws RoleException         ROL0012 Cannot find any role by this id param.
      */
     @Override
-    public GroupVO create(GroupParam param) throws GroupException {
+    public GroupVO create(GroupParam param) throws GroupException, ResourceException, RoleException {
         Group group = groupRepository.findByName(param.getName());
         if (group != null) {
             // Throw group already existing, name taken.
@@ -119,9 +128,11 @@ public class GroupServiceImpl implements GroupService {
      * @param param         group's params
      * @return              group's VO
      * @throws GroupException        ROL0012 Cannot find any group by this id param.
+     * @throws ResourceException     RSC0012 Cannot find any resource by this id param.
+     * @throws RoleException         ROL0012 Cannot find any role by this id param.
      */
     @Override
-    public GroupVO update(GroupParam param) throws GroupException {
+    public GroupVO update(GroupParam param) throws GroupException, ResourceException, RoleException {
         if (!groupRepository.exists(param.getId())) {
             // Throw group cannot find by id parameter exception.
             throw new GroupException(ErrorType.GRP0012);
@@ -151,10 +162,19 @@ public class GroupServiceImpl implements GroupService {
     // --------------------------
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private ResourceService resourceService;
+
+    @Autowired
     private GroupRepository groupRepository;
 
     @Autowired
     private ResultHelper resultHelper;
+
+    @Autowired
+    private Transformer transformer;
 
     private final static String GROUP = "group";
 
@@ -163,10 +183,20 @@ public class GroupServiceImpl implements GroupService {
      *
      * @param param         group's param
      * @return              group's PO
+     * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
+     * @throws RoleException            ROL0012 Cannot find any role by this id param.
      */
-    private Group groupParam2PO(GroupParam param) {
+    private Group groupParam2PO(GroupParam param) throws ResourceException, RoleException {
         Group group = new Group();
         BeanUtils.copyProperties(param, group);
+        if (!StringUtils.isBlank(param.getResourceIds())) {
+            Iterable<Resource> resources = resourceService.getResourcesByIds(transformer.idsStr2Iterable(param.getResourceIds()));
+            group.setResources(transformer.iterable2Set(resources));
+        }
+        if (!StringUtils.isBlank(param.getRoleIds())) {
+            Iterable<Role> roles = roleService.getRolesByIds(transformer.idsStr2Iterable(param.getRoleIds()));
+            group.setRoles(transformer.iterable2Set(roles));
+        }
         return group;
     }
 
