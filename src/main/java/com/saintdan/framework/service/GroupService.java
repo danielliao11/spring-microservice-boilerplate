@@ -2,6 +2,7 @@ package com.saintdan.framework.service;
 
 import com.saintdan.framework.exception.GroupException;
 import com.saintdan.framework.param.GroupParam;
+import com.saintdan.framework.po.Group;
 import com.saintdan.framework.vo.GroupVO;
 import com.saintdan.framework.vo.GroupsVO;
 
@@ -30,6 +31,15 @@ public interface GroupService {
      * @throws GroupException        GRP0011 No group exist.
      */
     GroupsVO getAllGroups() throws GroupException;
+
+    /**
+     * Show groups by ids.
+     *
+     * @param ids           groups' ids
+     * @return              groups' PO
+     * @throws GroupException        GRP0012 Cannot find any group by this id param.
+     */
+    Iterable<Group> getGroupsByIds(Iterable<Long> ids) throws GroupException;
 
     /**
      * Show group's VO by group's id.

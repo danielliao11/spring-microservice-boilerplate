@@ -1,8 +1,6 @@
 package com.saintdan.framework.param;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Group RESTFul param bean.
@@ -21,9 +19,16 @@ public class GroupParam extends BaseParam implements Serializable {
 
     private String description;
 
-    private Set<Long> roleIds = new HashSet<>(); // role ids
+    private String roleIds; // role ids string
 
-    private Set<Long> resourceIds = new HashSet<>(); // resource ids
+    private String resourceIds; // resource ids string
+
+    public GroupParam() {
+    }
+
+    public GroupParam(Long id) {
+        this.id = id;
+    }
 
     public Long getId() {
         return id;
@@ -49,19 +54,19 @@ public class GroupParam extends BaseParam implements Serializable {
         this.description = description;
     }
 
-    public Set<Long> getRoleIds() {
+    public String getRoleIds() {
         return roleIds;
     }
 
-    public void setRoleIds(Set<Long> roleIds) {
+    public void setRoleIds(String roleIds) {
         this.roleIds = roleIds;
     }
 
-    public Set<Long> getResourceIds() {
+    public String getResourceIds() {
         return resourceIds;
     }
 
-    public void setResourceIds(Set<Long> resourceIds) {
+    public void setResourceIds(String resourceIds) {
         this.resourceIds = resourceIds;
     }
 }

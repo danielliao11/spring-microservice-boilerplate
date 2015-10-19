@@ -12,4 +12,9 @@ public interface ResourceURL {
     String RESOURCES = "/resources";
 
     String USERS = "/users";
+
+    String ROLES = "/roles";
+
+    String GROUPS = "/groups";
+
 }

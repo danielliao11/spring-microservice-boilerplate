@@ -1,7 +1,10 @@
 package com.saintdan.framework.service;
 
+import com.saintdan.framework.exception.GroupException;
 import com.saintdan.framework.exception.RoleException;
+import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.param.RoleParam;
+import com.saintdan.framework.po.Role;
 import com.saintdan.framework.vo.RoleVO;
 import com.saintdan.framework.vo.RolesVO;
 
@@ -20,8 +23,10 @@ public interface RoleService {
      * @param param         role's params
      * @return              role's VO
      * @throws RoleException        ROL0031 Role already existing, name taken.
+     * @throws UserException        USR0012 Cannot find any user by this id param.
+     * @throws GroupException       GRP0012 Cannot find any group by this id param.
      */
-    RoleVO create(RoleParam param) throws RoleException;
+    RoleVO create(RoleParam param) throws RoleException, UserException, GroupException;
 
     /**
      * Show all roles' VO.
@@ -30,6 +35,15 @@ public interface RoleService {
      * @throws RoleException        ROL0011 No role exist.
      */
     RolesVO getAllRoles() throws RoleException;
+
+    /**
+     * Show roles by ids.
+     *
+     * @param ids           roles' ids
+     * @return              roles' PO
+     * @throws RoleException        ROL0012 Cannot find any role by this id param.
+     */
+    Iterable<Role> getRolesByIds(Iterable<Long> ids) throws RoleException;
 
     /**
      * Show role's VO by role's id.
@@ -55,8 +69,10 @@ public interface RoleService {
      * @param param         role's params
      * @return              role's VO
      * @throws RoleException        ROL0012 Cannot find any role by this id param.
+     * @throws UserException        USR0012 Cannot find any user by this id param.
+     * @throws GroupException       GRP0012 Cannot find any group by this id param.
      */
-    RoleVO update(RoleParam param) throws RoleException;
+    RoleVO update(RoleParam param) throws RoleException, UserException, GroupException;
 
     /**
      * Delete role.

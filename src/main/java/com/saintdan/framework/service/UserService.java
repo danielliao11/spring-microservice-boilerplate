@@ -1,7 +1,9 @@
 package com.saintdan.framework.service;
 
+import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.param.UserParam;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.UserVO;
 import com.saintdan.framework.vo.UsersVO;
 
@@ -20,8 +22,9 @@ public interface UserService {
      * @param param     user's params
      * @return          user's VO
      * @throws UserException        USR0031 User already existing exception, usr taken
+     * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
-    UserVO create(UserParam param) throws UserException;
+    UserVO create(UserParam param) throws UserException, RoleException;
 
     /**
      * Show all users' VO.
@@ -30,6 +33,15 @@ public interface UserService {
      * @throws UserException        USR0011 No user yet
      */
     UsersVO getAllUsers() throws UserException;
+
+    /**
+     * Show users by ids.
+     *
+     * @param ids           users' ids
+     * @return              users' PO
+     * @throws UserException        USR0012 Cannot find any user by this id param.
+     */
+    Iterable<User> getUsersByIds(Iterable<Long> ids) throws UserException;
 
     /**
      * Show user's VO.
@@ -56,8 +68,9 @@ public interface UserService {
      * @param param     user's params
      * @return          user's VO
      * @throws UserException        USR0012 Cannot find any user by this id param.
+     * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
-    UserVO update(UserParam param) throws UserException;
+    UserVO update(UserParam param) throws UserException, RoleException;
 
     /**
      * Delete user.

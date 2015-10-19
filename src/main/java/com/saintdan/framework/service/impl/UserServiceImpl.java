@@ -1,13 +1,17 @@
 package com.saintdan.framework.service.impl;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
+import com.saintdan.framework.component.IdsHelper;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.param.UserParam;
+import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
+import com.saintdan.framework.service.RoleService;
 import com.saintdan.framework.service.UserService;
 import com.saintdan.framework.vo.UserVO;
 import com.saintdan.framework.vo.UsersVO;
@@ -18,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implements the
@@ -40,9 +45,10 @@ public class UserServiceImpl implements UserService {
      * @param param     user's params
      * @return          user's VO
      * @throws UserException        USR0031 User already existing exception, usr taken
+     * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
     @Override
-    public UserVO create(UserParam param) throws UserException {
+    public UserVO create(UserParam param) throws UserException, RoleException {
         User user = userRepository.findByUsr(param.getUsr());
         if (user != null) {
             // Throw user already existing exception, username taken.
@@ -66,6 +72,18 @@ public class UserServiceImpl implements UserService {
             throw new UserException(ErrorType.USR0011);
         }
         return usersPO2VO(users, String.format(ControllerConstant.INDEX, USER));
+    }
+
+    /**
+     * Show users by ids.
+     *
+     * @param ids           users' ids
+     * @return              users' PO
+     * @throws UserException        USR0012 Cannot find any user by this id param.
+     */
+    @Override
+    public Iterable<User> getUsersByIds(Iterable<Long> ids) throws UserException {
+        return userRepository.findAll(ids);
     }
 
     /**
@@ -108,11 +126,11 @@ public class UserServiceImpl implements UserService {
      * @param param     user's params
      * @return          user's VO
      * @throws UserException        USR0012 Cannot find any user by this id param.
+     * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
     @Override
-    public UserVO update(UserParam param) throws UserException {
-        User user = userRepository.findOne(param.getId());
-        if (user == null) {
+    public UserVO update(UserParam param) throws UserException, RoleException {
+        if (userRepository.exists(param.getId())) {
             // Throw user cannot find by usr parameter exception.
             throw new UserException(ErrorType.USR0012);
         }
@@ -141,6 +159,9 @@ public class UserServiceImpl implements UserService {
     // --------------------------
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private final UserRepository userRepository;
 
     @Autowired
@@ -148,6 +169,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ResultHelper resultHelper;
+
+    @Autowired
+    private IdsHelper idsHelper;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -162,9 +186,13 @@ public class UserServiceImpl implements UserService {
      * @param param     user's param
      * @return          user's PO
      */
-    public User userParam2PO(UserParam param) {
+    private User userParam2PO(UserParam param) throws RoleException {
         User user = new User();
         BeanUtils.copyProperties(param, user);
+        if (!StringUtils.isBlank(param.getRoleIds())) {
+            Iterable<Role> roles = roleService.getRolesByIds(idsHelper.idsStr2Iterable(param.getRoleIds()));
+            user.setRoles((Set<Role>) roles);
+        }
         user.setPwd(passwordEncoder.encode(param.getPwd()));
         return user;
     }

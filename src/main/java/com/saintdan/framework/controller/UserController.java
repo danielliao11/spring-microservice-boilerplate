@@ -95,7 +95,7 @@ public class UserController {
     public ResultVO show(@PathVariable String id) {
         try {
             if (StringUtils.isBlank(id)) {
-                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, "id"));
+                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             UserParam param = new UserParam(Long.valueOf(id));
             return userService.getUserById(param);
@@ -120,7 +120,8 @@ public class UserController {
         try {
             // If usr or sign is empty, return SYS0002, params error.
             if (StringUtils.isBlank(usr)) {
-                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, "usr"));
+                final String USR = "usr";
+                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, USR));
             }
             // Prepare to validate signature.
             UserParam param = new UserParam(usr);
@@ -151,7 +152,7 @@ public class UserController {
     public ResultVO update(@PathVariable String id, UserParam param) {
         try {
             if (StringUtils.isBlank(id)) {
-                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, "id"));
+                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             // Set user's ID.
             param.setId(Long.valueOf(id));
@@ -176,11 +177,12 @@ public class UserController {
     public ResultVO delete(@PathVariable String id) {
         try {
             if (StringUtils.isBlank(id)) {
-                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, "id"));
+                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             // Delete user.
             userService.delete(new UserParam(Long.valueOf(id)));
-            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.INDEX, "user"));
+            final String USER = "user";
+            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.INDEX, USER));
         } catch (UserException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());

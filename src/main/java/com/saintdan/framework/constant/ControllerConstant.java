@@ -11,6 +11,8 @@ public interface ControllerConstant {
 
     String PARAM_BLANK = "Params: %s cannot be null.";
 
+    String ID_PARAM = "id";
+
     String SHOW = "Get %s data successfully.";
 
     String INDEX = "Get all %ss data successfully.";

@@ -3,8 +3,6 @@ package com.saintdan.framework.param;
 import com.saintdan.framework.annotation.ParamField;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * User RESTFul param bean.
@@ -30,7 +28,7 @@ public class UserParam extends BaseParam implements Serializable {
 
     private String description;
 
-    private Set<Long> roleIds = new HashSet<>(); // role ids
+    private String roleIds; // role ids string
 
     public UserParam() {
 
@@ -84,11 +82,11 @@ public class UserParam extends BaseParam implements Serializable {
         this.description = description;
     }
 
-    public Set<Long> getRoleIds() {
+    public String getRoleIds() {
         return roleIds;
     }
 
-    public void setRoleIds(Set<Long> roleIds) {
+    public void setRoleIds(String roleIds) {
         this.roleIds = roleIds;
     }
 }

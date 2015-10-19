@@ -1,12 +1,16 @@
 package com.saintdan.framework.service.impl;
 
+import com.saintdan.framework.component.IdsHelper;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.exception.GroupException;
 import com.saintdan.framework.exception.ResourceException;
 import com.saintdan.framework.param.ResourceParam;
+import com.saintdan.framework.po.Group;
 import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.repo.ResourceRepository;
+import com.saintdan.framework.service.GroupService;
 import com.saintdan.framework.service.ResourceService;
 import com.saintdan.framework.vo.ResourceVO;
 import com.saintdan.framework.vo.ResourcesVO;
@@ -16,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implements the
@@ -37,9 +42,10 @@ public class ResourceServiceImpl implements ResourceService {
      * @param param         resource's params
      * @return              resource's VO
      * @throws ResourceException        RSC0031 Resource already existing, name taken.
+     * @throws GroupException           GRP0012 Cannot find any group by this id param.
      */
     @Override
-    public ResourceVO create(ResourceParam param) throws ResourceException {
+    public ResourceVO create(ResourceParam param) throws ResourceException, GroupException {
         Resource resource = resourceRepository.findByName(param.getName());
         if (resource != null) {
             // Throw Resource already existing, name taken.
@@ -63,6 +69,18 @@ public class ResourceServiceImpl implements ResourceService {
             throw new ResourceException(ErrorType.GRP0011);
         }
         return resourcesPO2VO(resources, String.format(ControllerConstant.INDEX, RESOURCE));
+    }
+
+    /**
+     * Show resources by ids.
+     *
+     * @param ids           resources' ids
+     * @return              resources' PO
+     * @throws ResourceException        GRP0012 Cannot find any resource by this id param.
+     */
+    @Override
+    public Iterable<Resource> getResourcesByIds(Iterable<Long> ids) throws ResourceException {
+        return resourceRepository.findAll(ids);
     }
 
     /**
@@ -122,9 +140,10 @@ public class ResourceServiceImpl implements ResourceService {
      * @param param         resource's params
      * @return              resource's VO
      * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
+     * @throws GroupException           GRP0012 Cannot find any group by this id param.
      */
     @Override
-    public ResourceVO update(ResourceParam param) throws ResourceException {
+    public ResourceVO update(ResourceParam param) throws ResourceException, GroupException {
         Resource resource = resourceRepository.findOne(param.getId());
         if (resource == null) {
             // Throw Resource cannot find by id parameter exception.
@@ -156,10 +175,16 @@ public class ResourceServiceImpl implements ResourceService {
     // --------------------------
 
     @Autowired
+    private GroupService groupService;
+
+    @Autowired
     private ResourceRepository resourceRepository;
 
     @Autowired
     private ResultHelper resultHelper;
+
+    @Autowired
+    private IdsHelper idsHelper;
 
     private final static String RESOURCE = "resource";
 
@@ -168,10 +193,15 @@ public class ResourceServiceImpl implements ResourceService {
      *
      * @param param         resource's param
      * @return              resource's PO
+     * @throws GroupException       GRP0012 Cannot find any group by this id param.
      */
-    private Resource resourceParam2PO(ResourceParam param) {
+    private Resource resourceParam2PO(ResourceParam param) throws GroupException {
         Resource resource = new Resource();
         BeanUtils.copyProperties(param, resource);
+        if (!StringUtils.isBlank(param.getGroupIds())) {
+            Iterable<Group> groups = groupService.getGroupsByIds(idsHelper.idsStr2Iterable(param.getGroupIds()));
+            resource.setGroups((Set<Group>) groups);
+        }
         return resource;
     }
 

@@ -7,9 +7,9 @@ import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
-import com.saintdan.framework.exception.RoleException;
-import com.saintdan.framework.param.RoleParam;
-import com.saintdan.framework.service.RoleService;
+import com.saintdan.framework.exception.ResourceException;
+import com.saintdan.framework.param.ResourceParam;
+import com.saintdan.framework.service.ResourceService;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Role's controller.
+ * Resource's controller.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/17/15
@@ -29,20 +29,20 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(ResourceURL.RESOURCES)
-public class RoleController {
+public class ResourceController {
 
     // ------------------------
     // PUBLIC METHODS
     // ------------------------
 
     /**
-     * Create new role.
+     * Create new resource.
      *
-     * @param param     role's param
-     * @return          role's result
+     * @param param     resource's param
+     * @return          resource's result
      */
     @RequestMapping(value = ResourceURL.ROLES , method = RequestMethod.POST)
-    public ResultVO create(RoleParam param) {
+    public ResultVO create(ResourceParam param) {
         try {
             // Get incorrect params.
             String validateContent = param.getIncorrectParams();
@@ -52,8 +52,8 @@ public class RoleController {
                         String.format(ControllerConstant.PARAM_BLANK, validateContent));
             }
             // Return result and message.
-            return roleService.create(param);
-        } catch (RoleException e) {
+            return resourceService.create(param);
+        } catch (ResourceException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -63,15 +63,15 @@ public class RoleController {
     }
 
     /**
-     * Show all roles' VO.
+     * Show all resources' VO.
      *
-     * @return          roles' result
+     * @return          resources' result
      */
     @RequestMapping(value = ResourceURL.ROLES, method = RequestMethod.GET)
     public ResultVO index() {
         try {
-            return roleService.getAllRoles();
-        } catch (RoleException e) {
+            return resourceService.getAllResources();
+        } catch (ResourceException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -81,10 +81,10 @@ public class RoleController {
     }
 
     /**
-     * Show role by ID.
+     * Show resource by ID.
      *
-     * @param id        role's id
-     * @return          role's result
+     * @param id        resource's id
+     * @return          resource's result
      */
     @RequestMapping(value = ResourceURL.ROLES + "/{id}", method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id) {
@@ -92,9 +92,9 @@ public class RoleController {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
-            RoleParam param = new RoleParam(Long.valueOf(id));
-            return roleService.getRoleById(param);
-        } catch (RoleException e) {
+            ResourceParam param = new ResourceParam(Long.valueOf(id));
+            return resourceService.getResourceById(param);
+        } catch (ResourceException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -104,23 +104,23 @@ public class RoleController {
     }
 
     /**
-     * Update role.
+     * Update resource.
      *
-     * @param id        role's id
-     * @param param     role's params
-     * @return          role's result
+     * @param id        resource's id
+     * @param param     resource's params
+     * @return          resource's result
      */
     @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.POST)
-    public ResultVO update(@PathVariable String id, RoleParam param) {
+    public ResultVO update(@PathVariable String id, ResourceParam param) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
-            // Set role's ID.
+            // Set resource's ID.
             param.setId(Long.valueOf(id));
-            // Update role.
-            return roleService.update(param);
-        } catch (RoleException e) {
+            // Update resource.
+            return resourceService.update(param);
+        } catch (ResourceException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -130,21 +130,21 @@ public class RoleController {
     }
 
     /**
-     * Delete role.
+     * Delete resource.
      *
-     * @param id        role's id
-     * @return          role's result
+     * @param id        resource's id
+     * @return          resource's result
      */
     public ResultVO delete(@PathVariable String id) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
-            // Delete role.
-            roleService.delete(new RoleParam(Long.valueOf(id)));
-            final String ROLE = "role";
+            // Delete resource.
+            resourceService.delete(new ResourceParam(Long.valueOf(id)));
+            final String ROLE = "resource";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.INDEX, ROLE));
-        } catch (RoleException e) {
+        } catch (ResourceException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -157,13 +157,13 @@ public class RoleController {
     // PRIVATE FIELDS
     // ------------------------
 
-    private static final Log log = LogFactory.getLog(RoleController.class);
+    private static final Log log = LogFactory.getLog(ResourceController.class);
 
     @Autowired
     private ResultHelper resultHelper;
 
     @Autowired
-    private RoleService roleService;
+    private ResourceService resourceService;
 
     @Autowired
     private SignHelper signHelper;

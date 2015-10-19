@@ -55,7 +55,7 @@ public class GroupServiceImpl implements GroupService {
      * Show all groups' VO.
      *
      * @return              groups' VO
-     * @throws GroupException        ROL0011 No group exist.
+     * @throws GroupException        GRP0011 No group exist.
      */
     @Override
     public GroupsVO getAllGroups() throws GroupException {
@@ -68,11 +68,23 @@ public class GroupServiceImpl implements GroupService {
     }
 
     /**
+     * Show groups by ids.
+     *
+     * @param ids           groups' ids
+     * @return              groups' PO
+     * @throws GroupException        GRP0012 Cannot find any group by this id param.
+     */
+    @Override
+    public Iterable<Group> getGroupsByIds(Iterable<Long> ids) throws GroupException {
+        return groupRepository.findAll(ids);
+    }
+
+    /**
      * Show group's VO by group's id.
      *
      * @param param         group's params
      * @return              group's VO
-     * @throws GroupException        ROL0012 Cannot find any group by this id param.
+     * @throws GroupException        GRP0012 Cannot find any group by this id param.
      */
     @Override
     public GroupVO getGroupById(GroupParam param) throws GroupException {
