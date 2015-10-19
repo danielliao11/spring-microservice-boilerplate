@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     public UsersVO getAllUsers() throws UserException {
         List<User> users = (List<User>) userRepository.findAll();
         if (users.isEmpty()) {
-            // Throw no user yet exception.
+            // Throw no user exist exception.
             throw new UserException(ErrorType.USR0011);
         }
         return usersPO2VO(users, String.format(ControllerConstant.INDEX, USER));
@@ -136,9 +136,9 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
     }
 
-    // ------------------------
+    // --------------------------
     // PRIVATE FIELDS AND METHODS
-    // ------------------------
+    // --------------------------
 
     @Autowired
     private final UserRepository userRepository;

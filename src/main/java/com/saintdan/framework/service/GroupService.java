@@ -1,9 +1,9 @@
 package com.saintdan.framework.service;
 
-import com.saintdan.framework.exception.RoleException;
-import com.saintdan.framework.param.RoleParam;
-import com.saintdan.framework.vo.RoleVO;
-import com.saintdan.framework.vo.RolesVO;
+import com.saintdan.framework.exception.GroupException;
+import com.saintdan.framework.param.GroupParam;
+import com.saintdan.framework.vo.GroupVO;
+import com.saintdan.framework.vo.GroupsVO;
 
 /**
  * Group's Service.
@@ -14,14 +14,56 @@ import com.saintdan.framework.vo.RolesVO;
  */
 public interface GroupService {
 
-    RoleVO create(RoleParam param) throws RoleException;
+    /**
+     * Create new group.
+     *
+     * @param param         group's params
+     * @return              group's VO
+     * @throws GroupException        GRP0031 Group already existing, name taken.
+     */
+    GroupVO create(GroupParam param) throws GroupException;
 
-    RolesVO getAllGroups() throws RoleException;
+    /**
+     * Show all groups' VO.
+     *
+     * @return              groups' VO
+     * @throws GroupException        GRP0011 No group exist.
+     */
+    GroupsVO getAllGroups() throws GroupException;
 
-    RoleVO getGroupById(RoleParam param) throws RoleException;
+    /**
+     * Show group's VO by group's id.
+     *
+     * @param param         group's params
+     * @return              group's VO
+     * @throws GroupException        GRP0012 Cannot find any group by this id param.
+     */
+    GroupVO getGroupById(GroupParam param) throws GroupException;
 
-    RoleVO update(RoleParam param) throws RoleException;
+    /**
+     * Show group's VO by group's name.
+     *
+     * @param param         group's params
+     * @return              group's VO
+     * @throws GroupException        GRP0011 Cannot find any group by this name param.
+     */
+    GroupVO getGroupByName(GroupParam param) throws GroupException;
 
-    void delete(RoleParam param) throws RoleException;
+    /**
+     * Update group.
+     *
+     * @param param         group's params
+     * @return              group's VO
+     * @throws GroupException        GRP0012 Cannot find any group by this id param.
+     */
+    GroupVO update(GroupParam param) throws GroupException;
+
+    /**
+     * Delete group.
+     *
+     * @param param         group's params.
+     * @throws GroupException        GRP0012 Cannot find any group by this id param.
+     */
+    void delete(GroupParam param) throws GroupException;
 
 }

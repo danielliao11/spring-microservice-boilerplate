@@ -63,7 +63,7 @@ public class UserController {
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN);
+            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -81,7 +81,7 @@ public class UserController {
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN);
+            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -104,7 +104,7 @@ public class UserController {
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN);
+            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -136,7 +136,7 @@ public class UserController {
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN);
+            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -162,7 +162,7 @@ public class UserController {
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN);
+            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -186,7 +186,7 @@ public class UserController {
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN);
+            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 

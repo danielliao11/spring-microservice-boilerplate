@@ -37,6 +37,26 @@ public enum ErrorType implements IntentState {
     ROL0030("Role already existing."),
     ROL0031("Role already existing, name taken."),
 
+    // Group
+    GRP0001("Group error."),
+    GRP0010("Group find error."),
+    GRP0011("Cannot find any group, no group exists."),
+    GRP0012("Cannot find any group by this id param."),
+    GRP0013("Cannot find any group by this name param."),
+    GRP0020("Create group failed."),
+    GRP0030("Group already existing."),
+    GRP0031("Group already existing, name taken."),
+
+    // Resource
+    RSC0001("Resource error."),
+    RSC0010("Resource find error."),
+    RSC0011("Cannot find any resource, no group exists."),
+    RSC0012("Cannot find any resource by this id param."),
+    RSC0013("Cannot find any resource by this name param."),
+    RSC0020("Create resource failed."),
+    RSC0030("Resource already existing."),
+    RSC0031("Resource already existing, name taken."),
+
     // Sign
     SGN0001("Signature error."),
     SGN0010("Signature failed"),

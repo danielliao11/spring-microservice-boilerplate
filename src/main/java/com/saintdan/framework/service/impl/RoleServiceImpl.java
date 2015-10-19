@@ -13,6 +13,7 @@ import com.saintdan.framework.vo.RolesVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
  * @date 10/17/15
  * @since JDK1.8
  */
+@Service
 public class RoleServiceImpl implements RoleService {
 
     // ------------------------
@@ -53,13 +55,13 @@ public class RoleServiceImpl implements RoleService {
      * Show all roles' VO.
      *
      * @return              roles' VO
-     * @throws RoleException        ROL0011 No role yet.
+     * @throws RoleException        ROL0011 No role exist.
      */
     @Override
     public RolesVO getAllRoles() throws RoleException {
         List<Role> roles = (List<Role>) roleRepository.findAll();
         if (roles == null) {
-            // Throw user cannot find by usr parameter exception.
+            // Throw No role exist exception.
             throw new RoleException(ErrorType.ROL0011);
         }
         return rolesPO2VO(roles, String.format(ControllerConstant.INDEX, ROLE));
@@ -70,7 +72,7 @@ public class RoleServiceImpl implements RoleService {
      *
      * @param param         role's params
      * @return              role's VO
-     * @throws RoleException        ROL0012 Cannot find any user by this id param.
+     * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
     @Override
     public RoleVO getRoleById(RoleParam param) throws RoleException {
@@ -87,7 +89,7 @@ public class RoleServiceImpl implements RoleService {
      *
      * @param param         role's params
      * @return              role's VO
-     * @throws RoleException        ROL0011 Cannot find any user by this name param.
+     * @throws RoleException        ROL0011 Cannot find any role by this name param.
      */
     @Override
     public RoleVO getRoleByName(RoleParam param) throws RoleException {
@@ -104,7 +106,7 @@ public class RoleServiceImpl implements RoleService {
      *
      * @param param         role's params
      * @return              role's VO
-     * @throws RoleException        ROL0012 Cannot find any user by this id param.
+     * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
     @Override
     public RoleVO update(RoleParam param) throws RoleException {
@@ -121,7 +123,7 @@ public class RoleServiceImpl implements RoleService {
      * Delete role.
      *
      * @param param         role's params.
-     * @throws RoleException        ROL0012 Cannot find any user by this id param.
+     * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
     @Override
     public void delete(RoleParam param) throws RoleException {
@@ -133,9 +135,9 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.delete(role);
     }
 
-    // ------------------------
+    // --------------------------
     // PRIVATE FIELDS AND METHODS
-    // ------------------------
+    // --------------------------
 
     @Autowired
     private RoleRepository roleRepository;

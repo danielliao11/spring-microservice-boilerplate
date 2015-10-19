@@ -1,9 +1,9 @@
 package com.saintdan.framework.service;
 
-import com.saintdan.framework.exception.RoleException;
-import com.saintdan.framework.param.RoleParam;
-import com.saintdan.framework.vo.RoleVO;
-import com.saintdan.framework.vo.RolesVO;
+import com.saintdan.framework.exception.ResourceException;
+import com.saintdan.framework.param.ResourceParam;
+import com.saintdan.framework.vo.ResourceVO;
+import com.saintdan.framework.vo.ResourcesVO;
 
 /**
  * Resource's Service.
@@ -14,14 +14,65 @@ import com.saintdan.framework.vo.RolesVO;
  */
 public interface ResourceService {
 
-    RoleVO create(RoleParam param) throws RoleException;
+    /**
+     * Create new resource.
+     *
+     * @param param         resource's params
+     * @return              resource's VO
+     * @throws ResourceException        RSC0031 Resource already existing, name taken.
+     */
+    ResourceVO create(ResourceParam param) throws ResourceException;
 
-    RolesVO getAllResources() throws RoleException;
+    /**
+     * Show all resources' VO.
+     *
+     * @return              resources' VO
+     * @throws ResourceException        RSC0011 No resource exist.
+     */
+    ResourcesVO getAllResources() throws ResourceException;
 
-    RoleVO getResourceById(RoleParam param) throws RoleException;
+    /**
+     * Show resource's VO by resource's id.
+     *
+     * @param param         resource's params
+     * @return              resource's VO
+     * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
+     */
+    ResourceVO getResourceById(ResourceParam param) throws ResourceException;
 
-    RoleVO update(RoleParam param) throws RoleException;
+    /**
+     * Show resource's VO by resource's name.
+     *
+     * @param param         resource's params
+     * @return              resource's VO
+     * @throws ResourceException        RSC0011 Cannot find any resource by this name param.
+     */
+    ResourceVO getResourceByName(ResourceParam param) throws ResourceException;
 
-    void delete(RoleParam param) throws RoleException;
+    /**
+     * Show resource's VO by resource's name.
+     *
+     * @param param         resource's params
+     * @return              resource's VO
+     * @throws ResourceException        RSC0011 Cannot find any resource by this name param.
+     */
+    ResourceVO getResourceByPath(ResourceParam param) throws ResourceException;
+
+    /**
+     * Update resource.
+     *
+     * @param param         resource's params
+     * @return              resource's VO
+     * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
+     */
+    ResourceVO update(ResourceParam param) throws ResourceException;
+
+    /**
+     * Delete resource.
+     *
+     * @param param         resource's params.
+     * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
+     */
+    void delete(ResourceParam param) throws ResourceException;
 
 }
