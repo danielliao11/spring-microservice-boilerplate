@@ -41,7 +41,7 @@ public class ResourceController {
      * @param param     resource's param
      * @return          resource's result
      */
-    @RequestMapping(value = ResourceURL.ROLES , method = RequestMethod.POST)
+    @RequestMapping(value = ResourceURL.RESOURCES , method = RequestMethod.POST)
     public ResultVO create(ResourceParam param) {
         try {
             // Get incorrect params.
@@ -67,7 +67,7 @@ public class ResourceController {
      *
      * @return          resources' result
      */
-    @RequestMapping(value = ResourceURL.ROLES, method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.RESOURCES, method = RequestMethod.GET)
     public ResultVO index() {
         try {
             return resourceService.getAllResources();
@@ -86,7 +86,7 @@ public class ResourceController {
      * @param id        resource's id
      * @return          resource's result
      */
-    @RequestMapping(value = ResourceURL.ROLES + "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}", method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -110,7 +110,7 @@ public class ResourceController {
      * @param param     resource's params
      * @return          resource's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}", method = RequestMethod.POST)
     public ResultVO update(@PathVariable String id, ResourceParam param) {
         try {
             if (StringUtils.isBlank(id)) {

@@ -17,6 +17,7 @@ import com.saintdan.framework.vo.ResourcesVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.Set;
  * @date 10/17/15
  * @since JDK1.8
  */
+@Service
 public class ResourceServiceImpl implements ResourceService {
 
     // ------------------------

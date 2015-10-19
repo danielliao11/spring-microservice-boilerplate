@@ -110,7 +110,7 @@ public class GroupController {
      * @param param     group's params
      * @return          group's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = ResourceURL.GROUPS + "/{id}", method = RequestMethod.POST)
     public ResultVO update(@PathVariable String id, GroupParam param) {
         try {
             if (StringUtils.isBlank(id)) {

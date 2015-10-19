@@ -110,7 +110,7 @@ public class RoleController {
      * @param param     role's params
      * @return          role's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = ResourceURL.ROLES + "/{id}", method = RequestMethod.POST)
     public ResultVO update(@PathVariable String id, RoleParam param) {
         try {
             if (StringUtils.isBlank(id)) {
