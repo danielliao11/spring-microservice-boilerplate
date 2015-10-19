@@ -1,8 +1,8 @@
 package com.saintdan.framework.service.impl;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
-import com.saintdan.framework.component.IdsHelper;
 import com.saintdan.framework.component.ResultHelper;
+import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.RoleException;
@@ -19,10 +19,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Implements the
@@ -33,6 +33,7 @@ import java.util.Set;
  * @since JDK1.8
  */
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     // ------------------------
@@ -130,7 +131,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserVO update(UserParam param) throws UserException, RoleException {
-        if (userRepository.exists(param.getId())) {
+        if (!userRepository.exists(param.getId())) {
             // Throw user cannot find by usr parameter exception.
             throw new UserException(ErrorType.USR0012);
         }
@@ -162,7 +163,7 @@ public class UserServiceImpl implements UserService {
     private RoleService roleService;
 
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private CustomPasswordEncoder passwordEncoder;
@@ -171,7 +172,7 @@ public class UserServiceImpl implements UserService {
     private ResultHelper resultHelper;
 
     @Autowired
-    private IdsHelper idsHelper;
+    private Transformer transformer;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -190,10 +191,12 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         BeanUtils.copyProperties(param, user);
         if (!StringUtils.isBlank(param.getRoleIds())) {
-            Iterable<Role> roles = roleService.getRolesByIds(idsHelper.idsStr2Iterable(param.getRoleIds()));
-            user.setRoles((Set<Role>) roles);
+            Iterable<Role> roles = roleService.getRolesByIds(transformer.idsStr2Iterable(param.getRoleIds()));
+            user.setRoles(transformer.iterable2Set(roles));
         }
-        user.setPwd(passwordEncoder.encode(param.getPwd()));
+        if (!StringUtils.isBlank(param.getPwd())) {
+            user.setPwd(passwordEncoder.encode(param.getPwd()));
+        }
         return user;
     }
 

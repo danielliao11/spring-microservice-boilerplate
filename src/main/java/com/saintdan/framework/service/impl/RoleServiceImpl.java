@@ -1,7 +1,7 @@
 package com.saintdan.framework.service.impl;
 
-import com.saintdan.framework.component.IdsHelper;
 import com.saintdan.framework.component.ResultHelper;
+import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.GroupException;
@@ -134,8 +134,7 @@ public class RoleServiceImpl implements RoleService {
      */
     @Override
     public RoleVO update(RoleParam param) throws RoleException, UserException, GroupException {
-        Role role = roleRepository.findOne(param.getId());
-        if (role == null) {
+        if (!roleRepository.exists(param.getId())) {
             // Throw role cannot find by id parameter exception.
             throw new RoleException(ErrorType.ROL0012);
         }
@@ -176,7 +175,7 @@ public class RoleServiceImpl implements RoleService {
     private ResultHelper resultHelper;
 
     @Autowired
-    private IdsHelper idsHelper;
+    private Transformer transformer;
 
     private final static String ROLE = "role";
 
@@ -192,11 +191,11 @@ public class RoleServiceImpl implements RoleService {
         Role role = new Role();
         BeanUtils.copyProperties(param, role);
         if (!StringUtils.isBlank(param.getUserIds())) {
-            Iterable<User> users = userService.getUsersByIds(idsHelper.idsStr2Iterable(param.getUserIds()));
+            Iterable<User> users = userService.getUsersByIds(transformer.idsStr2Iterable(param.getUserIds()));
             role.setUsers((Set<User>) users);
         }
         if (!StringUtils.isBlank(param.getGroupIds())) {
-            Iterable<Group> groups = groupService.getGroupsByIds(idsHelper.idsStr2Iterable(param.getGroupIds()));
+            Iterable<Group> groups = groupService.getGroupsByIds(transformer.idsStr2Iterable(param.getGroupIds()));
             role.setGroups((Set<Group>) groups);
         }
         return role;

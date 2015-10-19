@@ -116,6 +116,13 @@ public class ResourceController {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
+            // Get incorrect params.
+            String validateContent = param.getIncorrectParams();
+            if (!StringUtils.isBlank(validateContent)) {
+                // If validate failed, return error message.
+                return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
+                        String.format(ControllerConstant.PARAM_BLANK, validateContent));
+            }
             // Set resource's ID.
             param.setId(Long.valueOf(id));
             // Update resource.

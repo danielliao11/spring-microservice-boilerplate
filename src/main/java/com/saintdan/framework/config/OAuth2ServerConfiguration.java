@@ -35,7 +35,10 @@ public class OAuth2ServerConfiguration {
     private static final String RESOURCE_ID = "rest_api";
 
     private static final String WELCOME_URL = "/welcome";
-    private static final StringBuilder USER_URL = new StringBuilder(ResourceURL.RESOURCES).append(ResourceURL.USERS);
+    private static final String USER_URL = new String(new StringBuilder(ResourceURL.RESOURCES).append(ResourceURL.USERS));
+    private static final String ROLE_URL = new String(new StringBuilder(ResourceURL.RESOURCES).append(ResourceURL.ROLES));
+    private static final String GROUP_URL = new String(new StringBuilder(ResourceURL.RESOURCES).append(ResourceURL.GROUPS));
+    private static final String RESOURCE_URL = new String(new StringBuilder(ResourceURL.RESOURCES).append(ResourceURL.RESOURCES));
 
     /**
      * OAuth2 resource server configuration.
@@ -58,12 +61,11 @@ public class OAuth2ServerConfiguration {
                     .and()
                         .authorizeRequests()
                             // Since resources can be used as its authorities, therefore, hasRole utilize resource as its' param.
-//                            .antMatchers(HttpMethod.GET, USER_URL.toString()).hasAnyAuthority("root", "admin", "getUserById user")
-//                            .antMatchers(HttpMethod.POST, USER_URL.toString()).hasAnyAuthority("root", "admin", "create user")
-                            .antMatchers(HttpMethod.GET, USER_URL.toString()).permitAll()
-                            .antMatchers(HttpMethod.POST, USER_URL.toString()).permitAll()
-                            .antMatchers(HttpMethod.PUT, USER_URL.toString()).permitAll()
-                            .antMatchers(HttpMethod.DELETE, USER_URL.toString()).permitAll()
+//                            .antMatchers(HttpMethod.POST, USER_URL, ROLE_URL, GROUP_URL, RESOURCE_URL).hasAnyAuthority("root", "admin")
+                            .antMatchers(HttpMethod.GET, USER_URL, ROLE_URL, GROUP_URL, RESOURCE_URL).permitAll()
+                            .antMatchers(HttpMethod.POST, USER_URL, ROLE_URL, GROUP_URL, RESOURCE_URL).permitAll()
+                            .antMatchers(HttpMethod.PUT, USER_URL, ROLE_URL, GROUP_URL, RESOURCE_URL).permitAll()
+                            .antMatchers(HttpMethod.DELETE, USER_URL, ROLE_URL, GROUP_URL, RESOURCE_URL).permitAll()
                             .antMatchers(HttpMethod.GET, WELCOME_URL).access("#oauth2.hasScope('read')");
         }
 

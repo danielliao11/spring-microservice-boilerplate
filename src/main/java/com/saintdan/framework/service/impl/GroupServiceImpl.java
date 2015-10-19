@@ -122,8 +122,7 @@ public class GroupServiceImpl implements GroupService {
      */
     @Override
     public GroupVO update(GroupParam param) throws GroupException {
-        Group group = groupRepository.findOne(param.getId());
-        if (group == null) {
+        if (!groupRepository.exists(param.getId())) {
             // Throw group cannot find by id parameter exception.
             throw new GroupException(ErrorType.GRP0012);
         }

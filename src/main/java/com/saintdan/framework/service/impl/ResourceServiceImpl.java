@@ -1,6 +1,6 @@
 package com.saintdan.framework.service.impl;
 
-import com.saintdan.framework.component.IdsHelper;
+import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
@@ -146,8 +146,7 @@ public class ResourceServiceImpl implements ResourceService {
      */
     @Override
     public ResourceVO update(ResourceParam param) throws ResourceException, GroupException {
-        Resource resource = resourceRepository.findOne(param.getId());
-        if (resource == null) {
+        if (!resourceRepository.exists(param.getId())) {
             // Throw Resource cannot find by id parameter exception.
             throw new ResourceException(ErrorType.GRP0012);
         }
@@ -186,7 +185,7 @@ public class ResourceServiceImpl implements ResourceService {
     private ResultHelper resultHelper;
 
     @Autowired
-    private IdsHelper idsHelper;
+    private Transformer transformer;
 
     private final static String RESOURCE = "resource";
 
@@ -201,7 +200,7 @@ public class ResourceServiceImpl implements ResourceService {
         Resource resource = new Resource();
         BeanUtils.copyProperties(param, resource);
         if (!StringUtils.isBlank(param.getGroupIds())) {
-            Iterable<Group> groups = groupService.getGroupsByIds(idsHelper.idsStr2Iterable(param.getGroupIds()));
+            Iterable<Group> groups = groupService.getGroupsByIds(transformer.idsStr2Iterable(param.getGroupIds()));
             resource.setGroups((Set<Group>) groups);
         }
         return resource;

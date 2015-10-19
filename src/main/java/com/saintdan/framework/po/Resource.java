@@ -49,7 +49,7 @@ public class Resource implements GrantedAuthority, Serializable {
     private String description;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources", cascade = {CascadeType.REFRESH})
     private Set<Group> groups = new HashSet<>();
 
     @Override
