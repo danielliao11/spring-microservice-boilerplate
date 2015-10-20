@@ -1,4 +1,4 @@
-package com.saintdan.framework;
+package com.saintdan.framework.tool;
 
 import org.apache.commons.codec.binary.Base64;
 

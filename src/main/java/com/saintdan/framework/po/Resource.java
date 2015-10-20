@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class Resource implements GrantedAuthority, Serializable {
     /**
      * The priority. the smaller the value the higher the priority.
      */
-    @NotEmpty
+    @NotNull
     @Column(nullable = false)
     private Integer priority;
 
@@ -51,6 +52,17 @@ public class Resource implements GrantedAuthority, Serializable {
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources", cascade = {CascadeType.REFRESH})
     private Set<Group> groups = new HashSet<>();
+
+    public Resource() {
+
+    }
+
+    public Resource(String name, String path, Integer priority, String description) {
+        this.name = name;
+        this.path = path;
+        this.priority = priority;
+        this.description = description;
+    }
 
     @Override
     public String getAuthority() {

@@ -51,6 +51,7 @@ public class User implements Serializable {
     private Set<Role> roles = new HashSet<>();
 
     public User() {
+
     }
 
     public User(User user) {
