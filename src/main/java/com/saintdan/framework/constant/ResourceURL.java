@@ -11,6 +11,8 @@ public interface ResourceURL {
 
     String RESOURCES = "/resources";
 
+    String SIGN = "/sign={sign}";
+
     String USERS = "/users";
 
     String ROLES = "/roles";

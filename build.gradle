@@ -15,7 +15,7 @@ buildscript {
         maven { url "https://repo.spring.io/plugins-release" }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.7.RELEASE")
     }
 }
 
@@ -38,7 +38,7 @@ compileTestJava {
 }
 
 ext {
-    springBootVersion = '1.2.6.RELEASE'
+    springBootVersion = '1.2.7.RELEASE'
     springOAuth2Version = '2.0.7.RELEASE'
 
     fastJsonVersion = '1.2.6'

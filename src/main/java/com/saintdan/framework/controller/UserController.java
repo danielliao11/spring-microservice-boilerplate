@@ -46,8 +46,8 @@ public class UserController {
      * @param param     user's param
      * @return          user's result
      */
-    @RequestMapping(value = ResourceURL.USERS , method = RequestMethod.POST)
-    public ResultVO create(UserParam param) {
+    @RequestMapping(value = ResourceURL.USERS + ResourceURL.SIGN, method = RequestMethod.POST)
+    public ResultVO create(UserParam param, @PathVariable String sign) {
         try {
             // Get incorrect params.
             String validateContent = param.getIncorrectParams();
@@ -55,6 +55,13 @@ public class UserController {
                 // If validate failed, return error message.
                 return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
                         String.format(ControllerConstant.PARAM_BLANK, validateContent));
+            }
+            // Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
             // Return result and message.
             return userService.create(param);
@@ -72,9 +79,17 @@ public class UserController {
      *
      * @return          users' result
      */
-    @RequestMapping(value = ResourceURL.USERS, method = RequestMethod.GET)
-    public ResultVO index() {
+    @RequestMapping(value = ResourceURL.USERS + ResourceURL.SIGN, method = RequestMethod.GET)
+    public ResultVO index(@PathVariable String sign) {
         try {
+            UserParam param = new UserParam();
+            // Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            }
             return userService.getAllUsers();
         } catch (UserException e) {
             // Return error information and log the exception.
@@ -91,13 +106,20 @@ public class UserController {
      * @param id        user's id
      * @return          user's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.GET)
-    public ResultVO show(@PathVariable String id) {
+    @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    public ResultVO show(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             UserParam param = new UserParam(Long.valueOf(id));
+            // Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            }
             return userService.getUserById(param);
         } catch (UserException e) {
             // Return error information and log the exception.
@@ -115,7 +137,7 @@ public class UserController {
      * @param sign      signature
      * @return          user's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{usr},{sign}", method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.USERS + "/usr={usr}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign) {
         try {
             // If usr or sign is empty, return SYS0002, params error.
@@ -123,12 +145,13 @@ public class UserController {
                 final String USR = "usr";
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, USR));
             }
-            // Prepare to validate signature.
             UserParam param = new UserParam(usr);
+            // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
             // Sign verification.
-            if (!ResultConstant.OK.equals(signHelper.signCheck(PUBLIC_KEY, param, sign).getCode())) {
-                return signHelper.signCheck(PUBLIC_KEY, param, sign);
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
             // Return result and message.
             return userService.getUserByUsr(param);
@@ -148,8 +171,8 @@ public class UserController {
      * @param param     user's params
      * @return          user's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.POST)
-    public ResultVO update(@PathVariable String id, UserParam param) {
+    @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
+    public ResultVO update(@PathVariable String id, @PathVariable String sign, UserParam param) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
@@ -163,6 +186,13 @@ public class UserController {
             }
             // Set user's ID.
             param.setId(Long.valueOf(id));
+            // Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            }
             // Update user.
             return userService.update(param);
         } catch (UserException e) {
@@ -180,14 +210,22 @@ public class UserController {
      * @param id        user's id
      * @return          user's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}", method = RequestMethod.DELETE)
-    public ResultVO delete(@PathVariable String id) {
+    @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
+    public ResultVO delete(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
+            UserParam param = new UserParam(Long.valueOf(id));
+            // Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            }
             // Delete user.
-            userService.delete(new UserParam(Long.valueOf(id)));
+            userService.delete(param);
             final String USER = "user";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.INDEX, USER));
         } catch (UserException e) {

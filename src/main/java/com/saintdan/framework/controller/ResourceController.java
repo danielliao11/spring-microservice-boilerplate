@@ -11,10 +11,13 @@ import com.saintdan.framework.exception.ResourceException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.service.ResourceService;
 import com.saintdan.framework.vo.ResultVO;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 10/17/15
  * @since JDK1.8
  */
+@PropertySource("classpath:api.properties")
 @RestController
 @RequestMapping(ResourceURL.RESOURCES)
 public class ResourceController {
@@ -41,8 +45,8 @@ public class ResourceController {
      * @param param     resource's param
      * @return          resource's result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES , method = RequestMethod.POST)
-    public ResultVO create(ResourceParam param) {
+    @RequestMapping(value = ResourceURL.RESOURCES + ResourceURL.SIGN, method = RequestMethod.POST)
+    public ResultVO create(ResourceParam param, @PathVariable String sign) {
         try {
             // Get incorrect params.
             String validateContent = param.getIncorrectParams();
@@ -50,6 +54,12 @@ public class ResourceController {
                 // If validate failed, return error message.
                 return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
                         String.format(ControllerConstant.PARAM_BLANK, validateContent));
+            }// Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
             // Return result and message.
             return resourceService.create(param);
@@ -67,9 +77,17 @@ public class ResourceController {
      *
      * @return          resources' result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES, method = RequestMethod.GET)
-    public ResultVO index() {
+    @RequestMapping(value = ResourceURL.RESOURCES + ResourceURL.SIGN, method = RequestMethod.GET)
+    public ResultVO index(@PathVariable String sign) {
         try {
+            ResourceParam param = new ResourceParam();
+            // Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            }
             return resourceService.getAllResources();
         } catch (ResourceException e) {
             // Return error information and log the exception.
@@ -86,13 +104,20 @@ public class ResourceController {
      * @param id        resource's id
      * @return          resource's result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}", method = RequestMethod.GET)
-    public ResultVO show(@PathVariable String id) {
+    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    public ResultVO show(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             ResourceParam param = new ResourceParam(Long.valueOf(id));
+            // Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            }
             return resourceService.getResourceById(param);
         } catch (ResourceException e) {
             // Return error information and log the exception.
@@ -110,8 +135,8 @@ public class ResourceController {
      * @param param     resource's params
      * @return          resource's result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}", method = RequestMethod.POST)
-    public ResultVO update(@PathVariable String id, ResourceParam param) {
+    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
+    public ResultVO update(@PathVariable String id, @PathVariable String sign, ResourceParam param) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
@@ -125,6 +150,13 @@ public class ResourceController {
             }
             // Set resource's ID.
             param.setId(Long.valueOf(id));
+            // Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            }
             // Update resource.
             return resourceService.update(param);
         } catch (ResourceException e) {
@@ -142,13 +174,22 @@ public class ResourceController {
      * @param id        resource's id
      * @return          resource's result
      */
-    public ResultVO delete(@PathVariable String id) {
+    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
+    public ResultVO delete(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
+            // Prepare to validate signature.
+            ResourceParam param = new ResourceParam(Long.valueOf(id));
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            }
             // Delete resource.
-            resourceService.delete(new ResourceParam(Long.valueOf(id)));
+            resourceService.delete(param);
             final String ROLE = "resource";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.INDEX, ROLE));
         } catch (ResourceException e) {
@@ -165,6 +206,9 @@ public class ResourceController {
     // ------------------------
 
     private static final Log log = LogFactory.getLog(ResourceController.class);
+
+    @Value("${opposite.end1.publicKey}")
+    private String PUBLIC_KEY;
 
     @Autowired
     private ResultHelper resultHelper;

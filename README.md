@@ -14,7 +14,9 @@ $ ./gradlew clean build bootRun
 
 ## Usage
 
-1. Take your token from `oauth/token` in terminal, if you use ssl remember add `-k`:
+### Get access token
+
+Take your token from `oauth/token` in terminal, if you use ssl remember add `-k`:
 
 ```
 $ curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app"
@@ -29,7 +31,24 @@ headers: Authorization: Basic <Encrypt client_id:client_secret by HTTP Basic>
 playload: password=admin&username=admin&grant_type=password&scope=read
 ```
 
-2. Use the **'access_json'** returned to make the authorized request to the protected endpoint:
+### Get new access token with refresh token
+
+```
+curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "grant_type=refresh_token&refresh_token=<refresh_token_returned>&client_secret=123456&client_id=ios_app"
+```
+
+or use Advanced REST Client:
+
+```
+url: http://localhost:8080/oauth/token
+POST
+headers: Authorization: Basic <Encrypt client_id:client_secret by HTTP Basic>
+playload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
+```
+
+### Access to welcome resource
+
+Use the **'access_json'** returned to make the authorized request to the protected endpoint:
 
 ```
 $ curl http://localhost:8080/welcome -H "Authorization: Bearer <access_token_returned>"
@@ -51,10 +70,22 @@ GET
 headers: Authorization: bearer <access_token_returned>
 ```
 
-3. Get user information:
+### Access to user resource
+
+#### 1. Create new user
 
 ```
-$ curl "http://localhost:8080/resources/users/usr=admin&sign=TEtjbkozTWVXNUxxOUJTYmxubUNJQkhqN0dPeE1RUzdqM0tURThsVXlJd29sQXMlMkZnTU1WejVrTklpTDA2ZVBMdExJJTJGZThLWUp0aiUyRlJDN3JockhkYm9GaHVFeUZZcHB2MEhwVTJ2OEoxYVoyYXJHZm1jWiUyQlBRJTJCdEFVQ016d2ZvSVhFV25mMG1zelJxMXNQMm43MVRrWnh1MiUyQjdrb1BQamNlJTJGTmw2RXZSdWpmb3Y1Ynh0JTJCZ2RtTHNGUllESFVZQU04NHBOdURoNmlvYWMyblFPdXFGeHhSeXNITXJkYklLQnhpYXFkcVVJY3NVQ1JvMDhJTVptaXFIVmNvJTJGWXNTRnRRMU4weFJvNjRaS2JxJTJCb3dZRkdvT1cxRDl4T0J3MzdWMUYxelNlRm5KZExONjBQNWwwSlg2VGtLeEw3M0JqSnRWcDZvaU1VZEJhdDgySDFFY3N6R0ElM0QlM0Q=" -H "Authorization: Bearer <access_token_returned>"
+
+```
+
+#### 2. Show all users
+
+#### 3. Show user by user's ID
+
+#### 4. Show user by user's usr
+
+```
+$ curl "http://localhost:8080/resources/users/usr=admin/sign=TEtjbkozTWVXNUxxOUJTYmxubUNJQkhqN0dPeE1RUzdqM0tURThsVXlJd29sQXMlMkZnTU1WejVrTklpTDA2ZVBMdExJJTJGZThLWUp0aiUyRlJDN3JockhkYm9GaHVFeUZZcHB2MEhwVTJ2OEoxYVoyYXJHZm1jWiUyQlBRJTJCdEFVQ016d2ZvSVhFV25mMG1zelJxMXNQMm43MVRrWnh1MiUyQjdrb1BQamNlJTJGTmw2RXZSdWpmb3Y1Ynh0JTJCZ2RtTHNGUllESFVZQU04NHBOdURoNmlvYWMyblFPdXFGeHhSeXNITXJkYklLQnhpYXFkcVVJY3NVQ1JvMDhJTVptaXFIVmNvJTJGWXNTRnRRMU4weFJvNjRaS2JxJTJCb3dZRkdvT1cxRDl4T0J3MzdWMUYxelNlRm5KZExONjBQNWwwSlg2VGtLeEw3M0JqSnRWcDZvaU1VZEJhdDgySDFFY3N6R0ElM0QlM0Q=" -H "Authorization: Bearer <access_token_returned>"
 ```
 
 If the request is successful, you will see the following JSON response:
@@ -77,20 +108,13 @@ GET
 headers: Authorization: bearer <access_token_returned>
 ```
 
-4. Refresh token:
+#### 5. Update user by user's ID
 
-```
-curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "grant_type=refresh_token&refresh_token=<refresh_token_returned>&client_secret=123456&client_id=ios_app"
-```
+#### 6. Delete user by user's ID
 
-or use Advanced REST Client:
+### Other resources
 
-```
-url: http://localhost:8080/oauth/token
-POST
-headers: Authorization: Basic <Encrypt client_id:client_secret by HTTP Basic>
-playload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
-```
+Refer to previous user resource.
 
 ## License
 
