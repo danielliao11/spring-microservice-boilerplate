@@ -1,7 +1,7 @@
 # Spring Rest OAuth2 Sample
 
 This is REST service sample that protected by:
-- [Spring Boot](http://projects.spring.io/spring-boot/);
+
 - [Spring OAuth 2](http://projects.spring.io/spring-security-oauth/);
 - [Spring Security](http://projects.spring.io/spring-security/).
 

@@ -57,16 +57,35 @@ public class OAuth2ServerConfiguration {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             http
-                        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                     .and()
-                        .authorizeRequests()
-                            // Since resources can be used as its authorities, therefore, hasRole utilize resource as its' param.
-//                            .antMatchers(HttpMethod.POST, USER_URL, ROLE_URL, GROUP_URL, RESOURCE_URL).hasAnyAuthority("root", "admin")
-                            .antMatchers(HttpMethod.GET, USER_URL, ROLE_URL, GROUP_URL, RESOURCE_URL).permitAll()
-                            .antMatchers(HttpMethod.POST, USER_URL, ROLE_URL, GROUP_URL, RESOURCE_URL).permitAll()
-                            .antMatchers(HttpMethod.PUT, USER_URL, ROLE_URL, GROUP_URL, RESOURCE_URL).permitAll()
-                            .antMatchers(HttpMethod.DELETE, USER_URL, ROLE_URL, GROUP_URL, RESOURCE_URL).permitAll()
-                            .antMatchers(HttpMethod.GET, WELCOME_URL).access("#oauth2.hasScope('read')");
+                    .authorizeRequests()
+                    // User resource
+                    .antMatchers(HttpMethod.GET, USER_URL).hasAnyAuthority("root", "user")
+                    .antMatchers(HttpMethod.POST, USER_URL).hasAnyAuthority("root", "user")
+                    .antMatchers(HttpMethod.PUT, USER_URL).hasAnyAuthority("root", "user")
+                    .antMatchers(HttpMethod.DELETE, USER_URL).hasAnyAuthority("root", "user")
+
+                    // role resource
+                    .antMatchers(HttpMethod.GET, ROLE_URL).hasAnyAuthority("root", "role")
+                    .antMatchers(HttpMethod.POST, ROLE_URL).hasAnyAuthority("root", "role")
+                    .antMatchers(HttpMethod.PUT, ROLE_URL).hasAnyAuthority("root", "role")
+                    .antMatchers(HttpMethod.DELETE, ROLE_URL).hasAnyAuthority("root", "role")
+
+                    // group resource
+                    .antMatchers(HttpMethod.GET, GROUP_URL).hasAnyAuthority("root", "group")
+                    .antMatchers(HttpMethod.POST, GROUP_URL).hasAnyAuthority("root", "group")
+                    .antMatchers(HttpMethod.PUT, GROUP_URL).hasAnyAuthority("root", "group")
+                    .antMatchers(HttpMethod.DELETE, GROUP_URL).hasAnyAuthority("root", "group")
+
+                    // resource resource
+                    .antMatchers(HttpMethod.GET, RESOURCE_URL).hasAnyAuthority("root", "resource")
+                    .antMatchers(HttpMethod.POST, RESOURCE_URL).hasAnyAuthority("root", "resource")
+                    .antMatchers(HttpMethod.PUT, RESOURCE_URL).hasAnyAuthority("root", "resource")
+                    .antMatchers(HttpMethod.DELETE, RESOURCE_URL).hasAnyAuthority("root", "resource")
+
+                    // welcome resource
+                    .antMatchers(HttpMethod.GET, WELCOME_URL).access("#oauth2.hasScope('read')");
         }
 
     }

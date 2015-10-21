@@ -1,6 +1,7 @@
 package com.saintdan.framework.repo;
 
 import com.saintdan.framework.Application;
+import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.po.Group;
 import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.Role;
@@ -205,6 +206,9 @@ public class Seed {
         System.out.println("-----------------------------");
     }
 
+    @Autowired
+    private CustomPasswordEncoder passwordEncoder;
+
     /**
      * Get users list.
      *
@@ -218,19 +222,19 @@ public class Seed {
 
         // Init root user
         root.setUsr(ROOT);
-        root.setPwd(ROOT);
+        root.setPwd(passwordEncoder.encode(ROOT));
         root.setName(ROOT);
         root.setDescription(ROOT + ACCOUNT);
 
         // Init admin user
         admin.setUsr(ADMIN);
-        admin.setPwd(ADMIN);
+        admin.setPwd(passwordEncoder.encode(ADMIN));
         admin.setName(ADMIN);
         admin.setDescription(ADMIN + ACCOUNT);
 
         // Init guest user
         guest.setUsr(GUEST);
-        guest.setPwd(GUEST);
+        guest.setPwd(passwordEncoder.encode(GUEST));
         guest.setName(GUEST);
         guest.setDescription(GUEST + ACCOUNT);
 
