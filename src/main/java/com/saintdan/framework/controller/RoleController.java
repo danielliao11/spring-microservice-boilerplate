@@ -192,7 +192,7 @@ public class RoleController {
             // Delete role.
             roleService.delete(param);
             final String ROLE = "role";
-            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.INDEX, ROLE));
+            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
         } catch (RoleException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());

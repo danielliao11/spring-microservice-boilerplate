@@ -191,7 +191,7 @@ public class ResourceController {
             // Delete resource.
             resourceService.delete(param);
             final String ROLE = "resource";
-            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.INDEX, ROLE));
+            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
         } catch (ResourceException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());

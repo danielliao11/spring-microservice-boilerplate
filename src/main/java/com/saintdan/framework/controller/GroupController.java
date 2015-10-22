@@ -192,7 +192,7 @@ public class GroupController {
             // Delete group.
             groupService.delete(param);
             final String ROLE = "group";
-            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.INDEX, ROLE));
+            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
         } catch (GroupException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());

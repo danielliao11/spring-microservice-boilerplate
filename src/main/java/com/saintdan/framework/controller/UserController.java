@@ -227,7 +227,7 @@ public class UserController {
             // Delete user.
             userService.delete(param);
             final String USER = "user";
-            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.INDEX, USER));
+            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, USER));
         } catch (UserException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
