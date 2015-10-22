@@ -53,37 +53,37 @@ INSERT INTO resources (id, name, path, priority, description) VALUES (5, 'action
 INSERT INTO resources (id, name, path, priority, description) VALUES (6, 'welcome', '/welcome/.*', 10, 'welcome resource');
 
 -- user_roles
-DROP TABLE user_roles;
-CREATE TABLE user_roles (
+DROP TABLE users_has_roles;
+CREATE TABLE users_has_roles (
   user_id INT NOT NULL,
   role_id INT NOT NULL
 );
-INSERT INTO user_roles (user_id, role_id) VALUES (1, 1);
-INSERT INTO user_roles (user_id, role_id) VALUES (2, 2);
-INSERT INTO user_roles (user_id, role_id) VALUES (3, 3);
-INSERT INTO user_roles (user_id, role_id) VALUES (4, 4);
+INSERT INTO users_has_roles (user_id, role_id) VALUES (1, 1);
+INSERT INTO users_has_roles (user_id, role_id) VALUES (2, 2);
+INSERT INTO users_has_roles (user_id, role_id) VALUES (3, 3);
+INSERT INTO users_has_roles (user_id, role_id) VALUES (4, 4);
 
 -- role_groups
-DROP TABLE role_groups;
-CREATE TABLE role_groups (
+DROP TABLE roles_has_groups;
+CREATE TABLE roles_has_groups (
   role_id  INT NOT NULL,
   group_id INT NOT NULL
 );
-INSERT INTO role_groups (role_id, group_id) VALUES (1, 1);
-INSERT INTO role_groups (role_id, group_id) VALUES (2, 2);
-INSERT INTO role_groups (role_id, group_id) VALUES (3, 3);
-INSERT INTO role_groups (role_id, group_id) VALUES (3, 4);
-INSERT INTO role_groups (role_id, group_id) VALUES (3, 5);
-INSERT INTO role_groups (role_id, group_id) VALUES (3, 6);
-INSERT INTO role_groups (role_id, group_id) VALUES (4, 3);
+INSERT INTO roles_has_groups (role_id, group_id) VALUES (1, 1);
+INSERT INTO roles_has_groups (role_id, group_id) VALUES (2, 2);
+INSERT INTO roles_has_groups (role_id, group_id) VALUES (3, 3);
+INSERT INTO roles_has_groups (role_id, group_id) VALUES (3, 4);
+INSERT INTO roles_has_groups (role_id, group_id) VALUES (3, 5);
+INSERT INTO roles_has_groups (role_id, group_id) VALUES (3, 6);
+INSERT INTO roles_has_groups (role_id, group_id) VALUES (4, 3);
 
 -- group_resources
-DROP TABLE group_resources;
-CREATE TABLE group_resources (
+DROP TABLE groups_has_resources;
+CREATE TABLE groups_has_resources (
   group_id    INT NOT NULL,
   resource_id INT NOT NULL
 );
-INSERT INTO group_resources (group_id, resource_id) VALUES (1, 1);
-INSERT INTO group_resources (group_id, resource_id) VALUES (2, 2);
-INSERT INTO group_resources (group_id, resource_id) VALUES (3, 3);
-INSERT INTO group_resources (group_id, resource_id) VALUES (4, 4);
+INSERT INTO groups_has_resources (group_id, resource_id) VALUES (1, 1);
+INSERT INTO groups_has_resources (group_id, resource_id) VALUES (2, 2);
+INSERT INTO groups_has_resources (group_id, resource_id) VALUES (3, 3);
+INSERT INTO groups_has_resources (group_id, resource_id) VALUES (4, 4);

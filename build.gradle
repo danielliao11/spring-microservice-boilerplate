@@ -1,6 +1,6 @@
 description = 'spring-rest-oauth2-sample'
 group = 'com.saintdan.framework'
-version = '0.5.1-RELEASE'
+version = '0.8.1.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'

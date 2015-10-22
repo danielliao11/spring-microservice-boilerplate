@@ -38,7 +38,7 @@ public class Group implements Serializable {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
-    @JoinTable(name = "group_resources",
+    @JoinTable(name = "groups_has_resources",
             joinColumns = { @JoinColumn(name = "group_id") },
             inverseJoinColumns = { @JoinColumn(name = "resource_id") })
     private Set<Resource> resources = new HashSet<>();
