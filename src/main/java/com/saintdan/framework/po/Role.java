@@ -41,7 +41,7 @@ public class Role implements GrantedAuthority, Serializable {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
-    @JoinTable(name = "role_groups",
+    @JoinTable(name = "roles_has_groups",
             joinColumns = { @JoinColumn(name = "role_id") },
             inverseJoinColumns = { @JoinColumn(name = "group_id") })
     private Set<Group> groups = new HashSet<>();
