@@ -5,41 +5,32 @@ import com.saintdan.framework.annotation.ParamField;
 import java.io.Serializable;
 
 /**
- * User RESTFul param bean.
+ * Group RESTFul param bean.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 9/22/15
+ * @date 10/16/15
  * @since JDK1.8
  */
-public class UserParam extends BaseParam implements Serializable {
+public class GroupParam extends BaseParam implements Serializable {
 
-    private static final long serialVersionUID = -9153801716112918626L;
+    private static final long serialVersionUID = 8542867394907970893L;
 
-    private Long id; // user's ID
-
-    @ParamField
-    private String usr; // username
+    private Long id; // role's ID.
 
     @ParamField
-    private String pwd; // password
-
-    @ParamField
-    private String name; // user's name
+    private String name; // role's name
 
     private String description;
 
     private String roleIds; // role ids string
 
-    public UserParam() {
+    private String resourceIds; // resource ids string
 
+    public GroupParam() {
     }
 
-    public UserParam(Long id) {
+    public GroupParam(Long id) {
         this.id = id;
-    }
-
-    public UserParam(String usr) {
-        this.usr = usr;
     }
 
     public Long getId() {
@@ -48,22 +39,6 @@ public class UserParam extends BaseParam implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUsr() {
-        return usr;
-    }
-
-    public void setUsr(String usr) {
-        this.usr = usr;
-    }
-
-    public String getPwd() {
-        return pwd;
-    }
-
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
     }
 
     public String getName() {
@@ -88,5 +63,13 @@ public class UserParam extends BaseParam implements Serializable {
 
     public void setRoleIds(String roleIds) {
         this.roleIds = roleIds;
+    }
+
+    public String getResourceIds() {
+        return resourceIds;
+    }
+
+    public void setResourceIds(String resourceIds) {
+        this.resourceIds = resourceIds;
     }
 }

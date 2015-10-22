@@ -17,8 +17,6 @@ import java.util.Date;
  */
 public class LogUtils {
 
-    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
     public static void trackInfo(Log log, String msg) {
         log.info(generateTraceString(msg, null));
     }
@@ -73,15 +71,17 @@ public class LogUtils {
      */
     public static String generateTraceString(String errorMsg, Throwable e) {
         StringWriter w = new StringWriter();
-        w.append("Time: ").append(DATE_FORMAT.format(new Date()))
-                .append("Function: ").append(Thread.currentThread().getName())
-                .append("Message: ").append(errorMsg);
+        w.append("Message is: ").append(errorMsg);
         PrintWriter out = new PrintWriter(w);
         if (!StringUtils.isEmpty(errorMsg)) {
             out.println(errorMsg);
         }
-        e.printStackTrace(out);
+        if (e != null) {
+            e.printStackTrace(out);
+        }
         return w.toString();
     }
+
+    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 }

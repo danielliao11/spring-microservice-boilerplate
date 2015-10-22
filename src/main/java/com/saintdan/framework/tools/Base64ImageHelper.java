@@ -13,12 +13,9 @@ import com.saintdan.framework.exception.FormatException;
  */
 public class Base64ImageHelper {
 
-    private final static String HAIR = "data:image/";
-    private final static String NECK = ";base64,";
-    private final static String PNG = "png";
-    private final static String JPEG = "jpeg";
-    private final static String JPG = "jpg";
-    private final static String GIF = "gif";
+    // ------------------------
+    // PUBLIC METHODS
+    // ------------------------
 
     /**
      * Transform Mr.Base64Image to Headless Knight.
@@ -30,6 +27,17 @@ public class Base64ImageHelper {
     public static byte[] transformToHeadlessKnight(String image) throws FormatException {
         return org.apache.commons.codec.binary.Base64.decodeBase64(cutHead(image));
     }
+
+    private final static String HAIR = "data:image/";
+    private final static String NECK = ";base64,";
+    private final static String PNG = "png";
+    private final static String JPEG = "jpeg";
+    private final static String JPG = "jpg";
+    private final static String GIF = "gif";
+
+    // ------------------------
+    // PRIVATE METHODS
+    // ------------------------
 
     /**
      * Cut head!

@@ -2,8 +2,10 @@ package com.saintdan.framework.po;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,15 +19,16 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "resources")
-public class Resource implements Serializable {
+public class Resource implements GrantedAuthority, Serializable {
 
     private static final long serialVersionUID = 6298843159549723556L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @NotEmpty
+    @Column(unique = true, nullable = false, length = 20)
     private String name;
 
     /**
@@ -33,27 +36,44 @@ public class Resource implements Serializable {
      * <p><b>NOTE: Using ANT path mode</b></p>
      */
     @NotEmpty
-    @Column(length = 1024, nullable = false)
+    @Column(unique = true, length = 1024, nullable = false)
     private String path;
 
     /**
      * The priority. the smaller the value the higher the priority.
      */
-    @NotEmpty
+    @NotNull
     @Column(nullable = false)
     private Integer priority;
 
+    @Column(length = 500)
     private String description;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources", cascade = {CascadeType.REFRESH})
     private Set<Group> groups = new HashSet<>();
 
-    public Integer getId() {
+    public Resource() {
+
+    }
+
+    public Resource(String name, String path, Integer priority, String description) {
+        this.name = name;
+        this.path = path;
+        this.priority = priority;
+        this.description = description;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

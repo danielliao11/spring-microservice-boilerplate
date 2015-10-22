@@ -11,8 +11,6 @@ import java.io.*;
  */
 public class StreamUtils {
 
-    private static final int DEFAULT_BUFFER_SIZE = 8192;
-
     public static void io(InputStream in, OutputStream out) throws IOException {
         io(in, out, -1);
     }
@@ -80,6 +78,8 @@ public class StreamUtils {
         io(reader, writer, bufferSize);
         return writer.toString();
     }
+
+    private static final int DEFAULT_BUFFER_SIZE = 8192;
 
     private static class SynchronizedOutputStream extends OutputStream {
         private OutputStream out;

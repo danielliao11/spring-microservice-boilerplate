@@ -23,29 +23,40 @@ public class Group implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @NotEmpty
+    @Column(unique = true, nullable = false, length = 20)
     private String name;
 
+    @Column(length = 500)
     private String description;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups", cascade = {CascadeType.REFRESH})
     private Set<Role> roles = new HashSet<>();
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
     @JoinTable(name = "group_resources",
             joinColumns = { @JoinColumn(name = "group_id") },
             inverseJoinColumns = { @JoinColumn(name = "resource_id") })
     private Set<Resource> resources = new HashSet<>();
 
-    public Integer getId() {
+    public Group() {
+
+    }
+
+    public Group(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

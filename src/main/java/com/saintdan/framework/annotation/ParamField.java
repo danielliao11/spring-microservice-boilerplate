@@ -16,5 +16,5 @@ import java.lang.annotation.Target;
 @Target(value = { ElementType.FIELD })
 public @interface ParamField {
 
-    public String value() default "";
+    String value() default "";
 }

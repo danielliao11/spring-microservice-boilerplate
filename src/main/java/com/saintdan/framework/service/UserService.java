@@ -1,11 +1,14 @@
 package com.saintdan.framework.service;
 
-import com.saintdan.framework.bo.UserBO;
+import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
+import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.vo.UserVO;
+import com.saintdan.framework.vo.UsersVO;
 
 /**
- * User service.
+ * User's service.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 7/21/15
@@ -14,11 +17,67 @@ import com.saintdan.framework.po.User;
 public interface UserService {
 
     /**
-     * Get user po by param
+     * Create new user.
      *
-     * @param param     user params
-     * @return          user po
-     * @throws UserException        User cannot find by usr parameter exception.
+     * @param param     user's params
+     * @return          user's VO
+     * @throws UserException        USR0031 User already existing exception, usr taken
+     * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
-    User getUserByUsr(UserBO param) throws UserException;
+    UserVO create(UserParam param) throws UserException, RoleException;
+
+    /**
+     * Show all users' VO.
+     *
+     * @return          users' VO
+     * @throws UserException        USR0011 No user yet
+     */
+    UsersVO getAllUsers() throws UserException;
+
+    /**
+     * Show users by ids.
+     *
+     * @param ids           users' ids
+     * @return              users' PO
+     * @throws UserException        USR0012 Cannot find any user by this id param.
+     */
+    Iterable<User> getUsersByIds(Iterable<Long> ids) throws UserException;
+
+    /**
+     * Show user's VO.
+     *
+     * @param param     user's params
+     * @return          user's VO
+     * @throws UserException        USR0012 Cannot find any user by this id param.
+     */
+    UserVO getUserById(UserParam param) throws UserException;
+
+    /**
+     * Get user's VO by param.
+     *
+     * @param param     user's params
+     * @return          user's VO
+     * @throws UserException        USR0013 Cannot find any user by this usr param.
+     */
+    UserVO getUserByUsr(UserParam param) throws UserException;
+
+
+    /**
+     * Update user.
+     *
+     * @param param     user's params
+     * @return          user's VO
+     * @throws UserException        USR0012 Cannot find any user by this id param.
+     * @throws RoleException        ROL0012 Cannot find any role by this id param.
+     */
+    UserVO update(UserParam param) throws UserException, RoleException;
+
+    /**
+     * Delete user.
+     *
+     * @param param     user's params
+     * @throws UserException        USR0012 Cannot find any user by this id param.
+     */
+    void delete(UserParam param) throws UserException;
+
 }

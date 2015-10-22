@@ -1,19 +1,18 @@
 package com.saintdan.framework.repo;
 
-import com.saintdan.framework.po.User;
+import com.saintdan.framework.po.Role;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * User's repository.
+ * Role's repository.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 6/25/15
+ * @date 10/16/15
  * @since JDK1.8
  */
 @Transactional
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface RoleRepository extends CrudRepository<Role, Long> {
 
-	User findByUsr(String usr);
-
+    Role findByName(String name);
 }

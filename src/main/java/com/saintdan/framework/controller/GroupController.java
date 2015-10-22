@@ -7,10 +7,9 @@ import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
-import com.saintdan.framework.exception.SignatureException;
-import com.saintdan.framework.exception.UserException;
-import com.saintdan.framework.param.UserParam;
-import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.exception.GroupException;
+import com.saintdan.framework.param.GroupParam;
+import com.saintdan.framework.service.GroupService;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -25,29 +24,29 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * User's controller.
+ * Group's controller.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 6/25/15
+ * @date 10/17/15
  * @since JDK1.8
  */
 @PropertySource("classpath:api.properties")
 @RestController
 @RequestMapping(ResourceURL.RESOURCES)
-public class UserController {
+public class GroupController {
 
     // ------------------------
     // PUBLIC METHODS
     // ------------------------
 
     /**
-     * Create new user.
+     * Create new group.
      *
-     * @param param     user's param
-     * @return          user's result
+     * @param param     group's param
+     * @return          group's result
      */
-    @RequestMapping(value = ResourceURL.USERS + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO create(UserParam param, @PathVariable String sign) {
+    @RequestMapping(value = ResourceURL.GROUPS + ResourceURL.SIGN, method = RequestMethod.POST)
+    public ResultVO create(GroupParam param, @PathVariable String sign) {
         try {
             // Get incorrect params.
             String validateContent = param.getIncorrectParams();
@@ -64,8 +63,8 @@ public class UserController {
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
             // Return result and message.
-            return userService.create(param);
-        } catch (UserException e) {
+            return groupService.create(param);
+        } catch (GroupException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -75,14 +74,14 @@ public class UserController {
     }
 
     /**
-     * Show all users' VO.
+     * Show all groups' VO.
      *
-     * @return          users' result
+     * @return          groups' result
      */
-    @RequestMapping(value = ResourceURL.USERS + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.GROUPS + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO index(@PathVariable String sign) {
         try {
-            UserParam param = new UserParam();
+            GroupParam param = new GroupParam();
             // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
             // Sign verification.
@@ -90,8 +89,8 @@ public class UserController {
                 // Return rsa signature failed information and log the exception.
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
-            return userService.getAllUsers();
-        } catch (UserException e) {
+            return groupService.getAllGroups();
+        } catch (GroupException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -101,18 +100,18 @@ public class UserController {
     }
 
     /**
-     * Show user by ID.
+     * Show group by ID.
      *
-     * @param id        user's id
-     * @return          user's result
+     * @param id        group's id
+     * @return          group's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.GROUPS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
-            UserParam param = new UserParam(Long.valueOf(id));
+            GroupParam param = new GroupParam(Long.valueOf(id));
             // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
             // Sign verification.
@@ -120,8 +119,8 @@ public class UserController {
                 // Return rsa signature failed information and log the exception.
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
-            return userService.getUserById(param);
-        } catch (UserException e) {
+            return groupService.getGroupById(param);
+        } catch (GroupException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -131,48 +130,14 @@ public class UserController {
     }
 
     /**
-     * Show user information by param usr.
+     * Update group.
      *
-     * @param usr       usr
-     * @param sign      signature
-     * @return          user's result
+     * @param id        group's id
+     * @param param     group's params
+     * @return          group's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/usr={usr}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign) {
-        try {
-            // If usr or sign is empty, return SYS0002, params error.
-            if (StringUtils.isBlank(usr)) {
-                final String USR = "usr";
-                return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, USR));
-            }
-            UserParam param = new UserParam(usr);
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
-            }
-            // Return result and message.
-            return userService.getUserByUsr(param);
-        } catch (SignatureException | UserException e) {
-            // Return error information and log the exception.
-            return resultHelper.infoResp(log, e.getErrorType());
-        } catch (Exception e) {
-            // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
-        }
-    }
-
-    /**
-     * Update user.
-     *
-     * @param id        user's id
-     * @param param     user's params
-     * @return          user's result
-     */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO update(@PathVariable String id, @PathVariable String sign, UserParam param) {
+    @RequestMapping(value = ResourceURL.GROUPS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
+    public ResultVO update(@PathVariable String id, @PathVariable String sign, GroupParam param) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
@@ -184,7 +149,7 @@ public class UserController {
                 return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
                         String.format(ControllerConstant.PARAM_BLANK, validateContent));
             }
-            // Set user's ID.
+            // Set group's ID.
             param.setId(Long.valueOf(id));
             // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
@@ -193,9 +158,9 @@ public class UserController {
                 // Return rsa signature failed information and log the exception.
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
-            // Update user.
-            return userService.update(param);
-        } catch (UserException e) {
+            // Update group.
+            return groupService.update(param);
+        } catch (GroupException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -205,18 +170,18 @@ public class UserController {
     }
 
     /**
-     * Delete user.
+     * Delete group.
      *
-     * @param id        user's id
-     * @return          user's result
+     * @param id        group's id
+     * @return          group's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
+    @RequestMapping(value = ResourceURL.GROUPS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
-            UserParam param = new UserParam(Long.valueOf(id));
+            GroupParam param = new GroupParam(Long.valueOf(id));
             // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
             // Sign verification.
@@ -224,11 +189,11 @@ public class UserController {
                 // Return rsa signature failed information and log the exception.
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
-            // Delete user.
-            userService.delete(param);
-            final String USER = "user";
-            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, USER));
-        } catch (UserException e) {
+            // Delete group.
+            groupService.delete(param);
+            final String ROLE = "group";
+            return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
+        } catch (GroupException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -241,7 +206,7 @@ public class UserController {
     // PRIVATE FIELDS
     // ------------------------
 
-    private static final Log log = LogFactory.getLog(UserController.class);
+    private static final Log log = LogFactory.getLog(GroupController.class);
 
     @Value("${opposite.end1.publicKey}")
     private String PUBLIC_KEY;
@@ -250,9 +215,8 @@ public class UserController {
     private ResultHelper resultHelper;
 
     @Autowired
-    private UserService userService;
+    private GroupService groupService;
 
     @Autowired
     private SignHelper signHelper;
-
 }

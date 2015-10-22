@@ -26,28 +26,32 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @NotEmpty
+    @Column(length = 50)
     private String name;
 
     @NotEmpty
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 20)
     private String usr;
 
     @NotEmpty
+    @Column(nullable = false, length = 100)
     private String pwd;
 
+    @Column(length = 500)
     private String description;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<Role> roles = new HashSet<>();
 
     public User() {
+
     }
 
     public User(User user) {
@@ -59,11 +63,11 @@ public class User implements Serializable {
         this.roles = user.getRoles();
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -85,6 +89,10 @@ public class User implements Serializable {
 
     public String getPwd() {
         return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
     public String getDescription() {

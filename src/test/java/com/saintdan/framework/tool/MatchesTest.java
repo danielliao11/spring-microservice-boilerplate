@@ -1,6 +1,6 @@
-package com.saintdan.framework;
+package com.saintdan.framework.tool;
 
-import com.saintdan.framework.tools.CustomPasswordEncoder;
+import com.saintdan.framework.component.CustomPasswordEncoder;
 import org.junit.Assert;
 import org.junit.Test;
 

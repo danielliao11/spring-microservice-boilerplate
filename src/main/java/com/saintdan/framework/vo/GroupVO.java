@@ -3,21 +3,19 @@ package com.saintdan.framework.vo;
 import java.io.Serializable;
 
 /**
- * User's VO.
+ * Group's VO.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 6/30/15
+ * @date 10/16/15
  * @since JDK1.8
  */
-public class UserVO extends ResultVO implements Serializable {
+public class GroupVO extends ResultVO implements Serializable {
 
-    private static final long serialVersionUID = 6597728015488383528L;
+    private static final long serialVersionUID = -4664952446541301713L;
 
     private Long id;
 
     private String name;
-
-    private String usr;
 
     private String description;
 
@@ -35,14 +33,6 @@ public class UserVO extends ResultVO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getUsr() {
-        return usr;
-    }
-
-    public void setUsr(String usr) {
-        this.usr = usr;
     }
 
     public String getDescription() {

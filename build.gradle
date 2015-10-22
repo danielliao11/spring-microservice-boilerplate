@@ -15,7 +15,7 @@ buildscript {
         maven { url "https://repo.spring.io/plugins-release" }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.7.RELEASE")
     }
 }
 
@@ -38,13 +38,14 @@ compileTestJava {
 }
 
 ext {
-    springBootVersion = '1.2.6.RELEASE'
+    springBootVersion = '1.2.7.RELEASE'
     springOAuth2Version = '2.0.7.RELEASE'
 
     fastJsonVersion = '1.2.6'
     commonsLang3Version = '3.4'
 
     hsqldbVersion = '1.8.0.10'
+    mysqlVersion = '5.1.36'
 
     jsonPathVersion = '2.0.0'
     junitVersion = '4.12'
@@ -64,7 +65,12 @@ dependencies {
     compile "com.alibaba:fastjson:${fastJsonVersion}"
 
     // DB dependencies.
-    compile "org.hsqldb:hsqldb:${hsqldbVersion}"
+    // You can choose one of them.
+    // HSQLDB
+    // compile "org.hsqldb:hsqldb:${hsqldbVersion}"
+
+    // Mysql
+    compile "mysql:mysql-connector-java:${mysqlVersion}"
 
     // Provide runtime dependencies.
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
