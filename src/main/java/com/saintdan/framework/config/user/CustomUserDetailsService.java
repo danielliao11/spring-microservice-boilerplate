@@ -1,4 +1,4 @@
-package com.saintdan.framework.service;
+package com.saintdan.framework.config.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,9 +47,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	private final static class UserRepositoryUserDetails extends User implements UserDetails {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = -2502869413772228006L;
 
-		private UserRepositoryUserDetails(User user) {
+        private UserRepositoryUserDetails(User user) {
 			super(user);
 		}
 

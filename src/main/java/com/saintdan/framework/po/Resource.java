@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,6 +49,16 @@ public class Resource implements GrantedAuthority, Serializable {
 
     @Column(length = 500)
     private String description;
+
+    @Column(nullable = false, name = "last_modify_at")
+    private Date lastModifyAT;
+
+    @Column(nullable = false, name = "create_at")
+    private Date createAT;
+
+    @NotNull
+    @Column(nullable = false)
+    private Integer version;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources", cascade = {CascadeType.REFRESH})
@@ -107,6 +118,30 @@ public class Resource implements GrantedAuthority, Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getLastModifyAT() {
+        return lastModifyAT;
+    }
+
+    public void setLastModifyAT(Date lastModifyAT) {
+        this.lastModifyAT = lastModifyAT;
+    }
+
+    public Date getCreateAT() {
+        return createAT;
+    }
+
+    public void setCreateAT(Date createAT) {
+        this.createAT = createAT;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public Set<Group> getGroups() {

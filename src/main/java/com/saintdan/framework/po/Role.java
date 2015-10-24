@@ -1,15 +1,18 @@
 package com.saintdan.framework.po;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.*;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Authorized roles, provide for spring security.
@@ -34,6 +37,19 @@ public class Role implements GrantedAuthority, Serializable {
 
     @Column(length = 500)
     private String description;
+
+    @LastModifiedDate
+    private Date lastModifyTime;
+
+    @LastModifiedBy
+    private User lastModifyUser;
+
+    @CreatedDate
+    private Date createTime;
+
+    @NotNull
+    @Column(nullable = false)
+    private Integer version;
 
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = {CascadeType.REFRESH})
@@ -82,6 +98,38 @@ public class Role implements GrantedAuthority, Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getLastModifyTime() {
+        return lastModifyTime;
+    }
+
+    public void setLastModifyTime(Date lastModifyTime) {
+        this.lastModifyTime = lastModifyTime;
+    }
+
+    public User getLastModifyUser() {
+        return lastModifyUser;
+    }
+
+    public void setLastModifyUser(User lastModifyUser) {
+        this.lastModifyUser = lastModifyUser;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public Set<User> getUsers() {

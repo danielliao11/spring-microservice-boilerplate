@@ -2,6 +2,7 @@ package com.saintdan.framework.repo;
 
 import com.saintdan.framework.Application;
 import com.saintdan.framework.component.CustomPasswordEncoder;
+import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.po.Group;
 import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.Role;
@@ -15,10 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Seed data.
@@ -225,18 +223,21 @@ public class Seed {
         root.setPwd(passwordEncoder.encode(ROOT));
         root.setName(ROOT);
         root.setDescription(ROOT + ACCOUNT);
+        root.setVersion(VersionConstant.INIT_VERSION);
 
         // Init admin user
         admin.setUsr(ADMIN);
         admin.setPwd(passwordEncoder.encode(ADMIN));
         admin.setName(ADMIN);
         admin.setDescription(ADMIN + ACCOUNT);
+        admin.setVersion(VersionConstant.INIT_VERSION);
 
         // Init guest user
         guest.setUsr(GUEST);
         guest.setPwd(passwordEncoder.encode(GUEST));
         guest.setName(GUEST);
         guest.setDescription(GUEST + ACCOUNT);
+        guest.setVersion(VersionConstant.INIT_VERSION);
 
         users.add(root);
         users.add(admin);
@@ -255,12 +256,15 @@ public class Seed {
 
         // Init root role
         Role root = new Role(ROOT, ROOT + ROLE);
+        root.setVersion(VersionConstant.INIT_VERSION);
 
         // Init admin role
         Role admin = new Role(ADMIN, ADMIN + ROLE);
+        admin.setVersion(VersionConstant.INIT_VERSION);
 
         // Init guest role
         Role guest = new Role(GUEST, GUEST + ROLE);
+        guest.setVersion(VersionConstant.INIT_VERSION);
 
         roles.add(root);
         roles.add(admin);
@@ -279,18 +283,33 @@ public class Seed {
 
         // init root control group
         Group root = new Group(ROOT, "root rights group");
+        root.setLastModifyAT(new Date());
+        root.setCreateAT(new Date());
+        root.setVersion(VersionConstant.INIT_VERSION);
 
         // Init user control group
         Group user = new Group("user", "user rights group");
+        user.setLastModifyAT(new Date());
+        user.setCreateAT(new Date());
+        user.setVersion(VersionConstant.INIT_VERSION);
 
         // Init authority control  group
         Group authority = new Group("authority", "authority rights group");
+        authority.setLastModifyAT(new Date());
+        authority.setCreateAT(new Date());
+        authority.setVersion(VersionConstant.INIT_VERSION);
 
         // Init resource group
         Group resource = new Group("resource", "resource rights group");
+        resource.setLastModifyAT(new Date());
+        resource.setCreateAT(new Date());
+        resource.setVersion(VersionConstant.INIT_VERSION);
 
         // Init guest group
         Group guest = new Group("guest", "guest rights group");
+        guest.setLastModifyAT(new Date());
+        guest.setCreateAT(new Date());
+        guest.setVersion(VersionConstant.INIT_VERSION);
 
         groups.add(root);
         groups.add(guest);
@@ -310,12 +329,39 @@ public class Seed {
     private Iterable<Resource> getResources() {
         List<Resource> resources = new ArrayList<>();
         Resource root = new Resource("root", "/.*", 10000, "all resources");
+        root.setLastModifyAT(new Date());
+        root.setCreateAT(new Date());
+        root.setVersion(VersionConstant.INIT_VERSION);
+
         Resource message = new Resource("message", "/messages", 10, "message resource");
+        message.setLastModifyAT(new Date());
+        message.setCreateAT(new Date());
+        message.setVersion(VersionConstant.INIT_VERSION);
+
         Resource welcome = new Resource("welcome", "/welcome", 1, "welcome resource");
+        welcome.setLastModifyAT(new Date());
+        welcome.setCreateAT(new Date());
+        welcome.setVersion(VersionConstant.INIT_VERSION);
+
         Resource user = new Resource("user", "/users" , 10, "user resource");
+        user.setLastModifyAT(new Date());
+        user.setCreateAT(new Date());
+        user.setVersion(VersionConstant.INIT_VERSION);
+
         Resource role = new Resource("role", "/roles", 10, "role resource");
+        role.setLastModifyAT(new Date());
+        role.setCreateAT(new Date());
+        role.setVersion(VersionConstant.INIT_VERSION);
+
         Resource group = new Resource("group", "/groups", 10, "group resource");
+        group.setLastModifyAT(new Date());
+        group.setCreateAT(new Date());
+        group.setVersion(VersionConstant.INIT_VERSION);
+
         Resource resource = new Resource("resource", "/resources", 10, "resource resource");
+        resource.setLastModifyAT(new Date());
+        resource.setCreateAT(new Date());
+        resource.setVersion(VersionConstant.INIT_VERSION);
 
         resources.add(root);
         resources.add(message);

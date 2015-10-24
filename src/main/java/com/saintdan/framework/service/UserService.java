@@ -6,6 +6,7 @@ import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.UserVO;
 import com.saintdan.framework.vo.UsersVO;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
 /**
  * User's service.
@@ -59,7 +60,7 @@ public interface UserService {
      * @return          user's VO
      * @throws UserException        USR0013 Cannot find any user by this usr param.
      */
-    UserVO getUserByUsr(UserParam param) throws UserException;
+    UserVO getUserByUsr(UserParam param, OAuth2AuthenticationDetails details) throws UserException;
 
 
     /**
@@ -71,6 +72,14 @@ public interface UserService {
      * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
     UserVO update(UserParam param) throws UserException, RoleException;
+
+    /**
+     * Update user's password
+     *
+     * @param param     user's param
+     * @throws UserException        USR0041 Update user's password failed.
+     */
+    void updatePwd(UserParam param) throws UserException;
 
     /**
      * Delete user.

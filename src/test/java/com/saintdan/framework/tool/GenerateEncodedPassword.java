@@ -11,7 +11,7 @@ import com.saintdan.framework.component.CustomPasswordEncoder;
  */
 public class GenerateEncodedPassword {
 
-    private static final String RAW_PASSWORD = "root";
+    private static final String RAW_PASSWORD = "admin";
 
     public static void main(String[] args) {
         String encodedPassword = new CustomPasswordEncoder().encode(RAW_PASSWORD);

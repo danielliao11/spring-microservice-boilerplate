@@ -19,10 +19,13 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * User's controller.
@@ -138,7 +141,7 @@ public class UserController {
      * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS + "/usr={usr}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign) {
+    public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign, HttpServletRequest request) {
         try {
             // If usr or sign is empty, return SYS0002, params error.
             if (StringUtils.isBlank(usr)) {
@@ -153,8 +156,9 @@ public class UserController {
                 // Return rsa signature failed information and log the exception.
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
+            OAuth2AuthenticationDetails details = new OAuth2AuthenticationDetails(request);
             // Return result and message.
-            return userService.getUserByUsr(param);
+            return userService.getUserByUsr(param, details);
         } catch (SignatureException | UserException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());

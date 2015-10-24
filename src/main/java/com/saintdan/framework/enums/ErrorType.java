@@ -19,6 +19,7 @@ public enum ErrorType implements IntentState {
 
     // User
     USR0001("User error."),
+    USR0002("Wrong password."),
     USR0010("User find error."),
     USR0011("Cannot find any user, no user exists."),
     USR0012("Cannot find any user by this id param."),
@@ -26,6 +27,8 @@ public enum ErrorType implements IntentState {
     USR0020("Create user failed."),
     USR0030("User already existing."),
     USR0031("User already existing, usr taken."),
+    USR0040("Update user failed."),
+    USR0041("Update user's password failed."),
 
     // Role
     ROL0001("Role error."),

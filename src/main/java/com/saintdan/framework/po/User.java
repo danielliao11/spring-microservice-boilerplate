@@ -1,14 +1,18 @@
 package com.saintdan.framework.po;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Authorized users, provide for spring security oauth2.
@@ -37,11 +41,37 @@ public class User implements Serializable {
     private String usr;
 
     @NotEmpty
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 200)
     private String pwd;
 
     @Column(length = 500)
     private String description;
+
+    // Last login time
+    @Column(name = "last_login_at")
+    private Date lastLoginAT;
+
+    // Last login IP address
+    @Column(name = "last_login_ip")
+    private String lastLoginIP;
+
+    @CreatedDate
+    private Date createTime;
+
+    @CreatedBy
+    @Column(columnDefinition = "BIGINT")
+    private User createUser;
+
+    @LastModifiedDate
+    private Date lastModifyTime;
+
+    @LastModifiedBy
+    @Column(columnDefinition = "BIGINT")
+    private User lastModifyUser;
+
+    @NotNull
+    @Column(nullable = false)
+    private Integer version;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
@@ -101,6 +131,62 @@ public class User implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getLastLoginAT() {
+        return lastLoginAT;
+    }
+
+    public void setLastLoginAT(Date lastLoginAT) {
+        this.lastLoginAT = lastLoginAT;
+    }
+
+    public String getLastLoginIP() {
+        return lastLoginIP;
+    }
+
+    public void setLastLoginIP(String lastLoginIP) {
+        this.lastLoginIP = lastLoginIP;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public User getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(User createUser) {
+        this.createUser = createUser;
+    }
+
+    public Date getLastModifyTime() {
+        return lastModifyTime;
+    }
+
+    public void setLastModifyTime(Date lastModifyTime) {
+        this.lastModifyTime = lastModifyTime;
+    }
+
+    public User getLastModifyUser() {
+        return lastModifyUser;
+    }
+
+    public void setLastModifyUser(User lastModifyUser) {
+        this.lastModifyUser = lastModifyUser;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public Set<Role> getRoles() {
