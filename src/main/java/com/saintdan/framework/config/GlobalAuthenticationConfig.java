@@ -1,7 +1,7 @@
 package com.saintdan.framework.config;
 
-import com.saintdan.framework.config.user.CustomUserDetailsService;
 import com.saintdan.framework.component.CustomPasswordEncoder;
+import com.saintdan.framework.config.user.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

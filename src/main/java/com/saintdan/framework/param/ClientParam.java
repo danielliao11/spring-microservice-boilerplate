@@ -1,114 +1,45 @@
-package com.saintdan.framework.po;
+package com.saintdan.framework.param;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import com.saintdan.framework.annotation.ParamField;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
 /**
+ * Client's RESTFul param bean.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 10/23/15
+ * @date 10/25/15
  * @since JDK1.8
  */
-@Entity
-@Table(name = "clients")
-public class Client implements Serializable {
+public class ClientParam extends BaseParam implements Serializable {
 
-    private static final long serialVersionUID = 6500601540965188191L;
+    private static final long serialVersionUID = 6065608866944007796L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @NotEmpty
-    @Column(length = 50)
+    @ParamField
     private String clientIdAlias;
 
-    @NotEmpty
-    @Column(length = 100)
+    @ParamField
     private String resourceIdStr;
 
-    @NotEmpty
-    @Column(length = 100)
+    @ParamField
     private String clientSecretAlias;
 
-    /**
-     * Available values: read, write
-     */
-    @NotEmpty
-    @Column(length = 100)
+    @ParamField
     private String scopeStr;
 
-    /**
-     * grant types include
-     * "authorization_code", "password", "assertion", and "refresh_token".
-     * Default value is "authorization_code,refresh_token".
-     */
-    @NotEmpty
-    @Column(length = 100)
+    @ParamField
     private String authorizedGrantTypeStr;
 
-    /**
-     * The redirect URI(s) established during registration (optional, comma separated).
-     */
-    @NotEmpty
-    @Column(length = 1024)
     private String registeredRedirectUriStr;
 
-    /**
-     * Authorities that are granted to the client (comma-separated). Distinct from the authorities
-     * granted to the user on behalf of whom the client is acting.
-     * <pre>
-     *     For example: USER
-     * </pre>
-     */
-    @NotEmpty
-    @Column(length = 500)
+    @ParamField
     private String authoritieStr;
 
-    /**
-     * The access token validity period in seconds (optional).
-     * If unspecified a global default will be applied by the token services.
-     */
     private Integer accessTokenValiditySecondsAlias;
 
-    /**
-     * The refresh token validity period in seconds (optional).
-     * If unspecified a global default will  be applied by the token services.
-     */
     private Integer refreshTokenValiditySecondsAlias;
 
-    /**
-     * Additional information for this client, not needed by the vanilla OAuth protocol but might be useful, for example,
-     * for storing descriptive information.
-     */
     private String additionalInformationStr;
-
-    public Client() {
-
-    }
-
-    public Client(Client client) {
-        super();
-        this.clientIdAlias = client.getClientIdAlias();
-        this.resourceIdStr = client.getResourceIdStr();
-        this.clientSecretAlias = client.getClientSecretAlias();
-        this.scopeStr = client.getScopeStr();
-        this.authorizedGrantTypeStr = client.getAuthorizedGrantTypeStr();
-        this.registeredRedirectUriStr = client.getRegisteredRedirectUriStr();
-        this.authoritieStr = client.getAuthoritieStr();
-        this.accessTokenValiditySecondsAlias = client.getAccessTokenValiditySecondsAlias();
-        this.refreshTokenValiditySecondsAlias = client.getRefreshTokenValiditySecondsAlias();
-        this.additionalInformationStr = client.getAdditionalInformationStr();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getClientIdAlias() {
         return clientIdAlias;

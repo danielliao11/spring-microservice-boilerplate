@@ -31,7 +31,7 @@ public class CustomClientDetailsService implements ClientDetailsService {
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-        Client client = clientRepository.findByClientId(clientId);
+        Client client = clientRepository.findByClientIdAlias(clientId);
         if (client == null) {
             throw new ClientRegistrationException(String.format("Client %s does not exist!", clientId));
         }
@@ -113,7 +113,7 @@ public class CustomClientDetailsService implements ClientDetailsService {
 
         @Override
         public Integer getRefreshTokenValiditySeconds() {
-            return getRefreshTokenValiditySecondsAlias();
+            return null;
         }
 
         @Override

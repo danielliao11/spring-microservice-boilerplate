@@ -17,6 +17,16 @@ public enum ErrorType implements IntentState {
     FMT0001("Format error."),
     FMT0010("Format error, unknown format."),
 
+    // Client
+    CLT0001("Client error."),
+    CLT0010("Client find error."),
+    CLT0011("Cannot find any client, no group exists."),
+    CLT0012("Cannot find any client by this id param."),
+    CLT0013("Cannot find any client by this clientId param."),
+    CLT0020("Create client failed."),
+    CLT0030("Client already existing."),
+    CLT0031("Client already existing, name taken."),
+
     // User
     USR0001("User error."),
     USR0002("Wrong password."),

@@ -14,5 +14,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface ClientRepository extends CrudRepository<Client, Long> {
 
-    Client findByClientId(String clientId);
+    Client findByClientIdAlias(String clientIdAlias);
 }
