@@ -1,5 +1,6 @@
 package com.saintdan.framework.config;
 
+import com.saintdan.framework.config.client.CustomClientDetailsService;
 import com.saintdan.framework.config.user.CustomUserDetailsService;
 import com.saintdan.framework.constant.ResourceURL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,8 +109,8 @@ public class OAuth2ServerConfiguration {
         @Autowired
         private CustomUserDetailsService userDetailsService;
 
-//        @Autowired
-//        private CustomClientDetailsService clientDetailsService;
+        @Autowired
+        private CustomClientDetailsService clientDetailsService;
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints)
@@ -122,15 +123,15 @@ public class OAuth2ServerConfiguration {
 
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//            clients.withClientDetails(clientDetailsService);
-            clients
-                    .inMemory()
-                    .withClient("ios_app")
-                    .authorizedGrantTypes("password", "refresh_token")
-                    .authorities("USER")
-                    .scopes("read")
-                    .resourceIds(RESOURCE_ID)
-                    .secret("123456");
+            clients.withClientDetails(clientDetailsService);
+//            clients
+//                    .inMemory()
+//                    .withClient("ios_app")
+//                    .authorizedGrantTypes("password", "refresh_token")
+//                    .authorities("USER")
+//                    .scopes("read")
+//                    .resourceIds(RESOURCE_ID)
+//                    .secret("123456");
             // You can add other clients like:
             /*
             clients

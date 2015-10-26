@@ -49,6 +49,10 @@ public class Seed {
     private static final String ACCOUNT = " account";
     private static final String ROLE = " role";
 
+    // --------------------------
+    // INIT DATABASE
+    // --------------------------
+
     /**
      * Init database.
      *
@@ -79,6 +83,10 @@ public class Seed {
         resourceRepository.save(getResources());
     }
 
+    // --------------------------
+    // SEED
+    // --------------------------
+
     @Test
     public void testSeed() throws Exception {
         userAndRole();
@@ -88,6 +96,10 @@ public class Seed {
         System.out.println("-- Insert seed successful. --");
         System.out.println("-----------------------------");
     }
+
+    // --------------------------
+    // PRIVATE FIELDS AND METHODS
+    // --------------------------
 
     @Autowired
     private CustomPasswordEncoder passwordEncoder;

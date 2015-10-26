@@ -51,7 +51,6 @@ public class Client implements Serializable {
     /**
      * The redirect URI(s) established during registration (optional, comma separated).
      */
-    @NotEmpty
     @Column(length = 1024)
     private String registeredRedirectUriStr;
 
@@ -62,9 +61,8 @@ public class Client implements Serializable {
      *     For example: USER
      * </pre>
      */
-    @NotEmpty
     @Column(length = 500)
-    private String authoritieStr;
+    private String authoritiesStr;
 
     /**
      * The access token validity period in seconds (optional).
@@ -96,7 +94,7 @@ public class Client implements Serializable {
         this.scopeStr = client.getScopeStr();
         this.authorizedGrantTypeStr = client.getAuthorizedGrantTypeStr();
         this.registeredRedirectUriStr = client.getRegisteredRedirectUriStr();
-        this.authoritieStr = client.getAuthoritieStr();
+        this.authoritiesStr = client.getAuthoritiesStr();
         this.accessTokenValiditySecondsAlias = client.getAccessTokenValiditySecondsAlias();
         this.refreshTokenValiditySecondsAlias = client.getRefreshTokenValiditySecondsAlias();
         this.additionalInformationStr = client.getAdditionalInformationStr();
@@ -158,12 +156,12 @@ public class Client implements Serializable {
         this.registeredRedirectUriStr = registeredRedirectUriStr;
     }
 
-    public String getAuthoritieStr() {
-        return authoritieStr;
+    public String getAuthoritiesStr() {
+        return authoritiesStr;
     }
 
-    public void setAuthoritieStr(String authoritieStr) {
-        this.authoritieStr = authoritieStr;
+    public void setAuthoritiesStr(String authoritiesStr) {
+        this.authoritiesStr = authoritiesStr;
     }
 
     public Integer getAccessTokenValiditySecondsAlias() {
