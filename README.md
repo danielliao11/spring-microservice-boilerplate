@@ -359,4 +359,5 @@ Copyright (c) 2015 saintdan
 - 0.8.2.RELEASE
   - Add [CustomClientDetailsService](src/main/java/com/saintdan/framework/config/custom/CustomClientDetailsService.java), add jdbc client choice.
   - Add createdBy, createdDate, lastModifiedBy, lastModifiedDate to POs.
+  - Add [SpringSecurityUtils](src/main/java/com/saintdan/framework/tools/SpringSecurityUtils.java), trace user's ip address.
   - Modify [Seed](src/test/java/com/saintdan/framework/repo/Seed.java).
