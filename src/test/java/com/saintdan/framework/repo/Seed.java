@@ -4,16 +4,21 @@ import com.saintdan.framework.Application;
 import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.po.*;
-import org.junit.Before;
+import com.saintdan.framework.service.UserService;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Seed data.
@@ -25,8 +30,60 @@ import java.util.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@Transactional
+@FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
 public class Seed {
+
+    // --------------------------
+    // SEED
+    // --------------------------
+
+    @Test
+    public void test001() throws Exception {
+        System.out.println("test001 start.");
+        User user = userRepository.save(getRoot());
+        ROOT_USER = user.getId();
+        System.out.println("ROOT_USER is:" + ROOT_USER);
+        System.out.println("test001 successfully.");
+    }
+
+    @Test
+    public void test002() throws Exception {
+        System.out.println("test002 start.");
+        // Init client
+        clientRepository.save(getClients());
+
+        // Init user
+        userRepository.save(getUsers());
+
+        // Init role
+        roleRepository.save(getRoles());
+
+        // Init group
+        groupRepository.save(getGroups());
+
+        // Init resource
+        resourceRepository.save(getResources());
+        System.out.println("test002 successfully.");
+    }
+
+    @Test
+    public void test003() throws Exception {
+        System.out.println("test003 start.");
+        userAndRole();
+        roleAndGroup();
+        groupAndResource();
+        System.out.println("-----------------------------");
+        System.out.println("-- Insert seed successful. --");
+        System.out.println("-----------------------------");
+        System.out.println("test003 successfully.");
+    }
+
+    // --------------------------
+    // PRIVATE FIELDS AND METHODS
+    // --------------------------
+
+    @Autowired
+    private CustomPasswordEncoder passwordEncoder;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -43,66 +100,33 @@ public class Seed {
     @Autowired
     private ResourceRepository resourceRepository;
 
+    @Autowired
+    private UserService userService;
+
     private static final String ROOT = "root";
     private static final String ADMIN = "admin";
     private static final String GUEST = "guest";
     private static final String ACCOUNT = " account";
     private static final String ROLE = " role";
 
-    // --------------------------
-    // INIT DATABASE
-    // --------------------------
+    private static Long ROOT_USER;
 
     /**
-     * Init database.
+     * Get root.
      *
-     * @throws Exception
+     * @return root
      */
-    @Before
-    public void setUp() throws Exception {
-
-        // Clear database;
-        userRepository.deleteAll();
-        roleRepository.deleteAll();
-        groupRepository.deleteAll();
-        resourceRepository.deleteAll();
-
-        // Init client
-        clientRepository.save(getClients());
-
-        // Init user
-        userRepository.save(getUsers());
-
-        // Init role
-        roleRepository.save(getRoles());
-
-        // Init group
-        groupRepository.save(getGroups());
-
-        // Init resource
-        resourceRepository.save(getResources());
+    private User getRoot() {
+        User root = new User();
+        root.setUsr(ROOT);
+        root.setPwd(passwordEncoder.encode(ROOT));
+        root.setName(ROOT);
+        root.setDescription(ROOT + ACCOUNT);
+        root.setCreatedBy(0L);
+        root.setLastModifiedBy(0L);
+        root.setVersion(VersionConstant.INIT_VERSION);
+        return root;
     }
-
-    // --------------------------
-    // SEED
-    // --------------------------
-
-    @Test
-    public void testSeed() throws Exception {
-        userAndRole();
-        roleAndGroup();
-        groupAndResource();
-        System.out.println("-----------------------------");
-        System.out.println("-- Insert seed successful. --");
-        System.out.println("-----------------------------");
-    }
-
-    // --------------------------
-    // PRIVATE FIELDS AND METHODS
-    // --------------------------
-
-    @Autowired
-    private CustomPasswordEncoder passwordEncoder;
 
     /**
      * Get clients list.
@@ -128,22 +152,16 @@ public class Seed {
      */
     private Iterable<User> getUsers() {
         List<User> users = new ArrayList<>();
-        User root = new User();
         User admin = new User();
         User guest = new User();
-
-        // Init root user
-        root.setUsr(ROOT);
-        root.setPwd(passwordEncoder.encode(ROOT));
-        root.setName(ROOT);
-        root.setDescription(ROOT + ACCOUNT);
-        root.setVersion(VersionConstant.INIT_VERSION);
 
         // Init admin user
         admin.setUsr(ADMIN);
         admin.setPwd(passwordEncoder.encode(ADMIN));
         admin.setName(ADMIN);
         admin.setDescription(ADMIN + ACCOUNT);
+        admin.setCreatedBy(ROOT_USER);
+        admin.setLastModifiedBy(ROOT_USER);
         admin.setVersion(VersionConstant.INIT_VERSION);
 
         // Init guest user
@@ -151,9 +169,10 @@ public class Seed {
         guest.setPwd(passwordEncoder.encode(GUEST));
         guest.setName(GUEST);
         guest.setDescription(GUEST + ACCOUNT);
+        guest.setCreatedBy(ROOT_USER);
+        guest.setLastModifiedBy(ROOT_USER);
         guest.setVersion(VersionConstant.INIT_VERSION);
 
-        users.add(root);
         users.add(admin);
         users.add(guest);
 
@@ -170,14 +189,20 @@ public class Seed {
 
         // Init root role
         Role root = new Role(ROOT, ROOT + ROLE);
+        root.setCreatedBy(ROOT_USER);
+        root.setLastModifiedBy(ROOT_USER);
         root.setVersion(VersionConstant.INIT_VERSION);
 
         // Init admin role
         Role admin = new Role(ADMIN, ADMIN + ROLE);
+        admin.setCreatedBy(ROOT_USER);
+        admin.setLastModifiedBy(ROOT_USER);
         admin.setVersion(VersionConstant.INIT_VERSION);
 
         // Init guest role
         Role guest = new Role(GUEST, GUEST + ROLE);
+        guest.setCreatedBy(ROOT_USER);
+        guest.setLastModifiedBy(ROOT_USER);
         guest.setVersion(VersionConstant.INIT_VERSION);
 
         roles.add(root);
@@ -197,32 +222,32 @@ public class Seed {
 
         // init root control group
         Group root = new Group(ROOT, "root rights group");
-        root.setLastModifyAT(new Date());
-        root.setCreateAT(new Date());
+        root.setCreatedBy(ROOT_USER);
+        root.setLastModifiedBy(ROOT_USER);
         root.setVersion(VersionConstant.INIT_VERSION);
 
         // Init user control group
         Group user = new Group("user", "user rights group");
-        user.setLastModifyAT(new Date());
-        user.setCreateAT(new Date());
+        user.setCreatedBy(ROOT_USER);
+        user.setLastModifiedBy(ROOT_USER);
         user.setVersion(VersionConstant.INIT_VERSION);
 
         // Init authority control  group
         Group authority = new Group("authority", "authority rights group");
-        authority.setLastModifyAT(new Date());
-        authority.setCreateAT(new Date());
+        authority.setCreatedBy(ROOT_USER);
+        authority.setLastModifiedBy(ROOT_USER);
         authority.setVersion(VersionConstant.INIT_VERSION);
 
         // Init resource group
         Group resource = new Group("resource", "resource rights group");
-        resource.setLastModifyAT(new Date());
-        resource.setCreateAT(new Date());
+        resource.setCreatedBy(ROOT_USER);
+        resource.setLastModifiedBy(ROOT_USER);
         resource.setVersion(VersionConstant.INIT_VERSION);
 
         // Init guest group
         Group guest = new Group("guest", "guest rights group");
-        guest.setLastModifyAT(new Date());
-        guest.setCreateAT(new Date());
+        guest.setCreatedBy(ROOT_USER);
+        guest.setLastModifiedBy(ROOT_USER);
         guest.setVersion(VersionConstant.INIT_VERSION);
 
         groups.add(root);
@@ -243,38 +268,38 @@ public class Seed {
     private Iterable<Resource> getResources() {
         List<Resource> resources = new ArrayList<>();
         Resource root = new Resource("root", "/.*", 10000, "all resources");
-        root.setLastModifyAT(new Date());
-        root.setCreateAT(new Date());
+        root.setCreatedBy(ROOT_USER);
+        root.setLastModifiedBy(ROOT_USER);
         root.setVersion(VersionConstant.INIT_VERSION);
 
         Resource message = new Resource("message", "/messages", 10, "message resource");
-        message.setLastModifyAT(new Date());
-        message.setCreateAT(new Date());
+        message.setCreatedBy(ROOT_USER);
+        message.setLastModifiedBy(ROOT_USER);
         message.setVersion(VersionConstant.INIT_VERSION);
 
         Resource welcome = new Resource("welcome", "/welcome", 1, "welcome resource");
-        welcome.setLastModifyAT(new Date());
-        welcome.setCreateAT(new Date());
+        welcome.setCreatedBy(ROOT_USER);
+        welcome.setLastModifiedBy(ROOT_USER);
         welcome.setVersion(VersionConstant.INIT_VERSION);
 
         Resource user = new Resource("user", "/users" , 10, "user resource");
-        user.setLastModifyAT(new Date());
-        user.setCreateAT(new Date());
+        user.setCreatedBy(ROOT_USER);
+        user.setLastModifiedBy(ROOT_USER);
         user.setVersion(VersionConstant.INIT_VERSION);
 
         Resource role = new Resource("role", "/roles", 10, "role resource");
-        role.setLastModifyAT(new Date());
-        role.setCreateAT(new Date());
+        role.setCreatedBy(ROOT_USER);
+        role.setLastModifiedBy(ROOT_USER);
         role.setVersion(VersionConstant.INIT_VERSION);
 
         Resource group = new Resource("group", "/groups", 10, "group resource");
-        group.setLastModifyAT(new Date());
-        group.setCreateAT(new Date());
+        group.setCreatedBy(ROOT_USER);
+        group.setLastModifiedBy(ROOT_USER);
         group.setVersion(VersionConstant.INIT_VERSION);
 
         Resource resource = new Resource("resource", "/resources", 10, "resource resource");
-        resource.setLastModifyAT(new Date());
-        resource.setCreateAT(new Date());
+        resource.setCreatedBy(ROOT_USER);
+        resource.setLastModifiedBy(ROOT_USER);
         resource.setVersion(VersionConstant.INIT_VERSION);
 
         resources.add(root);

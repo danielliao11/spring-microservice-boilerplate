@@ -19,12 +19,10 @@ import com.saintdan.framework.vo.UsersVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -115,16 +113,12 @@ public class UserServiceImpl implements UserService {
      * @throws UserException        USR0012 Cannot find any user by this usr param.
      */
     @Override
-    public UserVO getUserByUsr(UserParam param, OAuth2AuthenticationDetails details) throws UserException {
+    public UserVO getUserByUsr(UserParam param) throws UserException {
         User user = userRepository.findByUsr(param.getUsr());
         if (user == null) {
             // Throw user cannot find by usr parameter exception.
             throw new UserException(ErrorType.USR0013);
         }
-        // Save last login information.
-        String remoteAddress = details.getRemoteAddress();
-        user.setLastLoginIP(remoteAddress);
-        user.setLastLoginAT(new Date());
         userRepository.save(user);
         return userPO2VO(user, String.format(ControllerConstant.SHOW, USER));
     }

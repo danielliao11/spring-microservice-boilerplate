@@ -1,7 +1,7 @@
 package com.saintdan.framework.config;
 
-import com.saintdan.framework.config.client.CustomClientDetailsService;
-import com.saintdan.framework.config.user.CustomUserDetailsService;
+import com.saintdan.framework.config.custom.CustomClientDetailsService;
+import com.saintdan.framework.config.custom.CustomUserDetailsService;
 import com.saintdan.framework.constant.ResourceURL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

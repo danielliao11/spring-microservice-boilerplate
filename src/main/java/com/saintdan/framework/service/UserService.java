@@ -6,7 +6,6 @@ import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.UserVO;
 import com.saintdan.framework.vo.UsersVO;
-import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
 /**
  * User's service.
@@ -60,7 +59,7 @@ public interface UserService {
      * @return          user's VO
      * @throws UserException        USR0013 Cannot find any user by this usr param.
      */
-    UserVO getUserByUsr(UserParam param, OAuth2AuthenticationDetails details) throws UserException;
+    UserVO getUserByUsr(UserParam param) throws UserException;
 
 
     /**

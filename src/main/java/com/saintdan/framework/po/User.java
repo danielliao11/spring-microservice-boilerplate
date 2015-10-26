@@ -6,9 +6,9 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,6 +23,7 @@ import java.util.Set;
  * @since JDK1.8
  */
 @Entity
+@EntityListeners({AuditingEntityListener.class})
 @Table(name = "users")
 public class User implements Serializable {
 
@@ -48,28 +49,28 @@ public class User implements Serializable {
     private String description;
 
     // Last login time
-    @Column(name = "last_login_at")
-    private Date lastLoginAT;
+    private Date lastLoginTime;
 
     // Last login IP address
     @Column(name = "last_login_ip")
     private String lastLoginIP;
 
     @CreatedDate
-    private Date createTime;
+    @Column(nullable = false)
+    private Date createdDate = new Date();
 
     @CreatedBy
-    @Column(columnDefinition = "BIGINT")
-    private User createUser;
+    @Column(nullable = false)
+    private Long createdBy;
 
     @LastModifiedDate
-    private Date lastModifyTime;
+    @Column(nullable = false)
+    private Date lastModifiedDate = new Date();
 
     @LastModifiedBy
-    @Column(columnDefinition = "BIGINT")
-    private User lastModifyUser;
+    @Column(nullable = false)
+    private Long lastModifiedBy;
 
-    @NotNull
     @Column(nullable = false)
     private Integer version;
 
@@ -82,6 +83,13 @@ public class User implements Serializable {
 
     public User() {
 
+    }
+
+    public User(Long id, String name, String usr, String pwd) {
+        this.id = id;
+        this.name = name;
+        this.usr = usr;
+        this.pwd = pwd;
     }
 
     public User(User user) {
@@ -133,12 +141,12 @@ public class User implements Serializable {
         this.description = description;
     }
 
-    public Date getLastLoginAT() {
-        return lastLoginAT;
+    public Date getLastLoginTime() {
+        return lastLoginTime;
     }
 
-    public void setLastLoginAT(Date lastLoginAT) {
-        this.lastLoginAT = lastLoginAT;
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 
     public String getLastLoginIP() {
@@ -149,36 +157,36 @@ public class User implements Serializable {
         this.lastLoginIP = lastLoginIP;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public User getCreateUser() {
-        return createUser;
+    public Long getCreatedBy() {
+        return createdBy;
     }
 
-    public void setCreateUser(User createUser) {
-        this.createUser = createUser;
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public Date getLastModifyTime() {
-        return lastModifyTime;
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
     }
 
-    public void setLastModifyTime(Date lastModifyTime) {
-        this.lastModifyTime = lastModifyTime;
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 
-    public User getLastModifyUser() {
-        return lastModifyUser;
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
     }
 
-    public void setLastModifyUser(User lastModifyUser) {
-        this.lastModifyUser = lastModifyUser;
+    public void setLastModifiedBy(Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 
     public Integer getVersion() {

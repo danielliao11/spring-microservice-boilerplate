@@ -355,3 +355,8 @@ Copyright (c) 2015 saintdan
   
 - 0.8.1.RELEASE
   - Modify table's name.
+  
+- 0.8.2.RELEASE
+  - Add [CustomClientDetailsService](src/main/java/com/saintdan/framework/config/custom/CustomClientDetailsService.java), add jdbc client choice.
+  - Add createdBy, createdDate, lastModifiedBy, lastModifiedDate to POs.
+  - Modify [Seed](src/test/java/com/saintdan/framework/repo/Seed.java).

@@ -1,4 +1,4 @@
-package com.saintdan.framework.config.client;
+package com.saintdan.framework.config.custom;
 
 import com.saintdan.framework.po.Client;
 import com.saintdan.framework.repo.ClientRepository;
@@ -66,7 +66,7 @@ public class CustomClientDetailsService implements ClientDetailsService {
 
         @Override
         public String getClientSecret() {
-            return getClientIdAlias();
+            return getClientSecretAlias();
         }
 
         @Override

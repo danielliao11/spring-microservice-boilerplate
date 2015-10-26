@@ -2,6 +2,10 @@ package com.saintdan.framework.po;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -50,13 +54,22 @@ public class Resource implements GrantedAuthority, Serializable {
     @Column(length = 500)
     private String description;
 
-    @Column(nullable = false, name = "last_modify_at")
-    private Date lastModifyAT;
+    @CreatedDate
+    @Column(nullable = false)
+    private Date createdDate = new Date();
 
-    @Column(nullable = false, name = "create_at")
-    private Date createAT;
+    @CreatedBy
+    @Column(nullable = false)
+    private Long createdBy;
 
-    @NotNull
+    @LastModifiedDate
+    @Column(nullable = false)
+    private Date lastModifiedDate = new Date();
+
+    @LastModifiedBy
+    @Column(nullable = false)
+    private Long lastModifiedBy;
+
     @Column(nullable = false)
     private Integer version;
 
@@ -120,20 +133,36 @@ public class Resource implements GrantedAuthority, Serializable {
         this.description = description;
     }
 
-    public Date getLastModifyAT() {
-        return lastModifyAT;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setLastModifyAT(Date lastModifyAT) {
-        this.lastModifyAT = lastModifyAT;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public Date getCreateAT() {
-        return createAT;
+    public Long getCreatedBy() {
+        return createdBy;
     }
 
-    public void setCreateAT(Date createAT) {
-        this.createAT = createAT;
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 
     public Integer getVersion() {

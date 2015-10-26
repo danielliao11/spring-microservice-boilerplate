@@ -2,6 +2,7 @@ package com.saintdan.framework.po;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -38,16 +39,22 @@ public class Role implements GrantedAuthority, Serializable {
     @Column(length = 500)
     private String description;
 
+    @CreatedDate
+    @Column(nullable = false)
+    private Date createdDate = new Date();
+
+    @CreatedBy
+    @Column(nullable = false)
+    private Long createdBy;
+
     @LastModifiedDate
-    private Date lastModifyTime;
+    @Column(nullable = false)
+    private Date lastModifiedDate = new Date();
 
     @LastModifiedBy
-    private User lastModifyUser;
+    @Column(nullable = false)
+    private Long lastModifiedBy;
 
-    @CreatedDate
-    private Date createTime;
-
-    @NotNull
     @Column(nullable = false)
     private Integer version;
 
@@ -100,28 +107,36 @@ public class Role implements GrantedAuthority, Serializable {
         this.description = description;
     }
 
-    public Date getLastModifyTime() {
-        return lastModifyTime;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setLastModifyTime(Date lastModifyTime) {
-        this.lastModifyTime = lastModifyTime;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public User getLastModifyUser() {
-        return lastModifyUser;
+    public Long getCreatedBy() {
+        return createdBy;
     }
 
-    public void setLastModifyUser(User lastModifyUser) {
-        this.lastModifyUser = lastModifyUser;
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 
     public Integer getVersion() {
