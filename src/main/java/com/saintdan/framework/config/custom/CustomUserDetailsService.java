@@ -1,7 +1,8 @@
-package com.saintdan.framework.service;
+package com.saintdan.framework.config.custom;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Set;
 
 import com.saintdan.framework.po.Group;
@@ -10,6 +11,7 @@ import com.saintdan.framework.po.Role;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.po.User;
 
+import com.saintdan.framework.tools.SpringSecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -42,14 +44,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException(String.format("User %s does not exist!", usr));
 		}
-		return new UserRepositoryUserDetails(user);
+        String ip = SpringSecurityUtils.getCurrentUserIp();
+        user.setLastLoginIP(ip);
+        user.setLastLoginTime(new Date());
+        userRepository.save(user);
+        return new UserRepositoryUserDetails(user);
 	}
 
 	private final static class UserRepositoryUserDetails extends User implements UserDetails {
 
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = -2502869413772228006L;
 
-		private UserRepositoryUserDetails(User user) {
+        private UserRepositoryUserDetails(User user) {
 			super(user);
 		}
 

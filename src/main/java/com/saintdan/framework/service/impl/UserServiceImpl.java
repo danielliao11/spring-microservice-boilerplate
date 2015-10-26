@@ -4,6 +4,7 @@ import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
+import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
@@ -118,6 +119,7 @@ public class UserServiceImpl implements UserService {
             // Throw user cannot find by usr parameter exception.
             throw new UserException(ErrorType.USR0013);
         }
+        userRepository.save(user);
         return userPO2VO(user, String.format(ControllerConstant.SHOW, USER));
     }
 
@@ -137,6 +139,17 @@ public class UserServiceImpl implements UserService {
         }
         return userPO2VO(userRepository.save(userParam2PO(param)),
                 String.format(ControllerConstant.UPDATE, USER));
+    }
+
+    /**
+     * Update user's password
+     *
+     * @param param     user's param
+     * @throws UserException        USR0041 Update user's password failed.
+     */
+    @Override
+    public void updatePwd(UserParam param) throws UserException {
+        userRepository.updatePwdFor(param.getPwd(), param.getId());
     }
 
     /**
@@ -196,6 +209,11 @@ public class UserServiceImpl implements UserService {
         }
         if (!StringUtils.isBlank(param.getPwd())) {
             user.setPwd(passwordEncoder.encode(param.getPwd()));
+        }
+        if (user.getId() == null) { // If user is new, set initial version -- 0
+            user.setVersion(VersionConstant.INIT_VERSION);
+        } else { // If user is not new, set version++
+            user.setVersion(userRepository.findOne(user.getId()).getVersion() + VersionConstant.INCREASE_STEP);
         }
         return user;
     }

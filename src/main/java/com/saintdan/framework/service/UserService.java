@@ -73,6 +73,14 @@ public interface UserService {
     UserVO update(UserParam param) throws UserException, RoleException;
 
     /**
+     * Update user's password
+     *
+     * @param param     user's param
+     * @throws UserException        USR0041 Update user's password failed.
+     */
+    void updatePwd(UserParam param) throws UserException;
+
+    /**
      * Delete user.
      *
      * @param param     user's params

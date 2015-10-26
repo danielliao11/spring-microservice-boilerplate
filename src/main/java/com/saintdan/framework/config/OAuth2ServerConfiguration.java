@@ -1,7 +1,8 @@
 package com.saintdan.framework.config;
 
+import com.saintdan.framework.config.custom.CustomClientDetailsService;
+import com.saintdan.framework.config.custom.CustomUserDetailsService;
 import com.saintdan.framework.constant.ResourceURL;
-import com.saintdan.framework.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -108,6 +109,10 @@ public class OAuth2ServerConfiguration {
         @Autowired
         private CustomUserDetailsService userDetailsService;
 
+        // When you use memory client, you can comment the custom client details service.
+        @Autowired
+        private CustomClientDetailsService clientDetailsService;
+
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints)
                 throws Exception {
@@ -117,28 +122,33 @@ public class OAuth2ServerConfiguration {
                     .userDetailsService(userDetailsService);
         }
 
-
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-            clients
-                    .inMemory()
-                    .withClient("ios_app")
-                    .authorizedGrantTypes("password", "refresh_token")
-                    .authorities("USER")
-                    .scopes("read")
-                    .resourceIds(RESOURCE_ID)
-                    .secret("123456");
-            // You can add other clients like:
-            /*
-            clients
-                    .inMemory()
-                    .withClient("android_app")
-                    .authorizedGrantTypes("password", "refresh_token")
-                    .authorities("USER")
-                    .scopes("read")
-                    .resourceIds(RESOURCE_ID)
-                    .secret("654321");
-            */
+            // Use JDBC client.
+            // If you have many clients, you can use JDBC client.
+            clients.withClientDetails(clientDetailsService);
+
+//            // Use memory client.
+//            // Or you can config them here use memory client.
+//            clients
+//                    .inMemory()
+//                    .withClient("ios_app")
+//                    .authorizedGrantTypes("password", "refresh_token")
+//                    .authorities("USER")
+//                    .scopes("read")
+//                    .resourceIds(RESOURCE_ID)
+//                    .secret("123456");
+//            // You can add other clients like:
+//            /*
+//            clients
+//                    .inMemory()
+//                    .withClient("android_app")
+//                    .authorizedGrantTypes("password", "refresh_token")
+//                    .authorities("USER")
+//                    .scopes("read")
+//                    .resourceIds(RESOURCE_ID)
+//                    .secret("654321");
+//            */
         }
 
         @Bean

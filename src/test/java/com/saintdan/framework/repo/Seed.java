@@ -2,13 +2,13 @@ package com.saintdan.framework.repo;
 
 import com.saintdan.framework.Application;
 import com.saintdan.framework.component.CustomPasswordEncoder;
-import com.saintdan.framework.po.Group;
-import com.saintdan.framework.po.Resource;
-import com.saintdan.framework.po.Role;
-import com.saintdan.framework.po.User;
-import org.junit.Before;
+import com.saintdan.framework.constant.VersionConstant;
+import com.saintdan.framework.po.*;
+import com.saintdan.framework.service.UserService;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,8 +30,63 @@ import java.util.Set;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@Transactional
+@FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
 public class Seed {
+
+    // --------------------------
+    // SEED
+    // --------------------------
+
+    @Test
+    public void test001() throws Exception {
+        System.out.println("test001 start.");
+        User user = userRepository.save(getRoot());
+        ROOT_USER = user.getId();
+        System.out.println("ROOT_USER is:" + ROOT_USER);
+        System.out.println("test001 successfully.");
+    }
+
+    @Test
+    public void test002() throws Exception {
+        System.out.println("test002 start.");
+        // Init client
+        clientRepository.save(getClients());
+
+        // Init user
+        userRepository.save(getUsers());
+
+        // Init role
+        roleRepository.save(getRoles());
+
+        // Init group
+        groupRepository.save(getGroups());
+
+        // Init resource
+        resourceRepository.save(getResources());
+        System.out.println("test002 successfully.");
+    }
+
+    @Test
+    public void test003() throws Exception {
+        System.out.println("test003 start.");
+        userAndRole();
+        roleAndGroup();
+        groupAndResource();
+        System.out.println("-----------------------------");
+        System.out.println("-- Insert seed successful. --");
+        System.out.println("-----------------------------");
+        System.out.println("test003 successfully.");
+    }
+
+    // --------------------------
+    // PRIVATE FIELDS AND METHODS
+    // --------------------------
+
+    @Autowired
+    private CustomPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -45,37 +100,217 @@ public class Seed {
     @Autowired
     private ResourceRepository resourceRepository;
 
+    @Autowired
+    private UserService userService;
+
     private static final String ROOT = "root";
     private static final String ADMIN = "admin";
     private static final String GUEST = "guest";
     private static final String ACCOUNT = " account";
     private static final String ROLE = " role";
 
+    private static Long ROOT_USER;
+
     /**
-     * Init database.
+     * Get root.
      *
-     * @throws Exception
+     * @return root
      */
-    @Before
-    public void setUp() throws Exception {
+    private User getRoot() {
+        User root = new User();
+        root.setUsr(ROOT);
+        root.setPwd(passwordEncoder.encode(ROOT));
+        root.setName(ROOT);
+        root.setDescription(ROOT + ACCOUNT);
+        root.setCreatedBy(0L);
+        root.setLastModifiedBy(0L);
+        root.setVersion(VersionConstant.INIT_VERSION);
+        return root;
+    }
 
-        // Clear database;
-        userRepository.deleteAll();
-        roleRepository.deleteAll();
-        groupRepository.deleteAll();
-        resourceRepository.deleteAll();
+    /**
+     * Get clients list.
+     *
+     * @return      clients
+     */
+    private Iterable<Client> getClients() {
+        List<Client> clients = new ArrayList<>();
+        Client ios = new Client();
+        ios.setClientIdAlias("ios_app");
+        ios.setClientSecretAlias("123456");
+        ios.setAuthorizedGrantTypeStr("password,refresh_token");
+        ios.setScopeStr("read");
+        ios.setResourceIdStr("rest_api");
+        clients.add(ios);
+        return clients;
+    }
 
-        // Init user
-        userRepository.save(getUsers());
+    /**
+     * Get users list.
+     *
+     * @return      users
+     */
+    private Iterable<User> getUsers() {
+        List<User> users = new ArrayList<>();
+        User admin = new User();
+        User guest = new User();
 
-        // Init role
-        roleRepository.save(getRoles());
+        // Init admin user
+        admin.setUsr(ADMIN);
+        admin.setPwd(passwordEncoder.encode(ADMIN));
+        admin.setName(ADMIN);
+        admin.setDescription(ADMIN + ACCOUNT);
+        admin.setCreatedBy(ROOT_USER);
+        admin.setLastModifiedBy(ROOT_USER);
+        admin.setVersion(VersionConstant.INIT_VERSION);
 
-        // Init group
-        groupRepository.save(getGroups());
+        // Init guest user
+        guest.setUsr(GUEST);
+        guest.setPwd(passwordEncoder.encode(GUEST));
+        guest.setName(GUEST);
+        guest.setDescription(GUEST + ACCOUNT);
+        guest.setCreatedBy(ROOT_USER);
+        guest.setLastModifiedBy(ROOT_USER);
+        guest.setVersion(VersionConstant.INIT_VERSION);
 
-        // Init resource
-        resourceRepository.save(getResources());
+        users.add(admin);
+        users.add(guest);
+
+        return users;
+    }
+
+    /**
+     * Get roles list
+     *
+     * @return      roles
+     */
+    private Iterable<Role> getRoles() {
+        List<Role> roles = new ArrayList<>();
+
+        // Init root role
+        Role root = new Role(ROOT, ROOT + ROLE);
+        root.setCreatedBy(ROOT_USER);
+        root.setLastModifiedBy(ROOT_USER);
+        root.setVersion(VersionConstant.INIT_VERSION);
+
+        // Init admin role
+        Role admin = new Role(ADMIN, ADMIN + ROLE);
+        admin.setCreatedBy(ROOT_USER);
+        admin.setLastModifiedBy(ROOT_USER);
+        admin.setVersion(VersionConstant.INIT_VERSION);
+
+        // Init guest role
+        Role guest = new Role(GUEST, GUEST + ROLE);
+        guest.setCreatedBy(ROOT_USER);
+        guest.setLastModifiedBy(ROOT_USER);
+        guest.setVersion(VersionConstant.INIT_VERSION);
+
+        roles.add(root);
+        roles.add(admin);
+        roles.add(guest);
+
+        return roles;
+    }
+
+    /**
+     * Get groups list
+     *
+     * @return      groups
+     */
+    private Iterable<Group> getGroups() {
+        List<Group> groups = new ArrayList<>();
+
+        // init root control group
+        Group root = new Group(ROOT, "root rights group");
+        root.setCreatedBy(ROOT_USER);
+        root.setLastModifiedBy(ROOT_USER);
+        root.setVersion(VersionConstant.INIT_VERSION);
+
+        // Init user control group
+        Group user = new Group("user", "user rights group");
+        user.setCreatedBy(ROOT_USER);
+        user.setLastModifiedBy(ROOT_USER);
+        user.setVersion(VersionConstant.INIT_VERSION);
+
+        // Init authority control  group
+        Group authority = new Group("authority", "authority rights group");
+        authority.setCreatedBy(ROOT_USER);
+        authority.setLastModifiedBy(ROOT_USER);
+        authority.setVersion(VersionConstant.INIT_VERSION);
+
+        // Init resource group
+        Group resource = new Group("resource", "resource rights group");
+        resource.setCreatedBy(ROOT_USER);
+        resource.setLastModifiedBy(ROOT_USER);
+        resource.setVersion(VersionConstant.INIT_VERSION);
+
+        // Init guest group
+        Group guest = new Group("guest", "guest rights group");
+        guest.setCreatedBy(ROOT_USER);
+        guest.setLastModifiedBy(ROOT_USER);
+        guest.setVersion(VersionConstant.INIT_VERSION);
+
+        groups.add(root);
+        groups.add(guest);
+        groups.add(user);
+        groups.add(authority);
+        groups.add(resource);
+
+
+        return groups;
+    }
+
+    /**
+     * Get resources list
+     *
+     * @return      resources
+     */
+    private Iterable<Resource> getResources() {
+        List<Resource> resources = new ArrayList<>();
+        Resource root = new Resource("root", "/.*", 10000, "all resources");
+        root.setCreatedBy(ROOT_USER);
+        root.setLastModifiedBy(ROOT_USER);
+        root.setVersion(VersionConstant.INIT_VERSION);
+
+        Resource message = new Resource("message", "/messages", 10, "message resource");
+        message.setCreatedBy(ROOT_USER);
+        message.setLastModifiedBy(ROOT_USER);
+        message.setVersion(VersionConstant.INIT_VERSION);
+
+        Resource welcome = new Resource("welcome", "/welcome", 1, "welcome resource");
+        welcome.setCreatedBy(ROOT_USER);
+        welcome.setLastModifiedBy(ROOT_USER);
+        welcome.setVersion(VersionConstant.INIT_VERSION);
+
+        Resource user = new Resource("user", "/users" , 10, "user resource");
+        user.setCreatedBy(ROOT_USER);
+        user.setLastModifiedBy(ROOT_USER);
+        user.setVersion(VersionConstant.INIT_VERSION);
+
+        Resource role = new Resource("role", "/roles", 10, "role resource");
+        role.setCreatedBy(ROOT_USER);
+        role.setLastModifiedBy(ROOT_USER);
+        role.setVersion(VersionConstant.INIT_VERSION);
+
+        Resource group = new Resource("group", "/groups", 10, "group resource");
+        group.setCreatedBy(ROOT_USER);
+        group.setLastModifiedBy(ROOT_USER);
+        group.setVersion(VersionConstant.INIT_VERSION);
+
+        Resource resource = new Resource("resource", "/resources", 10, "resource resource");
+        resource.setCreatedBy(ROOT_USER);
+        resource.setLastModifiedBy(ROOT_USER);
+        resource.setVersion(VersionConstant.INIT_VERSION);
+
+        resources.add(root);
+        resources.add(message);
+        resources.add(welcome);
+        resources.add(user);
+        resources.add(role);
+        resources.add(group);
+        resources.add(resource);
+
+        return resources;
     }
 
     /**
@@ -150,7 +385,7 @@ public class Seed {
      *
      * @throws Exception
      */
-    public void groupAndResource() throws Exception {
+    private void groupAndResource() throws Exception {
         // root group -- root resource
         Set<Resource> rootResources = new HashSet<>();
         Group rootGroup = groupRepository.findByName(ROOT);
@@ -194,137 +429,5 @@ public class Seed {
         resResources.add(resourceResource);
         resourceGroup.setResources(resResources);
         groupRepository.save(resourceGroup);
-    }
-
-    @Test
-    public void testSeed() throws Exception {
-        userAndRole();
-        roleAndGroup();
-        groupAndResource();
-        System.out.println("-----------------------------");
-        System.out.println("-- Insert seed successful. --");
-        System.out.println("-----------------------------");
-    }
-
-    @Autowired
-    private CustomPasswordEncoder passwordEncoder;
-
-    /**
-     * Get users list.
-     *
-     * @return      users
-     */
-    private Iterable<User> getUsers() {
-        List<User> users = new ArrayList<>();
-        User root = new User();
-        User admin = new User();
-        User guest = new User();
-
-        // Init root user
-        root.setUsr(ROOT);
-        root.setPwd(passwordEncoder.encode(ROOT));
-        root.setName(ROOT);
-        root.setDescription(ROOT + ACCOUNT);
-
-        // Init admin user
-        admin.setUsr(ADMIN);
-        admin.setPwd(passwordEncoder.encode(ADMIN));
-        admin.setName(ADMIN);
-        admin.setDescription(ADMIN + ACCOUNT);
-
-        // Init guest user
-        guest.setUsr(GUEST);
-        guest.setPwd(passwordEncoder.encode(GUEST));
-        guest.setName(GUEST);
-        guest.setDescription(GUEST + ACCOUNT);
-
-        users.add(root);
-        users.add(admin);
-        users.add(guest);
-
-        return users;
-    }
-
-    /**
-     * Get roles list
-     *
-     * @return      roles
-     */
-    private Iterable<Role> getRoles() {
-        List<Role> roles = new ArrayList<>();
-
-        // Init root role
-        Role root = new Role(ROOT, ROOT + ROLE);
-
-        // Init admin role
-        Role admin = new Role(ADMIN, ADMIN + ROLE);
-
-        // Init guest role
-        Role guest = new Role(GUEST, GUEST + ROLE);
-
-        roles.add(root);
-        roles.add(admin);
-        roles.add(guest);
-
-        return roles;
-    }
-
-    /**
-     * Get groups list
-     *
-     * @return      groups
-     */
-    private Iterable<Group> getGroups() {
-        List<Group> groups = new ArrayList<>();
-
-        // init root control group
-        Group root = new Group(ROOT, "root rights group");
-
-        // Init user control group
-        Group user = new Group("user", "user rights group");
-
-        // Init authority control  group
-        Group authority = new Group("authority", "authority rights group");
-
-        // Init resource group
-        Group resource = new Group("resource", "resource rights group");
-
-        // Init guest group
-        Group guest = new Group("guest", "guest rights group");
-
-        groups.add(root);
-        groups.add(guest);
-        groups.add(user);
-        groups.add(authority);
-        groups.add(resource);
-
-
-        return groups;
-    }
-
-    /**
-     * Get resources list
-     *
-     * @return      resources
-     */
-    private Iterable<Resource> getResources() {
-        List<Resource> resources = new ArrayList<>();
-        Resource root = new Resource("root", "/.*", 10000, "all resources");
-        Resource message = new Resource("message", "/messages", 10, "message resource");
-        Resource welcome = new Resource("welcome", "/welcome", 1, "welcome resource");
-        Resource user = new Resource("user", "/users" , 10, "user resource");
-        Resource role = new Resource("role", "/roles", 10, "role resource");
-        Resource group = new Resource("group", "/groups", 10, "group resource");
-        Resource resource = new Resource("resource", "/resources", 10, "resource resource");
-
-        resources.add(root);
-        resources.add(message);
-        resources.add(welcome);
-        resources.add(user);
-        resources.add(role);
-        resources.add(group);
-        resources.add(resource);
-
-        return resources;
     }
 }

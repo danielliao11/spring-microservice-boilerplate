@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * User's controller.
  *
@@ -138,7 +140,7 @@ public class UserController {
      * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS + "/usr={usr}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign) {
+    public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign, HttpServletRequest request) {
         try {
             // If usr or sign is empty, return SYS0002, params error.
             if (StringUtils.isBlank(usr)) {

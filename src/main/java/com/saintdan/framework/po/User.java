@@ -1,14 +1,18 @@
 package com.saintdan.framework.po;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Authorized users, provide for spring security oauth2.
@@ -19,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @since JDK1.8
  */
 @Entity
+@EntityListeners({AuditingEntityListener.class})
 @Table(name = "users")
 public class User implements Serializable {
 
@@ -37,11 +42,37 @@ public class User implements Serializable {
     private String usr;
 
     @NotEmpty
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 200)
     private String pwd;
 
     @Column(length = 500)
     private String description;
+
+    // Last login time
+    private Date lastLoginTime;
+
+    // Last login IP address
+    @Column(name = "last_login_ip")
+    private String lastLoginIP;
+
+    @CreatedDate
+    @Column(nullable = false)
+    private Date createdDate = new Date();
+
+    @CreatedBy
+    @Column(nullable = false)
+    private Long createdBy;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private Date lastModifiedDate = new Date();
+
+    @LastModifiedBy
+    @Column(nullable = false)
+    private Long lastModifiedBy;
+
+    @Column(nullable = false)
+    private Integer version;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
@@ -52,6 +83,13 @@ public class User implements Serializable {
 
     public User() {
 
+    }
+
+    public User(Long id, String name, String usr, String pwd) {
+        this.id = id;
+        this.name = name;
+        this.usr = usr;
+        this.pwd = pwd;
     }
 
     public User(User user) {
@@ -101,6 +139,62 @@ public class User implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
+    }
+
+    public String getLastLoginIP() {
+        return lastLoginIP;
+    }
+
+    public void setLastLoginIP(String lastLoginIP) {
+        this.lastLoginIP = lastLoginIP;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public Set<Role> getRoles() {
