@@ -12,6 +12,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * Authorized client, provide for spring security.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/23/15
  * @since JDK1.8
