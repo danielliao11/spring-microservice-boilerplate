@@ -1,19 +1,14 @@
 package com.saintdan.framework.repo;
 
-import com.saintdan.framework.Application;
+import com.saintdan.framework.BaseTest;
 import com.saintdan.framework.component.CustomPasswordEncoder;
-import com.saintdan.framework.constant.VersionConstant;
+import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.po.*;
 import com.saintdan.framework.service.UserService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -27,11 +22,8 @@ import java.util.Set;
  * @date 10/20/15
  * @since JDK1.8
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration
 @FixMethodOrder(value = MethodSorters.NAME_ASCENDING)
-public class Seed {
+public class Seed extends BaseTest {
 
     // --------------------------
     // SEED
@@ -124,7 +116,7 @@ public class Seed {
         root.setDescription(ROOT + ACCOUNT);
         root.setCreatedBy(0L);
         root.setLastModifiedBy(0L);
-        root.setVersion(VersionConstant.INIT_VERSION);
+        root.setVersion(CommonsConstant.INIT_VERSION);
         return root;
     }
 
@@ -162,7 +154,7 @@ public class Seed {
         admin.setDescription(ADMIN + ACCOUNT);
         admin.setCreatedBy(ROOT_USER);
         admin.setLastModifiedBy(ROOT_USER);
-        admin.setVersion(VersionConstant.INIT_VERSION);
+        admin.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init guest user
         guest.setUsr(GUEST);
@@ -171,7 +163,7 @@ public class Seed {
         guest.setDescription(GUEST + ACCOUNT);
         guest.setCreatedBy(ROOT_USER);
         guest.setLastModifiedBy(ROOT_USER);
-        guest.setVersion(VersionConstant.INIT_VERSION);
+        guest.setVersion(CommonsConstant.INIT_VERSION);
 
         users.add(admin);
         users.add(guest);
@@ -191,19 +183,19 @@ public class Seed {
         Role root = new Role(ROOT, ROOT + ROLE);
         root.setCreatedBy(ROOT_USER);
         root.setLastModifiedBy(ROOT_USER);
-        root.setVersion(VersionConstant.INIT_VERSION);
+        root.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init admin role
         Role admin = new Role(ADMIN, ADMIN + ROLE);
         admin.setCreatedBy(ROOT_USER);
         admin.setLastModifiedBy(ROOT_USER);
-        admin.setVersion(VersionConstant.INIT_VERSION);
+        admin.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init guest role
         Role guest = new Role(GUEST, GUEST + ROLE);
         guest.setCreatedBy(ROOT_USER);
         guest.setLastModifiedBy(ROOT_USER);
-        guest.setVersion(VersionConstant.INIT_VERSION);
+        guest.setVersion(CommonsConstant.INIT_VERSION);
 
         roles.add(root);
         roles.add(admin);
@@ -224,31 +216,31 @@ public class Seed {
         Group root = new Group(ROOT, "root rights group");
         root.setCreatedBy(ROOT_USER);
         root.setLastModifiedBy(ROOT_USER);
-        root.setVersion(VersionConstant.INIT_VERSION);
+        root.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init user control group
         Group user = new Group("user", "user rights group");
         user.setCreatedBy(ROOT_USER);
         user.setLastModifiedBy(ROOT_USER);
-        user.setVersion(VersionConstant.INIT_VERSION);
+        user.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init authority control  group
         Group authority = new Group("authority", "authority rights group");
         authority.setCreatedBy(ROOT_USER);
         authority.setLastModifiedBy(ROOT_USER);
-        authority.setVersion(VersionConstant.INIT_VERSION);
+        authority.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init resource group
         Group resource = new Group("resource", "resource rights group");
         resource.setCreatedBy(ROOT_USER);
         resource.setLastModifiedBy(ROOT_USER);
-        resource.setVersion(VersionConstant.INIT_VERSION);
+        resource.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init guest group
         Group guest = new Group("guest", "guest rights group");
         guest.setCreatedBy(ROOT_USER);
         guest.setLastModifiedBy(ROOT_USER);
-        guest.setVersion(VersionConstant.INIT_VERSION);
+        guest.setVersion(CommonsConstant.INIT_VERSION);
 
         groups.add(root);
         groups.add(guest);
@@ -270,37 +262,37 @@ public class Seed {
         Resource root = new Resource("root", "/.*", 10000, "all resources");
         root.setCreatedBy(ROOT_USER);
         root.setLastModifiedBy(ROOT_USER);
-        root.setVersion(VersionConstant.INIT_VERSION);
+        root.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource message = new Resource("message", "/messages", 10, "message resource");
         message.setCreatedBy(ROOT_USER);
         message.setLastModifiedBy(ROOT_USER);
-        message.setVersion(VersionConstant.INIT_VERSION);
+        message.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource welcome = new Resource("welcome", "/welcome", 1, "welcome resource");
         welcome.setCreatedBy(ROOT_USER);
         welcome.setLastModifiedBy(ROOT_USER);
-        welcome.setVersion(VersionConstant.INIT_VERSION);
+        welcome.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource user = new Resource("user", "/users" , 10, "user resource");
         user.setCreatedBy(ROOT_USER);
         user.setLastModifiedBy(ROOT_USER);
-        user.setVersion(VersionConstant.INIT_VERSION);
+        user.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource role = new Resource("role", "/roles", 10, "role resource");
         role.setCreatedBy(ROOT_USER);
         role.setLastModifiedBy(ROOT_USER);
-        role.setVersion(VersionConstant.INIT_VERSION);
+        role.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource group = new Resource("group", "/groups", 10, "group resource");
         group.setCreatedBy(ROOT_USER);
         group.setLastModifiedBy(ROOT_USER);
-        group.setVersion(VersionConstant.INIT_VERSION);
+        group.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource resource = new Resource("resource", "/resources", 10, "resource resource");
         resource.setCreatedBy(ROOT_USER);
         resource.setLastModifiedBy(ROOT_USER);
-        resource.setVersion(VersionConstant.INIT_VERSION);
+        resource.setVersion(CommonsConstant.INIT_VERSION);
 
         resources.add(root);
         resources.add(message);

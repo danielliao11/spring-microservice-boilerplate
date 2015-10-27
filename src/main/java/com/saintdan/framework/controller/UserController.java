@@ -2,6 +2,7 @@ package com.saintdan.framework.controller;
 
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.SignHelper;
+import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
@@ -19,12 +20,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * User's controller.
@@ -103,10 +103,32 @@ public class UserController {
     }
 
     /**
+     * Show users' page.
+     *
+     * @param pageNo        page number
+     * @return              users' page
+     */
+    @RequestMapping(value = ResourceURL.USERS + "/pageNo={pageNo}", method = RequestMethod.GET)
+    public ResultVO showPages(@PathVariable String pageNo) {
+        try {
+            if (StringUtils.isBlank(pageNo)) {
+                pageNo = "0";
+            }
+            return userService.getPageUsers(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+        } catch (UserException e) {
+            // Return error information and log the exception.
+            return resultHelper.infoResp(log, e.getErrorType());
+        } catch (Exception e) {
+            // Return unknown error and log the exception.
+            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
+        }
+    }
+
+    /**
      * Show user by ID.
      *
      * @param id        user's id
-     * @return          user's result
+     * @return user's result
      */
     @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
@@ -140,7 +162,7 @@ public class UserController {
      * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS + "/usr={usr}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign, HttpServletRequest request) {
+    public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign) {
         try {
             // If usr or sign is empty, return SYS0002, params error.
             if (StringUtils.isBlank(usr)) {

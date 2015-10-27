@@ -1,11 +1,11 @@
 package com.saintdan.framework.po;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -23,6 +23,7 @@ import java.util.Set;
  * @since JDK1.8
  */
 @Entity
+@EntityListeners({AuditingEntityListener.class})
 @Table(name = "resources")
 public class Resource implements GrantedAuthority, Serializable {
 
@@ -73,7 +74,6 @@ public class Resource implements GrantedAuthority, Serializable {
     @Column(nullable = false)
     private Integer version;
 
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources", cascade = {CascadeType.REFRESH})
     private Set<Group> groups = new HashSet<>();
 

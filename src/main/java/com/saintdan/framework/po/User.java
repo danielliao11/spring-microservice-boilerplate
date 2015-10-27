@@ -1,6 +1,5 @@
 package com.saintdan.framework.po;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -74,7 +73,6 @@ public class User implements Serializable {
     @Column(nullable = false)
     private Integer version;
 
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
     @JoinTable(name = "users_has_roles",
             joinColumns = {@JoinColumn(name = "user_id")},
