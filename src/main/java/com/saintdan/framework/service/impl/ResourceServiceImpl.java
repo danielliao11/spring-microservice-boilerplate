@@ -1,7 +1,7 @@
 package com.saintdan.framework.service.impl;
 
-import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.component.ResultHelper;
+import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.GroupException;
@@ -12,16 +12,18 @@ import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.repo.ResourceRepository;
 import com.saintdan.framework.service.GroupService;
 import com.saintdan.framework.service.ResourceService;
+import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.ResourceVO;
 import com.saintdan.framework.vo.ResourcesVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Implements the
@@ -71,6 +73,26 @@ public class ResourceServiceImpl implements ResourceService {
             throw new ResourceException(ErrorType.GRP0011);
         }
         return resourcesPO2VO(resources, String.format(ControllerConstant.INDEX, RESOURCE));
+    }
+
+    /**
+     * Show resources' page VO.
+     *
+     * @param pageable      page
+     * @return              resources' page VO
+     * @throws ResourceException        RSC0011 No resource exist.
+     */
+    @Override
+    public PageVO getPage(Pageable pageable) throws ResourceException {
+        Page<Resource> resourcePage = resourceRepository.findAll(pageable);
+        if (resourcePage.getContent().isEmpty()) {
+            // Throw no resource exist exception.
+            throw new ResourceException(ErrorType.USR0011);
+        }
+        return transformer.poPage2VO(
+                poList2VOList(resourcePage.getContent()),
+                pageable, resourcePage.getTotalElements(),
+                String.format(ControllerConstant.INDEX, RESOURCE));
     }
 
     /**
@@ -233,16 +255,26 @@ public class ResourceServiceImpl implements ResourceService {
      */
     private ResourcesVO resourcesPO2VO(Iterable<Resource> resources, String msg) {
         ResourcesVO vos = new ResourcesVO();
-        List<ResourceVO> resourceVOList = new ArrayList<>();
-        for (Resource resource : resources) {
-            ResourceVO vo = resourcePO2VO(resource, "");
-            resourceVOList.add(vo);
-        }
-        vos.setResourceVOList(resourceVOList);
+        vos.setResourceVOList(poList2VOList(resources));
         if (StringUtils.isBlank(msg)) {
             return vos;
         }
         vos.setMessage(msg);
         return (ResourcesVO) resultHelper.sucessResp(vos);
+    }
+
+    /**
+     * Transform resource's PO list to VO list.
+     *
+     * @param resources     resource's PO list
+     * @return              resource's VO list
+     */
+    private List<ResourceVO> poList2VOList(Iterable<Resource> resources) {
+        List<ResourceVO> resourceVOList = new ArrayList<>();
+        for (Resource resource : resources) {
+            ResourceVO vo = resourcePO2VO(resource, "");
+            resourceVOList.add(vo);
+        }
+        return resourceVOList;
     }
 }

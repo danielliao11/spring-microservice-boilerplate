@@ -1,6 +1,8 @@
 package com.saintdan.framework.repo;
 
 import com.saintdan.framework.po.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -15,4 +17,6 @@ public interface ResourceRepository extends CrudRepository<Resource, Long> {
     Resource findByName(String name);
 
     Resource findByPath(String path);
+
+    Page<Resource> findAll(Pageable pageable);
 }

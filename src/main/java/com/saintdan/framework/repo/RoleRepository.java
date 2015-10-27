@@ -1,6 +1,8 @@
 package com.saintdan.framework.repo;
 
 import com.saintdan.framework.po.Role;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,4 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface RoleRepository extends CrudRepository<Role, Long> {
 
     Role findByName(String name);
+
+    Page<Role> findAll(Pageable pageable);
 }

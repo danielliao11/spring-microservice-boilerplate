@@ -44,7 +44,7 @@ public interface UserService {
      * @return              users' page VO
      * @throws UserException        USR0011 No user exists.
      */
-    PageVO getPageUsers(Pageable pageable) throws UserException;
+    PageVO getPage(Pageable pageable) throws UserException;
 
     /**
      * Show users by ids.

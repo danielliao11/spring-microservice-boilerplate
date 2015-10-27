@@ -2,10 +2,8 @@ package com.saintdan.framework.service;
 
 import com.saintdan.framework.exception.ClientException;
 import com.saintdan.framework.param.ClientParam;
-import com.saintdan.framework.vo.ClientVO;
-import com.saintdan.framework.vo.ClientsVO;
-import com.saintdan.framework.vo.LogVO;
-import com.saintdan.framework.vo.LogsVO;
+import com.saintdan.framework.vo.*;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Log's service.
@@ -32,6 +30,15 @@ public interface LogService {
      * @throws ClientException
      */
     LogsVO getAllLogs() throws ClientException;
+
+    /**
+     * Show users' page VO.
+     *
+     * @param pageable      page
+     * @return              roles' page VO
+     * @throws ClientException        ROL0011 No role exists.
+     */
+    PageVO getPage(Pageable pageable) throws ClientException;
 
     /**
      * Show client by id.

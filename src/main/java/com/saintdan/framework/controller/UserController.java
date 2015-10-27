@@ -111,10 +111,11 @@ public class UserController {
     @RequestMapping(value = ResourceURL.USERS + "/pageNo={pageNo}", method = RequestMethod.GET)
     public ResultVO showPages(@PathVariable String pageNo) {
         try {
+            // Init page number.
             if (StringUtils.isBlank(pageNo)) {
                 pageNo = "0";
             }
-            return userService.getPageUsers(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+            return userService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
         } catch (UserException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());

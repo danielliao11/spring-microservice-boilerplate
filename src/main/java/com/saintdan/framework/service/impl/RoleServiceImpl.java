@@ -15,11 +15,14 @@ import com.saintdan.framework.repo.RoleRepository;
 import com.saintdan.framework.service.GroupService;
 import com.saintdan.framework.service.RoleService;
 import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.RoleVO;
 import com.saintdan.framework.vo.RolesVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -75,6 +78,26 @@ public class RoleServiceImpl implements RoleService {
             throw new RoleException(ErrorType.ROL0011);
         }
         return rolesPO2VO(roles, String.format(ControllerConstant.INDEX, ROLE));
+    }
+
+    /**
+     * Show roles' page VO.
+     *
+     * @param pageable      page
+     * @return              roles' page VO
+     * @throws RoleException        ROL0011 No role exists.
+     */
+    @Override
+    public PageVO getPage(Pageable pageable) throws RoleException {
+        Page<Role> rolePage = roleRepository.findAll(pageable);
+        if (rolePage.getContent().isEmpty()) {
+            // Throw no user exist exception.
+            throw new RoleException(ErrorType.ROL0011);
+        }
+        return transformer.poPage2VO(
+                poList2VOList(rolePage.getContent()),
+                pageable, rolePage.getTotalElements(),
+                String.format(ControllerConstant.INDEX, ROLE));
     }
 
     /**
@@ -228,16 +251,26 @@ public class RoleServiceImpl implements RoleService {
      */
     private RolesVO rolesPO2VO(Iterable<Role> roles, String msg) {
         RolesVO vos = new RolesVO();
-        List<RoleVO> roleVOList = new ArrayList<>();
-        for (Role role : roles) {
-            RoleVO vo = rolePO2VO(role, "");
-            roleVOList.add(vo);
-        }
-        vos.setRoleVOList(roleVOList);
+        vos.setRoleVOList(poList2VOList(roles));
         if (StringUtils.isBlank(msg)) {
             return vos;
         }
         vos.setMessage(msg);
         return (RolesVO) resultHelper.sucessResp(vos);
+    }
+
+    /**
+     * Transform role's PO list to VO list.
+     *
+     * @param roles     role's PO list
+     * @return          role's VO list
+     */
+    private List<RoleVO> poList2VOList(Iterable<Role> roles) {
+        List<RoleVO> roleVOList = new ArrayList<>();
+        for (Role role : roles) {
+            RoleVO vo = rolePO2VO(role, "");
+            roleVOList.add(vo);
+        }
+        return roleVOList;
     }
 }

@@ -17,9 +17,12 @@ import com.saintdan.framework.service.ResourceService;
 import com.saintdan.framework.service.RoleService;
 import com.saintdan.framework.vo.GroupVO;
 import com.saintdan.framework.vo.GroupsVO;
+import com.saintdan.framework.vo.PageVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -74,6 +77,26 @@ public class GroupServiceImpl implements GroupService {
             throw new GroupException(ErrorType.GRP0011);
         }
         return groupsPO2VO(groups, String.format(ControllerConstant.INDEX, GROUP));
+    }
+
+    /**
+     * Show groups' page VO.
+     *
+     * @param pageable      page
+     * @return              groups' page VO
+     * @throws GroupException        GRP0011 No group exist.
+     */
+    @Override
+    public PageVO getPage(Pageable pageable) throws GroupException {
+        Page<Group> groupPage = groupRepository.findAll(pageable);
+        if (groupPage.getContent().isEmpty()) {
+            // Throw no group exist exception.
+            throw new GroupException(ErrorType.GRP0011);
+        }
+        return transformer.poPage2VO(
+                poList2VOList(groupPage.getContent()),
+                pageable, groupPage.getTotalElements(),
+                String.format(ControllerConstant.INDEX, GROUP));
     }
 
     /**
@@ -227,16 +250,26 @@ public class GroupServiceImpl implements GroupService {
      */
     private GroupsVO groupsPO2VO(Iterable<Group> groups, String msg) {
         GroupsVO vos = new GroupsVO();
-        List<GroupVO> groupVOList = new ArrayList<>();
-        for (Group group : groups) {
-            GroupVO vo = groupPO2VO(group, "");
-            groupVOList.add(vo);
-        }
-        vos.setGroupVOList(groupVOList);
+        vos.setGroupVOList(poList2VOList(groups));
         if (StringUtils.isBlank(msg)) {
             return vos;
         }
         vos.setMessage(msg);
         return (GroupsVO) resultHelper.sucessResp(vos);
+    }
+
+    /**
+     * Transform group's PO list to VO list.
+     *
+     * @param groups    group's PO list
+     * @return          group's VO list
+     */
+    private List<GroupVO> poList2VOList(Iterable<Group> groups) {
+        List<GroupVO> groupVOList = new ArrayList<>();
+        for (Group group : groups) {
+            GroupVO vo = groupPO2VO(group, "");
+            groupVOList.add(vo);
+        }
+        return groupVOList;
     }
 }

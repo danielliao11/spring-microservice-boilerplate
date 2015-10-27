@@ -1,6 +1,8 @@
 package com.saintdan.framework.repo;
 
 import com.saintdan.framework.po.Group;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -13,4 +15,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface GroupRepository extends CrudRepository<Group, Long> {
 
     Group findByName(String name);
+
+    Page<Group> findAll(Pageable pageable);
 }

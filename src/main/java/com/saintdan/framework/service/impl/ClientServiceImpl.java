@@ -5,6 +5,8 @@ import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.service.ClientService;
 import com.saintdan.framework.vo.ClientVO;
 import com.saintdan.framework.vo.ClientsVO;
+import com.saintdan.framework.vo.PageVO;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Implements the
@@ -27,6 +29,11 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientsVO getAllClients() throws ClientException {
+        return null;
+    }
+
+    @Override
+    public PageVO getPage(Pageable pageable) throws ClientException {
         return null;
     }
 

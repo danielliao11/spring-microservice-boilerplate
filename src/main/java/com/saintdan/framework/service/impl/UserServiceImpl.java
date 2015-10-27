@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
      * @throws UserException        USR0011 No user exists.
      */
     @Override
-    public PageVO getPageUsers(Pageable pageable) throws UserException {
+    public PageVO getPage(Pageable pageable) throws UserException {
         Page<User> userPage = userRepository.findAll(pageable);
         if (userPage.getContent().isEmpty()) {
             // Throw no user exist exception.
@@ -279,8 +279,8 @@ public class UserServiceImpl implements UserService {
     /**
      * Transform user's PO list to VO list.
      *
-     * @param users     users' PO list
-     * @return          users' VO list
+     * @param users     user's PO list
+     * @return          user's VO list
      */
     private List<UserVO> poList2VOList(Iterable<User> users) {
         List<UserVO> userVOList = new ArrayList<>();
@@ -290,7 +290,5 @@ public class UserServiceImpl implements UserService {
         }
         return userVOList;
     }
-
-
 
 }

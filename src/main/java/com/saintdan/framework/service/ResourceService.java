@@ -4,8 +4,10 @@ import com.saintdan.framework.exception.GroupException;
 import com.saintdan.framework.exception.ResourceException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.Resource;
+import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.ResourceVO;
 import com.saintdan.framework.vo.ResourcesVO;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Resource's Service.
@@ -33,6 +35,15 @@ public interface ResourceService {
      * @throws ResourceException        RSC0011 No resource exist.
      */
     ResourcesVO getAllResources() throws ResourceException;
+
+    /**
+     * Show resources' page VO.
+     *
+     * @param pageable      page
+     * @return              resources' page VO
+     * @throws ResourceException        RSC0011 No resources exists.
+     */
+    PageVO getPage(Pageable pageable) throws ResourceException;
 
     /**
      * Show resources by ids.

@@ -4,6 +4,8 @@ import com.saintdan.framework.exception.ClientException;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.vo.ClientVO;
 import com.saintdan.framework.vo.ClientsVO;
+import com.saintdan.framework.vo.PageVO;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Client's service.
@@ -30,6 +32,15 @@ public interface ClientService {
      * @throws ClientException
      */
     ClientsVO getAllClients() throws ClientException;
+
+    /**
+     * Show users' page VO.
+     *
+     * @param pageable      page
+     * @return              roles' page VO
+     * @throws ClientException        ROL0011 No role exists.
+     */
+    PageVO getPage(Pageable pageable) throws ClientException;
 
     /**
      * Show client by id.
