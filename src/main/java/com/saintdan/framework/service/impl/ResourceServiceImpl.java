@@ -12,9 +12,9 @@ import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.repo.ResourceRepository;
 import com.saintdan.framework.service.GroupService;
 import com.saintdan.framework.service.ResourceService;
+import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.ResourceVO;
-import com.saintdan.framework.vo.ResourcesVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class ResourceServiceImpl implements ResourceService {
      * @throws ResourceException        RSC0011 No resource exist.
      */
     @Override
-    public ResourcesVO getAllResources() throws ResourceException {
+    public ObjectsVO getAllResources() throws ResourceException {
         List<Resource> resources = (List<Resource>) resourceRepository.findAll();
         if (resources.isEmpty()) {
             // Throw no Resource exist exception.
@@ -253,14 +253,10 @@ public class ResourceServiceImpl implements ResourceService {
      * @param msg           return message
      * @return              resources' VO
      */
-    private ResourcesVO resourcesPO2VO(Iterable<Resource> resources, String msg) {
-        ResourcesVO vos = new ResourcesVO();
-        vos.setResourceVOList(poList2VOList(resources));
-        if (StringUtils.isBlank(msg)) {
-            return vos;
-        }
-        vos.setMessage(msg);
-        return (ResourcesVO) resultHelper.sucessResp(vos);
+    private ObjectsVO resourcesPO2VO(Iterable<Resource> resources, String msg) {
+        List objList = poList2VOList(resources);
+        ObjectsVO vos = transformer.voList2ObjectsVO(objList, msg);
+        return (ObjectsVO) resultHelper.sucessResp(vos);
     }
 
     /**

@@ -1,8 +1,10 @@
 package com.saintdan.framework.service;
 
-import com.saintdan.framework.exception.ClientException;
-import com.saintdan.framework.param.ClientParam;
-import com.saintdan.framework.vo.*;
+import com.saintdan.framework.exception.LogException;
+import com.saintdan.framework.param.LogParam;
+import com.saintdan.framework.vo.LogVO;
+import com.saintdan.framework.vo.ObjectsVO;
+import com.saintdan.framework.vo.PageVO;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -15,38 +17,29 @@ import org.springframework.data.domain.Pageable;
 public interface LogService {
 
     /**
-     * Create new client.
+     * Create new log.
      *
-     * @param param     client's param
-     * @return          client's VO
-     * @throws ClientException
+     * @param param     log's param
+     * @return          log's VO
+     * @throws LogException      LOG0020 Log create failed.
      */
-    LogVO create(ClientParam param) throws ClientException;
+    LogVO create(LogParam param) throws LogException;
 
     /**
-     * Show all clients.
+     * Show all logs.
      *
-     * @return          clients' VO
-     * @throws ClientException
+     * @return          logs' VO
+     * @throws LogException      LOG0011 Cannot find any log, no log exists.
      */
-    LogsVO getAllLogs() throws ClientException;
+    ObjectsVO getAllLogs() throws LogException;
 
     /**
      * Show users' page VO.
      *
      * @param pageable      page
-     * @return              roles' page VO
-     * @throws ClientException        ROL0011 No role exists.
+     * @return              logs' page VO
+     * @throws LogException      LOG0011 Cannot find any log, no log exists.
      */
-    PageVO getPage(Pageable pageable) throws ClientException;
-
-    /**
-     * Show client by id.
-     *
-     * @param param     client's param
-     * @return          client's VO
-     * @throws ClientException
-     */
-    ClientVO getClientById(ClientParam param) throws ClientException;
+    PageVO getPage(Pageable pageable) throws LogException;
 
 }

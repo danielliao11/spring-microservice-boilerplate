@@ -331,8 +331,8 @@ Copyright (c) 2015 saintdan
     Thanks [cbweixin](https://github.com/cbweixin) for reminding me.
     
 - 0.5.0.RELEASE
-  - Extract the elements with similar return results and integrate them into one -> [ResultHelper](/src/main/java/saintdan/framework/component/ResultHelper.java);
-  - Extract the elements with similar signature and integrate them into one -> [SignHelper](/src/main/java/saintdan/framework/component/SignHelper.java);
+  - Extract the elements with similar return results and integrate them into one --> [ResultHelper](/src/main/java/saintdan/framework/component/ResultHelper.java);
+  - Extract the elements with similar signature and integrate them into one --> [SignHelper](/src/main/java/saintdan/framework/component/SignHelper.java);
   - Add package of RESTFul parameters.
   - Optimize code of services, implements, controllers.
   
@@ -361,3 +361,6 @@ Copyright (c) 2015 saintdan
   - Add createdBy, createdDate, lastModifiedBy, lastModifiedDate to POs.
   - Add [SpringSecurityUtils](src/main/java/com/saintdan/framework/tools/SpringSecurityUtils.java), trace user's ip address.
   - Modify [Seed](src/test/java/com/saintdan/framework/repo/Seed.java).
+  
+- 0.8.3.RELEASE
+  - Extract the elements with similar xxxsVO into one -> [ObjectsVO](src/main/java/com/saintdan/framework/vo/ObjectsVO.java).

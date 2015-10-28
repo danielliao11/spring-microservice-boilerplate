@@ -1,6 +1,8 @@
 package com.saintdan.framework.component;
 
+import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -67,6 +69,23 @@ public class Transformer {
         pageVO.setPage(page);
         pageVO.setMessage(msg);
         return (PageVO) resultHelper.sucessResp(pageVO);
+    }
+
+    /**
+     * Transform VO list to objects' VO.
+     *
+     * @param list          VO list
+     * @param msg           return message
+     * @return              objects' VO
+     */
+    public ObjectsVO voList2ObjectsVO(List list, String msg) {
+        ObjectsVO vo = new ObjectsVO();
+        vo.setObjectsVOList(list);
+        if (StringUtils.isBlank(msg)) {
+            return vo;
+        }
+        vo.setMessage(msg);
+        return vo;
     }
 
     @Autowired

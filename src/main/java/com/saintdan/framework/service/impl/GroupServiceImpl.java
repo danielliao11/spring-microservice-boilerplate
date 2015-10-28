@@ -16,7 +16,7 @@ import com.saintdan.framework.service.GroupService;
 import com.saintdan.framework.service.ResourceService;
 import com.saintdan.framework.service.RoleService;
 import com.saintdan.framework.vo.GroupVO;
-import com.saintdan.framework.vo.GroupsVO;
+import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -70,7 +70,7 @@ public class GroupServiceImpl implements GroupService {
      * @throws GroupException        GRP0011 No group exist.
      */
     @Override
-    public GroupsVO getAllGroups() throws GroupException {
+    public ObjectsVO getAllGroups() throws GroupException {
         List<Group> groups = (List<Group>) groupRepository.findAll();
         if (groups.isEmpty()) {
             // Throw no group exist exception.
@@ -248,14 +248,10 @@ public class GroupServiceImpl implements GroupService {
      * @param msg       return message
      * @return          groups' VO
      */
-    private GroupsVO groupsPO2VO(Iterable<Group> groups, String msg) {
-        GroupsVO vos = new GroupsVO();
-        vos.setGroupVOList(poList2VOList(groups));
-        if (StringUtils.isBlank(msg)) {
-            return vos;
-        }
-        vos.setMessage(msg);
-        return (GroupsVO) resultHelper.sucessResp(vos);
+    private ObjectsVO groupsPO2VO(Iterable<Group> groups, String msg) {
+        List objList = poList2VOList(groups);
+        ObjectsVO vos = transformer.voList2ObjectsVO(objList, msg);
+        return (ObjectsVO) resultHelper.sucessResp(vos);
     }
 
     /**

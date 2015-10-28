@@ -14,9 +14,9 @@ import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.service.RoleService;
 import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.UserVO;
-import com.saintdan.framework.vo.UsersVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
      * @throws UserException        USR0011 No user exists.
      */
     @Override
-    public UsersVO getAllUsers() throws UserException {
+    public ObjectsVO getAllUsers() throws UserException {
         List<User> users = (List<User>) userRepository.findAll();
         if (users.isEmpty()) {
             // Throw no user exist exception.
@@ -266,14 +266,10 @@ public class UserServiceImpl implements UserService {
      * @param msg       return message
      * @return          users' VO
      */
-    private UsersVO usersPO2VO(Iterable<User> users, String msg) {
-        UsersVO vos = new UsersVO();
-        vos.setUserVOList(poList2VOList(users));
-        if (StringUtils.isBlank(msg)) {
-            return vos;
-        }
-        vos.setMessage(msg);
-        return (UsersVO) resultHelper.sucessResp(vos);
+    private ObjectsVO usersPO2VO(Iterable<User> users, String msg) {
+        List objList = poList2VOList(users);
+        ObjectsVO vos = transformer.voList2ObjectsVO(objList, msg);
+        return (ObjectsVO) resultHelper.sucessResp(vos);
     }
 
     /**

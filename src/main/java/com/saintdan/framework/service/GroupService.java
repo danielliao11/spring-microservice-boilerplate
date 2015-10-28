@@ -6,7 +6,7 @@ import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.param.GroupParam;
 import com.saintdan.framework.po.Group;
 import com.saintdan.framework.vo.GroupVO;
-import com.saintdan.framework.vo.GroupsVO;
+import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import org.springframework.data.domain.Pageable;
 
@@ -36,7 +36,7 @@ public interface GroupService {
      * @return              groups' VO
      * @throws GroupException        GRP0011 No group exist.
      */
-    GroupsVO getAllGroups() throws GroupException;
+    ObjectsVO getAllGroups() throws GroupException;
 
     /**
      * Show groups' page VO.

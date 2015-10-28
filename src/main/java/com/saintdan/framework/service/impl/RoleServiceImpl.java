@@ -15,9 +15,9 @@ import com.saintdan.framework.repo.RoleRepository;
 import com.saintdan.framework.service.GroupService;
 import com.saintdan.framework.service.RoleService;
 import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.RoleVO;
-import com.saintdan.framework.vo.RolesVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +71,7 @@ public class RoleServiceImpl implements RoleService {
      * @throws RoleException        ROL0011 No role exist.
      */
     @Override
-    public RolesVO getAllRoles() throws RoleException {
+    public ObjectsVO getAllRoles() throws RoleException {
         List<Role> roles = (List<Role>) roleRepository.findAll();
         if (roles == null) {
             // Throw No role exist exception.
@@ -249,14 +249,10 @@ public class RoleServiceImpl implements RoleService {
      * @param msg       return message
      * @return          roles' VO
      */
-    private RolesVO rolesPO2VO(Iterable<Role> roles, String msg) {
-        RolesVO vos = new RolesVO();
-        vos.setRoleVOList(poList2VOList(roles));
-        if (StringUtils.isBlank(msg)) {
-            return vos;
-        }
-        vos.setMessage(msg);
-        return (RolesVO) resultHelper.sucessResp(vos);
+    private ObjectsVO rolesPO2VO(Iterable<Role> roles, String msg) {
+        List objList = poList2VOList(roles);
+        ObjectsVO vos = transformer.voList2ObjectsVO(objList, msg);
+        return (ObjectsVO) resultHelper.sucessResp(vos);
     }
 
     /**
