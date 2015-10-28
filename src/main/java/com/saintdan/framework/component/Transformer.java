@@ -1,5 +1,12 @@
 package com.saintdan.framework.component;
 
+import com.saintdan.framework.vo.ObjectsVO;
+import com.saintdan.framework.vo.PageVO;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -47,4 +54,40 @@ public class Transformer {
         }
         return objectSet;
     }
+
+    /**
+     * Transform PO page to PageVO.
+     *
+     * @param content               page content
+     * @param pageable              page init
+     * @param totalElements         page total
+     * @return                      PageVO
+     */
+    public PageVO poPage2VO(List content, Pageable pageable, Long totalElements, String msg) {
+        Page page = new PageImpl<>(content, pageable, totalElements);
+        PageVO pageVO = new PageVO();
+        pageVO.setPage(page);
+        pageVO.setMessage(msg);
+        return (PageVO) resultHelper.sucessResp(pageVO);
+    }
+
+    /**
+     * Transform VO list to objects' VO.
+     *
+     * @param list          VO list
+     * @param msg           return message
+     * @return              objects' VO
+     */
+    public ObjectsVO voList2ObjectsVO(List list, String msg) {
+        ObjectsVO vo = new ObjectsVO();
+        vo.setObjectsVOList(list);
+        if (StringUtils.isBlank(msg)) {
+            return vo;
+        }
+        vo.setMessage(msg);
+        return vo;
+    }
+
+    @Autowired
+    private ResultHelper resultHelper;
 }

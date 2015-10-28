@@ -8,6 +8,7 @@ package com.saintdan.framework.enums;
  * @since JDK1.8
  */
 public interface IntentState {
+
     // Enum translation.
     String value();
 }

@@ -19,4 +19,6 @@ public interface ResourceURL {
 
     String GROUPS = "/groups";
 
+    String CLIENTS = "/clients";
+
 }

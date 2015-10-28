@@ -36,6 +36,7 @@ public class OAuth2ServerConfiguration {
     private static final String RESOURCE_ID = "rest_api";
 
     private static final String WELCOME_URL = "/welcome";
+    private static final String CLIENT_URL = new String(new StringBuilder(ResourceURL.RESOURCES).append(ResourceURL.CLIENTS));
     private static final String USER_URL = new String(new StringBuilder(ResourceURL.RESOURCES).append(ResourceURL.USERS));
     private static final String ROLE_URL = new String(new StringBuilder(ResourceURL.RESOURCES).append(ResourceURL.ROLES));
     private static final String GROUP_URL = new String(new StringBuilder(ResourceURL.RESOURCES).append(ResourceURL.GROUPS));
@@ -61,6 +62,13 @@ public class OAuth2ServerConfiguration {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                     .and()
                     .authorizeRequests()
+
+                    // User resource
+                    .antMatchers(HttpMethod.GET, CLIENT_URL).hasAnyAuthority("root", "client")
+                    .antMatchers(HttpMethod.POST, CLIENT_URL).hasAnyAuthority("root", "client")
+                    .antMatchers(HttpMethod.PUT, CLIENT_URL).hasAnyAuthority("root", "client")
+                    .antMatchers(HttpMethod.DELETE, CLIENT_URL).hasAnyAuthority("root", "client")
+
                     // User resource
                     .antMatchers(HttpMethod.GET, USER_URL).hasAnyAuthority("root", "user")
                     .antMatchers(HttpMethod.POST, USER_URL).hasAnyAuthority("root", "user")

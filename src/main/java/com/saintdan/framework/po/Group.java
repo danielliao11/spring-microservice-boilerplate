@@ -1,14 +1,13 @@
 package com.saintdan.framework.po;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -22,6 +21,7 @@ import java.util.Set;
  * @since JDK1.8
  */
 @Entity
+@EntityListeners({AuditingEntityListener.class})
 @Table(name = "groups")
 public class Group implements Serializable {
 
@@ -57,11 +57,9 @@ public class Group implements Serializable {
     @Column(nullable = false)
     private Integer version;
 
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups", cascade = {CascadeType.REFRESH})
     private Set<Role> roles = new HashSet<>();
 
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
     @JoinTable(name = "groups_has_resources",
             joinColumns = { @JoinColumn(name = "group_id") },

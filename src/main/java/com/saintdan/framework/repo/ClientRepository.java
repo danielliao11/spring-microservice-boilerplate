@@ -1,6 +1,8 @@
 package com.saintdan.framework.repo;
 
 import com.saintdan.framework.po.Client;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,4 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ClientRepository extends CrudRepository<Client, Long> {
 
     Client findByClientIdAlias(String clientIdAlias);
+
+    Page<Client> findAll(Pageable pageable);
 }

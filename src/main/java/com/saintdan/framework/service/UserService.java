@@ -4,8 +4,10 @@ import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.vo.ObjectsVO;
+import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.UserVO;
-import com.saintdan.framework.vo.UsersVO;
+import org.springframework.data.domain.Pageable;
 
 /**
  * User's service.
@@ -32,7 +34,16 @@ public interface UserService {
      * @return          users' VO
      * @throws UserException        USR0011 No user yet
      */
-    UsersVO getAllUsers() throws UserException;
+    ObjectsVO getAllUsers() throws UserException;
+
+    /**
+     * Show users' page VO.
+     *
+     * @param pageable      page
+     * @return              users' page VO
+     * @throws UserException        USR0011 No user exists.
+     */
+    PageVO getPage(Pageable pageable) throws UserException;
 
     /**
      * Show users by ids.

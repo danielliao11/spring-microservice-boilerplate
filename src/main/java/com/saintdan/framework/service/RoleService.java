@@ -5,8 +5,10 @@ import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.Role;
+import com.saintdan.framework.vo.ObjectsVO;
+import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.RoleVO;
-import com.saintdan.framework.vo.RolesVO;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Role's Service.
@@ -34,7 +36,16 @@ public interface RoleService {
      * @return              roles' VO
      * @throws RoleException        ROL0011 No role exist.
      */
-    RolesVO getAllRoles() throws RoleException;
+    ObjectsVO getAllRoles() throws RoleException;
+
+    /**
+     * Show users' page VO.
+     *
+     * @param pageable      page
+     * @return              roles' page VO
+     * @throws RoleException        ROL0011 No role exists.
+     */
+    PageVO getPage(Pageable pageable) throws RoleException;
 
     /**
      * Show roles by ids.
@@ -59,7 +70,7 @@ public interface RoleService {
      *
      * @param param         role's params
      * @return              role's VO
-     * @throws RoleException        ROL0011 Cannot find any role by this name param.
+     * @throws RoleException        ROL0013 Cannot find any role by this name param.
      */
     RoleVO getRoleByName(RoleParam param) throws RoleException;
 

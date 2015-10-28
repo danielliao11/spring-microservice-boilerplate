@@ -8,9 +8,9 @@ import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
-import com.saintdan.framework.exception.ResourceException;
-import com.saintdan.framework.param.ResourceParam;
-import com.saintdan.framework.service.ResourceService;
+import com.saintdan.framework.exception.ClientException;
+import com.saintdan.framework.param.ClientParam;
+import com.saintdan.framework.service.ClientService;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -26,29 +26,29 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Resource's controller.
+ * Client's controller
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 10/17/15
+ * @date 10/28/15
  * @since JDK1.8
  */
 @PropertySource("classpath:api.properties")
 @RestController
 @RequestMapping(ResourceURL.RESOURCES)
-public class ResourceController {
+public class ClientController {
 
     // ------------------------
     // PUBLIC METHODS
     // ------------------------
 
     /**
-     * Create new resource.
+     * Create new client.
      *
-     * @param param     resource's param
-     * @return          resource's result
+     * @param param     client's param
+     * @return          client's result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO create(ResourceParam param, @PathVariable String sign) {
+    @RequestMapping(value = ResourceURL.CLIENTS + ResourceURL.SIGN, method = RequestMethod.POST)
+    public ResultVO create(ClientParam param, @PathVariable String sign) {
         try {
             // Get incorrect params.
             String validateContent = param.getIncorrectParams();
@@ -56,33 +56,7 @@ public class ResourceController {
                 // If validate failed, return error message.
                 return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
                         String.format(ControllerConstant.PARAM_BLANK, validateContent));
-            }// Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
-            // Return result and message.
-            return resourceService.create(param);
-        } catch (ResourceException e) {
-            // Return error information and log the exception.
-            return resultHelper.infoResp(log, e.getErrorType());
-        } catch (Exception e) {
-            // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
-        }
-    }
-
-    /**
-     * Show all resources' VO.
-     *
-     * @return          resources' result
-     */
-    @RequestMapping(value = ResourceURL.RESOURCES + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO index(@PathVariable String sign) {
-        try {
-            ResourceParam param = new ResourceParam();
             // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
             // Sign verification.
@@ -90,8 +64,9 @@ public class ResourceController {
                 // Return rsa signature failed information and log the exception.
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
-            return resourceService.getAllResources();
-        } catch (ResourceException e) {
+            // Return result and message.
+            return clientService.create(param);
+        } catch (ClientException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -101,15 +76,41 @@ public class ResourceController {
     }
 
     /**
-     * Show resources' page.
+     * Show all clients' VO.
+     *
+     * @return          clients' result
+     */
+    @RequestMapping(value = ResourceURL.CLIENTS + ResourceURL.SIGN, method = RequestMethod.GET)
+    public ResultVO index(@PathVariable String sign) {
+        try {
+            ClientParam param = new ClientParam();
+            // Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            }
+            return clientService.getAllClients();
+        } catch (ClientException e) {
+            // Return error information and log the exception.
+            return resultHelper.infoResp(log, e.getErrorType());
+        } catch (Exception e) {
+            // Return unknown error and log the exception.
+            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
+        }
+    }
+
+    /**
+     * Show clients' page.
      *
      * @param pageNo        page number
-     * @return              resources' page
+     * @return              clients' page
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.CLIENTS + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
         try {
-            ResourceParam param = new ResourceParam();
+            ClientParam param = new ClientParam();
             // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
             // Sign verification.
@@ -121,8 +122,8 @@ public class ResourceController {
             if (StringUtils.isBlank(pageNo)) {
                 pageNo = "0";
             }
-            return resourceService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
-        } catch (ResourceException e) {
+            return clientService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+        } catch (ClientException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -132,18 +133,18 @@ public class ResourceController {
     }
 
     /**
-     * Show resource by ID.
+     * Show client by ID.
      *
-     * @param id        resource's id
-     * @return          resource's result
+     * @param id        client's id
+     * @return          client's result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.CLIENTS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
-            ResourceParam param = new ResourceParam(Long.valueOf(id));
+            ClientParam param = new ClientParam(Long.valueOf(id));
             // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
             // Sign verification.
@@ -151,8 +152,8 @@ public class ResourceController {
                 // Return rsa signature failed information and log the exception.
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
-            return resourceService.getResourceById(param);
-        } catch (ResourceException e) {
+            return clientService.getClientById(param);
+        } catch (ClientException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -162,14 +163,14 @@ public class ResourceController {
     }
 
     /**
-     * Update resource.
+     * Update client.
      *
-     * @param id        resource's id
-     * @param param     resource's params
-     * @return          resource's result
+     * @param id        client's id
+     * @param param     client's params
+     * @return          client's result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO update(@PathVariable String id, @PathVariable String sign, ResourceParam param) {
+    @RequestMapping(value = ResourceURL.CLIENTS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
+    public ResultVO update(@PathVariable String id, @PathVariable String sign, ClientParam param) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
@@ -181,7 +182,7 @@ public class ResourceController {
                 return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
                         String.format(ControllerConstant.PARAM_BLANK, validateContent));
             }
-            // Set resource's ID.
+            // Set client's ID.
             param.setId(Long.valueOf(id));
             // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
@@ -190,9 +191,9 @@ public class ResourceController {
                 // Return rsa signature failed information and log the exception.
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
-            // Update resource.
-            return resourceService.update(param);
-        } catch (ResourceException e) {
+            // Update client.
+            return clientService.update(param);
+        } catch (ClientException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -202,30 +203,30 @@ public class ResourceController {
     }
 
     /**
-     * Delete resource.
+     * Delete client.
      *
-     * @param id        resource's id
-     * @return          resource's result
+     * @param id        client's id
+     * @return          client's result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
+    @RequestMapping(value = ResourceURL.CLIENTS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
+            ClientParam param = new ClientParam(Long.valueOf(id));
             // Prepare to validate signature.
-            ResourceParam param = new ResourceParam(Long.valueOf(id));
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
             // Sign verification.
             if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
                 // Return rsa signature failed information and log the exception.
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
-            // Delete resource.
-            resourceService.delete(param);
-            final String ROLE = "resource";
+            // Delete client.
+            clientService.delete(param);
+            final String ROLE = "client";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
-        } catch (ResourceException e) {
+        } catch (ClientException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -238,7 +239,7 @@ public class ResourceController {
     // PRIVATE FIELDS
     // ------------------------
 
-    private static final Log log = LogFactory.getLog(ResourceController.class);
+    private static final Log log = LogFactory.getLog(ClientController.class);
 
     @Value("${opposite.end1.publicKey}")
     private String PUBLIC_KEY;
@@ -247,7 +248,7 @@ public class ResourceController {
     private ResultHelper resultHelper;
 
     @Autowired
-    private ResourceService resourceService;
+    private ClientService clientService;
 
     @Autowired
     private SignHelper signHelper;

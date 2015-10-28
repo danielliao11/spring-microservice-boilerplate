@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ import java.util.Set;
  * @since JDK1.8
  */
 @Entity
+@EntityListeners({AuditingEntityListener.class})
 @Table(name = "roles")
 public class Role implements GrantedAuthority, Serializable {
 
@@ -58,11 +60,9 @@ public class Role implements GrantedAuthority, Serializable {
     @Column(nullable = false)
     private Integer version;
 
-	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = {CascadeType.REFRESH})
 	private Set<User> users = new HashSet<>();
 
-    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
     @JoinTable(name = "roles_has_groups",
             joinColumns = { @JoinColumn(name = "role_id") },

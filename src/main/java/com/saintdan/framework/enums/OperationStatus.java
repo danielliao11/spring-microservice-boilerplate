@@ -19,6 +19,7 @@ public enum OperationStatus implements IntentState {
         this.val = val;
     }
 
+    @Override
     public String value() {
         return this.val;
     }

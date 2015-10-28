@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,11 +13,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * Authorized client, provide for spring security.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/23/15
  * @since JDK1.8
  */
 @Entity
+@EntityListeners({AuditingEntityListener.class})
 @Table(name = "clients")
 public class Client implements Serializable {
 

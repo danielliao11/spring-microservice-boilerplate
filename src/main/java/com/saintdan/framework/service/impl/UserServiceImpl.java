@@ -3,8 +3,8 @@ package com.saintdan.framework.service.impl;
 import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.Transformer;
+import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
-import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
@@ -14,11 +14,14 @@ import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.service.RoleService;
 import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.vo.ObjectsVO;
+import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.UserVO;
-import com.saintdan.framework.vo.UsersVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,13 +70,33 @@ public class UserServiceImpl implements UserService {
      * @throws UserException        USR0011 No user exists.
      */
     @Override
-    public UsersVO getAllUsers() throws UserException {
+    public ObjectsVO getAllUsers() throws UserException {
         List<User> users = (List<User>) userRepository.findAll();
         if (users.isEmpty()) {
             // Throw no user exist exception.
             throw new UserException(ErrorType.USR0011);
         }
         return usersPO2VO(users, String.format(ControllerConstant.INDEX, USER));
+    }
+
+    /**
+     * Show users' page VO.
+     *
+     * @param pageable      page
+     * @return              users' page VO
+     * @throws UserException        USR0011 No user exists.
+     */
+    @Override
+    public PageVO getPage(Pageable pageable) throws UserException {
+        Page<User> userPage = userRepository.findAll(pageable);
+        if (userPage.getContent().isEmpty()) {
+            // Throw no user exist exception.
+            throw new UserException(ErrorType.USR0011);
+        }
+        return transformer.poPage2VO(
+                poList2VOList(userPage.getContent()),
+                pageable, userPage.getTotalElements(),
+                String.format(ControllerConstant.INDEX, USER));
     }
 
     /**
@@ -211,9 +234,9 @@ public class UserServiceImpl implements UserService {
             user.setPwd(passwordEncoder.encode(param.getPwd()));
         }
         if (user.getId() == null) { // If user is new, set initial version -- 0
-            user.setVersion(VersionConstant.INIT_VERSION);
+            user.setVersion(CommonsConstant.INIT_VERSION);
         } else { // If user is not new, set version++
-            user.setVersion(userRepository.findOne(user.getId()).getVersion() + VersionConstant.INCREASE_STEP);
+            user.setVersion(userRepository.findOne(user.getId()).getVersion() + CommonsConstant.INCREASE_STEP);
         }
         return user;
     }
@@ -243,19 +266,25 @@ public class UserServiceImpl implements UserService {
      * @param msg       return message
      * @return          users' VO
      */
-    private UsersVO usersPO2VO(Iterable<User> users, String msg) {
-        UsersVO vos = new UsersVO();
+    private ObjectsVO usersPO2VO(Iterable<User> users, String msg) {
+        List objList = poList2VOList(users);
+        ObjectsVO vos = transformer.voList2ObjectsVO(objList, msg);
+        return (ObjectsVO) resultHelper.sucessResp(vos);
+    }
+
+    /**
+     * Transform user's PO list to VO list.
+     *
+     * @param users     user's PO list
+     * @return          user's VO list
+     */
+    private List<UserVO> poList2VOList(Iterable<User> users) {
         List<UserVO> userVOList = new ArrayList<>();
         for (User user : users) {
             UserVO vo = userPO2VO(user, "");
             userVOList.add(vo);
         }
-        vos.setUserVOList(userVOList);
-        if (StringUtils.isBlank(msg)) {
-            return vos;
-        }
-        vos.setMessage(msg);
-        return (UsersVO) resultHelper.sucessResp(vos);
+        return userVOList;
     }
 
 }

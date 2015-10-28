@@ -15,6 +15,8 @@ public class ClientParam extends BaseParam implements Serializable {
 
     private static final long serialVersionUID = 6065608866944007796L;
 
+    private Long id;
+
     @ParamField
     private String clientIdAlias;
 
@@ -40,6 +42,22 @@ public class ClientParam extends BaseParam implements Serializable {
     private Integer refreshTokenValiditySecondsAlias;
 
     private String additionalInformationStr;
+
+    public ClientParam() {
+
+    }
+
+    public ClientParam(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getClientIdAlias() {
         return clientIdAlias;

@@ -15,11 +15,14 @@ import com.saintdan.framework.repo.RoleRepository;
 import com.saintdan.framework.service.GroupService;
 import com.saintdan.framework.service.RoleService;
 import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.vo.ObjectsVO;
+import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.RoleVO;
-import com.saintdan.framework.vo.RolesVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -68,13 +71,33 @@ public class RoleServiceImpl implements RoleService {
      * @throws RoleException        ROL0011 No role exist.
      */
     @Override
-    public RolesVO getAllRoles() throws RoleException {
+    public ObjectsVO getAllRoles() throws RoleException {
         List<Role> roles = (List<Role>) roleRepository.findAll();
         if (roles == null) {
             // Throw No role exist exception.
             throw new RoleException(ErrorType.ROL0011);
         }
         return rolesPO2VO(roles, String.format(ControllerConstant.INDEX, ROLE));
+    }
+
+    /**
+     * Show roles' page VO.
+     *
+     * @param pageable      page
+     * @return              roles' page VO
+     * @throws RoleException        ROL0011 No role exists.
+     */
+    @Override
+    public PageVO getPage(Pageable pageable) throws RoleException {
+        Page<Role> rolePage = roleRepository.findAll(pageable);
+        if (rolePage.getContent().isEmpty()) {
+            // Throw no user exist exception.
+            throw new RoleException(ErrorType.ROL0011);
+        }
+        return transformer.poPage2VO(
+                poList2VOList(rolePage.getContent()),
+                pageable, rolePage.getTotalElements(),
+                String.format(ControllerConstant.INDEX, ROLE));
     }
 
     /**
@@ -111,7 +134,7 @@ public class RoleServiceImpl implements RoleService {
      *
      * @param param         role's params
      * @return              role's VO
-     * @throws RoleException        ROL0011 Cannot find any role by this name param.
+     * @throws RoleException        ROL0013 Cannot find any role by this name param.
      */
     @Override
     public RoleVO getRoleByName(RoleParam param) throws RoleException {
@@ -226,18 +249,24 @@ public class RoleServiceImpl implements RoleService {
      * @param msg       return message
      * @return          roles' VO
      */
-    private RolesVO rolesPO2VO(Iterable<Role> roles, String msg) {
-        RolesVO vos = new RolesVO();
+    private ObjectsVO rolesPO2VO(Iterable<Role> roles, String msg) {
+        List objList = poList2VOList(roles);
+        ObjectsVO vos = transformer.voList2ObjectsVO(objList, msg);
+        return (ObjectsVO) resultHelper.sucessResp(vos);
+    }
+
+    /**
+     * Transform role's PO list to VO list.
+     *
+     * @param roles     role's PO list
+     * @return          role's VO list
+     */
+    private List<RoleVO> poList2VOList(Iterable<Role> roles) {
         List<RoleVO> roleVOList = new ArrayList<>();
         for (Role role : roles) {
             RoleVO vo = rolePO2VO(role, "");
             roleVOList.add(vo);
         }
-        vos.setRoleVOList(roleVOList);
-        if (StringUtils.isBlank(msg)) {
-            return vos;
-        }
-        vos.setMessage(msg);
-        return (RolesVO) resultHelper.sucessResp(vos);
+        return roleVOList;
     }
 }
