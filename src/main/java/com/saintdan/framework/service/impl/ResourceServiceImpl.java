@@ -52,8 +52,8 @@ public class ResourceServiceImpl implements ResourceService {
     public ResourceVO create(ResourceParam param) throws ResourceException, GroupException {
         Resource resource = resourceRepository.findByName(param.getName());
         if (resource != null) {
-            // Throw Resource already existing, name taken.
-            throw new ResourceException(ErrorType.GRP0031);
+            // Throw resource already existing, name taken.
+            throw new ResourceException(ErrorType.RSC0031);
         }
         return resourcePO2VO(resourceRepository.save(resourceParam2PO(param)),
                 String.format(ControllerConstant.CREATE, RESOURCE));
@@ -69,8 +69,8 @@ public class ResourceServiceImpl implements ResourceService {
     public ObjectsVO getAllResources() throws ResourceException {
         List<Resource> resources = (List<Resource>) resourceRepository.findAll();
         if (resources.isEmpty()) {
-            // Throw no Resource exist exception.
-            throw new ResourceException(ErrorType.GRP0011);
+            // Throw no resource exist exception.
+            throw new ResourceException(ErrorType.RSC0011);
         }
         return resourcesPO2VO(resources, String.format(ControllerConstant.INDEX, RESOURCE));
     }
@@ -87,7 +87,7 @@ public class ResourceServiceImpl implements ResourceService {
         Page<Resource> resourcePage = resourceRepository.findAll(pageable);
         if (resourcePage.getContent().isEmpty()) {
             // Throw no resource exist exception.
-            throw new ResourceException(ErrorType.USR0011);
+            throw new ResourceException(ErrorType.RSC0011);
         }
         return transformer.poPage2VO(
                 poList2VOList(resourcePage.getContent()),
@@ -100,7 +100,7 @@ public class ResourceServiceImpl implements ResourceService {
      *
      * @param ids           resources' ids
      * @return              resources' PO
-     * @throws ResourceException        GRP0012 Cannot find any resource by this id param.
+     * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
      */
     @Override
     public Iterable<Resource> getResourcesByIds(Iterable<Long> ids) throws ResourceException {
@@ -118,8 +118,8 @@ public class ResourceServiceImpl implements ResourceService {
     public ResourceVO getResourceById(ResourceParam param) throws ResourceException {
         Resource resource = resourceRepository.findOne(param.getId());
         if (resource == null) {
-            // Throw Resource cannot find by id parameter exception.
-            throw new ResourceException(ErrorType.GRP0012);
+            // Throw resource cannot find by id parameter exception.
+            throw new ResourceException(ErrorType.RSC0012);
         }
         return resourcePO2VO(resource, String.format(ControllerConstant.SHOW, RESOURCE));
     }
@@ -129,14 +129,14 @@ public class ResourceServiceImpl implements ResourceService {
      *
      * @param param         resource's params
      * @return              resource's VO
-     * @throws ResourceException        RSC0011 Cannot find any resource by this name param.
+     * @throws ResourceException        RSC0013 Cannot find any resource by this name param.
      */
     @Override
     public ResourceVO getResourceByName(ResourceParam param) throws ResourceException {
         Resource resource = resourceRepository.findByName(param.getName());
         if (resource == null) {
-            // Throw Resource cannot find by name parameter exception.
-            throw new ResourceException(ErrorType.GRP0013);
+            // Throw resource cannot find by name parameter exception.
+            throw new ResourceException(ErrorType.RSC0013);
         }
         return resourcePO2VO(resource, String.format(ControllerConstant.SHOW, RESOURCE));
     }
@@ -146,14 +146,14 @@ public class ResourceServiceImpl implements ResourceService {
      *
      * @param param         resource's params
      * @return              resource's VO
-     * @throws ResourceException        RSC0011 Cannot find any resource by this name param.
+     * @throws ResourceException        RSC0013 Cannot find any resource by this name param.
      */
     @Override
     public ResourceVO getResourceByPath(ResourceParam param) throws ResourceException {
         Resource resource = resourceRepository.findByName(param.getName());
         if (resource == null) {
-            // Throw Resource cannot find by name parameter exception.
-            throw new ResourceException(ErrorType.GRP0013);
+            // Throw resource cannot find by name parameter exception.
+            throw new ResourceException(ErrorType.RSC0013);
         }
         return resourcePO2VO(resource, String.format(ControllerConstant.SHOW, RESOURCE));
     }
@@ -169,8 +169,8 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public ResourceVO update(ResourceParam param) throws ResourceException, GroupException {
         if (!resourceRepository.exists(param.getId())) {
-            // Throw Resource cannot find by id parameter exception.
-            throw new ResourceException(ErrorType.GRP0012);
+            // Throw resource cannot find by id parameter exception.
+            throw new ResourceException(ErrorType.RSC0012);
         }
         return resourcePO2VO(resourceRepository.save(resourceParam2PO(param)),
                 String.format(ControllerConstant.UPDATE, RESOURCE));
@@ -186,8 +186,8 @@ public class ResourceServiceImpl implements ResourceService {
     public void delete(ResourceParam param) throws ResourceException {
         Resource resource = resourceRepository.findOne(param.getId());
         if (resource == null) {
-            // Throw role cannot find by id parameter exception.
-            throw new ResourceException(ErrorType.ROL0012);
+            // Throw resource cannot find by id parameter exception.
+            throw new ResourceException(ErrorType.RSC0012);
         }
         resourceRepository.delete(resource);
     }

@@ -133,7 +133,7 @@ public class GroupServiceImpl implements GroupService {
      *
      * @param param         group's params
      * @return              group's VO
-     * @throws GroupException        GRP0011 Cannot find any group by this name param.
+     * @throws GroupException        GRP0013 Cannot find any group by this name param.
      */
     @Override
     public GroupVO getGroupByName(GroupParam param) throws GroupException {

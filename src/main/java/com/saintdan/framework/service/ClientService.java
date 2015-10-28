@@ -21,7 +21,7 @@ public interface ClientService {
      *
      * @param param     client's param
      * @return          client's VO
-     * @throws ClientException          CLT0031 Client already existing, name taken.
+     * @throws ClientException          CLT0031 Client already existing, clientId taken.
      */
     ClientVO create(ClientParam param) throws ClientException;
 

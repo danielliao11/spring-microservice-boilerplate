@@ -23,6 +23,17 @@ public class LogParam implements Serializable {
 
     private LogType type;
 
+    public LogParam() {
+
+    }
+
+    public LogParam(String loginIP, Long userId, String username, LogType type) {
+        this.loginIP = loginIP;
+        this.userId = userId;
+        this.username = username;
+        this.type = type;
+    }
+
     public String getLoginIP() {
         return loginIP;
     }

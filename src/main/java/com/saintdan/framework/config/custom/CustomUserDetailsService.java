@@ -1,16 +1,9 @@
 package com.saintdan.framework.config.custom;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
-
-import com.saintdan.framework.po.Group;
-import com.saintdan.framework.po.Resource;
-import com.saintdan.framework.po.Role;
+import com.saintdan.framework.enums.LogType;
+import com.saintdan.framework.po.*;
+import com.saintdan.framework.repo.LogRepository;
 import com.saintdan.framework.repo.UserRepository;
-import com.saintdan.framework.po.User;
-
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +12,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
 
 /**
  * Custom user detail service.
@@ -33,6 +31,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	private final UserRepository userRepository;
 
+    @Autowired
+    private LogRepository logRepository;
+
 	@Autowired
 	public CustomUserDetailsService(UserRepository userRepository) {
 		this.userRepository = userRepository;
@@ -44,10 +45,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException(String.format("User %s does not exist!", usr));
 		}
+        // Get client ip address.
         String ip = SpringSecurityUtils.getCurrentUserIp();
+
+        // Save user login info.
         user.setLastLoginIP(ip);
         user.setLastLoginTime(new Date());
         userRepository.save(user);
+
+        // Save to log.
+        Log log = new Log(ip, user.getId(), user.getUsr(), LogType.LOGIN);
+        logRepository.save(log);
         return new UserRepositoryUserDetails(user);
 	}
 

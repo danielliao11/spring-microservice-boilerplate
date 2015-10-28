@@ -108,9 +108,17 @@ public class UserController {
      * @param pageNo        page number
      * @return              users' page
      */
-    @RequestMapping(value = ResourceURL.USERS + "/pageNo={pageNo}", method = RequestMethod.GET)
-    public ResultVO showPages(@PathVariable String pageNo) {
+    @RequestMapping(value = ResourceURL.USERS + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
         try {
+            UserParam param = new UserParam();
+            // Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            }
             // Init page number.
             if (StringUtils.isBlank(pageNo)) {
                 pageNo = "0";

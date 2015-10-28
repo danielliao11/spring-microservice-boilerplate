@@ -213,36 +213,43 @@ public class Seed extends BaseTest {
         List<Group> groups = new ArrayList<>();
 
         // init root control group
-        Group root = new Group(ROOT, "root rights group");
+        Group root = new Group(ROOT, "root privileges group");
         root.setCreatedBy(ROOT_USER);
         root.setLastModifiedBy(ROOT_USER);
         root.setVersion(CommonsConstant.INIT_VERSION);
 
+        // Init client control group
+        Group client = new Group("client", "client privileges group");
+        client.setCreatedBy(ROOT_USER);
+        client.setLastModifiedBy(ROOT_USER);
+        client.setVersion(CommonsConstant.INIT_VERSION);
+
         // Init user control group
-        Group user = new Group("user", "user rights group");
+        Group user = new Group("user", "user privileges group");
         user.setCreatedBy(ROOT_USER);
         user.setLastModifiedBy(ROOT_USER);
         user.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init authority control  group
-        Group authority = new Group("authority", "authority rights group");
+        Group authority = new Group("authority", "authority privileges group");
         authority.setCreatedBy(ROOT_USER);
         authority.setLastModifiedBy(ROOT_USER);
         authority.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init resource group
-        Group resource = new Group("resource", "resource rights group");
+        Group resource = new Group("resource", "resource privileges group");
         resource.setCreatedBy(ROOT_USER);
         resource.setLastModifiedBy(ROOT_USER);
         resource.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init guest group
-        Group guest = new Group("guest", "guest rights group");
+        Group guest = new Group("guest", "guest privileges group");
         guest.setCreatedBy(ROOT_USER);
         guest.setLastModifiedBy(ROOT_USER);
         guest.setVersion(CommonsConstant.INIT_VERSION);
 
         groups.add(root);
+        groups.add(client);
         groups.add(guest);
         groups.add(user);
         groups.add(authority);
@@ -274,6 +281,11 @@ public class Seed extends BaseTest {
         welcome.setLastModifiedBy(ROOT_USER);
         welcome.setVersion(CommonsConstant.INIT_VERSION);
 
+        Resource client = new Resource("client", "/client", 10, "client resource");
+        client.setCreatedBy(ROOT_USER);
+        client.setLastModifiedBy(ROOT_USER);
+        client.setVersion(CommonsConstant.INIT_VERSION);
+
         Resource user = new Resource("user", "/users" , 10, "user resource");
         user.setCreatedBy(ROOT_USER);
         user.setLastModifiedBy(ROOT_USER);
@@ -295,6 +307,7 @@ public class Seed extends BaseTest {
         resource.setVersion(CommonsConstant.INIT_VERSION);
 
         resources.add(root);
+        resources.add(client);
         resources.add(message);
         resources.add(welcome);
         resources.add(user);
@@ -353,10 +366,12 @@ public class Seed extends BaseTest {
         // admin role -- user, authority, resource, guest group
         Set<Group> adminGroups = new HashSet<>();
         Role adminRole = roleRepository.findByName(ADMIN);
+        Group clientGroup = groupRepository.findByName("client");
         Group userGroup = groupRepository.findByName("user");
         Group authGroup = groupRepository.findByName("authority");
         Group resourceGroup = groupRepository.findByName("resource");
         Group guestGroup = groupRepository.findByName(GUEST);
+        adminGroups.add(clientGroup);
         adminGroups.add(userGroup);
         adminGroups.add(authGroup);
         adminGroups.add(resourceGroup);
@@ -385,6 +400,14 @@ public class Seed extends BaseTest {
         rootResources.add(rootResource);
         rootGroup.setResources(rootResources);
         groupRepository.save(rootGroup);
+
+        // client group -- client resource
+        Set<Resource> clientResources = new HashSet<>();
+        Group clientGroup = groupRepository.findByName("client");
+        Resource clientResource = resourceRepository.findByName("client");
+        clientResources.add(clientResource);
+        clientGroup.setResources(clientResources);
+        groupRepository.save(clientGroup);
 
         // guest group -- guest resource
         Set<Resource> guestResources = new HashSet<>();

@@ -134,7 +134,7 @@ public class RoleServiceImpl implements RoleService {
      *
      * @param param         role's params
      * @return              role's VO
-     * @throws RoleException        ROL0011 Cannot find any role by this name param.
+     * @throws RoleException        ROL0013 Cannot find any role by this name param.
      */
     @Override
     public RoleVO getRoleByName(RoleParam param) throws RoleException {

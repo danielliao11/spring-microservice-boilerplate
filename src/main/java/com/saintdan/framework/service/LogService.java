@@ -21,9 +21,8 @@ public interface LogService {
      *
      * @param param     log's param
      * @return          log's VO
-     * @throws LogException      LOG0020 Log create failed.
      */
-    LogVO create(LogParam param) throws LogException;
+    LogVO create(LogParam param);
 
     /**
      * Show all logs.

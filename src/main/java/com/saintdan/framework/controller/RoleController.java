@@ -2,6 +2,7 @@ package com.saintdan.framework.controller;
 
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.SignHelper;
+import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
@@ -18,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -90,6 +92,37 @@ public class RoleController {
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
             return roleService.getAllRoles();
+        } catch (RoleException e) {
+            // Return error information and log the exception.
+            return resultHelper.infoResp(log, e.getErrorType());
+        } catch (Exception e) {
+            // Return unknown error and log the exception.
+            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
+        }
+    }
+
+    /**
+     * Show roles' page.
+     *
+     * @param pageNo        page number
+     * @return              roles' page
+     */
+    @RequestMapping(value = ResourceURL.ROLES + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
+        try {
+            RoleParam param = new RoleParam();
+            // Prepare to validate signature.
+            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+            // Sign verification.
+            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
+                // Return rsa signature failed information and log the exception.
+                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            }
+            // Init page number.
+            if (StringUtils.isBlank(pageNo)) {
+                pageNo = "0";
+            }
+            return roleService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
         } catch (RoleException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());

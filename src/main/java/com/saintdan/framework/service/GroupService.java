@@ -70,7 +70,7 @@ public interface GroupService {
      *
      * @param param         group's params
      * @return              group's VO
-     * @throws GroupException        GRP0011 Cannot find any group by this name param.
+     * @throws GroupException        GRP0013 Cannot find any group by this name param.
      */
     GroupVO getGroupByName(GroupParam param) throws GroupException;
 
