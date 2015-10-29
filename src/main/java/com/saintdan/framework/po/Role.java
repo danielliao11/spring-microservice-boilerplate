@@ -1,6 +1,6 @@
 package com.saintdan.framework.po;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.saintdan.framework.enums.ValidFlag;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,7 +10,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -41,6 +40,9 @@ public class Role implements GrantedAuthority, Serializable {
     @Column(length = 500)
     private String description;
 
+    @Column(nullable = false)
+    private ValidFlag validFlag = ValidFlag.VALID;
+
     @CreatedDate
     @Column(nullable = false)
     private Date createdDate = new Date();
@@ -57,8 +59,9 @@ public class Role implements GrantedAuthority, Serializable {
     @Column(nullable = false)
     private Long lastModifiedBy;
 
+    @Version
     @Column(nullable = false)
-    private Integer version;
+    private int version;
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = {CascadeType.REFRESH})
 	private Set<User> users = new HashSet<>();
@@ -107,6 +110,14 @@ public class Role implements GrantedAuthority, Serializable {
         this.description = description;
     }
 
+    public ValidFlag getValidFlag() {
+        return validFlag;
+    }
+
+    public void setValidFlag(ValidFlag validFlag) {
+        this.validFlag = validFlag;
+    }
+
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -139,11 +150,11 @@ public class Role implements GrantedAuthority, Serializable {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public Integer getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 

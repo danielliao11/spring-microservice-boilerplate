@@ -7,7 +7,7 @@ package com.saintdan.framework.enums;
  * @date 8/19/15
  * @since JDK1.8
  */
-public enum OperationStatus implements IntentState {
+public enum OperationStatus implements IntentStateWithValue {
 
     SUCCESS("Operate success"),
     FAILURE("Operate failed"),
