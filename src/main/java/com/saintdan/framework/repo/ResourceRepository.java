@@ -1,9 +1,11 @@
 package com.saintdan.framework.repo;
 
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * Resource's repository.
@@ -12,11 +14,15 @@ import org.springframework.data.repository.CrudRepository;
  * @date 10/16/15
  * @since JDK1.8
  */
-public interface ResourceRepository extends CrudRepository<Resource, Long> {
+public interface ResourceRepository extends RepositoryWithoutDelete<Resource, Long> {
 
     Resource findByName(String name);
 
     Resource findByPath(String path);
 
     Page<Resource> findAll(Pageable pageable);
+
+    @Modifying
+    @Query("update Resource r set r.validFlag=?1 where r.id=?2")
+    void updateValidFlagFor(ValidFlag validFlag, Long id);
 }

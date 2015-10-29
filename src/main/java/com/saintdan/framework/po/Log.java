@@ -35,6 +35,8 @@ public class Log implements Serializable {
     @Column(nullable = false)
     private String username;
 
+    private String clientId;
+
     @Column(nullable = false)
     private LogType type;
 
@@ -50,6 +52,14 @@ public class Log implements Serializable {
         this.loginIP = loginIP;
         this.userId = userId;
         this.username = username;
+        this.type = type;
+    }
+
+    public Log(String loginIP, Long userId, String username, String clientId, LogType type) {
+        this.loginIP = loginIP;
+        this.userId = userId;
+        this.username = username;
+        this.clientId = clientId;
         this.type = type;
     }
 
@@ -91,6 +101,14 @@ public class Log implements Serializable {
 
     public void setType(LogType type) {
         this.type = type;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public Date getCreateDate() {

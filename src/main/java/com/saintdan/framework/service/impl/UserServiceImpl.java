@@ -3,9 +3,9 @@ package com.saintdan.framework.service.impl;
 import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.Transformer;
-import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.param.UserParam;
@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
             // Throw user cannot find by usr parameter exception.
             throw new UserException(ErrorType.USR0012);
         }
-        userRepository.delete(user);
+        userRepository.updateValidFlagFor(ValidFlag.INVALID, user.getId());
     }
 
     // --------------------------
@@ -232,11 +232,6 @@ public class UserServiceImpl implements UserService {
         }
         if (!StringUtils.isBlank(param.getPwd())) {
             user.setPwd(passwordEncoder.encode(param.getPwd()));
-        }
-        if (user.getId() == null) { // If user is new, set initial version -- 0
-            user.setVersion(CommonsConstant.INIT_VERSION);
-        } else { // If user is not new, set version++
-            user.setVersion(userRepository.findOne(user.getId()).getVersion() + CommonsConstant.INCREASE_STEP);
         }
         return user;
     }

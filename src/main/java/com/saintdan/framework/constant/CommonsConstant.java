@@ -8,10 +8,5 @@ package com.saintdan.framework.constant;
  * @since JDK1.8
  */
 public interface CommonsConstant {
-
-    Integer INIT_VERSION = 0;
-
-    Integer INCREASE_STEP = 1;
-
     Integer PAGE_SIZE = 20;
 }

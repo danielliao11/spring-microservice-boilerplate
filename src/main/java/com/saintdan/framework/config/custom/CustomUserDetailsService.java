@@ -47,6 +47,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
         // Get client ip address.
         String ip = SpringSecurityUtils.getCurrentUserIp();
+        String clientId = SpringSecurityUtils.getCurrentUsername();
 
         // Save user login info.
         user.setLastLoginIP(ip);
@@ -54,7 +55,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         userRepository.save(user);
 
         // Save to log.
-        Log log = new Log(ip, user.getId(), user.getUsr(), LogType.LOGIN);
+        Log log = new Log(ip, user.getId(), user.getUsr(), clientId, LogType.LOGIN);
         logRepository.save(log);
         return new UserRepositoryUserDetails(user);
 	}

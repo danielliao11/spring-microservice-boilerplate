@@ -1,9 +1,11 @@
 package com.saintdan.framework.repo;
 
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Client;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -14,9 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @since JDK1.8
  */
 @Transactional
-public interface ClientRepository extends CrudRepository<Client, Long> {
+public interface ClientRepository extends RepositoryWithoutDelete<Client, Long> {
 
     Client findByClientIdAlias(String clientIdAlias);
 
     Page<Client> findAll(Pageable pageable);
+
+    @Modifying
+    @Query("update Client c set c.validFlag=?1 where c.id=?2")
+    void updateValidFlagFor(ValidFlag validFlag, Long id);
 }

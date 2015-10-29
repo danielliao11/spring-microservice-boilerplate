@@ -1,5 +1,6 @@
 package com.saintdan.framework.po;
 
+import com.saintdan.framework.enums.ValidFlag;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,7 +9,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -91,6 +91,29 @@ public class Client implements Serializable {
      * for storing descriptive information.
      */
     private String additionalInformationStr;
+
+    @Column(nullable = false)
+    private ValidFlag validFlag = ValidFlag.VALID;
+
+    @CreatedDate
+    @Column(nullable = false)
+    private Date createdDate = new Date();
+
+    @CreatedBy
+    @Column(nullable = false)
+    private Long createdBy;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private Date lastModifiedDate = new Date();
+
+    @LastModifiedBy
+    @Column(nullable = false)
+    private Long lastModifiedBy;
+
+    @Version
+    @Column(nullable = false)
+    private int version;
 
     public Client() {
 
@@ -196,5 +219,53 @@ public class Client implements Serializable {
 
     public void setAdditionalInformationStr(String additionalInformationStr) {
         this.additionalInformationStr = additionalInformationStr;
+    }
+
+    public ValidFlag getValidFlag() {
+        return validFlag;
+    }
+
+    public void setValidFlag(ValidFlag validFlag) {
+        this.validFlag = validFlag;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Long createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

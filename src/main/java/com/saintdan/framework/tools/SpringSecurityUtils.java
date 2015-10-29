@@ -37,6 +37,38 @@ public class SpringSecurityUtils {
     }
 
     /**
+     * Get current user.
+     *
+     * @param <T>       user details
+     * @return          user details
+     */
+    public static <T extends UserDetails> T getCurrentUser() {
+        Authentication authentication = getAuthentication();
+        if (authentication == null) {
+            return null;
+        }
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof UserDetails)) {
+            return null;
+        }
+        return (T) principal;
+
+    }
+
+    /**
+     * Get current username.
+     *
+     * @return          current username
+     */
+    public static String getCurrentUsername() {
+        Authentication authentication = getAuthentication();
+        if ((authentication == null) || (authentication.getPrincipal() == null)) {
+            return "";
+        }
+        return authentication.getName();
+    }
+
+    /**
      * Save user details to security context.
      *
      * @param userDetails       user details

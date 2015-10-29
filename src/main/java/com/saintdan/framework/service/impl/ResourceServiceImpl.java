@@ -4,6 +4,7 @@ import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.GroupException;
 import com.saintdan.framework.exception.ResourceException;
 import com.saintdan.framework.param.ResourceParam;
@@ -189,7 +190,7 @@ public class ResourceServiceImpl implements ResourceService {
             // Throw resource cannot find by id parameter exception.
             throw new ResourceException(ErrorType.RSC0012);
         }
-        resourceRepository.delete(resource);
+        resourceRepository.updateValidFlagFor(ValidFlag.INVALID, resource.getId());
     }
 
 

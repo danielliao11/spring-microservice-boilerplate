@@ -4,6 +4,7 @@ import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.GroupException;
 import com.saintdan.framework.exception.ResourceException;
 import com.saintdan.framework.exception.RoleException;
@@ -177,7 +178,7 @@ public class GroupServiceImpl implements GroupService {
             // Throw role cannot find by id parameter exception.
             throw new GroupException(ErrorType.ROL0012);
         }
-        groupRepository.delete(group);
+        groupRepository.updateValidFlagFor(ValidFlag.INVALID, group.getId());
     }
 
     // --------------------------

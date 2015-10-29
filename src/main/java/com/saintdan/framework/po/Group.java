@@ -1,5 +1,6 @@
 package com.saintdan.framework.po;
 
+import com.saintdan.framework.enums.ValidFlag;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -38,6 +39,9 @@ public class Group implements Serializable {
     @Column(length = 500)
     private String description;
 
+    @Column(nullable = false)
+    private ValidFlag validFlag = ValidFlag.VALID;
+
     @CreatedDate
     @Column(nullable = false)
     private Date createdDate = new Date();
@@ -54,8 +58,9 @@ public class Group implements Serializable {
     @Column(nullable = false, columnDefinition = "BIGINT")
     private Long lastModifiedBy;
 
+    @Version
     @Column(nullable = false)
-    private Integer version;
+    private int version;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups", cascade = {CascadeType.REFRESH})
     private Set<Role> roles = new HashSet<>();
@@ -99,6 +104,14 @@ public class Group implements Serializable {
         this.description = description;
     }
 
+    public ValidFlag getValidFlag() {
+        return validFlag;
+    }
+
+    public void setValidFlag(ValidFlag validFlag) {
+        this.validFlag = validFlag;
+    }
+
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -131,11 +144,11 @@ public class Group implements Serializable {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public Integer getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 

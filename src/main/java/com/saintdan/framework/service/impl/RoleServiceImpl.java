@@ -4,6 +4,7 @@ import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.GroupException;
 import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
@@ -178,7 +179,7 @@ public class RoleServiceImpl implements RoleService {
             // Throw role cannot find by id parameter exception.
             throw new RoleException(ErrorType.ROL0012);
         }
-        roleRepository.delete(role);
+        roleRepository.updateValidFlagFor(ValidFlag.INVALID, role.getId());
     }
 
     // --------------------------

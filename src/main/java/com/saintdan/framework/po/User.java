@@ -1,5 +1,6 @@
 package com.saintdan.framework.po;
 
+import com.saintdan.framework.enums.ValidFlag;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -47,6 +48,9 @@ public class User implements Serializable {
     @Column(length = 500)
     private String description;
 
+    @Column(nullable = false)
+    private ValidFlag validFlag = ValidFlag.VALID;
+
     // Last login time
     private Date lastLoginTime;
 
@@ -70,8 +74,9 @@ public class User implements Serializable {
     @Column(nullable = false)
     private Long lastModifiedBy;
 
+    @Version
     @Column(nullable = false)
-    private Integer version;
+    private int version;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
     @JoinTable(name = "users_has_roles",
@@ -139,6 +144,14 @@ public class User implements Serializable {
         this.description = description;
     }
 
+    public ValidFlag getValidFlag() {
+        return validFlag;
+    }
+
+    public void setValidFlag(ValidFlag validFlag) {
+        this.validFlag = validFlag;
+    }
+
     public Date getLastLoginTime() {
         return lastLoginTime;
     }
@@ -187,11 +200,11 @@ public class User implements Serializable {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public Integer getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(Integer version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 

@@ -2,9 +2,7 @@ package com.saintdan.framework.repo;
 
 import com.saintdan.framework.BaseTest;
 import com.saintdan.framework.component.CustomPasswordEncoder;
-import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.po.*;
-import com.saintdan.framework.service.UserService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
@@ -92,9 +90,6 @@ public class Seed extends BaseTest {
     @Autowired
     private ResourceRepository resourceRepository;
 
-    @Autowired
-    private UserService userService;
-
     private static final String ROOT = "root";
     private static final String ADMIN = "admin";
     private static final String GUEST = "guest";
@@ -116,7 +111,6 @@ public class Seed extends BaseTest {
         root.setDescription(ROOT + ACCOUNT);
         root.setCreatedBy(0L);
         root.setLastModifiedBy(0L);
-        root.setVersion(CommonsConstant.INIT_VERSION);
         return root;
     }
 
@@ -133,6 +127,8 @@ public class Seed extends BaseTest {
         ios.setAuthorizedGrantTypeStr("password,refresh_token");
         ios.setScopeStr("read");
         ios.setResourceIdStr("rest_api");
+        ios.setCreatedBy(ROOT_USER);
+        ios.setLastModifiedBy(ROOT_USER);
         clients.add(ios);
         return clients;
     }
@@ -154,7 +150,6 @@ public class Seed extends BaseTest {
         admin.setDescription(ADMIN + ACCOUNT);
         admin.setCreatedBy(ROOT_USER);
         admin.setLastModifiedBy(ROOT_USER);
-        admin.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init guest user
         guest.setUsr(GUEST);
@@ -163,7 +158,6 @@ public class Seed extends BaseTest {
         guest.setDescription(GUEST + ACCOUNT);
         guest.setCreatedBy(ROOT_USER);
         guest.setLastModifiedBy(ROOT_USER);
-        guest.setVersion(CommonsConstant.INIT_VERSION);
 
         users.add(admin);
         users.add(guest);
@@ -183,19 +177,16 @@ public class Seed extends BaseTest {
         Role root = new Role(ROOT, ROOT + ROLE);
         root.setCreatedBy(ROOT_USER);
         root.setLastModifiedBy(ROOT_USER);
-        root.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init admin role
         Role admin = new Role(ADMIN, ADMIN + ROLE);
         admin.setCreatedBy(ROOT_USER);
         admin.setLastModifiedBy(ROOT_USER);
-        admin.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init guest role
         Role guest = new Role(GUEST, GUEST + ROLE);
         guest.setCreatedBy(ROOT_USER);
         guest.setLastModifiedBy(ROOT_USER);
-        guest.setVersion(CommonsConstant.INIT_VERSION);
 
         roles.add(root);
         roles.add(admin);
@@ -216,37 +207,31 @@ public class Seed extends BaseTest {
         Group root = new Group(ROOT, "root privileges group");
         root.setCreatedBy(ROOT_USER);
         root.setLastModifiedBy(ROOT_USER);
-        root.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init client control group
         Group client = new Group("client", "client privileges group");
         client.setCreatedBy(ROOT_USER);
         client.setLastModifiedBy(ROOT_USER);
-        client.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init user control group
         Group user = new Group("user", "user privileges group");
         user.setCreatedBy(ROOT_USER);
         user.setLastModifiedBy(ROOT_USER);
-        user.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init authority control  group
         Group authority = new Group("authority", "authority privileges group");
         authority.setCreatedBy(ROOT_USER);
         authority.setLastModifiedBy(ROOT_USER);
-        authority.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init resource group
         Group resource = new Group("resource", "resource privileges group");
         resource.setCreatedBy(ROOT_USER);
         resource.setLastModifiedBy(ROOT_USER);
-        resource.setVersion(CommonsConstant.INIT_VERSION);
 
         // Init guest group
         Group guest = new Group("guest", "guest privileges group");
         guest.setCreatedBy(ROOT_USER);
         guest.setLastModifiedBy(ROOT_USER);
-        guest.setVersion(CommonsConstant.INIT_VERSION);
 
         groups.add(root);
         groups.add(client);
@@ -269,42 +254,34 @@ public class Seed extends BaseTest {
         Resource root = new Resource("root", "/.*", 10000, "all resources");
         root.setCreatedBy(ROOT_USER);
         root.setLastModifiedBy(ROOT_USER);
-        root.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource message = new Resource("message", "/messages", 10, "message resource");
         message.setCreatedBy(ROOT_USER);
         message.setLastModifiedBy(ROOT_USER);
-        message.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource welcome = new Resource("welcome", "/welcome", 1, "welcome resource");
         welcome.setCreatedBy(ROOT_USER);
         welcome.setLastModifiedBy(ROOT_USER);
-        welcome.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource client = new Resource("client", "/client", 10, "client resource");
         client.setCreatedBy(ROOT_USER);
         client.setLastModifiedBy(ROOT_USER);
-        client.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource user = new Resource("user", "/users" , 10, "user resource");
         user.setCreatedBy(ROOT_USER);
         user.setLastModifiedBy(ROOT_USER);
-        user.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource role = new Resource("role", "/roles", 10, "role resource");
         role.setCreatedBy(ROOT_USER);
         role.setLastModifiedBy(ROOT_USER);
-        role.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource group = new Resource("group", "/groups", 10, "group resource");
         group.setCreatedBy(ROOT_USER);
         group.setLastModifiedBy(ROOT_USER);
-        group.setVersion(CommonsConstant.INIT_VERSION);
 
         Resource resource = new Resource("resource", "/resources", 10, "resource resource");
         resource.setCreatedBy(ROOT_USER);
         resource.setLastModifiedBy(ROOT_USER);
-        resource.setVersion(CommonsConstant.INIT_VERSION);
 
         resources.add(root);
         resources.add(client);

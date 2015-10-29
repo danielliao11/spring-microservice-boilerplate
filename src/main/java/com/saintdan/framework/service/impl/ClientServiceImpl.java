@@ -4,6 +4,7 @@ import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.ClientException;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.Client;
@@ -154,7 +155,7 @@ public class ClientServiceImpl implements ClientService {
             // Throw client cannot find by id parameter exception.
             throw new ClientException(ErrorType.CLT0012);
         }
-        clientRepository.delete(client);
+        clientRepository.updateValidFlagFor(ValidFlag.INVALID, client.getId());
     }
 
     // --------------------------
