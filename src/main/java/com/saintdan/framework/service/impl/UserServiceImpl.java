@@ -4,16 +4,21 @@ import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
+import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
+import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
+import com.saintdan.framework.service.LogService;
 import com.saintdan.framework.service.RoleService;
 import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.tools.SpringSecurityUtils;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.UserVO;
@@ -26,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,19 +53,20 @@ public class UserServiceImpl implements UserService {
     /**
      * Create new user.
      *
-     * @param param     user's params
-     * @return          user's VO
+     * @param currentUser   current user
+     * @param param         user's params
+     * @return              user's VO
      * @throws UserException        USR0031 User already existing exception, usr taken
      * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
     @Override
-    public UserVO create(UserParam param) throws UserException, RoleException {
+    public UserVO create(UserParam param, User currentUser) throws UserException, RoleException {
         User user = userRepository.findByUsr(param.getUsr());
         if (user != null) {
             // Throw user already existing exception, username taken.
             throw new UserException(ErrorType.USR0031);
         }
-        return userPO2VO(userRepository.save(userParam2PO(param)),
+        return userPO2VO(userRepository.save(userParam2PO(param, new User(), currentUser)),
                 String.format(ControllerConstant.CREATE, USER));
     }
 
@@ -155,39 +162,46 @@ public class UserServiceImpl implements UserService {
      * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
     @Override
-    public UserVO update(UserParam param) throws UserException, RoleException {
-        if (!userRepository.exists(param.getId())) {
+    public UserVO update(UserParam param, User currentUser) throws UserException, RoleException {
+        User user = userRepository.findOne(param.getId());
+        if (user == null) {
             // Throw user cannot find by usr parameter exception.
             throw new UserException(ErrorType.USR0012);
         }
-        return userPO2VO(userRepository.save(userParam2PO(param)),
+        return userPO2VO(userRepository.save(userParam2PO(param, user, currentUser)),
                 String.format(ControllerConstant.UPDATE, USER));
     }
 
     /**
      * Update user's password
      *
-     * @param param     user's param
+     * @param currentUser   current user
+     * @param param         user's param
      * @throws UserException        USR0041 Update user's password failed.
      */
     @Override
-    public void updatePwd(UserParam param) throws UserException {
+    public void updatePwd(UserParam param, User currentUser) throws UserException {
         userRepository.updatePwdFor(param.getPwd(), param.getId());
     }
 
     /**
      * Delete user.
      *
-     * @param param     user's params
+     * @param currentUser   current user
+     * @param param         user's params
      * @throws UserException        USR0012 Cannot find any user by this id param.
      */
     @Override
-    public void delete(UserParam param) throws UserException {
+    public void delete(UserParam param, User currentUser) throws UserException {
         User user = userRepository.findOne(param.getId());
         if (user == null) {
             // Throw user cannot find by usr parameter exception.
             throw new UserException(ErrorType.USR0012);
         }
+        // Get ip and clientId
+        String ip = SpringSecurityUtils.getCurrentUserIp();
+        String clientId = SpringSecurityUtils.getCurrentUsername();
+        logService.create(new LogParam(ip, LogType.DELETE, clientId, ResourceConstant.USER), currentUser);
         userRepository.updateValidFlagFor(ValidFlag.INVALID, user.getId());
     }
 
@@ -197,6 +211,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private LogService logService;
 
     @Autowired
     private UserRepository userRepository;
@@ -220,12 +237,33 @@ public class UserServiceImpl implements UserService {
     /**
      * Transform user's param to PO.
      *
-     * @param param     user's param
-     * @return          user's PO
+     * @param param         user's param
+     * @param user          user
+     * @param currentUser   currentUser
+     * @return              user's PO
      */
-    private User userParam2PO(UserParam param) throws RoleException {
-        User user = new User();
+    private User userParam2PO(UserParam param, User user, User currentUser) throws RoleException {
+        // Get ip and clientId
+        String ip = SpringSecurityUtils.getCurrentUserIp();
+        String clientId = SpringSecurityUtils.getCurrentUsername();
+        // Init createdBy, lastModifiedBy
+        Long createdBy, lastModifiedBy;
+        // Init createdDate
+        Date createdDate = new Date();
+        if (user.getId() == null) {
+            createdBy = currentUser.getId();
+            lastModifiedBy = createdBy;
+            logService.create(new LogParam(ip, LogType.CREATE, clientId, ResourceConstant.USER), currentUser);
+        } else {
+            createdBy = user.getCreatedBy();
+            createdDate = user.getCreatedDate();
+            lastModifiedBy = currentUser.getId();
+            logService.create(new LogParam(ip, LogType.UPDATE, clientId, ResourceConstant.USER), currentUser);
+        }
         BeanUtils.copyProperties(param, user);
+        user.setCreatedBy(createdBy);
+        user.setCreatedDate(createdDate);
+        user.setLastModifiedBy(lastModifiedBy);
         if (!StringUtils.isBlank(param.getRoleIds())) {
             Iterable<Role> roles = roleService.getRolesByIds(transformer.idsStr2Iterable(param.getRoleIds()));
             user.setRoles(transformer.iterable2Set(roles));

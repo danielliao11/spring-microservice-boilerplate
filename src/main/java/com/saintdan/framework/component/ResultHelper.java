@@ -40,7 +40,7 @@ public class ResultHelper {
      * @return              result vo
      */
     public ResultVO infoResp(ErrorType errorType) {
-        return infoResp(errorType, errorType.value());
+        return infoResp(errorType, errorType.description());
     }
 
     /**
@@ -59,11 +59,11 @@ public class ResultHelper {
     }
 
     public ResultVO infoResp(Log log, ErrorType errorType) {
-        LogUtils.trackInfo(log, errorType.value());
+        LogUtils.trackInfo(log, errorType.description());
         return new ResultVO(
                 errorType.name(),
                 OperationStatus.FAILURE,
-                errorType.value()
+                errorType.description()
         );
     }
 
@@ -77,7 +77,7 @@ public class ResultHelper {
      * @return              result vo
      */
     public ResultVO errorResp(Log log, Throwable e, ErrorType errorType) {
-        return errorResp(log, e, errorType, errorType.value());
+        return errorResp(log, e, errorType, errorType.description());
     }
 
     /**
@@ -91,7 +91,7 @@ public class ResultHelper {
      * @return              result vo
      */
     public ResultVO errorResp(Log log, Throwable e, ErrorType errorType, String msg) {
-        LogUtils.traceError(log, e, errorType.value());
+        LogUtils.traceError(log, e, errorType.description());
         return new ResultVO(
                 errorType.name(),
                 OperationStatus.FAILURE,

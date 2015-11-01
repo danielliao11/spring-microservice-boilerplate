@@ -3,16 +3,22 @@ package com.saintdan.framework.service.impl;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
+import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.GroupException;
 import com.saintdan.framework.exception.ResourceException;
+import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.Group;
 import com.saintdan.framework.po.Resource;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.ResourceRepository;
 import com.saintdan.framework.service.GroupService;
+import com.saintdan.framework.service.LogService;
 import com.saintdan.framework.service.ResourceService;
+import com.saintdan.framework.tools.SpringSecurityUtils;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.ResourceVO;
@@ -24,6 +30,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,19 +51,20 @@ public class ResourceServiceImpl implements ResourceService {
     /**
      * Create new resource.
      *
+     * @param currentUser   current user
      * @param param         resource's params
      * @return              resource's VO
      * @throws ResourceException        RSC0031 Resource already existing, name taken.
      * @throws GroupException           GRP0012 Cannot find any group by this id param.
      */
     @Override
-    public ResourceVO create(ResourceParam param) throws ResourceException, GroupException {
+    public ResourceVO create(ResourceParam param, User currentUser) throws ResourceException, GroupException {
         Resource resource = resourceRepository.findByName(param.getName());
         if (resource != null) {
             // Throw resource already existing, name taken.
             throw new ResourceException(ErrorType.RSC0031);
         }
-        return resourcePO2VO(resourceRepository.save(resourceParam2PO(param)),
+        return resourcePO2VO(resourceRepository.save(resourceParam2PO(param, new Resource(), currentUser)),
                 String.format(ControllerConstant.CREATE, RESOURCE));
     }
 
@@ -162,34 +170,41 @@ public class ResourceServiceImpl implements ResourceService {
     /**
      * Update resource.
      *
+     * @param currentUser   current user
      * @param param         resource's params
      * @return              resource's VO
      * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
      * @throws GroupException           GRP0012 Cannot find any group by this id param.
      */
     @Override
-    public ResourceVO update(ResourceParam param) throws ResourceException, GroupException {
-        if (!resourceRepository.exists(param.getId())) {
+    public ResourceVO update(ResourceParam param, User currentUser) throws ResourceException, GroupException {
+        Resource resource = resourceRepository.findOne(param.getId());
+        if (resource == null) {
             // Throw resource cannot find by id parameter exception.
             throw new ResourceException(ErrorType.RSC0012);
         }
-        return resourcePO2VO(resourceRepository.save(resourceParam2PO(param)),
+        return resourcePO2VO(resourceRepository.save(resourceParam2PO(param, resource, currentUser)),
                 String.format(ControllerConstant.UPDATE, RESOURCE));
     }
 
     /**
      * Delete resource.
      *
+     * @param currentUser   current user
      * @param param         resource's params.
      * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
      */
     @Override
-    public void delete(ResourceParam param) throws ResourceException {
+    public void delete(ResourceParam param, User currentUser) throws ResourceException {
         Resource resource = resourceRepository.findOne(param.getId());
         if (resource == null) {
             // Throw resource cannot find by id parameter exception.
             throw new ResourceException(ErrorType.RSC0012);
         }
+        // Get ip and clientId
+        String ip = SpringSecurityUtils.getCurrentUserIp();
+        String clientId = SpringSecurityUtils.getCurrentUsername();
+        logService.create(new LogParam(ip, LogType.DELETE, clientId, ResourceConstant.RESOURCE), currentUser);
         resourceRepository.updateValidFlagFor(ValidFlag.INVALID, resource.getId());
     }
 
@@ -200,6 +215,9 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private LogService logService;
 
     @Autowired
     private ResourceRepository resourceRepository;
@@ -216,12 +234,33 @@ public class ResourceServiceImpl implements ResourceService {
      * Transform resource's param to PO.
      *
      * @param param         resource's param
+     * @param resource      resource
+     * @param currentUser   currentUser
      * @return              resource's PO
      * @throws GroupException       GRP0012 Cannot find any group by this id param.
      */
-    private Resource resourceParam2PO(ResourceParam param) throws GroupException {
-        Resource resource = new Resource();
+    private Resource resourceParam2PO(ResourceParam param, Resource resource, User currentUser) throws GroupException {
+        // Get ip and clientId
+        String ip = SpringSecurityUtils.getCurrentUserIp();
+        String clientId = SpringSecurityUtils.getCurrentUsername();
+        // Init createdBy, lastModifiedBy
+        Long createdBy, lastModifiedBy;
+        // Init createdDate
+        Date createdDate = new Date();
+        if (resource.getId() == null) {
+            createdBy = currentUser.getId();
+            lastModifiedBy = createdBy;
+            logService.create(new LogParam(ip, LogType.CREATE, clientId, ResourceConstant.RESOURCE), currentUser);
+        } else {
+            createdBy = resource.getCreatedBy();
+            createdDate = resource.getCreatedDate();
+            lastModifiedBy = currentUser.getId();
+            logService.create(new LogParam(ip, LogType.UPDATE, clientId, ResourceConstant.RESOURCE), currentUser);
+        }
         BeanUtils.copyProperties(param, resource);
+        resource.setCreatedBy(createdBy);
+        resource.setCreatedDate(createdDate);
+        resource.setLastModifiedBy(lastModifiedBy);
         if (!StringUtils.isBlank(param.getGroupIds())) {
             Iterable<Group> groups = groupService.getGroupsByIds(transformer.idsStr2Iterable(param.getGroupIds()));
             resource.setGroups(transformer.iterable2Set(groups));

@@ -1,15 +1,13 @@
 package com.saintdan.framework.param;
 
-import com.saintdan.framework.annotation.ParamField;
+import com.saintdan.framework.annotation.SignField;
+import com.saintdan.framework.annotation.ValidationField;
 import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.SignatureException;
-import com.saintdan.framework.exception.SystemException;
 import com.saintdan.framework.exception.UnknownException;
 import com.saintdan.framework.tools.SignatureUtils;
-import com.sun.javafx.binding.StringFormatter;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.NotNull;
 import java.beans.BeanInfo;
@@ -43,12 +41,22 @@ public class BaseParam implements Serializable {
     @NotNull(message = "sign could not be null.")
     private String sign;
 
+    private UserDetails currentUser;
+
     public String getSign() {
         return sign;
     }
 
     public void setSign(String sign) {
         this.sign = sign;
+    }
+
+    public UserDetails getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(UserDetails currentUser) {
+        this.currentUser = currentUser;
     }
 
     /**
@@ -107,7 +115,7 @@ public class BaseParam implements Serializable {
 
                 }
 
-                if (field == null || !field.isAnnotationPresent(ParamField.class)) {
+                if (field == null || !field.isAnnotationPresent(SignField.class)) {
                     continue; // Ignore field without ParamField annotation.
                 }
                 field.setAccessible(true);
@@ -164,7 +172,7 @@ public class BaseParam implements Serializable {
 
                 }
 
-                if (field == null || !field.isAnnotationPresent(ParamField.class)) {
+                if (field == null || !field.isAnnotationPresent(ValidationField.class)) {
                     continue; // Ignore field without ParamField annotation.
                 }
                 field.setAccessible(true);

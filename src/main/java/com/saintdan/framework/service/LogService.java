@@ -2,6 +2,7 @@ package com.saintdan.framework.service;
 
 import com.saintdan.framework.exception.LogException;
 import com.saintdan.framework.param.LogParam;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.LogVO;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -19,10 +20,11 @@ public interface LogService {
     /**
      * Create new log.
      *
-     * @param param     log's param
-     * @return          log's VO
+     * @param currentUser   current user
+     * @param param         log's param
+     * @return              log's VO
      */
-    LogVO create(LogParam param);
+    LogVO create(LogParam param, User currentUser);
 
     /**
      * Show all logs.

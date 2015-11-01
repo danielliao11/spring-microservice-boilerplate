@@ -85,3 +85,8 @@
 - 0.8.4.RELEASE
   - Add valid flag. When you don't want to delete something, you can set the valid flag to 'invalid'.
   - Add [RepositoryWithoutDelete](src/main/java/com/saintdan/framework/repo/RepositoryWithoutDelete.java) to hide delete interface.
+
+- 0.8.5.RELEASE
+  - Add [@CurrentUser](src/main/java/com/saintdan/framework/annotation/CurrentUser.java), annotate param with it can get current login user.
+  - Separate the SignField to SignField and [ValidationField](src/main/java/com/saintdan/framework/annotation/ValidationField.java).
+  - Add some code comments.

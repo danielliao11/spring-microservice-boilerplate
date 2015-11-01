@@ -28,7 +28,7 @@ public abstract class SystemException extends Exception implements Serializable 
      * @param t   the root cause
      */
     public SystemException(ErrorType msg, Throwable t) {
-        super(msg.name() + ": " + msg.value(), t);
+        super(msg.name() + ": " + msg.description(), t);
         this.errorType = msg;
     }
 
@@ -38,7 +38,7 @@ public abstract class SystemException extends Exception implements Serializable 
      * @param msg the {@link ErrorType}
      */
     public SystemException(ErrorType msg) {
-        super(msg.name() + ": " + msg.value());
+        super(msg.name() + ": " + msg.description());
         this.errorType = msg;
     }
 
@@ -82,6 +82,6 @@ public abstract class SystemException extends Exception implements Serializable 
      * @return error msg
      */
     public String getErrorMsg() {
-        return obtainErrorType().value();
+        return obtainErrorType().description();
     }
 }

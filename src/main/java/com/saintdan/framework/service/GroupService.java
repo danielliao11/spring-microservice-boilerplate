@@ -5,6 +5,7 @@ import com.saintdan.framework.exception.ResourceException;
 import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.param.GroupParam;
 import com.saintdan.framework.po.Group;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.GroupVO;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -22,13 +23,14 @@ public interface GroupService {
     /**
      * Create new group.
      *
+     * @param currentUser   current user
      * @param param         group's params
      * @return              group's VO
      * @throws GroupException        GRP0031 Group already existing, name taken.
      * @throws ResourceException     RSC0012 Cannot find any resource by this id param.
      * @throws RoleException         ROL0012 Cannot find any role by this id param.
      */
-    GroupVO create(GroupParam param) throws GroupException, ResourceException, RoleException;
+    GroupVO create(GroupParam param, User currentUser) throws GroupException, ResourceException, RoleException;
 
     /**
      * Show all groups' VO.
@@ -77,20 +79,22 @@ public interface GroupService {
     /**
      * Update group.
      *
+     * @param currentUser   current user
      * @param param         group's params
      * @return              group's VO
      * @throws GroupException        GRP0012 Cannot find any group by this id param.
      * @throws ResourceException     RSC0012 Cannot find any resource by this id param.
      * @throws RoleException         ROL0012 Cannot find any role by this id param.
      */
-    GroupVO update(GroupParam param) throws GroupException, ResourceException, RoleException;
+    GroupVO update(GroupParam param, User currentUser) throws GroupException, ResourceException, RoleException;
 
     /**
      * Delete group.
      *
+     * @param currentUser   current user
      * @param param         group's params.
      * @throws GroupException        GRP0012 Cannot find any group by this id param.
      */
-    void delete(GroupParam param) throws GroupException;
+    void delete(GroupParam param, User currentUser) throws GroupException;
 
 }

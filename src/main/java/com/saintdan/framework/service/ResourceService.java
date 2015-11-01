@@ -4,6 +4,7 @@ import com.saintdan.framework.exception.GroupException;
 import com.saintdan.framework.exception.ResourceException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.Resource;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.ResourceVO;
@@ -21,12 +22,13 @@ public interface ResourceService {
     /**
      * Create new resource.
      *
+     * @param currentUser   current user
      * @param param         resource's params
      * @return              resource's VO
      * @throws ResourceException        RSC0031 Resource already existing, name taken.
      * @throws GroupException           GRP0012 Cannot find any group by this id param.
      */
-    ResourceVO create(ResourceParam param) throws ResourceException, GroupException;
+    ResourceVO create(ResourceParam param, User currentUser) throws ResourceException, GroupException;
 
     /**
      * Show all resources' VO.
@@ -84,19 +86,21 @@ public interface ResourceService {
     /**
      * Update resource.
      *
+     * @param currentUser   current user
      * @param param         resource's params
      * @return              resource's VO
      * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
      * @throws GroupException           GRP0012 Cannot find any group by this id param.
      */
-    ResourceVO update(ResourceParam param) throws ResourceException, GroupException;
+    ResourceVO update(ResourceParam param, User currentUser) throws ResourceException, GroupException;
 
     /**
      * Delete resource.
      *
+     * @param currentUser   current user
      * @param param         resource's params.
      * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
      */
-    void delete(ResourceParam param) throws ResourceException;
+    void delete(ResourceParam param, User currentUser) throws ResourceException;
 
 }

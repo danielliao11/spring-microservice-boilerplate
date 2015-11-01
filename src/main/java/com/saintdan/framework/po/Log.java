@@ -37,6 +37,8 @@ public class Log implements Serializable {
 
     private String clientId;
 
+    private String accessResource;
+
     @Column(nullable = false)
     private LogType type;
 
@@ -46,21 +48,6 @@ public class Log implements Serializable {
 
     public Log() {
 
-    }
-
-    public Log(String loginIP, Long userId, String username, LogType type) {
-        this.loginIP = loginIP;
-        this.userId = userId;
-        this.username = username;
-        this.type = type;
-    }
-
-    public Log(String loginIP, Long userId, String username, String clientId, LogType type) {
-        this.loginIP = loginIP;
-        this.userId = userId;
-        this.username = username;
-        this.clientId = clientId;
-        this.type = type;
     }
 
     public Long getId() {
@@ -95,20 +82,28 @@ public class Log implements Serializable {
         this.username = username;
     }
 
-    public LogType getType() {
-        return type;
-    }
-
-    public void setType(LogType type) {
-        this.type = type;
-    }
-
     public String getClientId() {
         return clientId;
     }
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    public String getAccessResource() {
+        return accessResource;
+    }
+
+    public void setAccessResource(String accessResource) {
+        this.accessResource = accessResource;
+    }
+
+    public LogType getType() {
+        return type;
+    }
+
+    public void setType(LogType type) {
+        this.type = type;
     }
 
     public Date getCreateDate() {

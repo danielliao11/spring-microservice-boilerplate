@@ -5,6 +5,7 @@ import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.Role;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.RoleVO;
@@ -22,13 +23,14 @@ public interface RoleService {
     /**
      * Create new role.
      *
+     * @param currentUser   current user
      * @param param         role's params
      * @return              role's VO
      * @throws RoleException        ROL0031 Role already existing, name taken.
      * @throws UserException        USR0012 Cannot find any user by this id param.
      * @throws GroupException       GRP0012 Cannot find any group by this id param.
      */
-    RoleVO create(RoleParam param) throws RoleException, UserException, GroupException;
+    RoleVO create(RoleParam param, User currentUser) throws RoleException, UserException, GroupException;
 
     /**
      * Show all roles' VO.
@@ -77,20 +79,22 @@ public interface RoleService {
     /**
      * Update role.
      *
+     * @param currentUser   current user
      * @param param         role's params
      * @return              role's VO
      * @throws RoleException        ROL0012 Cannot find any role by this id param.
      * @throws UserException        USR0012 Cannot find any user by this id param.
      * @throws GroupException       GRP0012 Cannot find any group by this id param.
      */
-    RoleVO update(RoleParam param) throws RoleException, UserException, GroupException;
+    RoleVO update(RoleParam param, User currentUser) throws RoleException, UserException, GroupException;
 
     /**
      * Delete role.
      *
+     * @param currentUser   current user
      * @param param         role's params.
      * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
-    void delete(RoleParam param) throws RoleException;
+    void delete(RoleParam param, User currentUser) throws RoleException;
 
 }

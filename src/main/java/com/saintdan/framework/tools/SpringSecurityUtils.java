@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
@@ -29,11 +30,15 @@ public class SpringSecurityUtils {
             return "";
         }
         Object details = authentication.getDetails();
-        if (!(details instanceof WebAuthenticationDetails)) {
-            return "";
+        if (details instanceof OAuth2AuthenticationDetails) {
+            OAuth2AuthenticationDetails oAuth2AuthenticationDetails = (OAuth2AuthenticationDetails) details;
+            return oAuth2AuthenticationDetails.getRemoteAddress();
         }
-        WebAuthenticationDetails webDetails = (WebAuthenticationDetails) details;
-        return webDetails.getRemoteAddress();
+        if (details instanceof WebAuthenticationDetails) {
+            WebAuthenticationDetails webDetails = (WebAuthenticationDetails) details;
+            return webDetails.getRemoteAddress();
+        }
+        return "";
     }
 
     /**

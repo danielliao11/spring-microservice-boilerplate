@@ -7,21 +7,21 @@ package com.saintdan.framework.enums;
  * @date 8/19/15
  * @since JDK1.8
  */
-public enum OperationStatus implements IntentStateWithValue {
+public enum OperationStatus implements IntentStateWithDescription {
 
     SUCCESS("Operate success"),
     FAILURE("Operate failed"),
     TIMEOUT("Time out");
 
-    private final String val;
+    private final String description;
 
-    OperationStatus(String val) {
-        this.val = val;
+    OperationStatus(String description) {
+        this.description = description;
     }
 
     @Override
-    public String value() {
-        return this.val;
+    public String description() {
+        return this.description;
     }
 
 }

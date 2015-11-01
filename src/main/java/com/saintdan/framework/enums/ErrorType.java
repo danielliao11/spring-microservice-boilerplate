@@ -7,7 +7,7 @@ package com.saintdan.framework.enums;
  * @date 7/21/15
  * @since JDK1.8
  */
-public enum ErrorType implements IntentStateWithValue {
+public enum ErrorType implements IntentStateWithDescription {
 
     // System
     SYS0001("System error."),
@@ -86,21 +86,21 @@ public enum ErrorType implements IntentStateWithValue {
     UNKNOWN("unknown error."),;
 
     /**
-     * Value
+     * Description
      */
-    private final String val;
+    private final String description;
 
     /**
      * Constructor
      *
-     * @param val value
+     * @param description description
      */
-    ErrorType(String val) {
-        this.val = val;
+    ErrorType(String description) {
+        this.description = description;
     }
 
     @Override
-    public String value() {
-        return this.val;
+    public String description() {
+        return this.description;
     }
 }

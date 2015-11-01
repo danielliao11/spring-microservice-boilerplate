@@ -21,6 +21,7 @@ public class SignTest {
     @Test
     public void testSign() throws Exception {
         UserParam param = new UserParam();
+        param.setId(4L);
         param.sign(PRIVATE_KEY);
         String sign = param.getSign();
         System.out.println(sign);

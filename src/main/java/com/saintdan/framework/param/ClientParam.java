@@ -1,6 +1,7 @@
 package com.saintdan.framework.param;
 
-import com.saintdan.framework.annotation.ParamField;
+import com.saintdan.framework.annotation.SignField;
+import com.saintdan.framework.annotation.ValidationField;
 
 import java.io.Serializable;
 
@@ -15,32 +16,43 @@ public class ClientParam extends BaseParam implements Serializable {
 
     private static final long serialVersionUID = 6065608866944007796L;
 
+    @SignField
     private Long id;
 
-    @ParamField
+    @SignField
+    @ValidationField
     private String clientIdAlias;
 
-    @ParamField
+    @SignField
+    @ValidationField
     private String resourceIdStr;
 
-    @ParamField
+    @SignField
+    @ValidationField
     private String clientSecretAlias;
 
-    @ParamField
+    @SignField
+    @ValidationField
     private String scopeStr;
 
-    @ParamField
+    @SignField
+    @ValidationField
     private String authorizedGrantTypeStr;
 
+    @SignField
     private String registeredRedirectUriStr;
 
-    @ParamField
-    private String authoritieStr;
+    @SignField
+    @ValidationField
+    private String authoritiesStr;
 
+    @SignField
     private Integer accessTokenValiditySecondsAlias;
 
+    @SignField
     private Integer refreshTokenValiditySecondsAlias;
 
+    @SignField
     private String additionalInformationStr;
 
     public ClientParam() {
@@ -107,12 +119,12 @@ public class ClientParam extends BaseParam implements Serializable {
         this.registeredRedirectUriStr = registeredRedirectUriStr;
     }
 
-    public String getAuthoritieStr() {
-        return authoritieStr;
+    public String getAuthoritiesStr() {
+        return authoritiesStr;
     }
 
-    public void setAuthoritieStr(String authoritieStr) {
-        this.authoritieStr = authoritieStr;
+    public void setAuthoritiesStr(String authoritiesStr) {
+        this.authoritiesStr = authoritiesStr;
     }
 
     public Integer getAccessTokenValiditySecondsAlias() {

@@ -1,6 +1,7 @@
 package com.saintdan.framework.param;
 
-import com.saintdan.framework.annotation.ParamField;
+import com.saintdan.framework.annotation.SignField;
+import com.saintdan.framework.annotation.ValidationField;
 
 import java.io.Serializable;
 
@@ -15,19 +16,25 @@ public class ResourceParam extends BaseParam implements Serializable {
 
     private static final long serialVersionUID = 8542867394907970893L;
 
+    @SignField
     private Long id; // role's ID.
 
-    @ParamField
+    @SignField
+    @ValidationField
     private String name; // role's name
 
-    @ParamField
+    @SignField
+    @ValidationField
     private String path;
 
-    @ParamField
+    @SignField
+    @ValidationField
     private Integer priority;
 
+    @SignField
     private String description;
 
+    @SignField
     private String groupIds; // role ids string
 
     public ResourceParam() {

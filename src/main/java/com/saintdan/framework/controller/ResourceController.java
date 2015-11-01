@@ -1,5 +1,6 @@
 package com.saintdan.framework.controller;
 
+import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.SignHelper;
 import com.saintdan.framework.constant.CommonsConstant;
@@ -10,6 +11,7 @@ import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.ResourceException;
 import com.saintdan.framework.param.ResourceParam;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.service.ResourceService;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.codec.binary.Base64;
@@ -48,13 +50,13 @@ public class ResourceController {
      * @return          resource's result
      */
     @RequestMapping(value = ResourceURL.RESOURCES + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO create(ResourceParam param, @PathVariable String sign) {
+    public ResultVO create(@CurrentUser User currentUser, ResourceParam param, @PathVariable String sign) {
         try {
             // Get incorrect params.
             String validateContent = param.getIncorrectParams();
             if (!StringUtils.isBlank(validateContent)) {
                 // If validate failed, return error message.
-                return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
+                return new ResultVO(ErrorType.SYS0002.description(), OperationStatus.FAILURE,
                         String.format(ControllerConstant.PARAM_BLANK, validateContent));
             }// Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
@@ -64,7 +66,7 @@ public class ResourceController {
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
             // Return result and message.
-            return resourceService.create(param);
+            return resourceService.create(param, currentUser);
         } catch (ResourceException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
@@ -169,7 +171,7 @@ public class ResourceController {
      * @return          resource's result
      */
     @RequestMapping(value = ResourceURL.RESOURCES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO update(@PathVariable String id, @PathVariable String sign, ResourceParam param) {
+    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, ResourceParam param) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
@@ -178,7 +180,7 @@ public class ResourceController {
             String validateContent = param.getIncorrectParams();
             if (!StringUtils.isBlank(validateContent)) {
                 // If validate failed, return error message.
-                return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
+                return new ResultVO(ErrorType.SYS0002.description(), OperationStatus.FAILURE,
                         String.format(ControllerConstant.PARAM_BLANK, validateContent));
             }
             // Set resource's ID.
@@ -191,7 +193,7 @@ public class ResourceController {
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
             // Update resource.
-            return resourceService.update(param);
+            return resourceService.update(param, currentUser);
         } catch (ResourceException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
@@ -208,7 +210,7 @@ public class ResourceController {
      * @return          resource's result
      */
     @RequestMapping(value = ResourceURL.RESOURCES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
-    public ResultVO delete(@PathVariable String id, @PathVariable String sign) {
+    public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
@@ -222,7 +224,7 @@ public class ResourceController {
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
             // Delete resource.
-            resourceService.delete(param);
+            resourceService.delete(param, currentUser);
             final String ROLE = "resource";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
         } catch (ResourceException e) {

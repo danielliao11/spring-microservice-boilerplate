@@ -1,5 +1,6 @@
 package com.saintdan.framework.controller;
 
+import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.SignHelper;
 import com.saintdan.framework.constant.CommonsConstant;
@@ -11,6 +12,7 @@ import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.SignatureException;
 import com.saintdan.framework.exception.UserException;
 import com.saintdan.framework.param.UserParam;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.service.UserService;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.codec.binary.Base64;
@@ -49,13 +51,13 @@ public class UserController {
      * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO create(UserParam param, @PathVariable String sign) {
+    public ResultVO create(@CurrentUser User currentUser, UserParam param, @PathVariable String sign) {
         try {
             // Get incorrect params.
             String validateContent = param.getIncorrectParams();
             if (!StringUtils.isBlank(validateContent)) {
                 // If validate failed, return error message.
-                return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
+                return new ResultVO(ErrorType.SYS0002.description(), OperationStatus.FAILURE,
                         String.format(ControllerConstant.PARAM_BLANK, validateContent));
             }
             // Prepare to validate signature.
@@ -66,7 +68,7 @@ public class UserController {
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
             // Return result and message.
-            return userService.create(param);
+            return userService.create(param, currentUser);
         } catch (UserException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
@@ -205,7 +207,7 @@ public class UserController {
      * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO update(@PathVariable String id, @PathVariable String sign, UserParam param) {
+    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, UserParam param) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
@@ -214,7 +216,7 @@ public class UserController {
             String validateContent = param.getIncorrectParams();
             if (!StringUtils.isBlank(validateContent)) {
                 // If validate failed, return error message.
-                return new ResultVO(ErrorType.SYS0002.value(), OperationStatus.FAILURE,
+                return new ResultVO(ErrorType.SYS0002.description(), OperationStatus.FAILURE,
                         String.format(ControllerConstant.PARAM_BLANK, validateContent));
             }
             // Set user's ID.
@@ -227,7 +229,7 @@ public class UserController {
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
             // Update user.
-            return userService.update(param);
+            return userService.update(param, currentUser);
         } catch (UserException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
@@ -244,7 +246,7 @@ public class UserController {
      * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
-    public ResultVO delete(@PathVariable String id, @PathVariable String sign) {
+    public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
@@ -258,7 +260,7 @@ public class UserController {
                 return resultHelper.infoResp(log, ErrorType.SGN0021);
             }
             // Delete user.
-            userService.delete(param);
+            userService.delete(param, currentUser);
             final String USER = "user";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, USER));
         } catch (UserException e) {
