@@ -30,7 +30,7 @@ public class SystemRuntimeException extends RuntimeException implements Serializ
      */
     public SystemRuntimeException(ErrorType msg, Throwable t) {
 
-        super(msg.name() + ": " + msg.value(), t);
+        super(msg.name() + ": " + msg.description(), t);
         this.errorType=msg;
     }
 
@@ -41,7 +41,7 @@ public class SystemRuntimeException extends RuntimeException implements Serializ
      */
     public SystemRuntimeException(ErrorType msg) {
 
-        super(msg.name() + ": " + msg.value());
+        super(msg.name() + ": " + msg.description());
         this.errorType=msg;
     }
 
@@ -82,6 +82,6 @@ public class SystemRuntimeException extends RuntimeException implements Serializ
      * @return error msg
      */
     public String getErrorMsg() {
-        return obtainErrorType().value();
+        return obtainErrorType().description();
     }
 }

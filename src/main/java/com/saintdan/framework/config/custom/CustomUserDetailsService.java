@@ -1,9 +1,14 @@
 package com.saintdan.framework.config.custom;
 
+import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.LogType;
-import com.saintdan.framework.po.*;
-import com.saintdan.framework.repo.LogRepository;
+import com.saintdan.framework.param.LogParam;
+import com.saintdan.framework.po.Group;
+import com.saintdan.framework.po.Resource;
+import com.saintdan.framework.po.Role;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
+import com.saintdan.framework.service.LogService;
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,7 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private final UserRepository userRepository;
 
     @Autowired
-    private LogRepository logRepository;
+    private LogService logService;
 
 	@Autowired
 	public CustomUserDetailsService(UserRepository userRepository) {
@@ -55,8 +60,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         userRepository.save(user);
 
         // Save to log.
-        Log log = new Log(ip, user.getId(), user.getUsr(), clientId, LogType.LOGIN);
-        logRepository.save(log);
+        logService.create(new LogParam(ip, LogType.LOGIN, clientId, ResourceConstant.LOGIN), user);
         return new UserRepositoryUserDetails(user);
 	}
 

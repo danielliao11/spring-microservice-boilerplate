@@ -52,7 +52,7 @@ public class Client implements Serializable {
     /**
      * grant types include
      * "authorization_code", "password", "assertion", and "refresh_token".
-     * Default value is "authorization_code,refresh_token".
+     * Default description is "authorization_code,refresh_token".
      */
     @NotEmpty
     @Column(length = 100)

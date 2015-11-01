@@ -21,12 +21,13 @@ public interface UserService {
     /**
      * Create new user.
      *
-     * @param param     user's params
-     * @return          user's VO
+     * @param currentUser   current user
+     * @param param         user's params
+     * @return              user's VO
      * @throws UserException        USR0031 User already existing exception, usr taken
      * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
-    UserVO create(UserParam param) throws UserException, RoleException;
+    UserVO create(UserParam param, User currentUser) throws UserException, RoleException;
 
     /**
      * Show all users' VO.
@@ -76,27 +77,30 @@ public interface UserService {
     /**
      * Update user.
      *
-     * @param param     user's params
-     * @return          user's VO
+     * @param currentUser   current user
+     * @param param         user's params
+     * @return              user's VO
      * @throws UserException        USR0012 Cannot find any user by this id param.
      * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
-    UserVO update(UserParam param) throws UserException, RoleException;
+    UserVO update(UserParam param, User currentUser) throws UserException, RoleException;
 
     /**
      * Update user's password
      *
-     * @param param     user's param
+     * @param currentUser   current user
+     * @param param         user's param
      * @throws UserException        USR0041 Update user's password failed.
      */
-    void updatePwd(UserParam param) throws UserException;
+    void updatePwd(UserParam param, User currentUser) throws UserException;
 
     /**
      * Delete user.
      *
-     * @param param     user's params
+     * @param currentUser   current user
+     * @param param         user's params
      * @throws UserException        USR0012 Cannot find any user by this id param.
      */
-    void delete(UserParam param) throws UserException;
+    void delete(UserParam param, User currentUser) throws UserException;
 
 }

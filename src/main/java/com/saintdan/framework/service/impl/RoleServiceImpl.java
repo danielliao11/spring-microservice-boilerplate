@@ -3,19 +3,24 @@ package com.saintdan.framework.service.impl;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
+import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.GroupException;
 import com.saintdan.framework.exception.RoleException;
 import com.saintdan.framework.exception.UserException;
+import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.Group;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.RoleRepository;
 import com.saintdan.framework.service.GroupService;
+import com.saintdan.framework.service.LogService;
 import com.saintdan.framework.service.RoleService;
 import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.tools.SpringSecurityUtils;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.RoleVO;
@@ -27,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -48,6 +54,7 @@ public class RoleServiceImpl implements RoleService {
     /**
      * Create new role.
      *
+     * @param currentUser   current user
      * @param param         role's params
      * @return              role's VO
      * @throws RoleException        ROL0031 Role already existing, name taken.
@@ -55,13 +62,13 @@ public class RoleServiceImpl implements RoleService {
      * @throws GroupException       GRP0012 Cannot find any group by this id param.
      */
     @Override
-    public RoleVO create(RoleParam param) throws RoleException, UserException, GroupException {
+    public RoleVO create(RoleParam param, User currentUser) throws RoleException, UserException, GroupException {
         Role role = roleRepository.findByName(param.getName());
         if (role != null) {
             // Throw role already existing, name taken.
             throw new RoleException(ErrorType.ROL0031);
         }
-        return rolePO2VO(roleRepository.save(roleParam2PO(param)),
+        return rolePO2VO(roleRepository.save(roleParam2PO(param, new Role(), currentUser)),
                 String.format(ControllerConstant.CREATE, ROLE));
     }
 
@@ -150,6 +157,7 @@ public class RoleServiceImpl implements RoleService {
     /**
      * Update role.
      *
+     * @param currentUser   current user
      * @param param         role's params
      * @return              role's VO
      * @throws RoleException        ROL0012 Cannot find any role by this id param.
@@ -157,28 +165,34 @@ public class RoleServiceImpl implements RoleService {
      * @throws GroupException       GRP0012 Cannot find any group by this id param.
      */
     @Override
-    public RoleVO update(RoleParam param) throws RoleException, UserException, GroupException {
-        if (!roleRepository.exists(param.getId())) {
+    public RoleVO update(RoleParam param, User currentUser) throws RoleException, UserException, GroupException {
+        Role role = roleRepository.findOne(param.getId());
+        if (role == null) {
             // Throw role cannot find by id parameter exception.
             throw new RoleException(ErrorType.ROL0012);
         }
-        return rolePO2VO(roleRepository.save(roleParam2PO(param)),
+        return rolePO2VO(roleRepository.save(roleParam2PO(param, role, currentUser)),
                 String.format(ControllerConstant.UPDATE, ROLE));
     }
 
     /**
      * Delete role.
      *
+     * @param currentUser   current user
      * @param param         role's params.
      * @throws RoleException        ROL0012 Cannot find any role by this id param.
      */
     @Override
-    public void delete(RoleParam param) throws RoleException {
+    public void delete(RoleParam param, User currentUser) throws RoleException {
         Role role = roleRepository.findOne(param.getId());
         if (role == null) {
             // Throw role cannot find by id parameter exception.
             throw new RoleException(ErrorType.ROL0012);
         }
+        // Get ip and clientId
+        String ip = SpringSecurityUtils.getCurrentUserIp();
+        String clientId = SpringSecurityUtils.getCurrentUsername();
+        logService.create(new LogParam(ip, LogType.DELETE, clientId, ResourceConstant.ROLE), currentUser);
         roleRepository.updateValidFlagFor(ValidFlag.INVALID, role.getId());
     }
 
@@ -191,6 +205,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private GroupService groupService;
+
+    @Autowired
+    private LogService logService;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -207,13 +224,34 @@ public class RoleServiceImpl implements RoleService {
      * Transform role's param to PO.
      *
      * @param param         role's param
+     * @param role          role
+     * @param currentUser   currentUser
      * @return              role's PO
      * @throws UserException            USR0012 Cannot find any user by this id param.
      * @throws GroupException           GRP0012 Cannot find any group by this id param.
      */
-    private Role roleParam2PO(RoleParam param) throws UserException, GroupException {
-        Role role = new Role();
+    private Role roleParam2PO(RoleParam param, Role role, User currentUser) throws UserException, GroupException {
+        // Get ip and clientId
+        String ip = SpringSecurityUtils.getCurrentUserIp();
+        String clientId = SpringSecurityUtils.getCurrentUsername();
+        // Init createdBy, lastModifiedBy
+        Long createdBy, lastModifiedBy;
+        // Init createdDate
+        Date createdDate = new Date();
+        if (role == null) {
+            createdBy = currentUser.getId();
+            lastModifiedBy = createdBy;
+            logService.create(new LogParam(ip, LogType.CREATE, clientId, ResourceConstant.ROLE), currentUser);
+        } else {
+            createdBy = role.getCreatedBy();
+            createdDate = role.getCreatedDate();
+            lastModifiedBy = currentUser.getId();
+            logService.create(new LogParam(ip, LogType.UPDATE, clientId, ResourceConstant.ROLE), currentUser);
+        }
         BeanUtils.copyProperties(param, role);
+        role.setCreatedBy(createdBy);
+        role.setCreatedDate(createdDate);
+        role.setLastModifiedBy(lastModifiedBy);
         if (!StringUtils.isBlank(param.getUserIds())) {
             Iterable<User> users = userService.getUsersByIds(transformer.idsStr2Iterable(param.getUserIds()));
             role.setUsers(transformer.iterable2Set(users));

@@ -5,7 +5,7 @@ import com.saintdan.framework.enums.LogType;
 import java.io.Serializable;
 
 /**
- * Log' param
+ * Log's param.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/28/15
@@ -17,21 +17,21 @@ public class LogParam implements Serializable {
 
     private String loginIP;
 
-    private Long userId;
-
-    private String username;
-
     private LogType type;
+
+    private String clientId;
+
+    private String accessResource;
 
     public LogParam() {
 
     }
 
-    public LogParam(String loginIP, Long userId, String username, LogType type) {
+    public LogParam(String loginIP, LogType type, String clientId, String accessResource) {
         this.loginIP = loginIP;
-        this.userId = userId;
-        this.username = username;
         this.type = type;
+        this.clientId = clientId;
+        this.accessResource = accessResource;
     }
 
     public String getLoginIP() {
@@ -42,27 +42,27 @@ public class LogParam implements Serializable {
         this.loginIP = loginIP;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public LogType getType() {
         return type;
     }
 
     public void setType(LogType type) {
         this.type = type;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getAccessResource() {
+        return accessResource;
+    }
+
+    public void setAccessResource(String accessResource) {
+        this.accessResource = accessResource;
     }
 }

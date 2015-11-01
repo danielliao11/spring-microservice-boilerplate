@@ -3,13 +3,19 @@ package com.saintdan.framework.service.impl;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
+import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.ClientException;
 import com.saintdan.framework.param.ClientParam;
+import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.Client;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.ClientRepository;
 import com.saintdan.framework.service.ClientService;
+import com.saintdan.framework.service.LogService;
+import com.saintdan.framework.tools.SpringSecurityUtils;
 import com.saintdan.framework.vo.ClientVO;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -21,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,18 +48,19 @@ public class ClientServiceImpl implements ClientService {
     /**
      * Create new client.
      *
-     * @param param     client's param
-     * @return          client's VO
+     * @param currentUser   current user
+     * @param param         client's param
+     * @return              client's VO
      * @throws ClientException          CLT0031 Client already existing, clientId taken.
      */
     @Override
-    public ClientVO create(ClientParam param) throws ClientException {
+    public ClientVO create(ClientParam param, User currentUser) throws ClientException {
         Client client = clientRepository.findByClientIdAlias(param.getClientIdAlias());
         if (client != null) {
             // Throw Resource already existing, clientId taken.
             throw new ClientException(ErrorType.CLT0031);
         }
-        return clientPO2VO(clientRepository.save(clientParam2PO(param)),
+        return clientPO2VO(clientRepository.save(clientParam2PO(param, new Client(), currentUser)),
                 String.format(ControllerConstant.CREATE, CLIENT));
     }
 
@@ -128,39 +136,49 @@ public class ClientServiceImpl implements ClientService {
     /**
      * Update client.
      *
-     * @param param     client's param
-     * @return          client' VO
+     * @param currentUser   current user
+     * @param param         client's param
+     * @return              client' VO
      * @throws ClientException          CLT0012 Cannot find any client by this id param.
      */
     @Override
-    public ClientVO update(ClientParam param) throws ClientException {
-        if (!clientRepository.exists(param.getId())) {
+    public ClientVO update(ClientParam param, User currentUser) throws ClientException {
+        Client client = clientRepository.findOne(param.getId());
+        if (client == null) {
             // Throw client cannot find by id parameter exception.
             throw new ClientException(ErrorType.CLT0012);
         }
-        return clientPO2VO(clientRepository.save(clientParam2PO(param)),
+        return clientPO2VO(clientRepository.save(clientParam2PO(param, client, currentUser)),
                 String.format(ControllerConstant.UPDATE, CLIENT));
     }
 
     /**
      * Delete client
      *
-     * @param param     client's param
+     * @param currentUser   current user
+     * @param param         client's param
      * @throws ClientException          CLT0012 Cannot find any client by this id param.
      */
     @Override
-    public void delete(ClientParam param) throws ClientException {
+    public void delete(ClientParam param, User currentUser) throws ClientException {
         Client client = clientRepository.findOne(param.getId());
         if (client == null) {
             // Throw client cannot find by id parameter exception.
             throw new ClientException(ErrorType.CLT0012);
         }
+        // Get ip and clientId
+        String ip = SpringSecurityUtils.getCurrentUserIp();
+        String clientId = SpringSecurityUtils.getCurrentUsername();
+        logService.create(new LogParam(ip, LogType.DELETE, clientId, ResourceConstant.CLIENT), currentUser);
         clientRepository.updateValidFlagFor(ValidFlag.INVALID, client.getId());
     }
 
     // --------------------------
     // PRIVATE FIELDS AND METHODS
     // --------------------------
+
+    @Autowired
+    private LogService logService;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -179,9 +197,28 @@ public class ClientServiceImpl implements ClientService {
      * @param param         client's param
      * @return              client's PO
      */
-    private Client clientParam2PO(ClientParam param) {
-        Client client = new Client();
+    private Client clientParam2PO(ClientParam param, Client client, User currentUser) {
+        // Get ip and clientId
+        String ip = SpringSecurityUtils.getCurrentUserIp();
+        String clientId = SpringSecurityUtils.getCurrentUsername();
+        // Init createdBy, lastModifiedBy
+        Long createdBy, lastModifiedBy;
+        // Init createdDate
+        Date createdDate = new Date();
+        if (client.getId() == null) {
+            createdBy = currentUser.getId();
+            lastModifiedBy = createdBy;
+            logService.create(new LogParam(ip, LogType.CREATE, clientId, ResourceConstant.CLIENT), currentUser);
+        } else {
+            createdBy = client.getCreatedBy();
+            createdDate = client.getCreatedDate();
+            lastModifiedBy = currentUser.getId();
+            logService.create(new LogParam(ip, LogType.UPDATE, clientId, ResourceConstant.CLIENT), currentUser);
+        }
         BeanUtils.copyProperties(param, client);
+        client.setCreatedBy(createdBy);
+        client.setCreatedDate(createdDate);
+        client.setLastModifiedBy(lastModifiedBy);
         return client;
     }
 

@@ -2,6 +2,7 @@ package com.saintdan.framework.service;
 
 import com.saintdan.framework.exception.ClientException;
 import com.saintdan.framework.param.ClientParam;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.ClientVO;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -19,11 +20,12 @@ public interface ClientService {
     /**
      * Create new client.
      *
-     * @param param     client's param
-     * @return          client's VO
+     * @param currentUser   current user
+     * @param param         client's param
+     * @return              client's VO
      * @throws ClientException          CLT0031 Client already existing, clientId taken.
      */
-    ClientVO create(ClientParam param) throws ClientException;
+    ClientVO create(ClientParam param, User currentUser) throws ClientException;
 
     /**
      * Show all clients.
@@ -63,17 +65,19 @@ public interface ClientService {
     /**
      * Update client.
      *
-     * @param param     client's param
-     * @return          client' VO
+     * @param currentUser   current user
+     * @param param         client's param
+     * @return              client' VO
      * @throws ClientException          CLT0012 Cannot find any client by this id param.
      */
-    ClientVO update(ClientParam param) throws ClientException;
+    ClientVO update(ClientParam param, User currentUser) throws ClientException;
 
     /**
      * Delete client
      *
-     * @param param     client's param
+     * @param currentUser   current user
+     * @param param         client's param
      * @throws ClientException          CLT0012 Cannot find any client by this id param.
      */
-    void delete(ClientParam param) throws ClientException;
+    void delete(ClientParam param, User currentUser) throws ClientException;
 }

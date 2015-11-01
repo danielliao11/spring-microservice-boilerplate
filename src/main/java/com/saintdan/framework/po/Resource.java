@@ -47,7 +47,7 @@ public class Resource implements GrantedAuthority, Serializable {
     private String path;
 
     /**
-     * The priority. the smaller the value the higher the priority.
+     * The priority. the smaller the description the higher the priority.
      */
     @NotNull
     @Column(nullable = false)

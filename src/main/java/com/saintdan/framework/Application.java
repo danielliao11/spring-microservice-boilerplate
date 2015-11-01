@@ -5,6 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Entrance of <p>spring-rest-oauth2</p>
+ * <p>
+ *     "Engine start"
+ * </p>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/25/15
@@ -12,7 +15,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class Application {
-
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}

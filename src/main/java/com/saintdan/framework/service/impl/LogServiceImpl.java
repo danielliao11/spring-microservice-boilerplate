@@ -7,6 +7,7 @@ import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.LogException;
 import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.Log;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.LogRepository;
 import com.saintdan.framework.service.LogService;
 import com.saintdan.framework.vo.LogVO;
@@ -40,12 +41,13 @@ public class LogServiceImpl implements LogService {
     /**
      * Create new log.
      *
-     * @param param     log's param
-     * @return          log's VO
+     * @param currentUser   current user
+     * @param param         log's param
+     * @return              log's VO
      */
     @Override
-    public LogVO create(LogParam param) {
-        return logPO2VO(logRepository.save(logParam2PO(param)),
+    public LogVO create(LogParam param, User currentUser) {
+        return logPO2VO(logRepository.save(logParam2PO(param, currentUser)),
                 String.format(ControllerConstant.CREATE, LOG));
     }
 
@@ -106,9 +108,11 @@ public class LogServiceImpl implements LogService {
      * @param param         log's param
      * @return              log's PO
      */
-    private Log logParam2PO(LogParam param) {
+    private Log logParam2PO(LogParam param, User currentUser) {
         Log log = new Log();
         BeanUtils.copyProperties(param, log);
+        log.setUserId(currentUser.getId());
+        log.setUsername(currentUser.getUsr());
         return log;
     }
 

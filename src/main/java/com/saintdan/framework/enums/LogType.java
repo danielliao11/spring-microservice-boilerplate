@@ -1,7 +1,7 @@
 package com.saintdan.framework.enums;
 
 /**
- * Log's type.
+ * Operation type in log.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/27/15

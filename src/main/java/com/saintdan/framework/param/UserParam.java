@@ -1,6 +1,7 @@
 package com.saintdan.framework.param;
 
-import com.saintdan.framework.annotation.ParamField;
+import com.saintdan.framework.annotation.SignField;
+import com.saintdan.framework.annotation.ValidationField;
 
 import java.io.Serializable;
 
@@ -15,19 +16,25 @@ public class UserParam extends BaseParam implements Serializable {
 
     private static final long serialVersionUID = -9153801716112918626L;
 
+    @SignField
     private Long id; // user's ID
 
-    @ParamField
+    @SignField
+    @ValidationField
     private String usr; // username
 
-    @ParamField
+    @SignField
+    @ValidationField
     private String pwd; // password
 
-    @ParamField
+    @SignField
+    @ValidationField
     private String name; // user's name
 
+    @SignField
     private String description;
 
+    @SignField
     private String roleIds; // role ids string
 
     public UserParam() {

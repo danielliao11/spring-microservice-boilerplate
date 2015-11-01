@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.saintdan.framework</groupId>
   <artifactId>spring-rest-oauth2-sample</artifactId>
-  <version>0.8.4.RELEASE</version>
+  <version>0.8.5.RELEASE</version>
   <dependencies>
     <dependency>
       <groupId>com.alibaba</groupId>
