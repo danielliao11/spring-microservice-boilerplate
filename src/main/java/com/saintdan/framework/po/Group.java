@@ -24,6 +24,7 @@ import java.util.Set;
 @Entity
 @EntityListeners({AuditingEntityListener.class})
 @Table(name = "groups")
+@NamedEntityGraph(name = "Group.resources", attributeNodes = @NamedAttributeNode("resources"))
 public class Group implements Serializable {
 
     private static final long serialVersionUID = -5730702381589572733L;

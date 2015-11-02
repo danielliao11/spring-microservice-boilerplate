@@ -25,6 +25,7 @@ import java.util.Set;
 @Entity
 @EntityListeners({AuditingEntityListener.class})
 @Table(name = "users")
+@NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
 public class User implements Serializable {
 
     private static final long serialVersionUID = 2680591198337929454L;
