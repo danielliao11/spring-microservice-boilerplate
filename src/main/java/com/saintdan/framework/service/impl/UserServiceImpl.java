@@ -149,7 +149,6 @@ public class UserServiceImpl implements UserService {
             // Throw user cannot find by usr parameter exception.
             throw new UserException(ErrorType.USR0013);
         }
-        userRepository.save(user);
         return userPO2VO(user, String.format(ControllerConstant.SHOW, USER));
     }
 
