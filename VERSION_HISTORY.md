@@ -90,3 +90,6 @@
   - Add [@CurrentUser](src/main/java/com/saintdan/framework/annotation/CurrentUser.java), annotate param with it can get current login user.
   - Separate the SignField to SignField and [ValidationField](src/main/java/com/saintdan/framework/annotation/ValidationField.java).
   - Add some code comments.
+
+- 0.8.6.RELEASE
+  - Add [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java).
