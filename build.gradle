@@ -16,6 +16,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.7.RELEASE")
+        classpath("org.springframework:springloaded:1.2.4.RELEASE")
     }
 }
 
@@ -24,6 +25,13 @@ allprojects {
         mavenCentral()
         jcenter()
         maven { url "https://repo.spring.io/libs-release" }
+    }
+}
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main/")
     }
 }
 
@@ -83,7 +91,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.7'
+    gradleVersion = '2.8'
 }
 
 task generatePom << {
