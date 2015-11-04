@@ -59,6 +59,10 @@ public class ClientParam extends BaseParam implements Serializable {
 
     }
 
+    public ClientParam(String clientIdAlias) {
+        this.clientIdAlias = clientIdAlias;
+    }
+
     public ClientParam(Long id) {
         this.id = id;
     }

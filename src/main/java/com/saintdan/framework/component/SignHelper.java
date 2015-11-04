@@ -21,15 +21,25 @@ import java.net.URLDecoder;
 @Component
 public class SignHelper {
 
-    public boolean signCheck(String publicKey, BaseParam params, String sign)
+    /**
+     * Check the sign.
+     *
+     * @param publicKey         public key
+     * @param param            param
+     * @param sign              signature
+     * @return                  success or not
+     * @throws UnsupportedEncodingException
+     * @throws SignatureException
+     */
+    public boolean signCheck(String publicKey, BaseParam param, String sign)
             throws UnsupportedEncodingException, SignatureException {
         // Prepare to validate signature.
         if (StringUtils.isEmpty(sign)) {
             throw new SignatureException(ErrorType.SYS0002);
         }
         // Transform encode.
-        params.setSign(URLDecoder.decode(new String(Base64.decodeBase64(sign.getBytes())), SignatureConstant.CHARSET_UTF8));
+        param.setSign(URLDecoder.decode(new String(Base64.decodeBase64(sign.getBytes())), SignatureConstant.CHARSET_UTF8));
         // Signature
-        return params.isSignValid(publicKey);
+        return param.isSignValid(publicKey);
     }
 }

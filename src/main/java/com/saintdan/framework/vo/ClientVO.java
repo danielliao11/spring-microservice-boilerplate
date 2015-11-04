@@ -37,6 +37,8 @@ public class ClientVO extends ResultVO implements Serializable {
 
     private Collection<GrantedAuthority> grantedAuthorities;
 
+    private String publicKey;
+
     public Long getId() {
         return id;
     }
@@ -115,5 +117,13 @@ public class ClientVO extends ResultVO implements Serializable {
 
     public void setGrantedAuthorities(Collection<GrantedAuthority> grantedAuthorities) {
         this.grantedAuthorities = grantedAuthorities;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 }

@@ -12,6 +12,7 @@ public enum ErrorType implements IntentStateWithDescription {
     // System
     SYS0001("System error."),
     SYS0002("Param cannot be null."),
+    SYS0003("You need use 'bearer' token."),
 
     // Format
     FMT0001("Format error."),

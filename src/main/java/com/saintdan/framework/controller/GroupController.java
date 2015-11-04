@@ -2,7 +2,7 @@ package com.saintdan.framework.controller;
 
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
-import com.saintdan.framework.component.SignHelper;
+import com.saintdan.framework.component.ValidateHelper;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
@@ -14,13 +14,10 @@ import com.saintdan.framework.param.GroupParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.service.GroupService;
 import com.saintdan.framework.vo.ResultVO;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 10/17/15
  * @since JDK1.8
  */
-@PropertySource("classpath:api.properties")
 @RestController
 @RequestMapping(ResourceURL.RESOURCES)
 public class GroupController {
@@ -52,19 +48,10 @@ public class GroupController {
     @RequestMapping(value = ResourceURL.GROUPS + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, GroupParam param, @PathVariable String sign) {
         try {
-            // Get incorrect params.
-            String validateContent = param.getIncorrectParams();
-            if (!StringUtils.isBlank(validateContent)) {
-                // If validate failed, return error message.
-                return new ResultVO(ErrorType.SYS0002.description(), OperationStatus.FAILURE,
-                        String.format(ControllerConstant.PARAM_BLANK, validateContent));
-            }
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            // Validate current user, param and sign.
+            ResultVO resultVO = validateHelper.validate(currentUser, param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             // Return result and message.
             return groupService.create(param, currentUser);
@@ -86,12 +73,10 @@ public class GroupController {
     public ResultVO index(@PathVariable String sign) {
         try {
             GroupParam param = new GroupParam();
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            // Sign validate.
+            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             return groupService.getAllGroups();
         } catch (GroupException e) {
@@ -112,17 +97,15 @@ public class GroupController {
     @RequestMapping(value = ResourceURL.GROUPS + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
         try {
-            GroupParam param = new GroupParam();
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
-            }
             // Init page number.
             if (StringUtils.isBlank(pageNo)) {
                 pageNo = "0";
+            }
+            GroupParam param = new GroupParam();
+            // Sign validate.
+            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             return groupService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
         } catch (GroupException e) {
@@ -147,12 +130,10 @@ public class GroupController {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             GroupParam param = new GroupParam(Long.valueOf(id));
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            // Sign validate.
+            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             return groupService.getGroupById(param);
         } catch (GroupException e) {
@@ -177,21 +158,10 @@ public class GroupController {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
-            // Get incorrect params.
-            String validateContent = param.getIncorrectParams();
-            if (!StringUtils.isBlank(validateContent)) {
-                // If validate failed, return error message.
-                return new ResultVO(ErrorType.SYS0002.description(), OperationStatus.FAILURE,
-                        String.format(ControllerConstant.PARAM_BLANK, validateContent));
-            }
-            // Set group's ID.
-            param.setId(Long.valueOf(id));
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            // Validate current user, param and sign.
+            ResultVO resultVO = validateHelper.validate(currentUser, param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             // Update group.
             return groupService.update(param, currentUser);
@@ -217,12 +187,10 @@ public class GroupController {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             GroupParam param = new GroupParam(Long.valueOf(id));
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            // Sign validate.
+            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             // Delete group.
             groupService.delete(param, currentUser);
@@ -243,15 +211,12 @@ public class GroupController {
 
     private static final Log log = LogFactory.getLog(GroupController.class);
 
-    @Value("${opposite.end1.publicKey}")
-    private String PUBLIC_KEY;
-
     @Autowired
     private ResultHelper resultHelper;
 
     @Autowired
-    private GroupService groupService;
+    private ValidateHelper validateHelper;
 
     @Autowired
-    private SignHelper signHelper;
+    private GroupService groupService;
 }

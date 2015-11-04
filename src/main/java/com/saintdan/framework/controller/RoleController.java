@@ -2,7 +2,7 @@ package com.saintdan.framework.controller;
 
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
-import com.saintdan.framework.component.SignHelper;
+import com.saintdan.framework.component.ValidateHelper;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
@@ -19,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,19 +51,9 @@ public class RoleController {
     @RequestMapping(value = ResourceURL.ROLES + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, RoleParam param, @PathVariable String sign) {
         try {
-            // Get incorrect params.
-            String validateContent = param.getIncorrectParams();
-            if (!StringUtils.isBlank(validateContent)) {
-                // If validate failed, return error message.
-                return new ResultVO(ErrorType.SYS0002.description(), OperationStatus.FAILURE,
-                        String.format(ControllerConstant.PARAM_BLANK, validateContent));
-            }
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            ResultVO resultVO = validateHelper.validate(currentUser, param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             // Return result and message.
             return roleService.create(param, currentUser);
@@ -86,12 +75,10 @@ public class RoleController {
     public ResultVO index(@PathVariable String sign) {
         try {
             RoleParam param = new RoleParam();
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            // Sign validate.
+            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             return roleService.getAllRoles();
         } catch (RoleException e) {
@@ -112,17 +99,15 @@ public class RoleController {
     @RequestMapping(value = ResourceURL.ROLES + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
         try {
-            RoleParam param = new RoleParam();
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
-            }
             // Init page number.
             if (StringUtils.isBlank(pageNo)) {
                 pageNo = "0";
+            }
+            RoleParam param = new RoleParam();
+            // Sign validate.
+            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             return roleService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
         } catch (RoleException e) {
@@ -147,12 +132,10 @@ public class RoleController {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             RoleParam param = new RoleParam(Long.valueOf(id));
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            // Sign validate.
+            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             return roleService.getRoleById(param);
         } catch (RoleException e) {
@@ -177,21 +160,9 @@ public class RoleController {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
-            // Get incorrect params.
-            String validateContent = param.getIncorrectParams();
-            if (!StringUtils.isBlank(validateContent)) {
-                // If validate failed, return error message.
-                return new ResultVO(ErrorType.SYS0002.description(), OperationStatus.FAILURE,
-                        String.format(ControllerConstant.PARAM_BLANK, validateContent));
-            }
-            // Set role's ID.
-            param.setId(Long.valueOf(id));
-            // Prepare to validate signature.
-            param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            ResultVO resultVO = validateHelper.validate(currentUser, param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             // Update role.
             return roleService.update(param, currentUser);
@@ -219,10 +190,10 @@ public class RoleController {
             RoleParam param = new RoleParam(Long.valueOf(id));
             // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
-            // Sign verification.
-            if (!signHelper.signCheck(PUBLIC_KEY, param, sign)) {
-                // Return rsa signature failed information and log the exception.
-                return resultHelper.infoResp(log, ErrorType.SGN0021);
+            // Sign validate.
+            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            if (resultVO != null) {
+                return resultVO;
             }
             // Delete role.
             roleService.delete(param, currentUser);
@@ -243,15 +214,12 @@ public class RoleController {
 
     private static final Log log = LogFactory.getLog(RoleController.class);
 
-    @Value("${opposite.end1.publicKey}")
-    private String PUBLIC_KEY;
-
     @Autowired
     private ResultHelper resultHelper;
 
     @Autowired
-    private RoleService roleService;
+    private ValidateHelper validateHelper;
 
     @Autowired
-    private SignHelper signHelper;
+    private RoleService roleService;
 }
