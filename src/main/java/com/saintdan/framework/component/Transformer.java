@@ -1,18 +1,20 @@
 package com.saintdan.framework.component;
 
+import com.saintdan.framework.po.User;
+import com.saintdan.framework.service.LogService;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
+import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * Ids string transform to iterable helper.
@@ -23,6 +25,10 @@ import java.util.Set;
  */
 @Component
 public class Transformer {
+
+    // ------------------------
+    // PUBLIC METHODS
+    // ------------------------
 
     /**
      * Transform ids string to iterable.
@@ -87,6 +93,107 @@ public class Transformer {
         vo.setMessage(msg);
         return vo;
     }
+
+    /**
+     * Transform param to PO.
+     *
+     * @param type          class type
+     * @param param         param
+     * @param po            PO
+     * @param currentUser   current user
+     * @param <T>           class
+     * @return              PO
+     * @throws Exception
+     */
+    public <T> T param2PO(Class<T> type, Object param, T po, User currentUser) throws Exception {
+        // Init createdBy, lastModifiedBy
+        Long createdBy, lastModifiedBy;
+        // Init createdDate
+        Date createdDate = new Date();
+        // Init transformer
+        Field idField = type.getDeclaredField("id");
+        idField.setAccessible(true);
+        Field createdByField = type.getDeclaredField("createdBy");
+        createdByField.setAccessible(true);
+        Field createdDateField = type.getDeclaredField("createdDate");
+        createdDateField.setAccessible(true);
+        Field lastModifiedByField = type.getDeclaredField("lastModifiedBy");
+        lastModifiedByField.setAccessible(true);
+        // Log operation.
+        if (idField.get(po) == null) {
+            createdBy = currentUser.getId();
+            lastModifiedBy = createdBy;
+        } else {
+            createdBy = (Long) createdByField.get(po);
+            createdDate = (Date) createdDateField.get(po);
+            lastModifiedBy = currentUser.getId();
+        }
+        // Set param.
+        BeanUtils.copyProperties(param, po);
+        createdByField.set(po, createdBy);
+        createdDateField.set(po, createdDate);
+        lastModifiedByField.set(po,lastModifiedBy);
+        return po;
+    }
+
+
+    /**
+     * Transform PO to VO.
+     *
+     * @param po        PO
+     * @param msg       return message
+     * @return VO
+     */
+    public <T extends ResultVO> T po2VO(Class<T> type, Object po, String msg) throws Exception {
+
+        T vo = type.newInstance();
+        BeanUtils.copyProperties(po, vo);
+        if (StringUtils.isBlank(msg)) {
+            return vo;
+        }
+        vo.setMessage(msg);
+        // Return success result.
+        return (T) resultHelper.sucessResp(vo);
+    }
+
+
+    /**
+     * Transform PO to VO
+     *
+     * @param pos       PO
+     * @param msg       return message
+     * @return VO
+     */
+    public ObjectsVO pos2VO(Class<? extends ResultVO> type, Iterable<Object> pos, String msg) throws Exception {
+        List objList = poList2VOList(type, pos);
+        ObjectsVO vos = transformer.voList2ObjectsVO(objList, msg);
+        return (ObjectsVO) resultHelper.sucessResp(vos);
+    }
+
+    /**
+     * Transform PO list to VO list.
+     *
+     * @param pos       PO list
+     * @return          VO list
+     */
+    public List<?> poList2VOList(Class<? extends ResultVO> type, Iterable pos) throws Exception{
+        List voList = new ArrayList();
+        for (Object po : pos) {
+            Object vo =  po2VO(type, po, "");
+            voList.add(vo);
+        }
+        return voList;
+    }
+
+    // --------------------------
+    // PRIVATE FIELDS AND METHODS
+    // --------------------------
+
+    @Autowired
+    protected Transformer transformer;
+
+    @Autowired
+    private LogService logService;
 
     @Autowired
     private ResultHelper resultHelper;

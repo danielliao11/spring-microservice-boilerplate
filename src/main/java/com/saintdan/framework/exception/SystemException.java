@@ -24,22 +24,34 @@ public abstract class SystemException extends Exception implements Serializable 
     /**
      * Constructs an {@code SystemException} with the specified message and root cause.
      *
-     * @param msg the {@link ErrorType}
-     * @param t   the root cause
+     * @param type  the {@link ErrorType}
+     * @param t     the root cause
+     * @param msg   the error message
      */
-    public SystemException(ErrorType msg, Throwable t) {
-        super(msg.name() + ": " + msg.description(), t);
-        this.errorType = msg;
+    public SystemException(ErrorType type, Throwable t, String msg) {
+        super(msg, t);
+        this.errorType = type;
+    }
+
+    /**
+     * Constructs an {@code SystemException} with the specified message and root cause.
+     *
+     * @param type  the {@link ErrorType}
+     * @param msg   the error message
+     */
+    public SystemException(ErrorType type, String msg) {
+        super(msg);
+        this.errorType = type;
     }
 
     /**
      * Constructs an {@code SystemException} with the specified message and no root cause.
      *
-     * @param msg the {@link ErrorType}
+     * @param type the {@link ErrorType}
      */
-    public SystemException(ErrorType msg) {
-        super(msg.name() + ": " + msg.description());
-        this.errorType = msg;
+    public SystemException(ErrorType type) {
+        super(type.name() + ": " + type.description());
+        this.errorType = type;
     }
 
     /**

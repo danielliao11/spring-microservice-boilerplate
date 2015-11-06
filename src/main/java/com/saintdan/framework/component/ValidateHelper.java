@@ -3,8 +3,6 @@ package com.saintdan.framework.component;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
-import com.saintdan.framework.exception.ClientException;
-import com.saintdan.framework.exception.SignatureException;
 import com.saintdan.framework.param.BaseParam;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.User;
@@ -16,8 +14,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.UnsupportedEncodingException;
 
 /**
  * Validate helper.
@@ -41,12 +37,9 @@ public class ValidateHelper {
      * @param sign              signature
      * @param log               log
      * @return                  result VO
-     * @throws UnsupportedEncodingException
-     * @throws SignatureException
-     * @throws ClientException
+     * @throws Exception
      */
-    public ResultVO validate(User currentUser, BaseParam param, String sign, Log log)
-            throws ClientException, UnsupportedEncodingException, SignatureException {
+    public ResultVO validate(User currentUser, BaseParam param, String sign, Log log) throws Exception {
         if (currentUser == null) {
             return resultHelper.infoResp(log, ErrorType.SYS0003);
         }
@@ -81,12 +74,9 @@ public class ValidateHelper {
      * @param sign              signature
      * @param log               log
      * @return                  result VO
-     * @throws UnsupportedEncodingException
-     * @throws SignatureException
-     * @throws ClientException
+     * @throws Exception
      */
-    public ResultVO validateSign(BaseParam param, String sign, Log log)
-            throws ClientException, UnsupportedEncodingException, SignatureException{
+    public ResultVO validateSign(BaseParam param, String sign, Log log) throws Exception {
         // Prepare to validate signature.
         param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
         // Get current clientId
@@ -94,7 +84,7 @@ public class ValidateHelper {
         // Sign verification.
         if (!signHelper.signCheck(getPublicKeyByClientId(clientId), param, sign)) {
             // Return rsa signature failed information and log the exception.
-            return resultHelper.infoResp(log, ErrorType.SGN0021);
+            return resultHelper.infoResp(log, ErrorType.SYS0004);
         }
         return null;
     }
@@ -117,10 +107,10 @@ public class ValidateHelper {
      *
      * @param clientId      client id
      * @return              public key
-     * @exception ClientException       CLT0011 Cannot find any client by this name param.
+     * @exception Exception
      */
-    private String getPublicKeyByClientId(String clientId) throws ClientException {
-         return clientService.getClientByClientId(new ClientParam(clientId)).getPublicKey();
+    private String getPublicKeyByClientId(String clientId) throws Exception {
+        return clientService.getClientByClientId(new ClientParam(clientId)).getPublicKey();
     }
 
 }
