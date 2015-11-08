@@ -33,6 +33,25 @@ public class ClientServiceImpl extends BaseServiceImpl<Client, Long> implements 
     // ------------------------
 
     /**
+     * Create new group.
+     *
+     * @param currentUser   current user
+     * @param param         group's params
+     * @return              group's VO
+     * @throws CommonsException        SYS0111 role already existing, name taken.
+     */
+    @Override
+    public ClientVO create(ClientParam param, User currentUser) throws Exception {
+        Client client = clientRepository.findByClientIdAlias(param.getClientIdAlias());
+        if (client != null) {
+            // Throw client already existing exception, clientId taken.
+            throw new CommonsException(ErrorType.SYS0111,
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), getClassT().getSimpleName(), CLIENT_ID));
+        }
+        return super.createByPO(ClientVO.class, transformer.param2PO(getClassT(), param, new Client(), currentUser), currentUser);
+    }
+
+    /**
      * Show client by client id.
      *
      * @param param     client's param

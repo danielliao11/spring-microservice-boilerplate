@@ -1,10 +1,10 @@
 package com.saintdan.framework.service;
 
 import com.saintdan.framework.exception.CommonsException;
-import com.saintdan.framework.param.GroupParam;
+import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.Client;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.vo.GroupVO;
+import com.saintdan.framework.vo.ClientVO;
 
 /**
  * Client's service.
@@ -16,20 +16,30 @@ import com.saintdan.framework.vo.GroupVO;
 public interface ClientService extends BaseService<Client, Long> {
 
     /**
-     * Show group's VO by group's name.
+     * Create new client.
      *
-     * @param param         group's params
-     * @return              group's VO
-     * @throws CommonsException         SYS0111 group already existing, name taken.
+     * @param currentUser   current user
+     * @param param         client's params
+     * @return              client's VO
+     * @throws CommonsException        SYS0111 client already existing, clientId taken.
      */
-    GroupVO getGroupByName(GroupParam param) throws Exception;
+    ClientVO create(ClientParam param, User currentUser) throws Exception;
+
+    /**
+     * Show client's VO by client's name.
+     *
+     * @param param         client's params
+     * @return              client's VO
+     * @throws CommonsException         SYS0111 client already existing, clientId taken.
+     */
+    ClientVO getClientByClientId(ClientParam param) throws Exception;
 
     /**
      * Delete group.
      *
      * @param currentUser   current user
-     * @param param         group's params.
-     * @throws CommonsException        SYS0111 group already existing, name taken.
+     * @param param         client's params.
+     * @throws CommonsException        SYS0111 client already existing, name taken.
      */
-    void delete(GroupParam param, User currentUser) throws Exception;
+    void delete(ClientParam param, User currentUser) throws Exception;
 }

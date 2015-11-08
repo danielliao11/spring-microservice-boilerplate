@@ -3,6 +3,7 @@ package com.saintdan.framework.service.impl;
 import com.saintdan.framework.po.Log;
 import com.saintdan.framework.service.LogService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implements the
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
  * @since JDK1.8
  */
 @Service
+@Transactional
 public class LogServiceImpl extends BaseServiceImpl<Log, Long> implements LogService {
 
 }
