@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import java.io.Serializable;
 
 /**
+ * Base service.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 11/6/15
  * @since JDK1.8

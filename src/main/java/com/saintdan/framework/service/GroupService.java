@@ -1,8 +1,6 @@
 package com.saintdan.framework.service;
 
-import com.saintdan.framework.exception.GroupException;
-import com.saintdan.framework.exception.ResourceException;
-import com.saintdan.framework.exception.RoleException;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.GroupParam;
 import com.saintdan.framework.po.Group;
 import com.saintdan.framework.po.User;
@@ -18,7 +16,7 @@ import org.springframework.data.domain.Pageable;
  * @date 10/16/15
  * @since JDK1.8
  */
-public interface GroupService {
+public interface GroupService extends BaseService<Group, Long> {
 
     /**
      * Create new group.
@@ -26,55 +24,53 @@ public interface GroupService {
      * @param currentUser   current user
      * @param param         group's params
      * @return              group's VO
-     * @throws GroupException        GRP0031 Group already existing, name taken.
-     * @throws ResourceException     RSC0012 Cannot find any resource by this id param.
-     * @throws RoleException         ROL0012 Cannot find any role by this id param.
+     * @throws CommonsException        SYS0111 group already existing, name taken.
      */
-    GroupVO create(GroupParam param, User currentUser) throws GroupException, ResourceException, RoleException;
+    GroupVO create(GroupParam param, User currentUser) throws Exception;
 
     /**
      * Show all groups' VO.
      *
      * @return              groups' VO
-     * @throws GroupException        GRP0011 No group exist.
+     * @throws CommonsException        SYS0120 No group exists.
      */
-    ObjectsVO getAllGroups() throws GroupException;
+    ObjectsVO getAllGroups() throws Exception;
 
     /**
      * Show groups' page VO.
      *
      * @param pageable      page
      * @return              groups' page VO
-     * @throws GroupException        GRP0011 No group exist.
+     * @throws CommonsException        SYS0120 No group exists.
      */
-    PageVO getPage(Pageable pageable) throws GroupException;
+    PageVO getPage(Pageable pageable) throws Exception;
 
     /**
      * Show groups by ids.
      *
      * @param ids           groups' ids
      * @return              groups' PO
-     * @throws GroupException        GRP0012 Cannot find any group by this id param.
+     * @throws CommonsException        SYS0120 No group exists.
      */
-    Iterable<Group> getGroupsByIds(Iterable<Long> ids) throws GroupException;
+    Iterable<Group> getGroupsByIds(Iterable<Long> ids) throws Exception;
 
     /**
      * Show group's VO by group's id.
      *
      * @param param         group's params
      * @return              group's VO
-     * @throws GroupException        GRP0012 Cannot find any group by this id param.
+     * @throws CommonsException        SYS0122 Cannot find any group by id param.
      */
-    GroupVO getGroupById(GroupParam param) throws GroupException;
+    GroupVO getGroupById(GroupParam param) throws Exception;
 
     /**
      * Show group's VO by group's name.
      *
      * @param param         group's params
      * @return              group's VO
-     * @throws GroupException        GRP0013 Cannot find any group by this name param.
+     * @throws CommonsException        SYS0122 Cannot find any group by id param.
      */
-    GroupVO getGroupByName(GroupParam param) throws GroupException;
+    GroupVO getGroupByName(GroupParam param) throws Exception;
 
     /**
      * Update group.
@@ -82,19 +78,17 @@ public interface GroupService {
      * @param currentUser   current user
      * @param param         group's params
      * @return              group's VO
-     * @throws GroupException        GRP0012 Cannot find any group by this id param.
-     * @throws ResourceException     RSC0012 Cannot find any resource by this id param.
-     * @throws RoleException         ROL0012 Cannot find any role by this id param.
+     * @throws CommonsException        SYS0122 Cannot find any group by id param.
      */
-    GroupVO update(GroupParam param, User currentUser) throws GroupException, ResourceException, RoleException;
+    GroupVO update(GroupParam param, User currentUser) throws Exception;
 
     /**
      * Delete group.
      *
      * @param currentUser   current user
      * @param param         group's params.
-     * @throws GroupException        GRP0012 Cannot find any group by this id param.
+     * @throws CommonsException        SYS0122 Cannot find any group by id param.
      */
-    void delete(GroupParam param, User currentUser) throws GroupException;
+    void delete(GroupParam param, User currentUser) throws Exception;
 
 }

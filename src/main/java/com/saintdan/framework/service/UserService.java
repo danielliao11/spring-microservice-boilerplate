@@ -1,7 +1,6 @@
 package com.saintdan.framework.service;
 
-import com.saintdan.framework.exception.RoleException;
-import com.saintdan.framework.exception.UserException;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.ObjectsVO;
@@ -16,7 +15,7 @@ import org.springframework.data.domain.Pageable;
  * @date 7/21/15
  * @since JDK1.8
  */
-public interface UserService {
+public interface UserService extends BaseService<User, Long> {
 
     /**
      * Create new user.
@@ -24,83 +23,79 @@ public interface UserService {
      * @param currentUser   current user
      * @param param         user's params
      * @return              user's VO
-     * @throws UserException        USR0031 User already existing exception, usr taken
-     * @throws RoleException        ROL0012 Cannot find any role by this id param.
+     * @throws CommonsException        SYS0111 user already existing, usr taken.
      */
-    UserVO create(UserParam param, User currentUser) throws UserException, RoleException;
+    UserVO create(UserParam param, User currentUser) throws Exception;
 
     /**
      * Show all users' VO.
      *
-     * @return          users' VO
-     * @throws UserException        USR0011 No user yet
+     * @return          users
+     * @throws CommonsException        SYS0120 No user exists.
      */
-    ObjectsVO getAllUsers() throws UserException;
+    ObjectsVO getAllUsers() throws Exception;
 
     /**
      * Show users' page VO.
      *
      * @param pageable      page
      * @return              users' page VO
-     * @throws UserException        USR0011 No user exists.
+     * @throws CommonsException        SYS0120 No user exists.
      */
-    PageVO getPage(Pageable pageable) throws UserException;
+    PageVO getPage(Pageable pageable) throws Exception;
 
     /**
      * Show users by ids.
      *
      * @param ids           users' ids
      * @return              users' PO
-     * @throws UserException        USR0012 Cannot find any user by this id param.
+     * @throws CommonsException        SYS0120 No user exists.
      */
-    Iterable<User> getUsersByIds(Iterable<Long> ids) throws UserException;
+    Iterable<User> getUsersByIds(Iterable<Long> ids) throws Exception;
 
     /**
-     * Show user's VO.
+     * Show user VO by user's id.
      *
      * @param param     user's params
      * @return          user's VO
-     * @throws UserException        USR0012 Cannot find any user by this id param.
+     * @throws CommonsException        SYS0122 Cannot find any user by id param.
      */
-    UserVO getUserById(UserParam param) throws UserException;
+    UserVO getUserById(UserParam param) throws Exception;
 
     /**
-     * Get user's VO by param.
+     * Get user's VO by usr.
      *
      * @param param     user's params
      * @return          user's VO
-     * @throws UserException        USR0013 Cannot find any user by this usr param.
+     * @throws CommonsException        SYS0122 Cannot find any user by usr param.
      */
-    UserVO getUserByUsr(UserParam param) throws UserException;
-
+    UserVO getUserByUsr(UserParam param) throws Exception;
 
     /**
      * Update user.
      *
-     * @param currentUser   current user
-     * @param param         user's params
-     * @return              user's VO
-     * @throws UserException        USR0012 Cannot find any user by this id param.
-     * @throws RoleException        ROL0012 Cannot find any role by this id param.
+     * @param param     user's params
+     * @return          user's VO
+     * @throws CommonsException        SYS0122 Cannot find any user by id param.
      */
-    UserVO update(UserParam param, User currentUser) throws UserException, RoleException;
+    UserVO update(UserParam param, User currentUser) throws Exception;
 
     /**
      * Update user's password
      *
      * @param currentUser   current user
      * @param param         user's param
-     * @throws UserException        USR0041 Update user's password failed.
+     * @throws CommonsException        SYS0131 user's pwd update failed.
      */
-    void updatePwd(UserParam param, User currentUser) throws UserException;
+    void updatePwd(UserParam param, User currentUser) throws Exception;
 
     /**
      * Delete user.
      *
      * @param currentUser   current user
      * @param param         user's params
-     * @throws UserException        USR0012 Cannot find any user by this id param.
+     * @throws CommonsException        SYS0122 Cannot find any user by id param.
      */
-    void delete(UserParam param, User currentUser) throws UserException;
+    void delete(UserParam param, User currentUser) throws Exception;
 
 }

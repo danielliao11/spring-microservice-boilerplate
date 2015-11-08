@@ -1,8 +1,6 @@
 package com.saintdan.framework.service;
 
-import com.saintdan.framework.exception.GroupException;
-import com.saintdan.framework.exception.RoleException;
-import com.saintdan.framework.exception.UserException;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
@@ -18,7 +16,7 @@ import org.springframework.data.domain.Pageable;
  * @date 10/16/15
  * @since JDK1.8
  */
-public interface RoleService {
+public interface RoleService extends BaseService<Role, Long> {
 
     /**
      * Create new role.
@@ -26,55 +24,53 @@ public interface RoleService {
      * @param currentUser   current user
      * @param param         role's params
      * @return              role's VO
-     * @throws RoleException        ROL0031 Role already existing, name taken.
-     * @throws UserException        USR0012 Cannot find any user by this id param.
-     * @throws GroupException       GRP0012 Cannot find any group by this id param.
+     * @throws CommonsException        SYS0111 role already existing, name taken.
      */
-    RoleVO create(RoleParam param, User currentUser) throws RoleException, UserException, GroupException;
+    RoleVO create(RoleParam param, User currentUser) throws Exception;
 
     /**
      * Show all roles' VO.
      *
-     * @return              roles' VO
-     * @throws RoleException        ROL0011 No role exist.
+     * @return          roles
+     * @throws CommonsException        SYS0120 No role exists.
      */
-    ObjectsVO getAllRoles() throws RoleException;
+    ObjectsVO getAllRoles() throws Exception;
 
     /**
-     * Show users' page VO.
+     * Show roles' page VO.
      *
      * @param pageable      page
      * @return              roles' page VO
-     * @throws RoleException        ROL0011 No role exists.
+     * @throws CommonsException        SYS0120 No role exists.
      */
-    PageVO getPage(Pageable pageable) throws RoleException;
+    PageVO getPage(Pageable pageable) throws Exception;
 
     /**
      * Show roles by ids.
      *
      * @param ids           roles' ids
      * @return              roles' PO
-     * @throws RoleException        ROL0012 Cannot find any role by this id param.
+     * @throws CommonsException        SYS0120 No role exists.
      */
-    Iterable<Role> getRolesByIds(Iterable<Long> ids) throws RoleException;
+    Iterable<Role> getRolesByIds(Iterable<Long> ids) throws Exception;
 
     /**
-     * Show role's VO by role's id.
+     * Show role VO by role's id.
      *
-     * @param param         role's params
-     * @return              role's VO
-     * @throws RoleException        ROL0012 Cannot find any role by this id param.
+     * @param param     role's params
+     * @return          role's VO
+     * @throws CommonsException        SYS0122 Cannot find any role by id param.
      */
-    RoleVO getRoleById(RoleParam param) throws RoleException;
+    RoleVO getRoleById(RoleParam param) throws Exception;
 
     /**
-     * Show role's VO by role's name.
+     * Get role's VO by name.
      *
-     * @param param         role's params
-     * @return              role's VO
-     * @throws RoleException        ROL0013 Cannot find any role by this name param.
+     * @param param     role's params
+     * @return          role's VO
+     * @throws CommonsException        SYS0122 Cannot find any role by name param.
      */
-    RoleVO getRoleByName(RoleParam param) throws RoleException;
+    RoleVO getRoleByName(RoleParam param) throws Exception;
 
     /**
      * Update role.
@@ -82,19 +78,17 @@ public interface RoleService {
      * @param currentUser   current user
      * @param param         role's params
      * @return              role's VO
-     * @throws RoleException        ROL0012 Cannot find any role by this id param.
-     * @throws UserException        USR0012 Cannot find any user by this id param.
-     * @throws GroupException       GRP0012 Cannot find any group by this id param.
+     * @throws CommonsException        SYS0122 Cannot find any role by id param.
      */
-    RoleVO update(RoleParam param, User currentUser) throws RoleException, UserException, GroupException;
+    RoleVO update(RoleParam param, User currentUser) throws Exception;
 
     /**
      * Delete role.
      *
      * @param currentUser   current user
-     * @param param         role's params.
-     * @throws RoleException        ROL0012 Cannot find any role by this id param.
+     * @param param         role's params
+     * @throws CommonsException        SYS0122 Cannot find any role by id param.
      */
-    void delete(RoleParam param, User currentUser) throws RoleException;
+    void delete(RoleParam param, User currentUser) throws Exception;
 
 }

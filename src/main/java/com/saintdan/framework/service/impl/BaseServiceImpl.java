@@ -42,7 +42,6 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> {
     // PUBLIC METHODS
     // ------------------------
 
-
     /**
      * Create <T> by param.
      *

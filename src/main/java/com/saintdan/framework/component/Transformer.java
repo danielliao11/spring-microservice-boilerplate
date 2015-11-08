@@ -1,7 +1,6 @@
 package com.saintdan.framework.component;
 
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.service.LogService;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.ResultVO;
@@ -145,7 +144,6 @@ public class Transformer {
      * @return VO
      */
     public <T extends ResultVO> T po2VO(Class<T> type, Object po, String msg) throws Exception {
-
         T vo = type.newInstance();
         BeanUtils.copyProperties(po, vo);
         if (StringUtils.isBlank(msg)) {
@@ -164,7 +162,7 @@ public class Transformer {
      * @param msg       return message
      * @return VO
      */
-    public ObjectsVO pos2VO(Class<? extends ResultVO> type, Iterable<Object> pos, String msg) throws Exception {
+    public ObjectsVO pos2VO(Class<? extends ResultVO> type, Iterable pos, String msg) throws Exception {
         List objList = poList2VOList(type, pos);
         ObjectsVO vos = transformer.voList2ObjectsVO(objList, msg);
         return (ObjectsVO) resultHelper.sucessResp(vos);
@@ -191,9 +189,6 @@ public class Transformer {
 
     @Autowired
     protected Transformer transformer;
-
-    @Autowired
-    private LogService logService;
 
     @Autowired
     private ResultHelper resultHelper;

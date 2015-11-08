@@ -1,7 +1,6 @@
 package com.saintdan.framework.service;
 
-import com.saintdan.framework.exception.GroupException;
-import com.saintdan.framework.exception.ResourceException;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.User;
@@ -17,7 +16,7 @@ import org.springframework.data.domain.Pageable;
  * @date 10/16/15
  * @since JDK1.8
  */
-public interface ResourceService {
+public interface ResourceService extends BaseService<Resource, Long> {
 
     /**
      * Create new resource.
@@ -25,63 +24,62 @@ public interface ResourceService {
      * @param currentUser   current user
      * @param param         resource's params
      * @return              resource's VO
-     * @throws ResourceException        RSC0031 Resource already existing, name taken.
-     * @throws GroupException           GRP0012 Cannot find any group by this id param.
+     * @throws CommonsException        SYS0111 resource already existing, name taken.
      */
-    ResourceVO create(ResourceParam param, User currentUser) throws ResourceException, GroupException;
+    ResourceVO create(ResourceParam param, User currentUser) throws Exception;
 
     /**
      * Show all resources' VO.
      *
      * @return              resources' VO
-     * @throws ResourceException        RSC0011 No resource exist.
+     * @throws CommonsException        SYS0120 No resource exists.
      */
-    ObjectsVO getAllResources() throws ResourceException;
+    ObjectsVO getAllResources() throws Exception;
 
     /**
      * Show resources' page VO.
      *
      * @param pageable      page
      * @return              resources' page VO
-     * @throws ResourceException        RSC0011 No resources exists.
+     * @throws CommonsException        SYS0120 No resource exists.
      */
-    PageVO getPage(Pageable pageable) throws ResourceException;
+    PageVO getPage(Pageable pageable) throws Exception;
 
     /**
      * Show resources by ids.
      *
      * @param ids           resources' ids
      * @return              resources' PO
-     * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
+     * @throws CommonsException        SYS0120 No resource exists.
      */
-    Iterable<Resource> getResourcesByIds(Iterable<Long> ids) throws ResourceException;
+    Iterable<Resource> getResourcesByIds(Iterable<Long> ids) throws Exception;
 
     /**
      * Show resource's VO by resource's id.
      *
      * @param param         resource's params
      * @return              resource's VO
-     * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
+     * @throws CommonsException        SYS0122 Cannot find any resource by id param.
      */
-    ResourceVO getResourceById(ResourceParam param) throws ResourceException;
+    ResourceVO getResourceById(ResourceParam param) throws Exception;
 
     /**
      * Show resource's VO by resource's name.
      *
      * @param param         resource's params
      * @return              resource's VO
-     * @throws ResourceException        RSC0013 Cannot find any resource by this name param.
+     * @throws CommonsException        SYS0122 Cannot find any resource by name param.
      */
-    ResourceVO getResourceByName(ResourceParam param) throws ResourceException;
+    ResourceVO getResourceByName(ResourceParam param) throws Exception;
 
     /**
-     * Show resource's VO by resource's name.
+     * Show resource's VO by resource's path.
      *
      * @param param         resource's params
      * @return              resource's VO
-     * @throws ResourceException        RSC0013 Cannot find any resource by this name param.
+     * @throws CommonsException        SYS0122 Cannot find any resource by path param.
      */
-    ResourceVO getResourceByPath(ResourceParam param) throws ResourceException;
+    ResourceVO getResourceByPath(ResourceParam param) throws Exception;
 
     /**
      * Update resource.
@@ -89,18 +87,17 @@ public interface ResourceService {
      * @param currentUser   current user
      * @param param         resource's params
      * @return              resource's VO
-     * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
-     * @throws GroupException           GRP0012 Cannot find any group by this id param.
+     * @throws CommonsException        SYS0122 Cannot find any resource by id param.
      */
-    ResourceVO update(ResourceParam param, User currentUser) throws ResourceException, GroupException;
+    ResourceVO update(ResourceParam param, User currentUser) throws Exception;
 
     /**
      * Delete resource.
      *
      * @param currentUser   current user
      * @param param         resource's params.
-     * @throws ResourceException        RSC0012 Cannot find any resource by this id param.
+     * @throws CommonsException        SYS0122 Cannot find any resource by id param.
      */
-    void delete(ResourceParam param, User currentUser) throws ResourceException;
+    void delete(ResourceParam param, User currentUser) throws Exception;
 
 }

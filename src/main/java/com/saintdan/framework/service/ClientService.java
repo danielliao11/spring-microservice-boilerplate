@@ -1,12 +1,10 @@
 package com.saintdan.framework.service;
 
-import com.saintdan.framework.exception.ClientException;
-import com.saintdan.framework.param.ClientParam;
+import com.saintdan.framework.exception.CommonsException;
+import com.saintdan.framework.param.GroupParam;
+import com.saintdan.framework.po.Client;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.vo.ClientVO;
-import com.saintdan.framework.vo.ObjectsVO;
-import com.saintdan.framework.vo.PageVO;
-import org.springframework.data.domain.Pageable;
+import com.saintdan.framework.vo.GroupVO;
 
 /**
  * Client's service.
@@ -15,69 +13,23 @@ import org.springframework.data.domain.Pageable;
  * @date 10/25/15
  * @since JDK1.8
  */
-public interface ClientService {
+public interface ClientService extends BaseService<Client, Long> {
 
     /**
-     * Create new client.
+     * Show group's VO by group's name.
+     *
+     * @param param         group's params
+     * @return              group's VO
+     * @throws CommonsException         SYS0111 group already existing, name taken.
+     */
+    GroupVO getGroupByName(GroupParam param) throws Exception;
+
+    /**
+     * Delete group.
      *
      * @param currentUser   current user
-     * @param param         client's param
-     * @return              client's VO
-     * @throws ClientException          CLT0031 Client already existing, clientId taken.
+     * @param param         group's params.
+     * @throws CommonsException        SYS0111 group already existing, name taken.
      */
-    ClientVO create(ClientParam param, User currentUser) throws ClientException;
-
-    /**
-     * Show all clients.
-     *
-     * @return          clients' VO
-     * @throws ClientException          CLT0011 No client exist.
-     */
-    ObjectsVO getAllClients() throws ClientException;
-
-    /**
-     * Show users' page VO.
-     *
-     * @param pageable      page
-     * @return              roles' page VO
-     * @throws ClientException          CLT0011 No client exist.
-     */
-    PageVO getPage(Pageable pageable) throws ClientException;
-
-    /**
-     * Show client by id.
-     *
-     * @param param     client's param
-     * @return          client's VO
-     * @throws ClientException          CLT0012 Cannot find any client by this id param.
-     */
-    ClientVO getClientById(ClientParam param) throws ClientException;
-
-    /**
-     * Show client by client id.
-     *
-     * @param param     client's param
-     * @return          client's VO
-     * @throws ClientException          CLT0011 Cannot find any client by this name param.
-     */
-    ClientVO getClientByClientId(ClientParam param) throws ClientException;
-
-    /**
-     * Update client.
-     *
-     * @param currentUser   current user
-     * @param param         client's param
-     * @return              client' VO
-     * @throws ClientException          CLT0012 Cannot find any client by this id param.
-     */
-    ClientVO update(ClientParam param, User currentUser) throws ClientException;
-
-    /**
-     * Delete client
-     *
-     * @param currentUser   current user
-     * @param param         client's param
-     * @throws ClientException          CLT0012 Cannot find any client by this id param.
-     */
-    void delete(ClientParam param, User currentUser) throws ClientException;
+    void delete(GroupParam param, User currentUser) throws Exception;
 }
