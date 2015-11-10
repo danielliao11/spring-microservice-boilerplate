@@ -91,5 +91,6 @@
   - Separate the SignField to SignField and [ValidationField](src/main/java/com/saintdan/framework/annotation/ValidationField.java).
   - Add some code comments.
 
-- 0.8.6.RELEASE
+- 0.9.0.RELEASE
   - Add [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java).
+  - Add []

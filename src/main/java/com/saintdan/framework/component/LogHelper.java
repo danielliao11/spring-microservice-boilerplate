@@ -5,7 +5,6 @@ import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.service.LogService;
 import com.saintdan.framework.tools.SpringSecurityUtils;
-import com.saintdan.framework.vo.LogVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,8 +26,7 @@ public class LogHelper {
         String clientId = SpringSecurityUtils.getCurrentUsername();
 
         // Log users' operations.
-        logService.create(LogVO.class, new LogParam(ip, logType, clientId, resource)
-                , currentUser);
+        logService.create(new LogParam(ip, logType, clientId, resource), currentUser);
     }
 
     @Autowired

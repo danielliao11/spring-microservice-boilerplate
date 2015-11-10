@@ -27,19 +27,7 @@ public interface BaseService<T, ID extends Serializable> {
      * @return              VO
      * @throws Exception
      */
-    <VO extends ResultVO> VO createByParam(Class<VO> voType, Object inputParam, User currentUser) throws Exception;
-
-    /**
-     * Create <T> by PO.
-     *
-     * @param voType        VO's class
-     * @param inputPO       input PO
-     * @param currentUser   current user
-     * @param <VO>          VO extends to ResultVO
-     * @return              VO
-     * @throws Exception
-     */
-    <VO extends ResultVO> VO createByPO(Class<VO> voType, T inputPO, User currentUser) throws Exception;
+    <VO extends ResultVO> VO create(Class<VO> voType, Object inputParam, User currentUser) throws Exception;
 
     /**
      * Get all <T>.
@@ -71,17 +59,6 @@ public interface BaseService<T, ID extends Serializable> {
     <VO extends ResultVO> VO getById(Class<VO> voType, Object inputParam) throws Exception;
 
     /**
-     * Get <T> by name.
-     *
-     * @param voType        VO's class
-     * @param inputParam    input param
-     * @param <VO>          VO extends to ResultVO
-     * @return              <T>
-     * @throws Exception
-     */
-    <VO extends ResultVO> VO getByName(Class<VO> voType, Object inputParam) throws Exception;
-
-    /**
      * Update <T> by param.
      *
      * @param voType        VO's class
@@ -91,18 +68,6 @@ public interface BaseService<T, ID extends Serializable> {
      * @return              VO
      * @throws Exception
      */
-    <VO extends ResultVO> VO updateByParam(Class<VO> voType, Object inputParam, User currentUser) throws Exception;
-
-    /**
-     * Update <T> by param.
-     *
-     * @param voType        VO's class
-     * @param inputPO       input PO
-     * @param currentUser   current user
-     * @param <VO>          VO extends to ResultVO
-     * @return              VO
-     * @throws Exception
-     */
-    <VO extends ResultVO> VO updateByPO(Class<VO> voType, T inputPO, User currentUser) throws Exception;
+    <VO extends ResultVO> VO update(Class<VO> voType, Object inputParam, User currentUser) throws Exception;
 
 }

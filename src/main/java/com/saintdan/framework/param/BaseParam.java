@@ -4,7 +4,7 @@ import com.saintdan.framework.annotation.SignField;
 import com.saintdan.framework.annotation.ValidationField;
 import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.exception.SignatureException;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.exception.UnknownException;
 import com.saintdan.framework.tools.SignatureUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,14 +59,7 @@ public class BaseParam implements Serializable {
         this.currentUser = currentUser;
     }
 
-    /**
-     * Validate the signature.
-     *
-     * @param publicKey     Opposite end public key
-     * @return              true/false
-     * @throws SignatureException
-     */
-    public boolean isSignValid(String publicKey) throws SignatureException {
+    public boolean isSignValid(String publicKey) throws CommonsException {
         String content = getSignContent();
         return SignatureUtils.rsaCheckContent(content, this.getSign(), publicKey, SignatureConstant.CHARSET_UTF8);
     }
@@ -75,9 +68,9 @@ public class BaseParam implements Serializable {
      * Signature.
      *
      * @param privateKey    Local private key.
-     * @throws SignatureException
+     * @throws CommonsException
      */
-    public void sign(String privateKey) throws SignatureException {
+    public void sign(String privateKey) throws CommonsException {
         String content = getSignContent();//JsonConverter.convertToJSON(this).toString();
         this.sign = SignatureUtils.rsaSign(content, privateKey, SignatureConstant.CHARSET_UTF8);
     }
@@ -86,9 +79,9 @@ public class BaseParam implements Serializable {
      * Get the signature content.
      *
      * @return              signature content
-     * @throws SignatureException
+     * @throws CommonsException
      */
-    public String getSignContent() throws SignatureException {
+    public String getSignContent() throws CommonsException {
         StringBuffer buffer = new StringBuffer();
         try{
             BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
@@ -135,7 +128,7 @@ public class BaseParam implements Serializable {
             }
             return buffer.toString();
         } catch (Exception e) {
-            throw new SignatureException(ErrorType.UNKNOWN);
+            throw new CommonsException(ErrorType.UNKNOWN);
         }
     }
 

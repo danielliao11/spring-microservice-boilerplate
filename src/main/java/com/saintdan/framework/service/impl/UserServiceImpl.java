@@ -94,7 +94,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
             throw new CommonsException(ErrorType.SYS0120,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
-        return transformer.poPage2VO(userPage.getContent(), pageable, userPage.getTotalElements(),
+        return transformer.poPage2VO(transformer.poList2VOList(UserVO.class, userPage.getContent()), pageable, userPage.getTotalElements(),
                 String.format(ControllerConstant.INDEX, getClassT()));
     }
 

@@ -51,15 +51,6 @@ public interface RepositoryWithoutDelete<T, ID extends Serializable> extends Rep
     T findOne(ID id);
 
     /**
-     * Retrieves an entity by its name.
-     *
-     * @param name must not be {@literal null}.
-     * @return the entity with the given id or {@literal null} if none found
-     * @throws IllegalArgumentException if {@code name} is {@literal null}
-     */
-    T findByName(String name);
-
-    /**
      * Returns whether an entity with the given id exists.
      *
      * @param id must not be {@literal null}.

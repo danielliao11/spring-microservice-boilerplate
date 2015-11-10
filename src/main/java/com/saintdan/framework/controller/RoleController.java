@@ -9,7 +9,7 @@ import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
-import com.saintdan.framework.exception.RoleException;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.service.RoleService;
@@ -55,7 +55,7 @@ public class RoleController {
             }
             // Return result and message.
             return roleService.create(param, currentUser);
-        } catch (RoleException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class RoleController {
                 return resultVO;
             }
             return roleService.getAllRoles();
-        } catch (RoleException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class RoleController {
                 return resultVO;
             }
             return roleService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
-        } catch (RoleException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -136,7 +136,7 @@ public class RoleController {
                 return resultVO;
             }
             return roleService.getRoleById(param);
-        } catch (RoleException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -164,7 +164,7 @@ public class RoleController {
             }
             // Update role.
             return roleService.update(param, currentUser);
-        } catch (RoleException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -197,7 +197,7 @@ public class RoleController {
             roleService.delete(param, currentUser);
             final String ROLE = "role";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
-        } catch (RoleException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {

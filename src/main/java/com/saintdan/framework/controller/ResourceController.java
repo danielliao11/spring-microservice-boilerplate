@@ -9,7 +9,7 @@ import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
-import com.saintdan.framework.exception.ResourceException;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.service.ResourceService;
@@ -55,7 +55,7 @@ public class ResourceController {
             }
             // Return result and message.
             return resourceService.create(param, currentUser);
-        } catch (ResourceException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class ResourceController {
                 return resultVO;
             }
             return resourceService.getAllResources();
-        } catch (ResourceException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class ResourceController {
                 return resultVO;
             }
             return resourceService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
-        } catch (ResourceException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -136,7 +136,7 @@ public class ResourceController {
                 return resultVO;
             }
             return resourceService.getResourceById(param);
-        } catch (ResourceException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -164,7 +164,7 @@ public class ResourceController {
             }
             // Update resource.
             return resourceService.update(param, currentUser);
-        } catch (ResourceException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -195,7 +195,7 @@ public class ResourceController {
             resourceService.delete(param, currentUser);
             final String ROLE = "resource";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
-        } catch (ResourceException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {

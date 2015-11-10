@@ -174,7 +174,7 @@ public class Transformer {
      * @param pos       PO list
      * @return          VO list
      */
-    public List<?> poList2VOList(Class<? extends ResultVO> type, Iterable pos) throws Exception{
+    public List<?> poList2VOList(Class<? extends ResultVO> type, Iterable pos) throws Exception {
         List voList = new ArrayList();
         for (Object po : pos) {
             Object vo =  po2VO(type, po, "");

@@ -96,7 +96,7 @@ public class GroupServiceImpl extends BaseServiceImpl<Group, Long> implements Gr
             throw new CommonsException(ErrorType.SYS0120,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
-        return transformer.poPage2VO(groupPage.getContent(), pageable, groupPage.getTotalElements(),
+        return transformer.poPage2VO(transformer.poList2VOList(GroupVO.class, groupPage.getContent()), pageable, groupPage.getTotalElements(),
                 String.format(ControllerConstant.INDEX, getClassT()));
     }
 

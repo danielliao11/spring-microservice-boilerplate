@@ -96,7 +96,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Long> implements Role
             throw new CommonsException(ErrorType.SYS0120,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
-        return transformer.poPage2VO(rolePage.getContent(), pageable, rolePage.getTotalElements(),
+        return transformer.poPage2VO(transformer.poList2VOList(RoleVO.class, rolePage.getContent()), pageable, rolePage.getTotalElements(),
                 String.format(ControllerConstant.INDEX, getClassT()));
     }
 

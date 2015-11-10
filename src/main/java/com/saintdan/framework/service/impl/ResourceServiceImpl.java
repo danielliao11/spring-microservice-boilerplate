@@ -94,7 +94,7 @@ public class ResourceServiceImpl extends BaseServiceImpl<Resource, Long> impleme
             throw new CommonsException(ErrorType.SYS0120,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
-        return transformer.poPage2VO(resourcePage.getContent(), pageable, resourcePage.getTotalElements(),
+        return transformer.poPage2VO(transformer.poList2VOList(ResourceVO.class, resourcePage.getContent()), pageable, resourcePage.getTotalElements(),
                 String.format(ControllerConstant.INDEX, getClassT()));
     }
 

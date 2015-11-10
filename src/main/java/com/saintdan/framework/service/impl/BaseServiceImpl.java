@@ -15,6 +15,7 @@ import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.RepositoryWithoutDelete;
+import com.saintdan.framework.service.BaseService;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -36,7 +37,7 @@ import java.util.List;
  * @date 7/21/15
  * @since JDK1.8
  */
-public abstract class BaseServiceImpl<T, ID extends Serializable> {
+public abstract class BaseServiceImpl<T, ID extends Serializable> implements BaseService<T, ID> {
 
     // ------------------------
     // PUBLIC METHODS
@@ -52,11 +53,9 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> {
      * @return              VO
      * @throws Exception
      */
-    public <VO extends ResultVO> VO createByParam(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
+    public <VO extends ResultVO> VO create(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
         T po = transformer.param2PO(getClassT(), inputParam, getClassT().newInstance(), currentUser);
-        logHelper.logUsersOperations(LogType.CREATE, getClassT().getSimpleName(), currentUser);
-        return transformer.po2VO(voType, repository.save(po),
-                String.format(ControllerConstant.CREATE, getClassT().getSimpleName()));
+        return createByPO(voType, po, currentUser);
     }
 
     /**
@@ -131,26 +130,6 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> {
     }
 
     /**
-     * Get <T> by name.
-     *
-     * @param voType        VO's class
-     * @param inputParam    input param
-     * @param <VO>          VO extends to ResultVO
-     * @return              <T>
-     * @throws Exception
-     */
-    public <VO extends ResultVO> VO getByName(Class<VO> voType, Object inputParam) throws Exception {
-        Field nameField = inputParam.getClass().getDeclaredField(CommonsConstant.NAME);
-        nameField.setAccessible(true);
-        T po = repository.findByName((String) nameField.get(inputParam));
-        if (po == null) {
-            // Throw po cannot find by id parameter exception.
-            throw new CommonsException(ErrorType.SYS0120, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), CommonsConstant.NAME));
-        }
-        return transformer.po2VO(voType, po, String.format(ControllerConstant.SHOW, getClassT().getSimpleName()));
-    }
-
-    /**
      * Update <T> by param.
      *
      * @param voType        VO's class
@@ -160,7 +139,7 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> {
      * @return              VO
      * @throws Exception
      */
-    public <VO extends ResultVO> VO updateByParam(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
+    public <VO extends ResultVO> VO update(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
         Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
         idField.setAccessible(true);
         T po = repository.findOne((ID) idField.get(inputParam));
@@ -168,9 +147,7 @@ public abstract class BaseServiceImpl<T, ID extends Serializable> {
             // Throw po cannot find by id parameter exception.
             throw new CommonsException(ErrorType.SYS0120, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), CommonsConstant.ID));
         }
-        logHelper.logUsersOperations(LogType.UPDATE, getClassT().getSimpleName(), currentUser);
-        return transformer.po2VO(voType, repository.save(transformer.param2PO(getClassT(), inputParam, getClassT().newInstance(), currentUser)),
-                String.format(ControllerConstant.UPDATE, getClassT().getSimpleName()));
+        return updateByPO(voType, po, currentUser);
     }
 
     /**

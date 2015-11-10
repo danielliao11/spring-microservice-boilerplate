@@ -9,7 +9,7 @@ import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
-import com.saintdan.framework.exception.GroupException;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.GroupParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.service.GroupService;
@@ -55,7 +55,7 @@ public class GroupController {
             }
             // Return result and message.
             return groupService.create(param, currentUser);
-        } catch (GroupException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -79,7 +79,7 @@ public class GroupController {
                 return resultVO;
             }
             return groupService.getAllGroups();
-        } catch (GroupException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class GroupController {
                 return resultVO;
             }
             return groupService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
-        } catch (GroupException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -136,7 +136,7 @@ public class GroupController {
                 return resultVO;
             }
             return groupService.getGroupById(param);
-        } catch (GroupException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -165,7 +165,7 @@ public class GroupController {
             }
             // Update group.
             return groupService.update(param, currentUser);
-        } catch (GroupException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
@@ -196,7 +196,7 @@ public class GroupController {
             groupService.delete(param, currentUser);
             final String ROLE = "group";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
-        } catch (GroupException e) {
+        } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(log, e.getErrorType());
         } catch (Exception e) {
