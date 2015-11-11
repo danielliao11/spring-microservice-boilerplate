@@ -1,8 +1,8 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.SignField;
-import com.saintdan.framework.annotation.ValidationField;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -20,15 +20,15 @@ public class ResourceParam extends BaseParam implements Serializable {
     private Long id; // role's ID.
 
     @SignField
-    @ValidationField
+    @NotNull(message = "Name cannnot be null.")
     private String name; // role's name
 
     @SignField
-    @ValidationField
+    @NotNull(message = "Path cannnot be null.")
     private String path;
 
     @SignField
-    @ValidationField
+    @NotNull(message = "Priority cannnot be null.")
     private Integer priority;
 
     @SignField

@@ -1,15 +1,16 @@
 package com.saintdan.framework.config.custom;
 
-import com.saintdan.framework.constant.ResourceConstant;
+import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.enums.LogType;
-import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.Group;
 import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
-import com.saintdan.framework.service.LogService;
+import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.SpringSecurityUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,10 +35,12 @@ import java.util.Set;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
+    private static final Log log = LogFactory.getLog(CustomUserDetailsService.class);
+
 	private final UserRepository userRepository;
 
     @Autowired
-    private LogService logService;
+    private LogHelper logHelper;
 
 	@Autowired
 	public CustomUserDetailsService(UserRepository userRepository) {
@@ -52,7 +55,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
         // Get client ip address.
         String ip = SpringSecurityUtils.getCurrentUserIp();
-        String clientId = SpringSecurityUtils.getCurrentUsername();
 
         // Save user login info.
         user.setLastLoginIP(ip);
@@ -60,7 +62,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         userRepository.save(user);
 
         // Save to log.
-        logService.create(new LogParam(ip, LogType.LOGIN, clientId, ResourceConstant.LOGIN), user);
+        try {
+            logHelper.logUsersOperations(LogType.LOGIN, "login", user);
+        } catch (Exception e) {
+            LogUtils.traceError(log, e, "Log user login failed.");
+        }
         return new UserRepositoryUserDetails(user);
 	}
 

@@ -1,8 +1,9 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.SignField;
-import com.saintdan.framework.annotation.ValidationField;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -20,30 +21,32 @@ public class ClientParam extends BaseParam implements Serializable {
     private Long id;
 
     @SignField
-    @ValidationField
+    @NotNull(message = "ClientIdAlias cannnot be null.")
+    @Size(min = 6, max = 50)
     private String clientIdAlias;
 
     @SignField
-    @ValidationField
+    @NotNull(message = "ResourceIdStr cannnot be null.")
     private String resourceIdStr;
 
     @SignField
-    @ValidationField
+    @NotNull(message = "ClientSecretAlias cannnot be null.")
+    @Size(min = 8, max = 50)
     private String clientSecretAlias;
 
     @SignField
-    @ValidationField
+    @NotNull(message = "ScopeStr cannnot be null.")
     private String scopeStr;
 
     @SignField
-    @ValidationField
+    @NotNull(message = "AuthorizedGrantTypeStr cannnot be null.")
     private String authorizedGrantTypeStr;
 
     @SignField
     private String registeredRedirectUriStr;
 
     @SignField
-    @ValidationField
+    @NotNull(message = "AuthoritiesStr cannnot be null.")
     private String authoritiesStr;
 
     @SignField

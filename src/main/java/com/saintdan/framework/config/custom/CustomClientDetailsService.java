@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
+ * Custom client service.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/23/15
  * @since JDK1.8

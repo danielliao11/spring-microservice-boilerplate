@@ -19,10 +19,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * Group's controller.
@@ -46,10 +49,10 @@ public class GroupController {
      * @return          group's result
      */
     @RequestMapping(value = ResourceURL.GROUPS + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO create(@CurrentUser User currentUser, GroupParam param, @PathVariable String sign) {
+    public ResultVO create(@CurrentUser User currentUser, @Valid GroupParam param, BindingResult result, @PathVariable String sign) {
         try {
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(currentUser, param, sign, log);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -74,7 +77,7 @@ public class GroupController {
         try {
             GroupParam param = new GroupParam();
             // Sign validate.
-            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -103,7 +106,7 @@ public class GroupController {
             }
             GroupParam param = new GroupParam();
             // Sign validate.
-            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -131,7 +134,7 @@ public class GroupController {
             }
             GroupParam param = new GroupParam(Long.valueOf(id));
             // Sign validate.
-            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -153,13 +156,13 @@ public class GroupController {
      * @return          group's result
      */
     @RequestMapping(value = ResourceURL.GROUPS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, GroupParam param) {
+    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid GroupParam param, BindingResult result) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(currentUser, param, sign, log);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -188,7 +191,7 @@ public class GroupController {
             }
             GroupParam param = new GroupParam(Long.valueOf(id));
             // Sign validate.
-            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }

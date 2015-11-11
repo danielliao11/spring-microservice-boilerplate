@@ -92,5 +92,10 @@
   - Add some code comments.
 
 - 0.9.0.RELEASE
-  - Add [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java).
-  - Add []
+  - Add [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java), can validate current user, param, sign.
+  - Add [CommonsException](src/main/java/com/saintdan/framework/exception/CommonsException.java) and modify the [ErrorType](src/main/java/com/saintdan/framework/enums/ErrorType.java)
+
+- 0.9.1.RELEASE
+  - Modify the [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java).
+  - Remove the @ValidateField.
+  - Use @Valid and BindingResult to validate param.

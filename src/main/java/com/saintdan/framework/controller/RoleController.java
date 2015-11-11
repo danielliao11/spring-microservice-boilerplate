@@ -20,10 +20,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * Role's controller.
@@ -47,9 +50,10 @@ public class RoleController {
      * @return          role's result
      */
     @RequestMapping(value = ResourceURL.ROLES + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO create(@CurrentUser User currentUser, RoleParam param, @PathVariable String sign) {
+    public ResultVO create(@CurrentUser User currentUser, @Valid RoleParam param, BindingResult result, @PathVariable String sign) {
         try {
-            ResultVO resultVO = validateHelper.validate(currentUser, param, sign, log);
+            // Validate current user, param and sign.
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -74,7 +78,7 @@ public class RoleController {
         try {
             RoleParam param = new RoleParam();
             // Sign validate.
-            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -103,7 +107,7 @@ public class RoleController {
             }
             RoleParam param = new RoleParam();
             // Sign validate.
-            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -131,7 +135,7 @@ public class RoleController {
             }
             RoleParam param = new RoleParam(Long.valueOf(id));
             // Sign validate.
-            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -153,12 +157,13 @@ public class RoleController {
      * @return          role's result
      */
     @RequestMapping(value = ResourceURL.ROLES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, RoleParam param) {
+    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid RoleParam param, BindingResult result) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
-            ResultVO resultVO = validateHelper.validate(currentUser, param, sign, log);
+            // Validate current user, param and sign.
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -189,7 +194,7 @@ public class RoleController {
             // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
             // Sign validate.
-            ResultVO resultVO = validateHelper.validateSign(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, log);
             if (resultVO != null) {
                 return resultVO;
             }

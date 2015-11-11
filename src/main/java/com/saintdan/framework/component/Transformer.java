@@ -73,7 +73,7 @@ public class Transformer {
         PageVO pageVO = new PageVO();
         pageVO.setPage(page);
         pageVO.setMessage(msg);
-        return (PageVO) resultHelper.sucessResp(pageVO);
+        return (PageVO) resultHelper.successResp(pageVO);
     }
 
     /**
@@ -151,7 +151,7 @@ public class Transformer {
         }
         vo.setMessage(msg);
         // Return success result.
-        return (T) resultHelper.sucessResp(vo);
+        return (T) resultHelper.successResp(vo);
     }
 
 
@@ -164,8 +164,8 @@ public class Transformer {
      */
     public ObjectsVO pos2VO(Class<? extends ResultVO> type, Iterable pos, String msg) throws Exception {
         List objList = poList2VOList(type, pos);
-        ObjectsVO vos = transformer.voList2ObjectsVO(objList, msg);
-        return (ObjectsVO) resultHelper.sucessResp(vos);
+        ObjectsVO vos = voList2ObjectsVO(objList, msg);
+        return (ObjectsVO) resultHelper.successResp(vos);
     }
 
     /**
@@ -186,9 +186,6 @@ public class Transformer {
     // --------------------------
     // PRIVATE FIELDS AND METHODS
     // --------------------------
-
-    @Autowired
-    protected Transformer transformer;
 
     @Autowired
     private ResultHelper resultHelper;

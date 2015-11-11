@@ -13,6 +13,7 @@ import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.LogVO;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,8 +47,7 @@ public class LogServiceImpl implements LogService {
      */
     @Override
     public LogVO create(LogParam param, User currentUser) throws Exception {
-        return transformer.po2VO(LogVO.class, logRepository.save(
-                transformer.param2PO(Log.class, param, new Log(), currentUser)),
+        return transformer.po2VO(LogVO.class, logRepository.save(logParam2PO(param, currentUser)),
                 String.format(ControllerConstant.CREATE, LOG));
     }
 
@@ -90,10 +90,25 @@ public class LogServiceImpl implements LogService {
     // --------------------------
 
     @Autowired
-    private LogRepository logRepository;
-
-    @Autowired
     private Transformer transformer;
 
     private final static String LOG = "log";
+
+
+    @Autowired
+    private LogRepository logRepository;
+
+    /**
+     * Transform log's param to PO.
+     *
+     * @param param         log's param
+     * @return              log's PO
+     */
+    private Log logParam2PO(LogParam param, User currentUser) {
+        Log log = new Log();
+        BeanUtils.copyProperties(param, log);
+        log.setUserId(currentUser.getId());
+        log.setUsername(currentUser.getUsr());
+        return log;
+    }
 }
