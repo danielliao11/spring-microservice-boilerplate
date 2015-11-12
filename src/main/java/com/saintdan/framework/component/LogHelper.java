@@ -3,7 +3,7 @@ package com.saintdan.framework.component;
 import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.service.LogService;
+import com.saintdan.framework.domain.LogDomain;
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ public class LogHelper {
         String clientId = SpringSecurityUtils.getCurrentUsername();
 
         // Log users' operations.
-        logService.create(new LogParam(ip, logType, clientId, resource), currentUser);
+        logDomain.create(new LogParam(ip, logType, clientId, resource), currentUser);
     }
 
     @Autowired
-    private LogService logService;
+    private LogDomain logDomain;
 }

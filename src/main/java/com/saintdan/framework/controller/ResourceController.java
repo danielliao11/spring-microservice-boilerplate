@@ -12,7 +12,7 @@ import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.service.ResourceService;
+import com.saintdan.framework.domain.ResourceDomain;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -221,5 +221,5 @@ public class ResourceController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private ResourceService resourceService;
+    private ResourceDomain resourceService;
 }

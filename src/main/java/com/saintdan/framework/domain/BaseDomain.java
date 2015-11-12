@@ -1,4 +1,4 @@
-package com.saintdan.framework.service;
+package com.saintdan.framework.domain;
 
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.ObjectsVO;
@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @date 11/6/15
  * @since JDK1.8
  */
-public interface BaseService<T, ID extends Serializable> {
+public interface BaseDomain<T, ID extends Serializable> {
 
     /**
      * Create <T> by param.

@@ -1,4 +1,4 @@
-package com.saintdan.framework.service.impl;
+package com.saintdan.framework.domain.impl;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
@@ -11,7 +11,7 @@ import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.Client;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.ClientRepository;
-import com.saintdan.framework.service.ClientService;
+import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ClientVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +19,14 @@ import org.springframework.stereotype.Service;
 
 /**
  * Implements the
- * {@link ClientService}
+ * {@link ClientDomain}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/25/15
  * @since JDK1.8
  */
 @Service
-public class ClientServiceImpl extends BaseServiceImpl<Client, Long> implements ClientService {
+public class ClientDomainImpl extends BaseDomainImpl<Client, Long> implements ClientDomain {
 
     // ------------------------
     // PUBLIC METHODS

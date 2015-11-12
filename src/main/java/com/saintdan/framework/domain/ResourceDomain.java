@@ -1,4 +1,4 @@
-package com.saintdan.framework.service;
+package com.saintdan.framework.domain;
 
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
  * @date 10/16/15
  * @since JDK1.8
  */
-public interface ResourceService extends BaseService<Resource, Long> {
+public interface ResourceDomain extends BaseDomain<Resource, Long> {
 
     /**
      * Create new resource.

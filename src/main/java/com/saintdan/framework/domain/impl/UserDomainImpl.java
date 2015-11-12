@@ -1,4 +1,4 @@
-package com.saintdan.framework.service.impl;
+package com.saintdan.framework.domain.impl;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.Transformer;
@@ -12,8 +12,8 @@ import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
-import com.saintdan.framework.service.RoleService;
-import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.domain.RoleDomain;
+import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * Implements the
- * {@link UserService}
+ * {@link UserDomain}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 7/21/15
@@ -37,7 +37,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class UserServiceImpl extends BaseServiceImpl<User, Long> implements UserService {
+public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDomain {
 
     // ------------------------
     // PUBLIC METHODS
@@ -208,7 +208,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
     // --------------------------
 
     @Autowired
-    private RoleService roleService;
+    private RoleDomain roleService;
 
     @Autowired
     private UserRepository userRepository;
@@ -220,7 +220,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
     private Transformer transformer;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserDomainImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

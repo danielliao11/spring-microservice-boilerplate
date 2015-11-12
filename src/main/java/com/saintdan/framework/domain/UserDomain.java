@@ -1,4 +1,4 @@
-package com.saintdan.framework.service;
+package com.saintdan.framework.domain;
 
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
  * @date 7/21/15
  * @since JDK1.8
  */
-public interface UserService extends BaseService<User, Long> {
+public interface UserDomain extends BaseDomain<User, Long> {
 
     /**
      * Create new user.

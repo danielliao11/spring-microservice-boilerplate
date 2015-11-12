@@ -1,4 +1,4 @@
-package com.saintdan.framework.service;
+package com.saintdan.framework.domain;
 
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.GroupParam;
@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
  * @date 10/16/15
  * @since JDK1.8
  */
-public interface GroupService extends BaseService<Group, Long> {
+public interface GroupDomain extends BaseDomain<Group, Long> {
 
     /**
      * Create new group.

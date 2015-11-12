@@ -1,4 +1,4 @@
-package com.saintdan.framework.service;
+package com.saintdan.framework.domain;
 
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
  * @date 10/16/15
  * @since JDK1.8
  */
-public interface RoleService extends BaseService<Role, Long> {
+public interface RoleDomain extends BaseDomain<Role, Long> {
 
     /**
      * Create new role.

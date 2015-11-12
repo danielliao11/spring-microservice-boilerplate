@@ -1,4 +1,4 @@
-package com.saintdan.framework.service.impl;
+package com.saintdan.framework.domain.impl;
 
 /**
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
@@ -15,7 +15,7 @@ import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.RepositoryWithoutDelete;
-import com.saintdan.framework.service.BaseService;
+import com.saintdan.framework.domain.BaseDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -37,7 +37,7 @@ import java.util.List;
  * @date 7/21/15
  * @since JDK1.8
  */
-public abstract class BaseServiceImpl<T, ID extends Serializable> implements BaseService<T, ID> {
+public abstract class BaseDomainImpl<T, ID extends Serializable> implements BaseDomain<T, ID> {
 
     // ------------------------
     // PUBLIC METHODS

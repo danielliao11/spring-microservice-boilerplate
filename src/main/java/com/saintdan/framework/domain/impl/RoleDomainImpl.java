@@ -1,4 +1,4 @@
-package com.saintdan.framework.service.impl;
+package com.saintdan.framework.domain.impl;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
@@ -12,9 +12,9 @@ import com.saintdan.framework.po.Group;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.RoleRepository;
-import com.saintdan.framework.service.GroupService;
-import com.saintdan.framework.service.RoleService;
-import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.domain.GroupDomain;
+import com.saintdan.framework.domain.RoleDomain;
+import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -31,7 +31,7 @@ import java.util.Set;
 
 /**
  * Implements the
- * {@link RoleService}
+ * {@link RoleDomain}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/17/15
@@ -39,7 +39,7 @@ import java.util.Set;
  */
 @Service
 @Transactional
-public class RoleServiceImpl extends BaseServiceImpl<Role, Long> implements RoleService {
+public class RoleDomainImpl extends BaseDomainImpl<Role, Long> implements RoleDomain {
 
     // ------------------------
     // PUBLIC METHODS
@@ -192,10 +192,10 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, Long> implements Role
     // --------------------------
 
     @Autowired
-    private UserService userService;
+    private UserDomain userService;
 
     @Autowired
-    private GroupService groupService;
+    private GroupDomain groupService;
 
     @Autowired
     private RoleRepository roleRepository;

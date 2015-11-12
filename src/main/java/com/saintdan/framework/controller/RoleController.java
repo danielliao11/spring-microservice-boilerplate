@@ -12,7 +12,7 @@ import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.service.RoleService;
+import com.saintdan.framework.domain.RoleDomain;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -224,5 +224,5 @@ public class RoleController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private RoleService roleService;
+    private RoleDomain roleService;
 }

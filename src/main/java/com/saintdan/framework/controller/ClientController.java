@@ -12,7 +12,7 @@ import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.service.ClientService;
+import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -221,5 +221,5 @@ public class ClientController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private ClientService clientService;
+    private ClientDomain clientService;
 }

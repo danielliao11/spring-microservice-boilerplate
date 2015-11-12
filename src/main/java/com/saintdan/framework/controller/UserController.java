@@ -12,7 +12,7 @@ import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.service.UserService;
+import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -253,6 +253,6 @@ public class UserController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private UserService userService;
+    private UserDomain userService;
 
 }

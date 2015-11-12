@@ -1,4 +1,4 @@
-package com.saintdan.framework.service.impl;
+package com.saintdan.framework.domain.impl;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.ControllerConstant;
@@ -8,7 +8,7 @@ import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.Log;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.LogRepository;
-import com.saintdan.framework.service.LogService;
+import com.saintdan.framework.domain.LogDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.LogVO;
 import com.saintdan.framework.vo.ObjectsVO;
@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * Implements the
- * {@link LogService}
+ * {@link LogDomain}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/28/15
@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class LogServiceImpl implements LogService {
+public class LogDomainImpl implements LogDomain {
 
     // ------------------------
     // PUBLIC METHODS

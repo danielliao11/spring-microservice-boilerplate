@@ -1,8 +1,8 @@
 /**
- * Test cases of service.
+ * Package of domain.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 11/12/15
+ * @date 6/25/15
  * @since JDK1.8
  */
-package com.saintdan.framework.service;
+package com.saintdan.framework.domain;

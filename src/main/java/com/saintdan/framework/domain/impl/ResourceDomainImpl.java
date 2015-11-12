@@ -1,4 +1,4 @@
-package com.saintdan.framework.service.impl;
+package com.saintdan.framework.domain.impl;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
@@ -12,8 +12,8 @@ import com.saintdan.framework.po.Group;
 import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.ResourceRepository;
-import com.saintdan.framework.service.GroupService;
-import com.saintdan.framework.service.ResourceService;
+import com.saintdan.framework.domain.GroupDomain;
+import com.saintdan.framework.domain.ResourceDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * Implements the
- * {@link ResourceService}
+ * {@link ResourceDomain}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/17/15
@@ -37,7 +37,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class ResourceServiceImpl extends BaseServiceImpl<Resource, Long> implements ResourceService {
+public class ResourceDomainImpl extends BaseDomainImpl<Resource, Long> implements ResourceDomain {
 
     // ------------------------
     // PUBLIC METHODS
@@ -211,7 +211,7 @@ public class ResourceServiceImpl extends BaseServiceImpl<Resource, Long> impleme
     // --------------------------
 
     @Autowired
-    private GroupService groupService;
+    private GroupDomain groupService;
 
     @Autowired
     private ResourceRepository resourceRepository;

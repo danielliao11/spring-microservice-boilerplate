@@ -4,7 +4,7 @@ import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.param.BaseParam;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.service.ClientService;
+import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.codec.binary.Base64;
@@ -97,7 +97,7 @@ public class ValidateHelper {
     private SignHelper signHelper;
 
     @Autowired
-    private ClientService clientService;
+    private ClientDomain clientService;
 
     /**
      * Get public key by client id.

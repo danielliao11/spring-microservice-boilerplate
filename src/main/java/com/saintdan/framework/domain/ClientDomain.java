@@ -1,4 +1,4 @@
-package com.saintdan.framework.service;
+package com.saintdan.framework.domain;
 
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
@@ -13,7 +13,7 @@ import com.saintdan.framework.vo.ClientVO;
  * @date 10/25/15
  * @since JDK1.8
  */
-public interface ClientService extends BaseService<Client, Long> {
+public interface ClientDomain extends BaseDomain<Client, Long> {
 
     /**
      * Create new client.

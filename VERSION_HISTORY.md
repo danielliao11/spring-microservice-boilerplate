@@ -99,3 +99,6 @@
   - Modify the [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java).
   - Remove the @ValidateField.
   - Use @Valid and BindingResult to validate param.
+
+- 0.9.2.RELEASE
+  - Change project to DDD.

@@ -1,4 +1,4 @@
-package com.saintdan.framework.service;
+package com.saintdan.framework.domain;
 
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.LogParam;
@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
  * @date 10/25/15
  * @since JDK1.8
  */
-public interface LogService {
+public interface LogDomain {
 
     /**
      * Create new log.

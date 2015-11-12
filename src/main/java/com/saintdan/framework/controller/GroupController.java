@@ -12,7 +12,7 @@ import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.GroupParam;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.service.GroupService;
+import com.saintdan.framework.domain.GroupDomain;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -221,5 +221,5 @@ public class GroupController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private GroupService groupService;
+    private GroupDomain groupService;
 }

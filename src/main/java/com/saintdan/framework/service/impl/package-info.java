@@ -1,11 +1,8 @@
 /**
- * Package of implements service interface.
- * <p>
- *
- * </p>
+ * Package of service implements.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 9/22/15
+ * @date 11/12/15
  * @since JDK1.8
  */
 package com.saintdan.framework.service.impl;
