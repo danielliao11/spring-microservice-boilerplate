@@ -102,3 +102,4 @@
 
 - 0.9.2.RELEASE
   - Change project to DDD.
+  - Add PostgreSQL support.

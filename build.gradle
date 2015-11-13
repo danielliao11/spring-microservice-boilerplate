@@ -54,6 +54,7 @@ ext {
 
     hsqldbVersion = '1.8.0.10'
     mysqlVersion = '5.1.36'
+    postgresqlVersion = '9.4-1205-jdbc42'
 
     jsonPathVersion = '2.0.0'
     junitVersion = '4.12'
@@ -78,7 +79,10 @@ dependencies {
     // compile "org.hsqldb:hsqldb:${hsqldbVersion}"
 
     // Mysql
-    compile "mysql:mysql-connector-java:${mysqlVersion}"
+    // compile "mysql:mysql-connector-java:${mysqlVersion}"
+
+    // Postgres
+    compile "org.postgresql:postgresql:${postgresqlVersion}"
 
     // Provide runtime dependencies.
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
