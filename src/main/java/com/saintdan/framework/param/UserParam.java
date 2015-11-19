@@ -4,7 +4,6 @@ import com.saintdan.framework.annotation.SignField;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 /**
  * User RESTFul param bean.
@@ -13,7 +12,7 @@ import java.io.Serializable;
  * @date 9/22/15
  * @since JDK1.8
  */
-public class UserParam extends BaseParam implements Serializable {
+public class UserParam extends BaseParam {
 
     private static final long serialVersionUID = -9153801716112918626L;
 

@@ -3,8 +3,6 @@ package com.saintdan.framework.exception;
 
 import com.saintdan.framework.enums.ErrorType;
 
-import java.io.Serializable;
-
 /**
  * Unknown exception.
  *
@@ -12,7 +10,7 @@ import java.io.Serializable;
  * @date 7/26/15
  * @since JDK1.8
  */
-public class UnknownException extends SystemRuntimeException implements Serializable {
+public class UnknownException extends SystemRuntimeException {
 
     private static final long serialVersionUID = -7431810328087316293L;
 

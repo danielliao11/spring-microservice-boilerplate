@@ -3,7 +3,6 @@ package com.saintdan.framework.param;
 import com.saintdan.framework.annotation.SignField;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * Resource RESTFul param bean.
@@ -12,7 +11,7 @@ import java.io.Serializable;
  * @date 10/16/15
  * @since JDK1.8
  */
-public class ResourceParam extends BaseParam implements Serializable {
+public class ResourceParam extends BaseParam {
 
     private static final long serialVersionUID = 8542867394907970893L;
 

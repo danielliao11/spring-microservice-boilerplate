@@ -2,8 +2,6 @@ package com.saintdan.framework.exception;
 
 import com.saintdan.framework.enums.ErrorType;
 
-import java.io.Serializable;
-
 /**
  * Commons exception.
  *
@@ -11,7 +9,7 @@ import java.io.Serializable;
  * @date 11/5/15
  * @since JDK1.8
  */
-public class CommonsException extends SystemException implements Serializable {
+public class CommonsException extends SystemException {
 
     private static final long serialVersionUID = -1041148006846583767L;
 

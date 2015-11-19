@@ -3,8 +3,6 @@ package com.saintdan.framework.exception;
 
 import com.saintdan.framework.enums.ErrorType;
 
-import java.io.Serializable;
-
 /**
  * Abstract superclass for all runtime exceptions related to an
  * {@link SystemRuntimeException} object being invalid for whatever reason.
@@ -13,7 +11,7 @@ import java.io.Serializable;
  * @date 7/26/15
  * @since JDK1.8
  */
-public class SystemRuntimeException extends RuntimeException implements Serializable {
+public class SystemRuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = -5228947246289048733L;
 
