@@ -49,7 +49,7 @@ public class UserController {
      * @return          user's result
      */
     @RequestMapping(value = ResourceURL.USERS + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO create(@CurrentUser User currentUser, @Valid  UserParam param, BindingResult result, @PathVariable String sign) {
+    public ResultVO create(@CurrentUser User currentUser, @Valid UserParam param, BindingResult result, @PathVariable String sign) {
         try {
             // Validate current user, param and sign.
             ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, log);

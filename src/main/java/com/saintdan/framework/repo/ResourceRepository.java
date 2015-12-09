@@ -4,7 +4,6 @@ import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,10 +16,8 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface ResourceRepository extends RepositoryWithoutDelete<Resource, Long> {
 
-    @EntityGraph(value = "Resource.resources", type = EntityGraph.EntityGraphType.FETCH)
     Resource findByName(String name);
 
-    @EntityGraph(value = "Resource.resources", type = EntityGraph.EntityGraphType.FETCH)
     Page<Resource> findAll(Pageable pageable);
 
     // ------------------------
@@ -28,15 +25,12 @@ public interface ResourceRepository extends RepositoryWithoutDelete<Resource, Lo
     // ------------------------
 
     @Override
-    @EntityGraph(value = "Resource.resources", type = EntityGraph.EntityGraphType.FETCH)
     Resource findOne(Long aLong);
 
     @Override
-    @EntityGraph(value = "Resource.resources", type = EntityGraph.EntityGraphType.FETCH)
     Iterable<Resource> findAll();
 
     @Override
-    @EntityGraph(value = "Resource.resources", type = EntityGraph.EntityGraphType.FETCH)
     Iterable<Resource> findAll(Iterable<Long> longs);
 
     @Modifying
