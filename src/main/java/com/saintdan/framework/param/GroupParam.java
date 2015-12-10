@@ -1,9 +1,8 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.SignField;
-import com.saintdan.framework.annotation.ValidationField;
 
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 
 /**
  * Group RESTFul param bean.
@@ -12,7 +11,7 @@ import java.io.Serializable;
  * @date 10/16/15
  * @since JDK1.8
  */
-public class GroupParam extends BaseParam implements Serializable {
+public class GroupParam extends BaseParam {
 
     private static final long serialVersionUID = 8542867394907970893L;
 
@@ -20,7 +19,7 @@ public class GroupParam extends BaseParam implements Serializable {
     private Long id; // role's ID.
 
     @SignField
-    @ValidationField
+    @NotNull(message = "Name cannnot be null.")
     private String name; // role's name
 
     @SignField

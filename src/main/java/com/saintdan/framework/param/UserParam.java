@@ -1,9 +1,9 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.SignField;
-import com.saintdan.framework.annotation.ValidationField;
 
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * User RESTFul param bean.
@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @date 9/22/15
  * @since JDK1.8
  */
-public class UserParam extends BaseParam implements Serializable {
+public class UserParam extends BaseParam {
 
     private static final long serialVersionUID = -9153801716112918626L;
 
@@ -20,15 +20,17 @@ public class UserParam extends BaseParam implements Serializable {
     private Long id; // user's ID
 
     @SignField
-    @ValidationField
+    @NotNull(message = "Usr cannnot be null.")
+    @Size(min = 4, max = 50)
     private String usr; // username
 
     @SignField
-    @ValidationField
+    @NotNull(message = "Pwd cannnot be null.")
+    @Size(min = 8, max = 50)
     private String pwd; // password
 
     @SignField
-    @ValidationField
+    @NotNull(message = "Name cannnot be null.")
     private String name; // user's name
 
     @SignField

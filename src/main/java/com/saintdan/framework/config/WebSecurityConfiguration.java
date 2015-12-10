@@ -1,13 +1,14 @@
 package com.saintdan.framework.config;
 
-import com.saintdan.framework.component.CustomPasswordEncoder;
-import com.saintdan.framework.config.custom.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.saintdan.framework.config.custom.CustomAuthenticationProvider;
+import com.saintdan.framework.constant.ResourceURL;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
@@ -26,21 +27,39 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 @EnableSpringDataWebSupport
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private CustomUserDetailsService userDetailsService;
-
-    @Autowired
-    private CustomPasswordEncoder passwordEncoder;
-	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		 auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+        auth.authenticationProvider(authenticationProvider());
 	}
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .authorizeRequests()
+                .antMatchers(CLIENT_URL).hasAnyAuthority("root", "client")
+                .antMatchers(USER_URL).hasAnyAuthority("root", "user")
+                .antMatchers(ROLE_URL).hasAnyAuthority("root", "role")
+                .antMatchers(GROUP_URL).hasAnyAuthority("root", "group")
+                .antMatchers(RESOURCE_URL).hasAnyAuthority("root", "resource");
+    }
 
 	@Override
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
+
+    @Bean
+    public AuthenticationProvider authenticationProvider(){
+        return new CustomAuthenticationProvider();
+    }
+
+    private static final String FIX = "/**";
+    private static final String CLIENT_URL = new String(new StringBuilder(FIX).append(ResourceURL.RESOURCES).append(ResourceURL.CLIENTS).append(FIX));
+    private static final String USER_URL = new String(new StringBuilder(FIX).append(ResourceURL.RESOURCES).append(ResourceURL.USERS).append(FIX));
+    private static final String ROLE_URL = new String(new StringBuilder(FIX).append(ResourceURL.RESOURCES).append(ResourceURL.USERS).append(FIX));
+    private static final String GROUP_URL = new String(new StringBuilder(FIX).append(ResourceURL.RESOURCES).append(ResourceURL.USERS).append(FIX));
+    private static final String RESOURCE_URL = new String(new StringBuilder(FIX).append(ResourceURL.RESOURCES).append(ResourceURL.USERS).append(FIX));
 
 }

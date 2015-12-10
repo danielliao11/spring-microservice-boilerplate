@@ -57,7 +57,7 @@ $ curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: 
 url: http://localhost:8080/oauth/token
 POST
 headers: Authorization: Basic <Encrypt client_id:client_secret by HTTP Basic>
-playload: password=admin&username=admin&grant_type=password&scope=read
+playload: password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app
 ```
 
 ### <a name="refresh_token"></a>使用 **refresh_token** 来获取新的 **access_token** [[TOP]](#index)

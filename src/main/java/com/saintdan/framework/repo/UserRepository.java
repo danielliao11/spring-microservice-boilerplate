@@ -20,10 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserRepository extends RepositoryWithoutDelete<User, Long> {
 
-    @EntityGraph(value = "User.roles", type = EntityGraph.EntityGraphType.FETCH)
 	User findByUsr(String usr);
 
-    @EntityGraph(value = "User.roles", type = EntityGraph.EntityGraphType.FETCH)
     Page<User> findAll(Pageable pageable);
 
     @Modifying
@@ -33,21 +31,5 @@ public interface UserRepository extends RepositoryWithoutDelete<User, Long> {
     @Modifying
     @Query("update User u set u.validFlag=?1 where u.id=?2")
     void updateValidFlagFor(ValidFlag validFlag, Long id);
-
-    // ------------------------
-    // OVERRIDE INTERFACES
-    // ------------------------
-
-    @Override
-    @EntityGraph(value = "User.roles", type = EntityGraph.EntityGraphType.FETCH)
-    User findOne(Long aLong);
-
-    @Override
-    @EntityGraph(value = "User.roles", type = EntityGraph.EntityGraphType.FETCH)
-    Iterable<User> findAll();
-
-    @Override
-    @EntityGraph(value = "User.roles", type = EntityGraph.EntityGraphType.FETCH)
-    Iterable<User> findAll(Iterable<Long> longs);
 
 }

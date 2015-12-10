@@ -2,7 +2,7 @@ package com.saintdan.framework.tools;
 
 
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.exception.FormatException;
+import com.saintdan.framework.exception.CommonsException;
 
 /**
  * decode base64 image utilities.
@@ -22,9 +22,9 @@ public class Base64ImageHelper {
      *
      * @param image         Mr.Base64Image
      * @return              Headless Knight
-     * @throws FormatException      not in the list
+     * @throws CommonsException      not in the list
      */
-    public static byte[] transformToHeadlessKnight(String image) throws FormatException {
+    public static byte[] transformToHeadlessKnight(String image) throws CommonsException {
         return org.apache.commons.codec.binary.Base64.decodeBase64(cutHead(image));
     }
 
@@ -45,9 +45,9 @@ public class Base64ImageHelper {
      *
      * @param image     Mr.Base64Image
      * @return          Mr.Headless
-     * @throws FormatException      not in the list
+     * @throws CommonsException      not in the list
      */
-    private static String cutHead(String image) throws FormatException {
+    private static String cutHead(String image) throws CommonsException {
         return image.replace(formHead(HAIR, cutWhom(image), NECK), "");
     }
 
@@ -73,9 +73,9 @@ public class Base64ImageHelper {
      *
      * @param image     luckless guy
      * @return          name of luckless guy
-     * @throws FormatException      not in the list
+     * @throws CommonsException      not in the list
      */
-    private static String cutWhom(String image) throws FormatException {
+    private static String cutWhom(String image) throws CommonsException {
         if (image.contains(PNG)) {
             return PNG;
         } else if (image.contains(JPEG)) {
@@ -85,7 +85,7 @@ public class Base64ImageHelper {
         } else if (image.contains(GIF)) {
             return GIF;
         } else {
-            throw new FormatException(ErrorType.FMT0010);
+            throw new CommonsException(ErrorType.SYS0005);
         }
     }
 

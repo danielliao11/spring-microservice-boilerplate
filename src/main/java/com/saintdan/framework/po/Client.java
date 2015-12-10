@@ -115,6 +115,9 @@ public class Client implements Serializable {
     @Column(nullable = false)
     private int version;
 
+    @Column(nullable = false, length = 5000)
+    private String publicKey;
+
     public Client() {
 
     }
@@ -267,5 +270,13 @@ public class Client implements Serializable {
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 }

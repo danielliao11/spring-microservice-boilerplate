@@ -4,6 +4,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
@@ -71,6 +72,17 @@ public class SpringSecurityUtils {
             return "";
         }
         return authentication.getName();
+    }
+
+    /**
+     * Get current client id.
+     *
+     * @return          current client id
+     */
+    public static String getCurrentClientId() {
+        OAuth2Authentication authentication = (OAuth2Authentication) getAuthentication();
+        assert authentication != null;
+        return authentication.getOAuth2Request().getClientId();
     }
 
     /**

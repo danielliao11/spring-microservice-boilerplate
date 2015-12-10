@@ -1,11 +1,9 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.SignField;
-import com.saintdan.framework.annotation.ValidationField;
 import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.exception.SignatureException;
-import com.saintdan.framework.exception.UnknownException;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.tools.SignatureUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -59,14 +57,7 @@ public class BaseParam implements Serializable {
         this.currentUser = currentUser;
     }
 
-    /**
-     * Validate the signature.
-     *
-     * @param publicKey     Opposite end public key
-     * @return              true/false
-     * @throws SignatureException
-     */
-    public boolean isSignValid(String publicKey) throws SignatureException {
+    public boolean isSignValid(String publicKey) throws CommonsException {
         String content = getSignContent();
         return SignatureUtils.rsaCheckContent(content, this.getSign(), publicKey, SignatureConstant.CHARSET_UTF8);
     }
@@ -75,9 +66,9 @@ public class BaseParam implements Serializable {
      * Signature.
      *
      * @param privateKey    Local private key.
-     * @throws SignatureException
+     * @throws CommonsException
      */
-    public void sign(String privateKey) throws SignatureException {
+    public void sign(String privateKey) throws CommonsException {
         String content = getSignContent();//JsonConverter.convertToJSON(this).toString();
         this.sign = SignatureUtils.rsaSign(content, privateKey, SignatureConstant.CHARSET_UTF8);
     }
@@ -86,9 +77,9 @@ public class BaseParam implements Serializable {
      * Get the signature content.
      *
      * @return              signature content
-     * @throws SignatureException
+     * @throws CommonsException
      */
-    public String getSignContent() throws SignatureException {
+    public String getSignContent() throws CommonsException {
         StringBuffer buffer = new StringBuffer();
         try{
             BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
@@ -135,58 +126,8 @@ public class BaseParam implements Serializable {
             }
             return buffer.toString();
         } catch (Exception e) {
-            throw new SignatureException(ErrorType.UNKNOWN);
+            throw new CommonsException(ErrorType.UNKNOWN);
         }
     }
 
-    /**
-     * Get the incorrect params string.
-     *
-     * @return              incorrect params string
-     * @throws UnknownException
-     */
-    public String getIncorrectParams() throws UnknownException {
-        StringBuffer buffer = new StringBuffer();
-        try{
-            BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
-            PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
-            Arrays.sort(pds, new Comparator<PropertyDescriptor>() {
-                public int compare(PropertyDescriptor o1, PropertyDescriptor o2) {
-                    return (o1.getName().compareTo(o2.getName()));
-                }
-            });
-            for (PropertyDescriptor pd : pds) {
-                Method method = pd.getReadMethod();
-                if (method == null) { // ignore read-only fields
-                    continue;
-                }
-                Field field = null;
-                String itemName = pd.getName();
-                try {
-                    if (baseFields.contains(itemName)) {
-                        field = BaseParam.class.getDeclaredField(itemName);
-                    } else {
-                        field = this.getClass().getDeclaredField(itemName);
-                    }
-                } catch (Exception ignored) {
-
-                }
-
-                if (field == null || !field.isAnnotationPresent(ValidationField.class)) {
-                    continue; // Ignore field without ParamField annotation.
-                }
-                field.setAccessible(true);
-                Object itemValue = field.get(this);
-                if (itemValue == null) {
-                    buffer.append(itemName).append(COMMA);
-                }
-            }
-            if (buffer.toString().endsWith(COMMA)) {
-                return buffer.toString().substring(0, buffer.toString().length() - 1);
-            }
-            return buffer.toString();
-        } catch (Exception e) {
-            throw new UnknownException();
-        }
-    }
 }

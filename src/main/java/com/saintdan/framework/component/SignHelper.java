@@ -2,7 +2,7 @@ package com.saintdan.framework.component;
 
 import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.exception.SignatureException;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.BaseParam;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -21,11 +21,20 @@ import java.net.URLDecoder;
 @Component
 public class SignHelper {
 
+    /**
+     * Check the sign.
+     *
+     * @param publicKey         public key
+     * @param sign              signature
+     * @return                  success or not
+     * @throws UnsupportedEncodingException
+     * @throws CommonsException
+     */
     public boolean signCheck(String publicKey, BaseParam params, String sign)
-            throws UnsupportedEncodingException, SignatureException {
+            throws UnsupportedEncodingException, CommonsException {
         // Prepare to validate signature.
         if (StringUtils.isEmpty(sign)) {
-            throw new SignatureException(ErrorType.SYS0002);
+            throw new CommonsException(ErrorType.SYS0002);
         }
         // Transform encode.
         params.setSign(URLDecoder.decode(new String(Base64.decodeBase64(sign.getBytes())), SignatureConstant.CHARSET_UTF8));

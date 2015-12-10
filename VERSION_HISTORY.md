@@ -90,3 +90,21 @@
   - Add [@CurrentUser](src/main/java/com/saintdan/framework/annotation/CurrentUser.java), annotate param with it can get current login user.
   - Separate the SignField to SignField and [ValidationField](src/main/java/com/saintdan/framework/annotation/ValidationField.java).
   - Add some code comments.
+
+- 0.9.0.RELEASE
+  - Add [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java), can validate current user, param, sign.
+  - Add [CommonsException](src/main/java/com/saintdan/framework/exception/CommonsException.java) and modify the [ErrorType](src/main/java/com/saintdan/framework/enums/ErrorType.java)
+
+- 0.9.1.RELEASE
+  - Modify the [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java).
+  - Remove the @ValidateField.
+  - Use @Valid and BindingResult to validate param.
+
+- 0.9.2.RELEASE
+  - Change project to DDD.
+  - Add PostgreSQL support.
+
+- 0.9.3.RELEASE
+  - Fix antMatcher bug.
+  - Change the log of login.
+  - Delete some outdated classes and codes.

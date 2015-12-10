@@ -8,5 +8,10 @@ package com.saintdan.framework.constant;
  * @since JDK1.8
  */
 public interface CommonsConstant {
+
     Integer PAGE_SIZE = 20;
+
+    String ID = "id";
+
+    String NAME = "name";
 }

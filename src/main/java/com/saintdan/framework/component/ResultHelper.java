@@ -24,7 +24,7 @@ public class ResultHelper {
      * @param vo        some vo extends result vo.
      * @return          result vo.
      */
-    public ResultVO sucessResp(ResultVO vo) {
+    public ResultVO successResp(ResultVO vo) {
         vo.setCode(ResultConstant.OK);
         vo.setOperationStatus(OperationStatus.SUCCESS);
         if (vo.getMessage() == null) {

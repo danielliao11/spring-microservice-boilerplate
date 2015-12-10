@@ -1,6 +1,6 @@
 description = 'spring-rest-oauth2-sample'
 group = 'com.saintdan.framework'
-version = '0.8.5.RELEASE'
+version = '0.9.1.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -16,6 +16,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.7.RELEASE")
+        classpath("org.springframework:springloaded:1.2.4.RELEASE")
     }
 }
 
@@ -24,6 +25,13 @@ allprojects {
         mavenCentral()
         jcenter()
         maven { url "https://repo.spring.io/libs-release" }
+    }
+}
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main/")
     }
 }
 
@@ -46,6 +54,7 @@ ext {
 
     hsqldbVersion = '1.8.0.10'
     mysqlVersion = '5.1.36'
+    postgresqlVersion = '9.4-1205-jdbc42'
 
     jsonPathVersion = '2.0.0'
     junitVersion = '4.12'
@@ -70,7 +79,10 @@ dependencies {
     // compile "org.hsqldb:hsqldb:${hsqldbVersion}"
 
     // Mysql
-    compile "mysql:mysql-connector-java:${mysqlVersion}"
+    // compile "mysql:mysql-connector-java:${mysqlVersion}"
+
+    // Postgres
+    compile "org.postgresql:postgresql:${postgresqlVersion}"
 
     // Provide runtime dependencies.
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
@@ -83,7 +95,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.7'
+    gradleVersion = '2.8'
 }
 
 task generatePom << {

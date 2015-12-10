@@ -1,6 +1,6 @@
-package com.saintdan.framework.service;
+package com.saintdan.framework.domain;
 
-import com.saintdan.framework.exception.LogException;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.LogVO;
@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
  * @date 10/25/15
  * @since JDK1.8
  */
-public interface LogService {
+public interface LogDomain {
 
     /**
      * Create new log.
@@ -24,23 +24,23 @@ public interface LogService {
      * @param param         log's param
      * @return              log's VO
      */
-    LogVO create(LogParam param, User currentUser);
+    LogVO create(LogParam param, User currentUser) throws Exception;
 
     /**
      * Show all logs.
      *
      * @return          logs' VO
-     * @throws LogException      LOG0011 Cannot find any log, no log exists.
+     * @throws CommonsException        SYS0120 No group exists.
      */
-    ObjectsVO getAllLogs() throws LogException;
+    ObjectsVO getAllLogs() throws Exception;
 
     /**
      * Show users' page VO.
      *
      * @param pageable      page
      * @return              logs' page VO
-     * @throws LogException      LOG0011 Cannot find any log, no log exists.
+     * @throws CommonsException        SYS0120 No group exists.
      */
-    PageVO getPage(Pageable pageable) throws LogException;
+    PageVO getPage(Pageable pageable) throws Exception;
 
 }

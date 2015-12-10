@@ -2,7 +2,7 @@ package com.saintdan.framework.tools;
 
 import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.exception.SignatureException;
+import com.saintdan.framework.exception.CommonsException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 
@@ -33,10 +33,10 @@ public class SignatureUtils {
      * @param publicKey     opposite end public key
      * @param charset       charset
      * @return              true/false
-     * @throws SignatureException
+     * @throws CommonsException
      */
     public static boolean rsaCheckContent(String content, String sign, String publicKey, String charset)
-            throws SignatureException {
+            throws CommonsException {
         try {
             PublicKey pubKey = getPublicKeyFromX509(SignatureConstant.SIGN_TYPE_RSA, new ByteArrayInputStream(publicKey
                     .getBytes()));
@@ -54,7 +54,7 @@ public class SignatureUtils {
 
             return signature.verify(Base64.decodeBase64(sign.getBytes()));
         } catch (Exception e) {
-            throw new SignatureException(ErrorType.SGN0020);
+            throw new CommonsException(ErrorType.SYS0004);
         }
     }
 
@@ -65,10 +65,10 @@ public class SignatureUtils {
      * @param privateKey        local private key
      * @param charset           charset
      * @return                  signature
-     * @throws SignatureException
+     * @throws CommonsException
      */
     public static String rsaSign(String content, String privateKey, String charset)
-            throws SignatureException {
+            throws CommonsException {
         try {
             PrivateKey priKey = getPrivateKeyFromPKCS8(SignatureConstant.SIGN_TYPE_RSA,
                     new ByteArrayInputStream(privateKey.getBytes()));
@@ -88,7 +88,7 @@ public class SignatureUtils {
 
             return new String(Base64.encodeBase64(signed));
         } catch (Exception e) {
-            throw new SignatureException(ErrorType.SGN0010);
+            throw new CommonsException(ErrorType.SYS0004);
         }
     }
 
