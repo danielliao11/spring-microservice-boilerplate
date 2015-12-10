@@ -1,12 +1,6 @@
 package com.saintdan.framework.repo;
 
-import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Role;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -19,29 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface RoleRepository extends RepositoryWithoutDelete<Role, Long> {
 
-    @EntityGraph(value = "Role.groups", type = EntityGraph.EntityGraphType.FETCH)
     Role findByName(String name);
 
-    @EntityGraph(value = "Role.groups", type = EntityGraph.EntityGraphType.FETCH)
-    Page<Role> findAll(Pageable pageable);
-
-    @Modifying
-    @Query("update Role r set r.validFlag=?1 where r.id=?2")
-    void updateValidFlagFor(ValidFlag validFlag, Long id);
-
-    // ------------------------
-    // OVERRIDE INTERFACES
-    // ------------------------
-
-    @Override
-    @EntityGraph(value = "Role.groups", type = EntityGraph.EntityGraphType.FETCH)
-    Role findOne(Long aLong);
-
-    @Override
-    @EntityGraph(value = "Role.groups", type = EntityGraph.EntityGraphType.FETCH)
-    Iterable<Role> findAll();
-
-    @Override
-    @EntityGraph(value = "Role.groups", type = EntityGraph.EntityGraphType.FETCH)
-    Iterable<Role> findAll(Iterable<Long> longs);
 }

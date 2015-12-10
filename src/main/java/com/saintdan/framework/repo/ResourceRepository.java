@@ -1,11 +1,6 @@
 package com.saintdan.framework.repo;
 
-import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Resource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 
 /**
  * Resource's repository.
@@ -18,22 +13,4 @@ public interface ResourceRepository extends RepositoryWithoutDelete<Resource, Lo
 
     Resource findByName(String name);
 
-    Page<Resource> findAll(Pageable pageable);
-
-    // ------------------------
-    // OVERRIDE INTERFACES
-    // ------------------------
-
-    @Override
-    Resource findOne(Long aLong);
-
-    @Override
-    Iterable<Resource> findAll();
-
-    @Override
-    Iterable<Resource> findAll(Iterable<Long> longs);
-
-    @Modifying
-    @Query("update Resource r set r.validFlag=?1 where r.id=?2")
-    void updateValidFlagFor(ValidFlag validFlag, Long id);
 }

@@ -46,11 +46,23 @@ public class User implements Serializable {
     @Column(nullable = false, length = 200)
     private String pwd;
 
-    @Column(length = 500)
-    private String description;
+    @Column(nullable = false)
+    private boolean isAccountNonExpiredAlias = Boolean.TRUE;
+
+    @Column(nullable = false)
+    private boolean isAccountNonLockedAlias = Boolean.TRUE;
+
+    @Column(nullable = false)
+    private boolean isCredentialsNonExpiredAlias = Boolean.TRUE;
+
+    @Column(nullable = false)
+    private boolean isEnabledAlias = Boolean.TRUE;
 
     @Column(nullable = false)
     private ValidFlag validFlag = ValidFlag.VALID;
+
+    @Column(length = 500)
+    private String description;
 
     // Last login time
     private Date lastLoginTime;
@@ -137,12 +149,36 @@ public class User implements Serializable {
         this.pwd = pwd;
     }
 
-    public String getDescription() {
-        return description;
+    public boolean isAccountNonExpiredAlias() {
+        return isAccountNonExpiredAlias;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setAccountNonExpiredAlias(boolean accountNonExpiredAlias) {
+        isAccountNonExpiredAlias = accountNonExpiredAlias;
+    }
+
+    public boolean isAccountNonLockedAlias() {
+        return isAccountNonLockedAlias;
+    }
+
+    public void setAccountNonLockedAlias(boolean accountNonLockedAlias) {
+        isAccountNonLockedAlias = accountNonLockedAlias;
+    }
+
+    public boolean isCredentialsNonExpiredAlias() {
+        return isCredentialsNonExpiredAlias;
+    }
+
+    public void setCredentialsNonExpiredAlias(boolean credentialsNonExpiredAlias) {
+        isCredentialsNonExpiredAlias = credentialsNonExpiredAlias;
+    }
+
+    public boolean isEnabledAlias() {
+        return isEnabledAlias;
+    }
+
+    public void setEnabledAlias(boolean enabledAlias) {
+        isEnabledAlias = enabledAlias;
     }
 
     public ValidFlag getValidFlag() {
@@ -151,6 +187,14 @@ public class User implements Serializable {
 
     public void setValidFlag(ValidFlag validFlag) {
         this.validFlag = validFlag;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getLastLoginTime() {
