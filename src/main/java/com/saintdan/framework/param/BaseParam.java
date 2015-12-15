@@ -35,8 +35,6 @@ public class BaseParam implements Serializable {
         baseFields.add("currentUser");
     }
 
-    private static final String COMMA = ",";
-
     private static final String EQUAL = "=";
 
     private static final long serialVersionUID = -103658650614029839L;
