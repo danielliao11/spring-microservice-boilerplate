@@ -36,6 +36,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .formLogin().usernameParameter("username").passwordParameter("password")
+                .and()
                 .authorizeRequests()
                 .antMatchers(CLIENT_URL).hasAnyAuthority("root", "client")
                 .antMatchers(USER_URL).hasAnyAuthority("root", "user")
