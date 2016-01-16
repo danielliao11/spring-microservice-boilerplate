@@ -1,5 +1,5 @@
 /**
- * Java config package.
+ * Package of Java config.
  *
  * <pre>
  *     {@link com.saintdan.framework.config.OAuth2ServerConfiguration}

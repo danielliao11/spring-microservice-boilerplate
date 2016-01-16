@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 /**
- * Client's controller
+ * Controller of client.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/28/15
