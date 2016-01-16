@@ -1,7 +1,7 @@
 package com.saintdan.framework.constant;
 
 /**
- * Signature constants.
+ * Constants of Signature.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 8/19/15
