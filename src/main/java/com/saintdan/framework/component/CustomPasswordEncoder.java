@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
- * Encrypt utilities.
+ * Custom encrypt utilities.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/28/15

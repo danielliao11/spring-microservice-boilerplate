@@ -1,15 +1,12 @@
 /**
  * Package of annotation.
- * <p>
+ * <pre>
  *     {@link com.saintdan.framework.annotation.CurrentUser}
  *     Annotate controller param, to get current user info.
  *
  *     {@link com.saintdan.framework.annotation.SignField}
  *     Annotate param field for signature.
- *
- *     {@link com.saintdan.framework.annotation.ValidationField}
- *     Annotate param field for validation.
- * </p>
+ * </pre>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 9/22/15
