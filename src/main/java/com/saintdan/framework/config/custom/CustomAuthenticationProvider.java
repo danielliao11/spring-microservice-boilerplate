@@ -10,8 +10,8 @@ import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.SpringSecurityUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -78,7 +78,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         try {
             logHelper.logUsersOperations(LogType.LOGIN, "login", user);
         } catch (Exception e) {
-            LogUtils.traceError(log, e, "Log user login failed.");
+            LogUtils.traceError(logger, e, "Log user login failed.");
         }
 
         //Authorize.
@@ -103,7 +103,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private CustomPasswordEncoder customPasswordEncoder;
 
-    private static final Log log = LogFactory.getLog(CustomAuthenticationProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
 
     private final static class UserRepositoryUserDetails extends User implements UserDetails {
 

@@ -1,7 +1,7 @@
 package com.saintdan.framework.constant;
 
 /**
- * Result constant.
+ * Constants of Result.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 9/22/15

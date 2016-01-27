@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 
 /**
  * Spring web security config.
@@ -23,7 +22,6 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
  */
 @Configuration
 @EnableWebSecurity
-@EnableWebMvcSecurity
 @EnableSpringDataWebSupport
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -36,6 +34,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .formLogin().usernameParameter("username").passwordParameter("password")
+                .and()
                 .authorizeRequests()
                 .antMatchers(CLIENT_URL).hasAnyAuthority("root", "client")
                 .antMatchers(USER_URL).hasAnyAuthority("root", "user")

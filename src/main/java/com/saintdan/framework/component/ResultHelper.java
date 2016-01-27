@@ -5,7 +5,7 @@ import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.vo.ResultVO;
-import org.apache.commons.logging.Log;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 /**
@@ -58,8 +58,15 @@ public class ResultHelper {
         );
     }
 
-    public ResultVO infoResp(Log log, ErrorType errorType) {
-        LogUtils.trackInfo(log, errorType.description());
+    /**
+     * Return error information.
+     *
+     * @param logger        Log
+     * @param errorType     error type
+     * @return              result vo
+     */
+    public ResultVO infoResp(Logger logger, ErrorType errorType) {
+        LogUtils.trackInfo(logger, errorType.description());
         return new ResultVO(
                 errorType.name(),
                 OperationStatus.FAILURE,
@@ -71,27 +78,27 @@ public class ResultHelper {
      * Return error information,
      * and log it to error.
      *
-     * @param log           Log
+     * @param logger        Log
      * @param errorType     error type
      * @param e             e
      * @return              result vo
      */
-    public ResultVO errorResp(Log log, Throwable e, ErrorType errorType) {
-        return errorResp(log, e, errorType, errorType.description());
+    public ResultVO errorResp(Logger logger, Throwable e, ErrorType errorType) {
+        return errorResp(logger, e, errorType, errorType.description());
     }
 
     /**
      * Return error information,
      * and log it to error.
      *
-     * @param log           Log
+     * @param logger        Log
      * @param errorType     error type
      * @param e             e
      * @param msg           error message
      * @return              result vo
      */
-    public ResultVO errorResp(Log log, Throwable e, ErrorType errorType, String msg) {
-        LogUtils.traceError(log, e, errorType.description());
+    public ResultVO errorResp(Logger logger, Throwable e, ErrorType errorType, String msg) {
+        LogUtils.traceError(logger, e, errorType.description());
         return new ResultVO(
                 errorType.name(),
                 OperationStatus.FAILURE,

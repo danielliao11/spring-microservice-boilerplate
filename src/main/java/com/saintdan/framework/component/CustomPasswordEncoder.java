@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
- * Encrypt utilities.
+ * Custom encrypt utilities.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/28/15
@@ -36,7 +36,6 @@ public class CustomPasswordEncoder implements PasswordEncoder{
     @Override
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
         String rawPwd = (String) rawPassword;
-        boolean status =  BCrypt.checkpw(rawPwd, encodedPassword);
-        return status;
+        return BCrypt.checkpw(rawPwd, encodedPassword);
     }
 }

@@ -108,3 +108,10 @@
   - Fix antMatcher bug.
   - Change the log of login.
   - Delete some outdated classes and codes.
+
+- 0.9.4.RELEASE
+  - Add login with authorization_code.
+
+- 0.9.5.RELEASE
+  - Add devtools support.
+  - Replace commons-logging with slf4j.

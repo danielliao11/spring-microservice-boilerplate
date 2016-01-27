@@ -1,7 +1,7 @@
 package com.saintdan.framework.constant;
 
 /**
- * User constant.
+ * Controller's constant.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/16/15

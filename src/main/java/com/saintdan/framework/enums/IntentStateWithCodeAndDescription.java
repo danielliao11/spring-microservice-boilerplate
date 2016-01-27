@@ -3,7 +3,7 @@ package com.saintdan.framework.enums;
 /**
  * Intent state interface.
  * <pre>
- *     int code;
+ *     String code;
  *     String description;
  * </pre>
  *

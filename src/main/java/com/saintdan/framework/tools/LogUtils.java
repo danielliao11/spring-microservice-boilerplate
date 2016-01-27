@@ -1,12 +1,11 @@
 package com.saintdan.framework.tools;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
+import org.slf4j.Logger;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Log utilities.
@@ -17,32 +16,32 @@ import java.util.Date;
  */
 public class LogUtils {
 
-    public static void trackInfo(Log log, String msg) {
-        log.info(generateTraceString(msg, null));
+    public static void trackInfo(Logger logger, String msg) {
+        logger.info(generateTraceString(msg, null));
     }
 
-    public static void trackWarn(Log log, String msg) {
-        log.warn(generateStackTrace(msg));
+    public static void trackWarn(Logger logger, String msg) {
+        logger.warn(generateStackTrace(msg));
     }
 
-    public static void traceDebug(Log log, Throwable e) {
-        log.debug(generateTraceString(null, e));
+    public static void traceDebug(Logger logger, Throwable e) {
+        logger.debug(generateTraceString(null, e));
     }
 
-    public static void traceDebug(Log log, Throwable e, String errorMsg) {
-        log.debug(generateTraceString(errorMsg, e));
+    public static void traceDebug(Logger logger, Throwable e, String errorMsg) {
+        logger.debug(generateTraceString(errorMsg, e));
     }
 
-    public static void traceError(Log log, String errorMsg) {
-        traceError(log, null, errorMsg);
+    public static void traceError(Logger logger, String errorMsg) {
+        traceError(logger, null, errorMsg);
     }
 
-    public static void traceError(Log log, Throwable e) {
-        traceError(log, e, null);
+    public static void traceError(Logger logger, Throwable e) {
+        traceError(logger, e, null);
     }
 
-    public static void traceError(Log log, Throwable e, String errorMsg) {
-        log.error(generateTraceString(errorMsg, e));
+    public static void traceError(Logger logger, Throwable e, String errorMsg) {
+        logger.error(generateTraceString(errorMsg, e));
     }
 
     /**

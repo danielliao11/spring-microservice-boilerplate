@@ -30,7 +30,10 @@ public class BaseParam implements Serializable {
 
     private static final Set<String> baseFields = new HashSet<>();
 
-    private static final String COMMA = ",";
+    static {
+        baseFields.add("sign");
+        baseFields.add("currentUser");
+    }
 
     private static final String EQUAL = "=";
 

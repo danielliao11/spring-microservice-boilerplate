@@ -1,6 +1,6 @@
 description = 'spring-rest-oauth2-sample'
 group = 'com.saintdan.framework'
-version = '0.9.1.RELEASE'
+version = '0.9.3.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -15,8 +15,7 @@ buildscript {
         maven { url "https://repo.spring.io/plugins-release" }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.7.RELEASE")
-        classpath("org.springframework:springloaded:1.2.4.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.2.RELEASE")
     }
 }
 
@@ -46,15 +45,15 @@ compileTestJava {
 }
 
 ext {
-    springBootVersion = '1.2.7.RELEASE'
-    springOAuth2Version = '2.0.7.RELEASE'
+    springBootVersion = '1.3.2.RELEASE'
+    springOAuth2Version = '2.0.8.RELEASE'
 
-    fastJsonVersion = '1.2.6'
+    fastJsonVersion = '1.2.7'
     commonsLang3Version = '3.4'
 
-    hsqldbVersion = '1.8.0.10'
-    mysqlVersion = '5.1.36'
-    postgresqlVersion = '9.4-1205-jdbc42'
+//    hsqldbVersion = '1.8.0.10'
+//    mysqlVersion = '5.1.36'
+    postgresqlVersion = '9.4.1207.jre7'
 
     jsonPathVersion = '2.0.0'
     junitVersion = '4.12'
@@ -65,6 +64,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-devtools"
 
     // Spring oauth2 dependency.
     compile "org.springframework.security.oauth:spring-security-oauth2:${springOAuth2Version}"
@@ -95,7 +95,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.8'
+    gradleVersion = '2.10'
 }
 
 task generatePom << {
