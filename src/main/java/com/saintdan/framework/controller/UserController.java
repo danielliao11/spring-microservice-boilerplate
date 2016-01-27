@@ -7,16 +7,16 @@ import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
+import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
@@ -52,7 +52,7 @@ public class UserController {
     public ResultVO create(@CurrentUser User currentUser, @Valid UserParam param, BindingResult result, @PathVariable String sign) {
         try {
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, log);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -60,10 +60,10 @@ public class UserController {
             return userService.create(param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
-            return resultHelper.infoResp(log, e.getErrorType());
+            return resultHelper.infoResp(logger, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
+            return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -77,17 +77,17 @@ public class UserController {
         try {
             UserParam param = new UserParam();
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, logger);
             if (resultVO != null) {
                 return resultVO;
             }
             return userService.getAllUsers();
         } catch (CommonsException e) {
             // Return error information and log the exception.
-            return resultHelper.infoResp(log, e.getErrorType());
+            return resultHelper.infoResp(logger, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
+            return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -106,17 +106,17 @@ public class UserController {
             }
             UserParam param = new UserParam();
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, logger);
             if (resultVO != null) {
                 return resultVO;
             }
             return userService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
         } catch (CommonsException e) {
             // Return error information and log the exception.
-            return resultHelper.infoResp(log, e.getErrorType());
+            return resultHelper.infoResp(logger, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
+            return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -134,17 +134,17 @@ public class UserController {
             }
             UserParam param = new UserParam(Long.valueOf(id));
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, logger);
             if (resultVO != null) {
                 return resultVO;
             }
             return userService.getUserById(param);
         } catch (CommonsException e) {
             // Return error information and log the exception.
-            return resultHelper.infoResp(log, e.getErrorType());
+            return resultHelper.infoResp(logger, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
+            return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -165,7 +165,7 @@ public class UserController {
             }
             UserParam param = new UserParam(usr);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -173,10 +173,10 @@ public class UserController {
             return userService.getUserByUsr(param);
         } catch (CommonsException e) {
             // Return error information and log the exception.
-            return resultHelper.infoResp(log, e.getErrorType());
+            return resultHelper.infoResp(logger, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
+            return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -194,7 +194,7 @@ public class UserController {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, log);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -202,10 +202,10 @@ public class UserController {
             return userService.update(param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
-            return resultHelper.infoResp(log, e.getErrorType());
+            return resultHelper.infoResp(logger, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
+            return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -223,7 +223,7 @@ public class UserController {
             }
             UserParam param = new UserParam(Long.valueOf(id));
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, log);
+            ResultVO resultVO = validateHelper.validate(param, sign, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -233,10 +233,10 @@ public class UserController {
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, USER));
         } catch (CommonsException e) {
             // Return error information and log the exception.
-            return resultHelper.infoResp(log, e.getErrorType());
+            return resultHelper.infoResp(logger, e.getErrorType());
         } catch (Exception e) {
             // Return unknown error and log the exception.
-            return resultHelper.errorResp(log, e, ErrorType.UNKNOWN, e.getMessage());
+            return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
         }
     }
 
@@ -244,7 +244,7 @@ public class UserController {
     // PRIVATE FIELDS
     // ------------------------
 
-    private static final Log log = LogFactory.getLog(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private ResultHelper resultHelper;

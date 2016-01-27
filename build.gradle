@@ -53,7 +53,7 @@ ext {
 
 //    hsqldbVersion = '1.8.0.10'
 //    mysqlVersion = '5.1.36'
-    postgresqlVersion = '9.4-1206-jdbc42'
+    postgresqlVersion = '9.4.1207.jre7'
 
     jsonPathVersion = '2.0.0'
     junitVersion = '4.12'

@@ -36,7 +36,6 @@ public class CustomPasswordEncoder implements PasswordEncoder{
     @Override
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
         String rawPwd = (String) rawPassword;
-        boolean status =  BCrypt.checkpw(rawPwd, encodedPassword);
-        return status;
+        return BCrypt.checkpw(rawPwd, encodedPassword);
     }
 }
