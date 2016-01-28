@@ -1,6 +1,7 @@
 package com.saintdan.framework.annotation;
 
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Get current user.{@link org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver}
+ * Get current user.{@link AuthenticationPrincipal}
  *
  * <pre>
  * @Controller

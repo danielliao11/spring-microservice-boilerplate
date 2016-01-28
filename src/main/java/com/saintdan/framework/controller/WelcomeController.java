@@ -1,9 +1,8 @@
 package com.saintdan.framework.controller;
 
-import com.saintdan.framework.vo.WelcomeVO;
 import com.saintdan.framework.po.User;
-
-import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
+import com.saintdan.framework.vo.WelcomeVO;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
