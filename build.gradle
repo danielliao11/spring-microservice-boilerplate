@@ -85,7 +85,10 @@ dependencies {
     compile "org.postgresql:postgresql:${postgresqlVersion}"
 
     // Provide runtime dependencies.
-    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+    // Tomcat
+//    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+    // Undertow - Undertow is a lightweight servlet container from JBoss
+    providedRuntime "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
 
     // Test dependencies.
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
