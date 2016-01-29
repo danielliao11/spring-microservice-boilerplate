@@ -115,3 +115,8 @@
 - 0.9.5.RELEASE
   - Add devtools support.
   - Replace commons-logging with slf4j.
+
+- 0.9.6.RELEASE
+  - Improve the performance of Spring Boot.
+    - Remove `JmxAutoConfiguration.class` and `WebSocketAutoConfiguration.class` import.
+    - Remove `spring-boot-starter-tomcat`, replace with `spring-boot-starter-undertow`.

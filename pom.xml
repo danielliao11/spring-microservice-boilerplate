@@ -4,18 +4,23 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.saintdan.framework</groupId>
   <artifactId>spring-rest-oauth2-sample</artifactId>
-  <version>0.9.3.RELEASE</version>
+  <version>0.9.6.RELEASE</version>
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-      <version>1.3.0.RELEASE</version>
-      <scope>compile</scope>
+      <artifactId>spring-boot-starter-undertow</artifactId>
+      <version>1.3.2.RELEASE</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
       <version>1.2.7</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -26,8 +31,8 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-security</artifactId>
-      <version>1.3.0.RELEASE</version>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <version>1.3.2.RELEASE</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -44,20 +49,20 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <version>1.3.0.RELEASE</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-tomcat</artifactId>
-      <version>1.3.0.RELEASE</version>
-      <scope>provided</scope>
+      <artifactId>spring-boot-starter-security</artifactId>
+      <version>1.3.2.RELEASE</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
-      <version>1.3.0.RELEASE</version>
+      <version>1.3.2.RELEASE</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>9.4.1207.jre7</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -67,22 +72,16 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-devtools</artifactId>
-      <version>1.3.0.RELEASE</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.security.oauth</groupId>
       <artifactId>spring-security-oauth2</artifactId>
       <version>2.0.8.RELEASE</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>9.4-1206-jdbc42</version>
-      <scope>compile</scope>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <version>1.3.2.RELEASE</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
