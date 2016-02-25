@@ -7,7 +7,7 @@ import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
-import com.saintdan.framework.domain.GroupDomain;
+import com.saintdan.framework.domain.impl.GroupDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
@@ -57,7 +57,7 @@ public class GroupController {
                 return resultVO;
             }
             // Return result and message.
-            return groupService.create(param, currentUser);
+            return groupDomain.create(param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -81,7 +81,7 @@ public class GroupController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return groupService.getAllGroups();
+            return groupDomain.getAllGroups();
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -110,7 +110,7 @@ public class GroupController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return groupService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+            return groupDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -138,7 +138,7 @@ public class GroupController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return groupService.getGroupById(param);
+            return groupDomain.getGroupById(param);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -167,7 +167,7 @@ public class GroupController {
                 return resultVO;
             }
             // Update group.
-            return groupService.update(param, currentUser);
+            return groupDomain.update(param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -196,7 +196,7 @@ public class GroupController {
                 return resultVO;
             }
             // Delete group.
-            groupService.delete(param, currentUser);
+            groupDomain.delete(param, currentUser);
             final String ROLE = "group";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
         } catch (CommonsException e) {
@@ -221,5 +221,5 @@ public class GroupController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private GroupDomain groupService;
+    private GroupDomain groupDomain;
 }

@@ -11,36 +11,33 @@ import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.Client;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.ClientRepository;
-import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ClientVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Implements the
- * {@link ClientDomain}
+ * Domain of {@link Client}.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/25/15
  * @since JDK1.8
  */
 @Service
-public class ClientDomainImpl extends BaseDomainImpl<Client, Long> implements ClientDomain {
+public class ClientDomain extends BaseDomain<Client, Long> {
 
     // ------------------------
     // PUBLIC METHODS
     // ------------------------
 
     /**
-     * Create new group.
+     * Create new client.
      *
      * @param currentUser   current user
-     * @param param         group's params
-     * @return              group's VO
-     * @throws CommonsException        SYS0111 role already existing, name taken.
+     * @param param         client's params
+     * @return              client's VO
+     * @throws CommonsException        SYS0111 client already existing, name taken.
      */
-    @Override
     public ClientVO create(ClientParam param, User currentUser) throws Exception {
         Client client = clientRepository.findByClientIdAlias(param.getClientIdAlias());
         if (client != null) {
@@ -58,7 +55,6 @@ public class ClientDomainImpl extends BaseDomainImpl<Client, Long> implements Cl
      * @return          client's VO
      * @throws CommonsException        SYS0122 Cannot find any client by name param.
      */
-    @Override
     public ClientVO getClientByClientId(ClientParam param) throws Exception {
         Client client = clientRepository.findByClientIdAlias(param.getClientIdAlias());
         if (client == null) {
@@ -75,7 +71,6 @@ public class ClientDomainImpl extends BaseDomainImpl<Client, Long> implements Cl
      * @param param         client's param
      * @throws CommonsException        SYS0122 Cannot find any client by id param.
      */
-    @Override
     public void delete(ClientParam param, User currentUser) throws Exception {
         Client client = clientRepository.findOne(param.getId());
         if (client == null) {

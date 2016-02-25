@@ -12,9 +12,6 @@ import com.saintdan.framework.po.Group;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.RoleRepository;
-import com.saintdan.framework.domain.GroupDomain;
-import com.saintdan.framework.domain.RoleDomain;
-import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -30,8 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Implements the
- * {@link RoleDomain}
+ * Domain of {@link Role}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/17/15
@@ -39,7 +35,7 @@ import java.util.Set;
  */
 @Service
 @Transactional
-public class RoleDomainImpl extends BaseDomainImpl<Role, Long> implements RoleDomain {
+public class RoleDomain extends BaseDomain<Role, Long> {
 
     // ------------------------
     // PUBLIC METHODS
@@ -53,7 +49,6 @@ public class RoleDomainImpl extends BaseDomainImpl<Role, Long> implements RoleDo
      * @return              role's VO
      * @throws CommonsException        SYS0111 user already existing, usr taken.
      */
-    @Override
     public RoleVO create(RoleParam param, User currentUser) throws Exception {
         Role role = roleRepository.findByName(param.getName());
         if (role != null) {
@@ -70,7 +65,6 @@ public class RoleDomainImpl extends BaseDomainImpl<Role, Long> implements RoleDo
      * @return          roles
      * @throws CommonsException        SYS0120 No role exists.
      */
-    @Override
     public ObjectsVO getAllRoles() throws Exception {
         Iterable roles = roleRepository.findAll();
         if (((List) roles).isEmpty()) {
@@ -88,7 +82,6 @@ public class RoleDomainImpl extends BaseDomainImpl<Role, Long> implements RoleDo
      * @return              roles' page VO
      * @throws CommonsException        SYS0120 No role exists.
      */
-    @Override
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Role> rolePage = roleRepository.findAll(pageable);
         if (rolePage.getContent().isEmpty()) {
@@ -107,7 +100,6 @@ public class RoleDomainImpl extends BaseDomainImpl<Role, Long> implements RoleDo
      * @return              roles' PO
      * @throws CommonsException        SYS0120 No role exists.
      */
-    @Override
     public Iterable<Role> getRolesByIds(Iterable<Long> ids) throws Exception {
         return roleRepository.findAll(ids);
     }
@@ -119,7 +111,6 @@ public class RoleDomainImpl extends BaseDomainImpl<Role, Long> implements RoleDo
      * @return          role's VO
      * @throws CommonsException        SYS0122 Cannot find any role by id param.
      */
-    @Override
     public RoleVO getRoleById(RoleParam param) throws Exception {
         Role role = roleRepository.findOne(param.getId());
         if (role == null) {
@@ -137,7 +128,6 @@ public class RoleDomainImpl extends BaseDomainImpl<Role, Long> implements RoleDo
      * @return          role's VO
      * @throws CommonsException        SYS0122 Cannot find any role by name param.
      */
-    @Override
     public RoleVO getRoleByName(RoleParam param) throws Exception {
         Role role = roleRepository.findByName(param.getName());
         if (role == null) {
@@ -155,7 +145,6 @@ public class RoleDomainImpl extends BaseDomainImpl<Role, Long> implements RoleDo
      * @return          role's VO
      * @throws CommonsException        SYS0122 Cannot find any role by id param.
      */
-    @Override
     public RoleVO update(RoleParam param, User currentUser) throws Exception {
         Role role = roleRepository.findByName(param.getName());
         if (role == null) {
@@ -173,7 +162,6 @@ public class RoleDomainImpl extends BaseDomainImpl<Role, Long> implements RoleDo
      * @param param         role's params
      * @throws CommonsException        SYS0122 Cannot find any role by id param.
      */
-    @Override
     public void delete(RoleParam param, User currentUser) throws Exception {
         Role role = roleRepository.findOne(param.getId());
         if (role == null) {

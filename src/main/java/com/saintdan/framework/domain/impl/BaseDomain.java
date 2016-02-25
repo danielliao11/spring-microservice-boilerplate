@@ -15,7 +15,6 @@ import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.RepositoryWithoutDelete;
-import com.saintdan.framework.domain.BaseDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -37,7 +36,7 @@ import java.util.List;
  * @date 7/21/15
  * @since JDK1.8
  */
-public abstract class BaseDomainImpl<T, ID extends Serializable> implements BaseDomain<T, ID> {
+public abstract class BaseDomain<T, ID extends Serializable> {
 
     // ------------------------
     // PUBLIC METHODS

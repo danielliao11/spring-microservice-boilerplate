@@ -7,7 +7,7 @@ import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
-import com.saintdan.framework.domain.UserDomain;
+import com.saintdan.framework.domain.impl.UserDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
@@ -57,7 +57,7 @@ public class UserController {
                 return resultVO;
             }
             // Return result and message.
-            return userService.create(param, currentUser);
+            return userDomain.create(param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -81,7 +81,7 @@ public class UserController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return userService.getAllUsers();
+            return userDomain.getAllUsers();
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -110,7 +110,7 @@ public class UserController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return userService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+            return userDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -138,7 +138,7 @@ public class UserController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return userService.getUserById(param);
+            return userDomain.getUserById(param);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -170,7 +170,7 @@ public class UserController {
                 return resultVO;
             }
             // Return result and message.
-            return userService.getUserByUsr(param);
+            return userDomain.getUserByUsr(param);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -199,7 +199,7 @@ public class UserController {
                 return resultVO;
             }
             // Update user.
-            return userService.update(param, currentUser);
+            return userDomain.update(param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -228,7 +228,7 @@ public class UserController {
                 return resultVO;
             }
             // Delete user.
-            userService.delete(param, currentUser);
+            userDomain.delete(param, currentUser);
             final String USER = "user";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, USER));
         } catch (CommonsException e) {
@@ -253,6 +253,6 @@ public class UserController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private UserDomain userService;
+    private UserDomain userDomain;
 
 }

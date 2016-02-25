@@ -8,7 +8,6 @@ import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.Log;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.LogRepository;
-import com.saintdan.framework.domain.LogDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.LogVO;
 import com.saintdan.framework.vo.ObjectsVO;
@@ -23,8 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Implements the
- * {@link LogDomain}
+ * Domain of {@link Log}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/28/15
@@ -32,7 +30,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class LogDomainImpl implements LogDomain {
+public class LogDomain {
 
     // ------------------------
     // PUBLIC METHODS
@@ -45,7 +43,6 @@ public class LogDomainImpl implements LogDomain {
      * @param param         log's param
      * @return              log's VO
      */
-    @Override
     public LogVO create(LogParam param, User currentUser) throws Exception {
         return transformer.po2VO(LogVO.class, logRepository.save(logParam2PO(param, currentUser)),
                 String.format(ControllerConstant.CREATE, LOG));
@@ -57,7 +54,6 @@ public class LogDomainImpl implements LogDomain {
      * @return          logs' VO
      * @throws CommonsException        SYS0120 No group exists.
      */
-    @Override
     public ObjectsVO getAllLogs() throws Exception {
         List<Log> logs = (List<Log>) logRepository.findAll();
         if (logs.isEmpty()) {
@@ -74,7 +70,6 @@ public class LogDomainImpl implements LogDomain {
      * @return              logs' page VO
      * @throws CommonsException        SYS0120 No group exists.
      */
-    @Override
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Log> logPage = logRepository.findAll(pageable);
         if (logPage.getContent().isEmpty()) {
@@ -92,11 +87,10 @@ public class LogDomainImpl implements LogDomain {
     @Autowired
     private Transformer transformer;
 
-    private final static String LOG = "log";
-
-
     @Autowired
     private LogRepository logRepository;
+
+    private final static String LOG = "log";
 
     /**
      * Transform log's param to PO.

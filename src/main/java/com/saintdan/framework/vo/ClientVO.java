@@ -2,7 +2,6 @@ package com.saintdan.framework.vo;
 
 import org.springframework.security.core.GrantedAuthority;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -13,7 +12,7 @@ import java.util.Set;
  * @date 10/25/15
  * @since JDK1.8
  */
-public class ClientVO extends ResultVO implements Serializable {
+public class ClientVO extends ResultVO {
 
     private static final long serialVersionUID = -6088897333280284093L;
 

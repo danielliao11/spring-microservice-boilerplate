@@ -12,8 +12,6 @@ import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
-import com.saintdan.framework.domain.RoleDomain;
-import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -28,8 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Implements the
- * {@link UserDomain}
+ * Domain of {@link User}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 7/21/15
@@ -37,7 +34,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDomain {
+public class UserDomain extends BaseDomain<User, Long> {
 
     // ------------------------
     // PUBLIC METHODS
@@ -51,7 +48,6 @@ public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDo
      * @return              user's VO
      * @throws CommonsException        SYS0111 user already existing, usr taken.
      */
-    @Override
     public UserVO create(UserParam param, User currentUser) throws Exception {
         User user = userRepository.findByUsr(param.getUsr());
         if (user != null) {
@@ -68,7 +64,6 @@ public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDo
      * @return          users
      * @throws CommonsException        SYS0120 No user exists.
      */
-    @Override
     public ObjectsVO getAllUsers() throws Exception {
         Iterable users = userRepository.findAll();
         if (((List) users).isEmpty()) {
@@ -86,7 +81,6 @@ public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDo
      * @return              users' page VO
      * @throws CommonsException        SYS0120 No user exists.
      */
-    @Override
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<User> userPage = userRepository.findAll(pageable);
         if (userPage.getContent().isEmpty()) {
@@ -105,7 +99,6 @@ public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDo
      * @return              users' PO
      * @throws CommonsException        SYS0120 No user exists.
      */
-    @Override
     public Iterable<User> getUsersByIds(Iterable<Long> ids) throws Exception {
         return userRepository.findAll(ids);
     }
@@ -117,7 +110,6 @@ public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDo
      * @return          user's VO
      * @throws CommonsException        SYS0122 Cannot find any user by id param.
      */
-    @Override
     public UserVO getUserById(UserParam param) throws Exception {
         User user = userRepository.findOne(param.getId());
         if (user == null) {
@@ -135,7 +127,6 @@ public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDo
      * @return          user's VO
      * @throws CommonsException        SYS0122 Cannot find any user by usr param.
      */
-    @Override
     public UserVO getUserByUsr(UserParam param) throws Exception {
         User user = userRepository.findByUsr(param.getUsr());
         if (user == null) {
@@ -153,7 +144,6 @@ public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDo
      * @return          user's VO
      * @throws CommonsException        SYS0122 Cannot find any user by id param.
      */
-    @Override
     public UserVO update(UserParam param, User currentUser) throws Exception {
         User user = userRepository.findByUsr(param.getUsr());
         if (user == null) {
@@ -171,7 +161,6 @@ public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDo
      * @param param         user's param
      * @throws CommonsException        SYS0131 user's pwd update failed.
      */
-    @Override
     public void updatePwd(UserParam param, User currentUser) throws Exception {
         User user = userRepository.findByUsr(param.getUsr());
         if (user == null) {
@@ -189,7 +178,6 @@ public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDo
      * @param param         user's params
      * @throws CommonsException        SYS0122 Cannot find any user by id param.
      */
-    @Override
     public void delete(UserParam param, User currentUser) throws Exception {
         User user = userRepository.findOne(param.getId());
         if (user == null) {
@@ -220,7 +208,7 @@ public class UserDomainImpl extends BaseDomainImpl<User, Long> implements UserDo
     private Transformer transformer;
 
     @Autowired
-    public UserDomainImpl(UserRepository userRepository) {
+    public UserDomain(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

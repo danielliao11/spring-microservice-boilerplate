@@ -120,3 +120,6 @@
   - Improve the performance of Spring Boot.
     - Remove `JmxAutoConfiguration.class` and `WebSocketAutoConfiguration.class` import.
     - Remove `spring-boot-starter-tomcat`, replace with `spring-boot-starter-undertow`.
+
+- 0.9.7.RELEASE
+  - Delete redundant codes of domain.

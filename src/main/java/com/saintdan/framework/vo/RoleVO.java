@@ -1,7 +1,5 @@
 package com.saintdan.framework.vo;
 
-import java.io.Serializable;
-
 /**
  * Role's VO.
  *
@@ -9,7 +7,7 @@ import java.io.Serializable;
  * @date 10/16/15
  * @since JDK1.8
  */
-public class RoleVO extends ResultVO implements Serializable {
+public class RoleVO extends ResultVO {
 
     private static final long serialVersionUID = 1444065316565469644L;
 

@@ -7,7 +7,7 @@ import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
-import com.saintdan.framework.domain.ClientDomain;
+import com.saintdan.framework.domain.impl.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
@@ -57,7 +57,7 @@ public class ClientController {
                 return resultVO;
             }
             // Return result and message.
-            return clientService.create(param, currentUser);
+            return clientDomain.create(param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -81,7 +81,7 @@ public class ClientController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return clientService.getAll();
+            return clientDomain.getAll();
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -110,7 +110,7 @@ public class ClientController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return clientService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE), ResultVO.class);
+            return clientDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE), ResultVO.class);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -138,7 +138,7 @@ public class ClientController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return clientService.getById(ResultVO.class, param);
+            return clientDomain.getById(ResultVO.class, param);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -167,7 +167,7 @@ public class ClientController {
                 return resultVO;
             }
             // Update client.
-            return clientService.update(ResultVO.class, param, currentUser);
+            return clientDomain.update(ResultVO.class, param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -196,7 +196,7 @@ public class ClientController {
                 return resultVO;
             }
             // Delete client.
-            clientService.delete(param, currentUser);
+            clientDomain.delete(param, currentUser);
             final String ROLE = "client";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
         } catch (CommonsException e) {
@@ -221,5 +221,5 @@ public class ClientController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private ClientDomain clientService;
+    private ClientDomain clientDomain;
 }

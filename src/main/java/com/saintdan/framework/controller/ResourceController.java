@@ -7,7 +7,7 @@ import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
-import com.saintdan.framework.domain.ResourceDomain;
+import com.saintdan.framework.domain.impl.ResourceDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
@@ -57,7 +57,7 @@ public class ResourceController {
                 return resultVO;
             }
             // Return result and message.
-            return resourceService.create(param, currentUser);
+            return resourceDomain.create(param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -81,7 +81,7 @@ public class ResourceController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return resourceService.getAllResources();
+            return resourceDomain.getAllResources();
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -110,7 +110,7 @@ public class ResourceController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return resourceService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+            return resourceDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -138,7 +138,7 @@ public class ResourceController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return resourceService.getResourceById(param);
+            return resourceDomain.getResourceById(param);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -167,7 +167,7 @@ public class ResourceController {
                 return resultVO;
             }
             // Update resource.
-            return resourceService.update(param, currentUser);
+            return resourceDomain.update(param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -196,7 +196,7 @@ public class ResourceController {
                 return resultVO;
             }
             // Delete resource.
-            resourceService.delete(param, currentUser);
+            resourceDomain.delete(param, currentUser);
             final String ROLE = "resource";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
         } catch (CommonsException e) {
@@ -221,5 +221,5 @@ public class ResourceController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private ResourceDomain resourceService;
+    private ResourceDomain resourceDomain;
 }

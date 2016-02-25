@@ -12,8 +12,6 @@ import com.saintdan.framework.po.Group;
 import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.ResourceRepository;
-import com.saintdan.framework.domain.GroupDomain;
-import com.saintdan.framework.domain.ResourceDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
@@ -28,8 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Implements the
- * {@link ResourceDomain}
+ * Domain of {@link Resource}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/17/15
@@ -37,7 +34,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class ResourceDomainImpl extends BaseDomainImpl<Resource, Long> implements ResourceDomain {
+public class ResourceDomain extends BaseDomain<Resource, Long> {
 
     // ------------------------
     // PUBLIC METHODS
@@ -51,7 +48,6 @@ public class ResourceDomainImpl extends BaseDomainImpl<Resource, Long> implement
      * @return              resource's VO
      * @throws CommonsException        SYS0111 resource already existing, name taken.
      */
-    @Override
     public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
         Resource resource = resourceRepository.findByName(param.getName());
         if (resource != null) {
@@ -68,7 +64,6 @@ public class ResourceDomainImpl extends BaseDomainImpl<Resource, Long> implement
      * @return              resources' VO
      * @throws CommonsException        SYS0120 No resource exists.
      */
-    @Override
     public ObjectsVO getAllResources() throws Exception {
         List<Resource> resources = (List<Resource>) resourceRepository.findAll();
         if (resources.isEmpty()) {
@@ -86,7 +81,6 @@ public class ResourceDomainImpl extends BaseDomainImpl<Resource, Long> implement
      * @return              resources' page VO
      * @throws CommonsException        SYS0120 No resource exists.
      */
-    @Override
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Resource> resourcePage = resourceRepository.findAll(pageable);
         if (resourcePage.getContent().isEmpty()) {
@@ -105,7 +99,6 @@ public class ResourceDomainImpl extends BaseDomainImpl<Resource, Long> implement
      * @return              resources' PO
      * @throws CommonsException        SYS0120 No resource exists.
      */
-    @Override
     public Iterable<Resource> getResourcesByIds(Iterable<Long> ids) throws Exception {
         return resourceRepository.findAll(ids);
     }
@@ -117,7 +110,6 @@ public class ResourceDomainImpl extends BaseDomainImpl<Resource, Long> implement
      * @return              resource's VO
      * @throws CommonsException        SYS0122 Cannot find any resource by id param.
      */
-    @Override
     public ResourceVO getResourceById(ResourceParam param) throws Exception {
         Resource resource = resourceRepository.findOne(param.getId());
         if (resource == null) {
@@ -135,7 +127,6 @@ public class ResourceDomainImpl extends BaseDomainImpl<Resource, Long> implement
      * @return              resource's VO
      * @throws CommonsException        SYS0122 Cannot find any resource by name param.
      */
-    @Override
     public ResourceVO getResourceByName(ResourceParam param) throws Exception {
         Resource resource = resourceRepository.findByName(param.getName());
         if (resource == null) {
@@ -153,7 +144,6 @@ public class ResourceDomainImpl extends BaseDomainImpl<Resource, Long> implement
      * @return              resource's VO
      * @throws CommonsException        SYS0122 Cannot find any resource by path param.
      */
-    @Override
     public ResourceVO getResourceByPath(ResourceParam param) throws Exception {
         Resource resource = resourceRepository.findByName(param.getName());
         if (resource == null) {
@@ -172,7 +162,6 @@ public class ResourceDomainImpl extends BaseDomainImpl<Resource, Long> implement
      * @return              resource's VO
      * @throws CommonsException        SYS0122 Cannot find any resource by id param.
      */
-    @Override
     public ResourceVO update(ResourceParam param, User currentUser) throws Exception {
         Resource resource = resourceRepository.findOne(param.getId());
         if (resource == null) {
@@ -191,7 +180,6 @@ public class ResourceDomainImpl extends BaseDomainImpl<Resource, Long> implement
      * @param param         resource's params.
      * @throws CommonsException        SYS0122 Cannot find any resource by id param.
      */
-    @Override
     public void delete(ResourceParam param, User currentUser) throws Exception {
         Resource resource = resourceRepository.findOne(param.getId());
         if (resource == null) {

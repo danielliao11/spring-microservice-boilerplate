@@ -1,6 +1,6 @@
 package com.saintdan.framework.component;
 
-import com.saintdan.framework.domain.ClientDomain;
+import com.saintdan.framework.domain.impl.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.param.BaseParam;
 import com.saintdan.framework.param.ClientParam;
@@ -97,7 +97,7 @@ public class ValidateHelper {
     private SignHelper signHelper;
 
     @Autowired
-    private ClientDomain clientService;
+    private ClientDomain clientDomain;
 
     /**
      * Get public key by client id.
@@ -107,7 +107,7 @@ public class ValidateHelper {
      * @exception Exception
      */
     private String getPublicKeyByClientId(String clientId) throws Exception {
-        return clientService.getClientByClientId(new ClientParam(clientId)).getPublicKey();
+        return clientDomain.getClientByClientId(new ClientParam(clientId)).getPublicKey();
     }
 
 }

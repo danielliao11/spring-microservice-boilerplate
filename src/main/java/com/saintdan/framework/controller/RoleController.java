@@ -7,7 +7,7 @@ import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
-import com.saintdan.framework.domain.RoleDomain;
+import com.saintdan.framework.domain.impl.RoleDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
@@ -58,7 +58,7 @@ public class RoleController {
                 return resultVO;
             }
             // Return result and message.
-            return roleService.create(param, currentUser);
+            return roleDomain.create(param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -82,7 +82,7 @@ public class RoleController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return roleService.getAllRoles();
+            return roleDomain.getAllRoles();
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -111,7 +111,7 @@ public class RoleController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return roleService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+            return roleDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -139,7 +139,7 @@ public class RoleController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return roleService.getRoleById(param);
+            return roleDomain.getRoleById(param);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -168,7 +168,7 @@ public class RoleController {
                 return resultVO;
             }
             // Update role.
-            return roleService.update(param, currentUser);
+            return roleDomain.update(param, currentUser);
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -199,7 +199,7 @@ public class RoleController {
                 return resultVO;
             }
             // Delete role.
-            roleService.delete(param, currentUser);
+            roleDomain.delete(param, currentUser);
             final String ROLE = "role";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
         } catch (CommonsException e) {
@@ -224,5 +224,5 @@ public class RoleController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private RoleDomain roleService;
+    private RoleDomain roleDomain;
 }

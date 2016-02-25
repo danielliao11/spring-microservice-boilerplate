@@ -2,7 +2,6 @@ package com.saintdan.framework.vo;
 
 import com.saintdan.framework.enums.LogType;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,7 +11,7 @@ import java.util.Date;
  * @date 10/27/15
  * @since JDK1.8
  */
-public class LogVO extends ResultVO implements Serializable {
+public class LogVO extends ResultVO {
 
     private static final long serialVersionUID = -8802363013216964724L;
 

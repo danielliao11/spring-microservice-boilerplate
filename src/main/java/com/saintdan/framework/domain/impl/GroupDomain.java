@@ -13,9 +13,6 @@ import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.GroupRepository;
-import com.saintdan.framework.domain.GroupDomain;
-import com.saintdan.framework.domain.ResourceDomain;
-import com.saintdan.framework.domain.RoleDomain;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.GroupVO;
 import com.saintdan.framework.vo.ObjectsVO;
@@ -30,8 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Implements the
- * {@link GroupDomain}
+ * Domain of {@link Group}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/17/15
@@ -39,7 +35,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class GroupDomainImpl extends BaseDomainImpl<Group, Long> implements GroupDomain {
+public class GroupDomain extends BaseDomain<Group, Long> {
 
     // ------------------------
     // PUBLIC METHODS
@@ -53,7 +49,6 @@ public class GroupDomainImpl extends BaseDomainImpl<Group, Long> implements Grou
      * @return              group's VO
      * @throws CommonsException        SYS0111 role already existing, name taken.
      */
-    @Override
     public GroupVO create(GroupParam param, User currentUser) throws Exception {
         Group group = groupRepository.findByName(param.getName());
         if (group != null) {
@@ -70,7 +65,6 @@ public class GroupDomainImpl extends BaseDomainImpl<Group, Long> implements Grou
      * @return              groups' VO
      * @throws CommonsException        SYS0120 No group exists.
      */
-    @Override
     public ObjectsVO getAllGroups() throws Exception {
         Iterable groups = groupRepository.findAll();
         if (((List) groups).isEmpty()) {
@@ -88,7 +82,6 @@ public class GroupDomainImpl extends BaseDomainImpl<Group, Long> implements Grou
      * @return              groups' page VO
      * @throws CommonsException        SYS0120 No group exists.
      */
-    @Override
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Group> groupPage = groupRepository.findAll(pageable);
         if (groupPage.getContent().isEmpty()) {
@@ -107,7 +100,6 @@ public class GroupDomainImpl extends BaseDomainImpl<Group, Long> implements Grou
      * @return              groups' PO
      * @throws CommonsException        SYS0120 No group exists.
      */
-    @Override
     public Iterable<Group> getGroupsByIds(Iterable<Long> ids) throws Exception {
         return groupRepository.findAll(ids);
     }
@@ -119,7 +111,6 @@ public class GroupDomainImpl extends BaseDomainImpl<Group, Long> implements Grou
      * @return              group's VO
      * @throws CommonsException        SYS0122 Cannot find any group by id param.
      */
-    @Override
     public GroupVO getGroupById(GroupParam param) throws Exception {
         Group group = groupRepository.findOne(param.getId());
         if (group == null) {
@@ -137,7 +128,6 @@ public class GroupDomainImpl extends BaseDomainImpl<Group, Long> implements Grou
      * @return              group's VO
      * @throws CommonsException        SYS0122 Cannot find any group by name param.
      */
-    @Override
     public GroupVO getGroupByName(GroupParam param) throws Exception {
         Group group = groupRepository.findByName(param.getName());
         if (group == null) {
@@ -156,7 +146,6 @@ public class GroupDomainImpl extends BaseDomainImpl<Group, Long> implements Grou
      * @return              group's VO
      * @throws CommonsException        SYS0122 Cannot find any group by id param.
      */
-    @Override
     public GroupVO update(GroupParam param, User currentUser) throws Exception {
         Group group = groupRepository.findByName(param.getName());
         if (group == null) {
@@ -174,7 +163,6 @@ public class GroupDomainImpl extends BaseDomainImpl<Group, Long> implements Grou
      * @param param         group's params.
      * @throws CommonsException        SYS0122 Cannot find any group by id param.
      */
-    @Override
     public void delete(GroupParam param, User currentUser) throws Exception {
         Group group = groupRepository.findOne(param.getId());
         if (group == null) {
