@@ -5,7 +5,7 @@ import com.saintdan.framework.enums.LogType;
 import java.io.Serializable;
 
 /**
- * Log's param.
+ * Param bean for {@link com.saintdan.framework.domain.LogDomain}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/28/15

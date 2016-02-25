@@ -1,4 +1,4 @@
-package com.saintdan.framework.domain.impl;
+package com.saintdan.framework.domain;
 
 /**
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>

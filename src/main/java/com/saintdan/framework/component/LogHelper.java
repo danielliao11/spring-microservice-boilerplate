@@ -1,6 +1,6 @@
 package com.saintdan.framework.component;
 
-import com.saintdan.framework.domain.impl.LogDomain;
+import com.saintdan.framework.domain.LogDomain;
 import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.User;

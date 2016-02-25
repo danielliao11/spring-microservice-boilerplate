@@ -5,4 +5,4 @@
  * @date 9/22/15
  * @since JDK1.8
  */
-package com.saintdan.framework.domain.impl;
+package com.saintdan.framework.domain;

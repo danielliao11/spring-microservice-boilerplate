@@ -1,6 +1,6 @@
 package com.saintdan.framework.component;
 
-import com.saintdan.framework.domain.impl.ClientDomain;
+import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.param.BaseParam;
 import com.saintdan.framework.param.ClientParam;

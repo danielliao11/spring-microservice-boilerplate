@@ -1,4 +1,4 @@
-package com.saintdan.framework.domain.impl;
+package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.Transformer;

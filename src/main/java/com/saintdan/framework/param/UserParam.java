@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * User RESTFul param bean.
+ * Param bean for {@link com.saintdan.framework.domain.UserDomain}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 9/22/15

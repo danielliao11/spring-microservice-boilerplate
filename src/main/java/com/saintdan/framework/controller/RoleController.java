@@ -7,7 +7,7 @@ import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
-import com.saintdan.framework.domain.impl.RoleDomain;
+import com.saintdan.framework.domain.RoleDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;

@@ -1,4 +1,4 @@
-package com.saintdan.framework.domain.impl;
+package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;

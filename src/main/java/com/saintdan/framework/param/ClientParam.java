@@ -1,12 +1,13 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.SignField;
+import com.saintdan.framework.domain.ClientDomain;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * Client's RESTFul param bean.
+ * Param bean for {@link ClientDomain}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/25/15
