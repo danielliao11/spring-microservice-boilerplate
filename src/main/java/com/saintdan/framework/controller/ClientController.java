@@ -35,7 +35,7 @@ import javax.validation.Valid;
  * @since JDK1.8
  */
 @RestController
-@RequestMapping(ResourceURL.RESOURCES)
+@RequestMapping(ResourceURL.RESOURCES + ResourceURL.CLIENTS)
 public class ClientController {
 
     // ------------------------
@@ -48,7 +48,7 @@ public class ClientController {
      * @param param     client's param
      * @return          client's result
      */
-    @RequestMapping(value = ResourceURL.CLIENTS + ResourceURL.SIGN, method = RequestMethod.POST)
+    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, ClientParam param, @PathVariable String sign) {
         try {
             // Validate current user, param and sign.
@@ -72,7 +72,7 @@ public class ClientController {
      *
      * @return          clients' result
      */
-    @RequestMapping(value = ResourceURL.CLIENTS + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO index(@PathVariable String sign) {
         try {
             ClientParam param = new ClientParam();
@@ -97,7 +97,7 @@ public class ClientController {
      * @param pageNo        page number
      * @return              clients' page
      */
-    @RequestMapping(value = ResourceURL.CLIENTS + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
         try {
             // Init page number.
@@ -126,7 +126,7 @@ public class ClientController {
      * @param id        client's id
      * @return          client's result
      */
-    @RequestMapping(value = ResourceURL.CLIENTS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -155,7 +155,7 @@ public class ClientController {
      * @param param     client's params
      * @return          client's result
      */
-    @RequestMapping(value = ResourceURL.CLIENTS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid ClientParam param, BindingResult result) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -183,7 +183,7 @@ public class ClientController {
      * @param id        client's id
      * @return          client's result
      */
-    @RequestMapping(value = ResourceURL.CLIENTS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {

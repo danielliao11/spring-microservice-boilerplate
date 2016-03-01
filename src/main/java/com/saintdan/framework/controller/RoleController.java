@@ -36,7 +36,7 @@ import javax.validation.Valid;
  * @since JDK1.8
  */
 @RestController
-@RequestMapping(ResourceURL.RESOURCES)
+@RequestMapping(ResourceURL.RESOURCES + ResourceURL.ROLES)
 public class RoleController {
 
     // ------------------------
@@ -49,7 +49,7 @@ public class RoleController {
      * @param param     role's param
      * @return          role's result
      */
-    @RequestMapping(value = ResourceURL.ROLES + ResourceURL.SIGN, method = RequestMethod.POST)
+    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, @Valid RoleParam param, BindingResult result, @PathVariable String sign) {
         try {
             // Validate current user, param and sign.
@@ -73,7 +73,7 @@ public class RoleController {
      *
      * @return          roles' result
      */
-    @RequestMapping(value = ResourceURL.ROLES + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO index(@PathVariable String sign) {
         try {
             RoleParam param = new RoleParam();
@@ -98,7 +98,7 @@ public class RoleController {
      * @param pageNo        page number
      * @return              roles' page
      */
-    @RequestMapping(value = ResourceURL.ROLES + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
         try {
             // Init page number.
@@ -127,7 +127,7 @@ public class RoleController {
      * @param id        role's id
      * @return          role's result
      */
-    @RequestMapping(value = ResourceURL.ROLES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -156,7 +156,7 @@ public class RoleController {
      * @param param     role's params
      * @return          role's result
      */
-    @RequestMapping(value = ResourceURL.ROLES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid RoleParam param, BindingResult result) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -184,7 +184,7 @@ public class RoleController {
      * @param id        role's id
      * @return          role's result
      */
-    @RequestMapping(value = ResourceURL.ROLES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {

@@ -35,7 +35,7 @@ import javax.validation.Valid;
  * @since JDK1.8
  */
 @RestController
-@RequestMapping(ResourceURL.RESOURCES)
+@RequestMapping(ResourceURL.RESOURCES + ResourceURL.GROUPS)
 public class GroupController {
 
     // ------------------------
@@ -48,7 +48,7 @@ public class GroupController {
      * @param param     group's param
      * @return          group's result
      */
-    @RequestMapping(value = ResourceURL.GROUPS + ResourceURL.SIGN, method = RequestMethod.POST)
+    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, @Valid GroupParam param, BindingResult result, @PathVariable String sign) {
         try {
             // Validate current user, param and sign.
@@ -72,7 +72,7 @@ public class GroupController {
      *
      * @return          groups' result
      */
-    @RequestMapping(value = ResourceURL.GROUPS + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO index(@PathVariable String sign) {
         try {
             GroupParam param = new GroupParam();
@@ -97,7 +97,7 @@ public class GroupController {
      * @param pageNo        page number
      * @return              groups' page
      */
-    @RequestMapping(value = ResourceURL.GROUPS + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
         try {
             // Init page number.
@@ -126,7 +126,7 @@ public class GroupController {
      * @param id        group's id
      * @return          group's result
      */
-    @RequestMapping(value = ResourceURL.GROUPS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -155,7 +155,7 @@ public class GroupController {
      * @param param     group's params
      * @return          group's result
      */
-    @RequestMapping(value = ResourceURL.GROUPS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid GroupParam param, BindingResult result) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -183,7 +183,7 @@ public class GroupController {
      * @param id        group's id
      * @return          group's result
      */
-    @RequestMapping(value = ResourceURL.GROUPS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {

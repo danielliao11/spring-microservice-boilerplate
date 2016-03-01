@@ -35,7 +35,7 @@ import javax.validation.Valid;
  * @since JDK1.8
  */
 @RestController
-@RequestMapping(ResourceURL.RESOURCES)
+@RequestMapping(ResourceURL.RESOURCES + ResourceURL.USERS)
 public class UserController {
 
     // ------------------------
@@ -48,7 +48,7 @@ public class UserController {
      * @param param     user's param
      * @return          user's result
      */
-    @RequestMapping(value = ResourceURL.USERS + ResourceURL.SIGN, method = RequestMethod.POST)
+    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, @Valid UserParam param, BindingResult result, @PathVariable String sign) {
         try {
             // Validate current user, param and sign.
@@ -72,7 +72,7 @@ public class UserController {
      *
      * @return          users' result
      */
-    @RequestMapping(value = ResourceURL.USERS + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO index(@PathVariable String sign) {
         try {
             UserParam param = new UserParam();
@@ -97,7 +97,7 @@ public class UserController {
      * @param pageNo        page number
      * @return              users' page
      */
-    @RequestMapping(value = ResourceURL.USERS + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
         try {
             // Init page number.
@@ -126,7 +126,7 @@ public class UserController {
      * @param id        user's id
      * @return user's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -155,7 +155,7 @@ public class UserController {
      * @param sign      signature
      * @return          user's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/usr={usr}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = "/usr={usr}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign) {
         try {
             // If usr or sign is empty, return SYS0002, params error.
@@ -187,7 +187,7 @@ public class UserController {
      * @param param     user's params
      * @return          user's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid UserParam param, BindingResult result) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -215,7 +215,7 @@ public class UserController {
      * @param id        user's id
      * @return          user's result
      */
-    @RequestMapping(value = ResourceURL.USERS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {

@@ -35,7 +35,7 @@ import javax.validation.Valid;
  * @since JDK1.8
  */
 @RestController
-@RequestMapping(ResourceURL.RESOURCES)
+@RequestMapping(ResourceURL.RESOURCES + ResourceURL.RESOURCES)
 public class ResourceController {
 
     // ------------------------
@@ -48,7 +48,7 @@ public class ResourceController {
      * @param param     resource's param
      * @return          resource's result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + ResourceURL.SIGN, method = RequestMethod.POST)
+    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, @Valid ResourceParam param, BindingResult result, @PathVariable String sign) {
         try {
             // Validate current user, param and sign.
@@ -72,7 +72,7 @@ public class ResourceController {
      *
      * @return          resources' result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO index(@PathVariable String sign) {
         try {
             ResourceParam param = new ResourceParam();
@@ -97,7 +97,7 @@ public class ResourceController {
      * @param pageNo        page number
      * @return              resources' page
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
         try {
             // Init page number.
@@ -126,7 +126,7 @@ public class ResourceController {
      * @param id        resource's id
      * @return          resource's result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -155,7 +155,7 @@ public class ResourceController {
      * @param param     resource's params
      * @return          resource's result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid ResourceParam param, BindingResult result) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -183,7 +183,7 @@ public class ResourceController {
      * @param id        resource's id
      * @return          resource's result
      */
-    @RequestMapping(value = ResourceURL.RESOURCES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
         try {
             if (StringUtils.isBlank(id)) {
@@ -212,7 +212,7 @@ public class ResourceController {
     // PRIVATE FIELDS
     // ------------------------
 
-    private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
     @Autowired
     private ResultHelper resultHelper;
