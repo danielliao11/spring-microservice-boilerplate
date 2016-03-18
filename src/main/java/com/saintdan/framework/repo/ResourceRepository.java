@@ -1,6 +1,9 @@
 package com.saintdan.framework.repo;
 
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Resource;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 /**
  * Resource's repository.
@@ -13,4 +16,7 @@ public interface ResourceRepository extends RepositoryWithoutDelete<Resource, Lo
 
     Resource findByName(String name);
 
+    @Modifying
+    @Query("update Resource r set r.validFlag=?1 where r.id=?2")
+    void updateValidFlagFor(ValidFlag validFlag, Long id);
 }

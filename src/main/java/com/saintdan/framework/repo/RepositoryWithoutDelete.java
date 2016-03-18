@@ -92,14 +92,4 @@ public interface RepositoryWithoutDelete<T, ID extends Serializable> extends Rep
      */
     long count();
 
-    /**
-     * Update the valid flag of entity.
-     *
-     * @param validFlag     valid flag
-     * @param id            id of entity
-     */
-    @Modifying
-    @Transactional
-    @Query("update #{#entityName} c set c.validFlag=?1 where c.id=?2")
-    void updateValidFlagFor(ValidFlag validFlag, ID id);
 }
