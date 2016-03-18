@@ -123,4 +123,4 @@
 
 - 0.9.7.RELEASE
   - Delete redundant codes of domain.
-  - Delete update valid flag which in the [RepositoryWithoutDelete](src/main/java/com/saintdan/framework/repo/RepositoryWithoutDelete.java).
+  - Delete update valid flag which is in the [RepositoryWithoutDelete](src/main/java/com/saintdan/framework/repo/RepositoryWithoutDelete.java).
