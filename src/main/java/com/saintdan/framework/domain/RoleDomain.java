@@ -84,7 +84,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
      */
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Role> rolePage = roleRepository.findAll(pageable);
-        if (rolePage.getContent().isEmpty()) {
+        if (!rolePage.hasContent()) {
             // Throw no role exists exception.
             throw new CommonsException(ErrorType.SYS0120,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));

@@ -84,7 +84,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
      */
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Group> groupPage = groupRepository.findAll(pageable);
-        if (groupPage.getContent().isEmpty()) {
+        if (!groupPage.hasContent()) {
             // Throw no group exists exception.
             throw new CommonsException(ErrorType.SYS0120,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));

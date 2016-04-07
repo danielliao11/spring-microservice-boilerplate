@@ -83,7 +83,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
      */
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Resource> resourcePage = resourceRepository.findAll(pageable);
-        if (resourcePage.getContent().isEmpty()) {
+        if (!resourcePage.hasContent()) {
             // Throw no resource exist exception.
             throw new CommonsException(ErrorType.SYS0120,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));

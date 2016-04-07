@@ -72,7 +72,7 @@ public class LogDomain {
      */
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Log> logPage = logRepository.findAll(pageable);
-        if (logPage.getContent().isEmpty()) {
+        if (!logPage.hasContent()) {
             // Throw no log exist exception.
             throw new CommonsException(ErrorType.SYS0120, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, LOG, LOG));
         }

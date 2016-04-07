@@ -83,7 +83,7 @@ public class UserDomain extends BaseDomain<User, Long> {
      */
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<User> userPage = userRepository.findAll(pageable);
-        if (userPage.getContent().isEmpty()) {
+        if (!userPage.hasContent()) {
             // Throw no user exists exception.
             throw new CommonsException(ErrorType.SYS0120,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
