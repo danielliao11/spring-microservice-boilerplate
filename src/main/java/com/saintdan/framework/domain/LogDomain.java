@@ -58,7 +58,7 @@ public class LogDomain {
         List<Log> logs = (List<Log>) logRepository.findAll();
         if (logs.isEmpty()) {
             // Throw no log exist exception.
-            throw new CommonsException(ErrorType.SYS0120, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, LOG, LOG));
+            throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
         }
         return transformer.pos2VO(ObjectsVO.class, logs, String.format(ControllerConstant.INDEX, LOG));
     }
@@ -74,7 +74,7 @@ public class LogDomain {
         Page<Log> logPage = logRepository.findAll(pageable);
         if (!logPage.hasContent()) {
             // Throw no log exist exception.
-            throw new CommonsException(ErrorType.SYS0120, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, LOG, LOG));
+            throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
         }
         return transformer.poPage2VO(transformer.poList2VOList(LogVO.class, logPage.getContent()), pageable, logPage.getTotalElements(),
                 String.format(ControllerConstant.INDEX, LOG));

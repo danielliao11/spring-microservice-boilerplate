@@ -43,7 +43,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
         if (client != null) {
             // Throw client already existing exception, clientId taken.
             throw new CommonsException(ErrorType.SYS0111,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), getClassT().getSimpleName(), CLIENT_ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CLIENT_ID));
         }
         return super.createByPO(ClientVO.class, transformer.param2PO(getClassT(), param, new Client(), currentUser), currentUser);
     }
@@ -59,7 +59,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
         Client client = clientRepository.findByClientIdAlias(param.getClientIdAlias());
         if (client == null) {
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CLIENT_ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CLIENT_ID));
         }
         return transformer.po2VO(ClientVO.class, client, String.format(ControllerConstant.SHOW, getClassT()));
     }
@@ -76,7 +76,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
         if (client == null) {
             // Throw client cannot find by id parameter exception.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         // Log delete operation.
         logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);

@@ -53,7 +53,7 @@ public class UserDomain extends BaseDomain<User, Long> {
         if (user != null) {
             // Throw user already existing exception, usr taken.
             throw new CommonsException(ErrorType.SYS0111,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), getClassT().getSimpleName(), USR));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), USR));
         }
         return super.createByPO(UserVO.class, userParam2PO(param, new User(), currentUser), currentUser);
     }
@@ -68,8 +68,8 @@ public class UserDomain extends BaseDomain<User, Long> {
         Iterable users = userRepository.findAll();
         if (((List) users).isEmpty()) {
             // Throw no user exists exception.
-            throw new CommonsException(ErrorType.SYS0120,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
+            throw new CommonsException(ErrorType.SYS0121,
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
         return transformer.pos2VO(ObjectsVO.class, users, String.format(ControllerConstant.INDEX, getClassT()));
     }
@@ -85,8 +85,8 @@ public class UserDomain extends BaseDomain<User, Long> {
         Page<User> userPage = userRepository.findAll(pageable);
         if (!userPage.hasContent()) {
             // Throw no user exists exception.
-            throw new CommonsException(ErrorType.SYS0120,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
+            throw new CommonsException(ErrorType.SYS0121,
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
         return transformer.poPage2VO(transformer.poList2VOList(UserVO.class, userPage.getContent()), pageable, userPage.getTotalElements(),
                 String.format(ControllerConstant.INDEX, getClassT()));
@@ -115,7 +115,7 @@ public class UserDomain extends BaseDomain<User, Long> {
         if (user == null) {
             // Throw user cannot find by id parameter exception.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         return transformer.po2VO(UserVO.class, user, String.format(ControllerConstant.SHOW, getClassT()));
     }
@@ -132,7 +132,7 @@ public class UserDomain extends BaseDomain<User, Long> {
         if (user == null) {
             // Throw user cannot find by usr parameter exception.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), USR));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), USR));
         }
         return transformer.po2VO(UserVO.class, user, String.format(ControllerConstant.SHOW, getClassT()));
     }
@@ -149,7 +149,7 @@ public class UserDomain extends BaseDomain<User, Long> {
         if (user == null) {
             // Throw cannot find any user by this id param.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         return super.updateByPO(UserVO.class, userParam2PO(param, new User(), currentUser), currentUser);
     }
@@ -166,7 +166,7 @@ public class UserDomain extends BaseDomain<User, Long> {
         if (user == null) {
             // Throw cannot find any user by this id param.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         userRepository.updatePwdFor(param.getPwd(), param.getId());
     }
@@ -183,7 +183,7 @@ public class UserDomain extends BaseDomain<User, Long> {
         if (user == null) {
             // Throw cannot find any user by this id param.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         // Log delete operation.
         logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);

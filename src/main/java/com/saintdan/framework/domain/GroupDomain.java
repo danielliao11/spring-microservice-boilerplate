@@ -54,7 +54,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
         if (group != null) {
             // Throw group already existing exception, name taken.
             throw new CommonsException(ErrorType.SYS0111,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.NAME));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
         }
         return super.createByPO(GroupVO.class, groupParam2PO(param, new Group(), currentUser), currentUser);
     }
@@ -69,8 +69,8 @@ public class GroupDomain extends BaseDomain<Group, Long> {
         Iterable groups = groupRepository.findAll();
         if (((List) groups).isEmpty()) {
             // Throw no group exists exception.
-            throw new CommonsException(ErrorType.SYS0120,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
+            throw new CommonsException(ErrorType.SYS0121,
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
         return transformer.pos2VO(ObjectsVO.class, groups, String.format(ControllerConstant.INDEX, getClassT()));
     }
@@ -86,8 +86,8 @@ public class GroupDomain extends BaseDomain<Group, Long> {
         Page<Group> groupPage = groupRepository.findAll(pageable);
         if (!groupPage.hasContent()) {
             // Throw no group exists exception.
-            throw new CommonsException(ErrorType.SYS0120,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
+            throw new CommonsException(ErrorType.SYS0121,
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
         return transformer.poPage2VO(transformer.poList2VOList(GroupVO.class, groupPage.getContent()), pageable, groupPage.getTotalElements(),
                 String.format(ControllerConstant.INDEX, getClassT()));
@@ -116,7 +116,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
         if (group == null) {
             // Throw group cannot find by id parameter exception.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         return transformer.po2VO(GroupVO.class, group, String.format(ControllerConstant.SHOW, getClassT()));
     }
@@ -133,7 +133,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
         if (group == null) {
             // Throw group cannot find by name parameter exception.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.NAME));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.NAME));
         }
         return transformer.po2VO(GroupVO.class, group, String.format(ControllerConstant.SHOW, getClassT()));
     }
@@ -151,7 +151,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
         if (group == null) {
             // Throw cannot find any group by this id param.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         return super.updateByPO(GroupVO.class, groupParam2PO(param, new Group(), currentUser), currentUser);
     }
@@ -168,7 +168,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
         if (group == null) {
             // Throw cannot find any group by this id param.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         // Log delete operation.
         logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);

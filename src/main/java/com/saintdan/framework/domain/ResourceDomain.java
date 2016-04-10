@@ -53,7 +53,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
         if (resource != null) {
             // Throw group already existing exception, name taken.
             throw new CommonsException(ErrorType.SYS0111,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.NAME));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
         }
         return super.createByPO(ResourceVO.class, resourceParam2PO(param, new Resource(), currentUser), currentUser);
     }
@@ -68,8 +68,8 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
         List<Resource> resources = (List<Resource>) resourceRepository.findAll();
         if (resources.isEmpty()) {
             // Throw no resource exist exception.
-            throw new CommonsException(ErrorType.SYS0120,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
+            throw new CommonsException(ErrorType.SYS0121,
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
         return transformer.pos2VO(ObjectsVO.class, resources, String.format(ControllerConstant.INDEX, getClassT()));
     }
@@ -85,8 +85,8 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
         Page<Resource> resourcePage = resourceRepository.findAll(pageable);
         if (!resourcePage.hasContent()) {
             // Throw no resource exist exception.
-            throw new CommonsException(ErrorType.SYS0120,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
+            throw new CommonsException(ErrorType.SYS0121,
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
         return transformer.poPage2VO(transformer.poList2VOList(ResourceVO.class, resourcePage.getContent()), pageable, resourcePage.getTotalElements(),
                 String.format(ControllerConstant.INDEX, getClassT()));
@@ -115,7 +115,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
         if (resource == null) {
             // Throw resource cannot find by id parameter exception.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         return transformer.po2VO(ResourceVO.class, resource, String.format(ControllerConstant.SHOW, getClassT()));
     }
@@ -132,7 +132,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
         if (resource == null) {
             // Throw resource cannot find by name parameter exception.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.NAME));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.NAME));
         }
         return transformer.po2VO(ResourceVO.class, resource, String.format(ControllerConstant.SHOW, getClassT()));
     }
@@ -149,7 +149,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
         if (resource == null) {
             // Throw resource cannot find by name parameter exception.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), PATH));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), PATH));
         }
         return transformer.po2VO(ResourceVO.class, resource, String.format(ControllerConstant.SHOW, getClassT()));
     }
@@ -168,7 +168,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
             // Throw resource cannot find by id parameter exception.
             // Throw cannot find any group by this id param.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         return super.updateByPO(ResourceVO.class, resourceParam2PO(param, new Resource(), currentUser), currentUser);
     }
@@ -185,7 +185,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
         if (resource == null) {
             // Throw resource cannot find by id parameter exception.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         // Log delete operation.
         logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);

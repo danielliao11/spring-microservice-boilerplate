@@ -54,7 +54,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
         if (role != null) {
             // Throw role already existing exception, name taken.
             throw new CommonsException(ErrorType.SYS0111,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.NAME));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
         }
         return super.createByPO(RoleVO.class, roleParam2PO(param, new Role(), currentUser), currentUser);
     }
@@ -69,8 +69,8 @@ public class RoleDomain extends BaseDomain<Role, Long> {
         Iterable roles = roleRepository.findAll();
         if (((List) roles).isEmpty()) {
             // Throw no role exists exception.
-            throw new CommonsException(ErrorType.SYS0120,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
+            throw new CommonsException(ErrorType.SYS0121,
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
         return transformer.pos2VO(ObjectsVO.class, roles, String.format(ControllerConstant.INDEX, getClassT()));
     }
@@ -86,8 +86,8 @@ public class RoleDomain extends BaseDomain<Role, Long> {
         Page<Role> rolePage = roleRepository.findAll(pageable);
         if (!rolePage.hasContent()) {
             // Throw no role exists exception.
-            throw new CommonsException(ErrorType.SYS0120,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), getClassT().getSimpleName()));
+            throw new CommonsException(ErrorType.SYS0121,
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
         return transformer.poPage2VO(transformer.poList2VOList(RoleVO.class, rolePage.getContent()), pageable, rolePage.getTotalElements(),
                 String.format(ControllerConstant.INDEX, getClassT()));
@@ -116,7 +116,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
         if (role == null) {
             // Throw role cannot find by id parameter exception.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         return transformer.po2VO(RoleVO.class, role, String.format(ControllerConstant.SHOW, getClassT()));
     }
@@ -133,7 +133,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
         if (role == null) {
             // Throw role cannot find by name parameter exception.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.NAME));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.NAME));
         }
         return transformer.po2VO(RoleVO.class, role, String.format(ControllerConstant.SHOW, getClassT()));
     }
@@ -150,7 +150,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
         if (role == null) {
             // Throw cannot find any role by this id param.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         return super.updateByPO(RoleVO.class, roleParam2PO(param, new Role(), currentUser), currentUser);
     }
@@ -167,7 +167,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
         if (role == null) {
             // Throw cannot find any role by this id param.
             throw new CommonsException(ErrorType.SYS0122,
-                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), getClassT().getSimpleName(), CommonsConstant.ID));
+                    ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         // Log delete operation.
         logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
