@@ -83,7 +83,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
         Iterable pos = repository.findAll();
         if (((List) pos).isEmpty()) {
             // Throw po cannot find exception.
-            throw new CommonsException(ErrorType.SYS0120, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName()));
+            throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
         return transformer.pos2VO(ObjectsVO.class, pos, String.format(ControllerConstant.INDEX, getClassT().getSimpleName()));
     }
@@ -96,11 +96,12 @@ public abstract class BaseDomain<T, ID extends Serializable> {
      * @return              <T>'s page
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     public PageVO getPage(Pageable pageable, Class voType) throws Exception {
         Page<T> poPage = repository.findAll(pageable);
         if (poPage.getSize() == 0) {
             // Throw po cannot find exception.
-            throw new CommonsException(ErrorType.SYS0120, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName()));
+            throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
         return transformer.poPage2VO(
                 transformer.poList2VOList(voType, (Iterable) poPage.getContent()),
@@ -117,13 +118,14 @@ public abstract class BaseDomain<T, ID extends Serializable> {
      * @return              <T>
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     public <VO extends ResultVO> VO getById(Class<VO> voType, Object inputParam) throws Exception {
         Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
         idField.setAccessible(true);
         T po = repository.findOne((ID) idField.get(inputParam));
         if (po == null) {
             // Throw po cannot find by id parameter exception.
-            throw new CommonsException(ErrorType.SYS0120, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), CommonsConstant.ID));
+            throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         return transformer.po2VO(voType, po, String.format(ControllerConstant.SHOW, getClassT().getSimpleName()));
     }
@@ -138,13 +140,14 @@ public abstract class BaseDomain<T, ID extends Serializable> {
      * @return              VO
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     public <VO extends ResultVO> VO update(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
         Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
         idField.setAccessible(true);
         T po = repository.findOne((ID) idField.get(inputParam));
         if (po == null) {
             // Throw po cannot find by id parameter exception.
-            throw new CommonsException(ErrorType.SYS0120, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0120, getClassT().getSimpleName(), CommonsConstant.ID));
+            throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
         return updateByPO(voType, po, currentUser);
     }
@@ -185,6 +188,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
      * @return      <T>'s class
      * @throws Exception
      */
+    @SuppressWarnings("unchecked")
     protected Class<T> getClassT() throws Exception {
         Type type = getClass().getGenericSuperclass();
         return (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
