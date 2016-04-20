@@ -40,8 +40,8 @@ public class LogDomain {
      * Create new log.
      *
      * @param currentUser   current user
-     * @param param         log's param
-     * @return              log's VO
+     * @param param         {@link LogParam}
+     * @return              {@link LogVO}
      */
     public LogVO create(LogParam param, User currentUser) throws Exception {
         return transformer.po2VO(LogVO.class, logRepository.save(logParam2PO(param, currentUser)),
@@ -49,10 +49,10 @@ public class LogDomain {
     }
 
     /**
-     * Show all logs.
+     * Show all {@link LogVO}.
      *
-     * @return          logs' VO
-     * @throws CommonsException        SYS0120 No group exists.
+     * @return              {@link ObjectsVO}, {@link LogVO}
+     * @throws CommonsException        {@link ErrorType#SYS0121} No group exists.
      */
     public ObjectsVO getAllLogs() throws Exception {
         List<Log> logs = (List<Log>) logRepository.findAll();
@@ -64,11 +64,11 @@ public class LogDomain {
     }
 
     /**
-     * Show users' page VO.
+     * Show {@link LogVO} of {@link PageVO}.
      *
-     * @param pageable      page
-     * @return              logs' page VO
-     * @throws CommonsException        SYS0120 No group exists.
+     * @param pageable      {@link Pageable}
+     * @return              {@link PageVO}, {@link LogVO}
+     * @throws CommonsException        {@link ErrorType#SYS0121} No group exists.
      */
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Log> logPage = logRepository.findAll(pageable);
@@ -93,10 +93,10 @@ public class LogDomain {
     private final static String LOG = "log";
 
     /**
-     * Transform log's param to PO.
+     * Transform {@link LogParam} to {@link Log}.
      *
-     * @param param         log's param
-     * @return              log's PO
+     * @param param         {@link LogParam}
+     * @return              {@link Log}
      */
     private Log logParam2PO(LogParam param, User currentUser) {
         Log log = new Log();

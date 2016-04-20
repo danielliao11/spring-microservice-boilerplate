@@ -34,9 +34,9 @@ public class ClientDomain extends BaseDomain<Client, Long> {
      * Create new client.
      *
      * @param currentUser   current user
-     * @param param         client's params
-     * @return              client's VO
-     * @throws CommonsException        SYS0111 client already existing, name taken.
+     * @param param         {@link ClientParam}
+     * @return              {@link ClientVO}
+     * @throws CommonsException        {@link ErrorType#SYS0111} client already existing, name taken.
      */
     public ClientVO create(ClientParam param, User currentUser) throws Exception {
         Client client = clientRepository.findByClientIdAlias(param.getClientIdAlias());
@@ -51,9 +51,9 @@ public class ClientDomain extends BaseDomain<Client, Long> {
     /**
      * Show client by client id.
      *
-     * @param param     client's param
-     * @return          client's VO
-     * @throws CommonsException        SYS0122 Cannot find any client by name param.
+     * @param param         {@link ClientParam}
+     * @return              {@link ClientVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any client by name param.
      */
     public ClientVO getClientByClientId(ClientParam param) throws Exception {
         Client client = clientRepository.findByClientIdAlias(param.getClientIdAlias());
@@ -68,8 +68,8 @@ public class ClientDomain extends BaseDomain<Client, Long> {
      * Delete client
      *
      * @param currentUser   current user
-     * @param param         client's param
-     * @throws CommonsException        SYS0122 Cannot find any client by id param.
+     * @param param         {@link ClientParam}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any client by id param.
      */
     public void delete(ClientParam param, User currentUser) throws Exception {
         Client client = clientRepository.findOne(param.getId());

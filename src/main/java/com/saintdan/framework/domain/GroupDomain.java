@@ -42,12 +42,12 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     // ------------------------
 
     /**
-     * Create new group.
+     * Create new {@link Group}.
      *
      * @param currentUser   current user
-     * @param param         group's params
-     * @return              group's VO
-     * @throws CommonsException        SYS0111 role already existing, name taken.
+     * @param param         {@link GroupParam}
+     * @return              {@link GroupVO}
+     * @throws CommonsException        {@link ErrorType#SYS0111} role already existing, name taken.
      */
     public GroupVO create(GroupParam param, User currentUser) throws Exception {
         Group group = groupRepository.findByName(param.getName());
@@ -60,10 +60,10 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     }
 
     /**
-     * Show all groups' VO.
+     * Show all {@link GroupVO}.
      *
-     * @return              groups' VO
-     * @throws CommonsException        SYS0120 No group exists.
+     * @return              {@link ObjectsVO}, {@link GroupVO}
+     * @throws CommonsException        {@link ErrorType#SYS0121} No group exists.
      */
     public ObjectsVO getAllGroups() throws Exception {
         Iterable groups = groupRepository.findAll();
@@ -76,11 +76,11 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     }
 
     /**
-     * Show groups' page VO.
+     * Show {@link GroupVO} of {@link PageVO}.
      *
-     * @param pageable      page
-     * @return              groups' page VO
-     * @throws CommonsException        SYS0120 No group exists.
+     * @param pageable      {@link Pageable}
+     * @return              {@link PageVO}, {@link GroupVO}
+     * @throws CommonsException        {@link ErrorType#SYS0121} No group exists.
      */
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Group> groupPage = groupRepository.findAll(pageable);
@@ -96,20 +96,20 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     /**
      * Show groups by ids.
      *
-     * @param ids           groups' ids
-     * @return              groups' PO
-     * @throws CommonsException        SYS0120 No group exists.
+     * @param ids           ids of groups
+     * @return              {@link Iterable<Group>}
+     * @throws CommonsException        {@link ErrorType#SYS0120} No group exists.
      */
     public Iterable<Group> getGroupsByIds(Iterable<Long> ids) throws Exception {
         return groupRepository.findAll(ids);
     }
 
     /**
-     * Show group's VO by group's id.
+     * Show VO of group by id of group.
      *
-     * @param param         group's params
-     * @return              group's VO
-     * @throws CommonsException        SYS0122 Cannot find any group by id param.
+     * @param param         {@link GroupParam}
+     * @return              {@link GroupVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any group by id param.
      */
     public GroupVO getGroupById(GroupParam param) throws Exception {
         Group group = groupRepository.findOne(param.getId());
@@ -122,11 +122,11 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     }
 
     /**
-     * Show group's VO by group's name.
+     * Show VO of group by name of group.
      *
-     * @param param         group's params
-     * @return              group's VO
-     * @throws CommonsException        SYS0122 Cannot find any group by name param.
+     * @param param         {@link GroupParam}
+     * @return              {@link GroupVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any group by name param.
      */
     public GroupVO getGroupByName(GroupParam param) throws Exception {
         Group group = groupRepository.findByName(param.getName());
@@ -142,9 +142,9 @@ public class GroupDomain extends BaseDomain<Group, Long> {
      * Update group.
      *
      * @param currentUser   current user
-     * @param param         group's params
-     * @return              group's VO
-     * @throws CommonsException        SYS0122 Cannot find any group by id param.
+     * @param param         {@link GroupParam}
+     * @return              {@link GroupVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any group by id param.
      */
     public GroupVO update(GroupParam param, User currentUser) throws Exception {
         Group group = groupRepository.findByName(param.getName());
@@ -160,8 +160,8 @@ public class GroupDomain extends BaseDomain<Group, Long> {
      * Delete group.
      *
      * @param currentUser   current user
-     * @param param         group's params.
-     * @throws CommonsException        SYS0122 Cannot find any group by id param.
+     * @param param         {@link GroupParam}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any group by id param.
      */
     public void delete(GroupParam param, User currentUser) throws Exception {
         Group group = groupRepository.findOne(param.getId());
@@ -195,10 +195,10 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     /**
      * Transform group's param to PO.
      *
-     * @param param         group's param
-     * @param group         group
+     * @param param         {@link GroupParam}
+     * @param group         {@link Group}
      * @param currentUser   currentUser
-     * @return              group's PO
+     * @param group         {@link Group}
      */
     private Group groupParam2PO(GroupParam param, Group group, User currentUser) throws Exception {
         transformer.param2PO(getClassT(), param, group, currentUser);

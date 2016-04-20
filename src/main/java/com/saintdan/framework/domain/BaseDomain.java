@@ -45,7 +45,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     /**
      * Create <T> by param.
      *
-     * @param voType        VO's class
+     * @param voType        VO of some class
      * @param inputParam    input param
      * @param currentUser   current user
      * @param <VO>          VO extends to ResultVO
@@ -60,7 +60,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     /**
      * Create <T> by PO.
      *
-     * @param voType        VO's class
+     * @param voType        VO of some class
      * @param inputPO       input PO
      * @param currentUser   current user
      * @param <VO>          VO extends to ResultVO
@@ -89,11 +89,11 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     }
 
     /**
-     * Get <T>'s page.
+     * Get page of <T>.
      *
      * @param pageable      pageable
-     * @param voType        VO's class
-     * @return              <T>'s page
+     * @param voType        VO of some class
+     * @return              page of <T>
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
@@ -112,7 +112,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     /**
      * Get <T> by id.
      *
-     * @param voType        VO's class
+     * @param voType        VO of some class
      * @param inputParam    input param
      * @param <VO>          VO extends to ResultVO
      * @return              <T>
@@ -133,7 +133,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     /**
      * Update <T> by param.
      *
-     * @param voType        VO's class
+     * @param voType        VO of some class
      * @param inputParam    input param
      * @param currentUser   current user
      * @param <VO>          VO extends to ResultVO
@@ -155,7 +155,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     /**
      * Update <T> by param.
      *
-     * @param voType        VO's class
+     * @param voType        VO of some class
      * @param inputPO       input PO
      * @param currentUser   current user
      * @param <VO>          VO extends to ResultVO
@@ -183,9 +183,9 @@ public abstract class BaseDomain<T, ID extends Serializable> {
 
 
     /**
-     * Get <T>'s class
+     * Get class of <T>
      *
-     * @return      <T>'s class
+     * @return      class of <T>
      * @throws Exception
      */
     @SuppressWarnings("unchecked")

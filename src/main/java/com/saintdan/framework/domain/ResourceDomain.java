@@ -44,9 +44,9 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
      * Create new resource.
      *
      * @param currentUser   current user
-     * @param param         resource's params
-     * @return              resource's VO
-     * @throws CommonsException        SYS0111 resource already existing, name taken.
+     * @param param         {@link ResourceParam}
+     * @return              {@link ResourceVO}
+     * @throws CommonsException        {@link ErrorType#SYS0111} resource already existing, name taken.
      */
     public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
         Resource resource = resourceRepository.findByName(param.getName());
@@ -59,10 +59,10 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     }
 
     /**
-     * Show all resources' VO.
+     * Show all {@link ResourceVO}.
      *
-     * @return              resources' VO
-     * @throws CommonsException        SYS0120 No resource exists.
+     * @return              {@link ResourceVO}
+     * @throws CommonsException        {@link ErrorType#SYS0121} No resource exists.
      */
     public ObjectsVO getAllResources() throws Exception {
         List<Resource> resources = (List<Resource>) resourceRepository.findAll();
@@ -75,11 +75,11 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     }
 
     /**
-     * Show resources' page VO.
+     * Show {@link ResourceVO} in {@link PageVO}.
      *
-     * @param pageable      page
-     * @return              resources' page VO
-     * @throws CommonsException        SYS0120 No resource exists.
+     * @param pageable      {@link Pageable}
+     * @return              {@link PageVO}, {@link ResourceVO}
+     * @throws CommonsException        {@link ErrorType#SYS0121} No resource exists.
      */
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Resource> resourcePage = resourceRepository.findAll(pageable);
@@ -93,22 +93,22 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     }
 
     /**
-     * Show resources by ids.
+     * Show {@link Iterable<Resource>} by ids.
      *
-     * @param ids           resources' ids
-     * @return              resources' PO
-     * @throws CommonsException        SYS0120 No resource exists.
+     * @param ids           ids of resources
+     * @return              {@link Iterable<Resource>}
+     * @throws CommonsException        {@link ErrorType#SYS0120} No resource exists.
      */
     public Iterable<Resource> getResourcesByIds(Iterable<Long> ids) throws Exception {
         return resourceRepository.findAll(ids);
     }
 
     /**
-     * Show resource's VO by resource's id.
+     * Show {@link ResourceVO} by id of resource.
      *
-     * @param param         resource's params
-     * @return              resource's VO
-     * @throws CommonsException        SYS0122 Cannot find any resource by id param.
+     * @param param         {@link ResourceParam}
+     * @return              {@link ResourceVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any resource by id param.
      */
     public ResourceVO getResourceById(ResourceParam param) throws Exception {
         Resource resource = resourceRepository.findOne(param.getId());
@@ -121,11 +121,11 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     }
 
     /**
-     * Show resource's VO by resource's name.
+     * Show {@link ResourceVO} by name of resource.
      *
-     * @param param         resource's params
-     * @return              resource's VO
-     * @throws CommonsException        SYS0122 Cannot find any resource by name param.
+     * @param param         {@link ResourceParam}
+     * @return              {@link ResourceVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any resource by name param.
      */
     public ResourceVO getResourceByName(ResourceParam param) throws Exception {
         Resource resource = resourceRepository.findByName(param.getName());
@@ -138,11 +138,11 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     }
 
     /**
-     * Show resource's VO by resource's path.
+     * Show {@link ResourceVO} by path of resource.
      *
-     * @param param         resource's params
-     * @return              resource's VO
-     * @throws CommonsException        SYS0122 Cannot find any resource by path param.
+     * @param param         {@link ResourceParam}
+     * @return              {@link ResourceVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any resource by path param.
      */
     public ResourceVO getResourceByPath(ResourceParam param) throws Exception {
         Resource resource = resourceRepository.findByName(param.getName());
@@ -158,9 +158,9 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
      * Update resource.
      *
      * @param currentUser   current user
-     * @param param         resource's params
-     * @return              resource's VO
-     * @throws CommonsException        SYS0122 Cannot find any resource by id param.
+     * @param param         {@link ResourceParam}
+     * @return              {@link ResourceVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any resource by id param.
      */
     public ResourceVO update(ResourceParam param, User currentUser) throws Exception {
         Resource resource = resourceRepository.findOne(param.getId());
@@ -177,8 +177,8 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
      * Delete resource.
      *
      * @param currentUser   current user
-     * @param param         resource's params.
-     * @throws CommonsException        SYS0122 Cannot find any resource by id param.
+     * @param param         {@link ResourceParam}
+     * @throws CommonsException        {@link ErrorType#SYS0121} Cannot find any resource by id param.
      */
     public void delete(ResourceParam param, User currentUser) throws Exception {
         Resource resource = resourceRepository.findOne(param.getId());
@@ -210,12 +210,12 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     private static final String PATH = "path";
 
     /**
-     * Transform resource's param to PO.
+     * Transform {@link ResourceParam} to {@link Resource}.
      *
-     * @param param         resource's param
-     * @param resource      resource
+     * @param param         {@link ResourceParam}
+     * @param resource      {@link Resource
      * @param currentUser   currentUser
-     * @return              resource's PO
+     * @return              {@link Resource
      */
     private Resource resourceParam2PO(ResourceParam param, Resource resource, User currentUser) throws Exception {
         transformer.param2PO(getClassT(), param, resource, currentUser);
