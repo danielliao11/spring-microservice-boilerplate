@@ -44,9 +44,9 @@ public class UserDomain extends BaseDomain<User, Long> {
      * Create new user.
      *
      * @param currentUser   current user
-     * @param param         user's params
-     * @return              user's VO
-     * @throws CommonsException        SYS0111 user already existing, usr taken.
+     * @param param         {@link UserParam}
+     * @return              {@link UserVO}
+     * @throws CommonsException        {@link ErrorType#SYS0111} user already existing, usr taken.
      */
     public UserVO create(UserParam param, User currentUser) throws Exception {
         User user = userRepository.findByUsr(param.getUsr());
@@ -59,10 +59,10 @@ public class UserDomain extends BaseDomain<User, Long> {
     }
 
     /**
-     * Show all users' VO.
+     * Show all {@link UserVO}.
      *
      * @return          users
-     * @throws CommonsException        SYS0120 No user exists.
+     * @throws CommonsException        {@link ErrorType#SYS0121} No user exists.
      */
     public ObjectsVO getAllUsers() throws Exception {
         Iterable users = userRepository.findAll();
@@ -75,11 +75,11 @@ public class UserDomain extends BaseDomain<User, Long> {
     }
 
     /**
-     * Show users' page VO.
+     * Show {@link UserVO} in {@link PageVO}.
      *
-     * @param pageable      page
-     * @return              users' page VO
-     * @throws CommonsException        SYS0120 No user exists.
+     * @param pageable      {@link Pageable}
+     * @return              {@link PageVO}, {@link UserVO}
+     * @throws CommonsException        {@link ErrorType#SYS0121} No user exists.
      */
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<User> userPage = userRepository.findAll(pageable);
@@ -93,22 +93,22 @@ public class UserDomain extends BaseDomain<User, Long> {
     }
 
     /**
-     * Show users by ids.
+     * Show {@link Iterable<User>} by ids.
      *
      * @param ids           users' ids
-     * @return              users' PO
-     * @throws CommonsException        SYS0120 No user exists.
+     * @return              {@link Iterable<User>}
+     * @throws CommonsException        {@link ErrorType#SYS0120} No user exists.
      */
     public Iterable<User> getUsersByIds(Iterable<Long> ids) throws Exception {
         return userRepository.findAll(ids);
     }
 
     /**
-     * Show user VO by user's id.
+     * Show {@link UserVO} by user's id.
      *
-     * @param param     user's params
-     * @return          user's VO
-     * @throws CommonsException        SYS0122 Cannot find any user by id param.
+     * @param param         {@link UserParam}
+     * @return              {@link UserVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any user by id param.
      */
     public UserVO getUserById(UserParam param) throws Exception {
         User user = userRepository.findOne(param.getId());
@@ -121,11 +121,11 @@ public class UserDomain extends BaseDomain<User, Long> {
     }
 
     /**
-     * Get user's VO by usr.
+     * Get {@link UserVO} by user's usr.
      *
-     * @param param     user's params
-     * @return          user's VO
-     * @throws CommonsException        SYS0122 Cannot find any user by usr param.
+     * @param param         {@link UserParam}
+     * @return              {@link UserVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any user by usr param.
      */
     public UserVO getUserByUsr(UserParam param) throws Exception {
         User user = userRepository.findByUsr(param.getUsr());
@@ -140,9 +140,9 @@ public class UserDomain extends BaseDomain<User, Long> {
     /**
      * Update user.
      *
-     * @param param     user's params
-     * @return          user's VO
-     * @throws CommonsException        SYS0122 Cannot find any user by id param.
+     * @param param         {@link UserParam}
+     * @return              {@link UserVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any user by id param.
      */
     public UserVO update(UserParam param, User currentUser) throws Exception {
         User user = userRepository.findByUsr(param.getUsr());
@@ -158,8 +158,8 @@ public class UserDomain extends BaseDomain<User, Long> {
      * Update user's password
      *
      * @param currentUser   current user
-     * @param param         user's param
-     * @throws CommonsException        SYS0131 user's pwd update failed.
+     * @param param         {@link UserParam}
+     * @throws CommonsException        {@link ErrorType#SYS0122} user's pwd update failed.
      */
     public void updatePwd(UserParam param, User currentUser) throws Exception {
         User user = userRepository.findByUsr(param.getUsr());
@@ -175,8 +175,8 @@ public class UserDomain extends BaseDomain<User, Long> {
      * Delete user.
      *
      * @param currentUser   current user
-     * @param param         user's params
-     * @throws CommonsException        SYS0122 Cannot find any user by id param.
+     * @param param         {@link UserParam}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any user by id param.
      */
     public void delete(UserParam param, User currentUser) throws Exception {
         User user = userRepository.findOne(param.getId());
@@ -215,12 +215,12 @@ public class UserDomain extends BaseDomain<User, Long> {
     private final static String USR = "usr";
 
     /**
-     * Transform user's param to PO.
+     * Transform {@link UserParam} to {@link User}.
      *
-     * @param param         user's param
-     * @param user          user
+     * @param param         {@link UserParam}
+     * @param user          {@link User}
      * @param currentUser   currentUser
-     * @return              user's PO
+     * @return              {@link User}
      */
     private User userParam2PO(UserParam param, User user, User currentUser) throws Exception {
         transformer.param2PO(getClassT(), param, user, currentUser);

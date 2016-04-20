@@ -44,10 +44,10 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     /**
      * Create new role.
      *
-     * @param currentUser   current role
-     * @param param         role's params
-     * @return              role's VO
-     * @throws CommonsException        SYS0111 user already existing, usr taken.
+     * @param currentUser   current user
+     * @param param         {@link RoleParam}
+     * @return              {@link RoleVO}
+     * @throws CommonsException        {@link ErrorType#SYS0111} user already existing, usr taken.
      */
     public RoleVO create(RoleParam param, User currentUser) throws Exception {
         Role role = roleRepository.findByName(param.getName());
@@ -63,7 +63,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
      * Show all roles' VO.
      *
      * @return          roles
-     * @throws CommonsException        SYS0120 No role exists.
+     * @throws CommonsException        {@link ErrorType#SYS0121} No role exists.
      */
     public ObjectsVO getAllRoles() throws Exception {
         Iterable roles = roleRepository.findAll();
@@ -79,8 +79,8 @@ public class RoleDomain extends BaseDomain<Role, Long> {
      * Show roles' page VO.
      *
      * @param pageable      page
-     * @return              roles' page VO
-     * @throws CommonsException        SYS0120 No role exists.
+     * @return              {@link RoleVO}
+     * @throws CommonsException        {@link ErrorType#SYS0121} No role exists.
      */
     public PageVO getPage(Pageable pageable) throws Exception {
         Page<Role> rolePage = roleRepository.findAll(pageable);
@@ -98,7 +98,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
      *
      * @param ids           roles' ids
      * @return              roles' PO
-     * @throws CommonsException        SYS0120 No role exists.
+     * @throws CommonsException        {@link ErrorType#SYS0120} No role exists.
      */
     public Iterable<Role> getRolesByIds(Iterable<Long> ids) throws Exception {
         return roleRepository.findAll(ids);
@@ -107,9 +107,9 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     /**
      * Show role VO by role's id.
      *
-     * @param param     role's params
-     * @return          role's VO
-     * @throws CommonsException        SYS0122 Cannot find any role by id param.
+     * @param param         {@link RoleParam}
+     * @return              {@link RoleVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any role by id param.
      */
     public RoleVO getRoleById(RoleParam param) throws Exception {
         Role role = roleRepository.findOne(param.getId());
@@ -124,9 +124,9 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     /**
      * Get role's VO by usr.
      *
-     * @param param     role's params
-     * @return          role's VO
-     * @throws CommonsException        SYS0122 Cannot find any role by name param.
+     * @param param         {@link RoleParam}
+     * @return              {@link RoleVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any role by name param.
      */
     public RoleVO getRoleByName(RoleParam param) throws Exception {
         Role role = roleRepository.findByName(param.getName());
@@ -141,9 +141,9 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     /**
      * Update role.
      *
-     * @param param     role's params
-     * @return          role's VO
-     * @throws CommonsException        SYS0122 Cannot find any role by id param.
+     * @param param         {@link RoleParam}
+     * @return              {@link RoleVO}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any role by id param.
      */
     public RoleVO update(RoleParam param, User currentUser) throws Exception {
         Role role = roleRepository.findByName(param.getName());
@@ -159,8 +159,8 @@ public class RoleDomain extends BaseDomain<Role, Long> {
      * Delete role.
      *
      * @param currentUser   current user
-     * @param param         role's params
-     * @throws CommonsException        SYS0122 Cannot find any role by id param.
+     * @param param         {@link RoleParam}
+     * @throws CommonsException        {@link ErrorType#SYS0122} Cannot find any role by id param.
      */
     public void delete(RoleParam param, User currentUser) throws Exception {
         Role role = roleRepository.findOne(param.getId());
@@ -192,12 +192,12 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     private Transformer transformer;
 
     /**
-     * Transform role's param to PO.
+     * Transform {@link RoleParam} to {@link Role}.
      *
-     * @param param         role's param
-     * @param role          role
+     * @param param         {@link RoleParam}
+     * @param role          {@link Role}
      * @param currentUser   currentUser
-     * @return              role's PO
+     * @return              {@link Role}
      */
     private Role roleParam2PO(RoleParam param, Role role, User currentUser) throws Exception {
         transformer.param2PO(getClassT(), param, role, currentUser);
