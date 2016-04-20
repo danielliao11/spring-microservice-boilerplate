@@ -43,10 +43,10 @@ public class ClientController {
     // ------------------------
 
     /**
-     * Create new client.
+     * Create new {@link com.saintdan.framework.po.Client}.
      *
-     * @param param     client's param
-     * @return          client's result
+     * @param param     {@link ClientParam}
+     * @return          {@link com.saintdan.framework.vo.ClientVO}
      */
     @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, ClientParam param, @PathVariable String sign) {
@@ -68,9 +68,9 @@ public class ClientController {
     }
 
     /**
-     * Show all clients' VO.
+     * Show all {@link com.saintdan.framework.vo.ClientVO}.
      *
-     * @return          clients' result
+     * @return          {@link com.saintdan.framework.vo.ClientVO}
      */
     @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO index(@PathVariable String sign) {
@@ -92,10 +92,10 @@ public class ClientController {
     }
 
     /**
-     * Show clients' page.
+     * Show {@link com.saintdan.framework.vo.ClientVO} in {@link com.saintdan.framework.vo.PageVO}.
      *
      * @param pageNo        page number
-     * @return              clients' page
+     * @return              {@link com.saintdan.framework.vo.ClientVO} in
      */
     @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
@@ -121,10 +121,10 @@ public class ClientController {
     }
 
     /**
-     * Show client by ID.
+     * Show {@link com.saintdan.framework.vo.ClientVO} by id.
      *
-     * @param id        client's id
-     * @return          client's result
+     * @param id        id of client
+     * @return          {@link com.saintdan.framework.vo.ClientVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
@@ -151,9 +151,9 @@ public class ClientController {
     /**
      * Update client.
      *
-     * @param id        client's id
-     * @param param     client's params
-     * @return          client's result
+     * @param id        id of client
+     * @param param     {@link ClientParam}
+     * @return          {@link com.saintdan.framework.vo.ClientVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid ClientParam param, BindingResult result) {
@@ -180,8 +180,8 @@ public class ClientController {
     /**
      * Delete client.
      *
-     * @param id        client's id
-     * @return          client's result
+     * @param id        id of client
+     * @return          {@link com.saintdan.framework.vo.ClientVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {

@@ -44,10 +44,10 @@ public class RoleController {
     // ------------------------
 
     /**
-     * Create new role.
+     * Create new {@link com.saintdan.framework.po.Role}.
      *
-     * @param param     role's param
-     * @return          role's result
+     * @param param     {@link RoleParam}
+     * @return          {@link com.saintdan.framework.vo.RoleVO}
      */
     @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, @Valid RoleParam param, BindingResult result, @PathVariable String sign) {
@@ -69,9 +69,9 @@ public class RoleController {
     }
 
     /**
-     * Show all roles' VO.
+     * Show all {@link com.saintdan.framework.vo.RoleVO}.
      *
-     * @return          roles' result
+     * @return          {@link com.saintdan.framework.vo.RoleVO}
      */
     @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO index(@PathVariable String sign) {
@@ -93,10 +93,10 @@ public class RoleController {
     }
 
     /**
-     * Show roles' page.
+     * Show {@link com.saintdan.framework.vo.RoleVO} in {@link com.saintdan.framework.vo.PageVO}.
      *
      * @param pageNo        page number
-     * @return              roles' page
+     * @return              {@link com.saintdan.framework.vo.RoleVO} in {@link com.saintdan.framework.vo.PageVO}.
      */
     @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
@@ -122,10 +122,10 @@ public class RoleController {
     }
 
     /**
-     * Show role by ID.
+     * Show {@link com.saintdan.framework.vo.RoleVO} by ID.
      *
-     * @param id        role's id
-     * @return          role's result
+     * @param id        id of role
+     * @return          {@link com.saintdan.framework.vo.RoleVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
@@ -150,11 +150,11 @@ public class RoleController {
     }
 
     /**
-     * Update role.
+     * Update {@link com.saintdan.framework.po.Role}.
      *
-     * @param id        role's id
+     * @param id        id of role
      * @param param     role's params
-     * @return          role's result
+     * @return          {@link com.saintdan.framework.vo.RoleVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid RoleParam param, BindingResult result) {
@@ -179,10 +179,10 @@ public class RoleController {
     }
 
     /**
-     * Delete role.
+     * Delete {@link com.saintdan.framework.po.Role}.
      *
-     * @param id        role's id
-     * @return          role's result
+     * @param id        id of role
+     * @return          {@link com.saintdan.framework.vo.RoleVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {

@@ -43,10 +43,10 @@ public class ResourceController {
     // ------------------------
 
     /**
-     * Create new resource.
+     * Create new {@link com.saintdan.framework.po.Resource}.
      *
-     * @param param     resource's param
-     * @return          resource's result
+     * @param param     {@link ResourceParam}
+     * @return          {@link com.saintdan.framework.vo.ResourceVO}
      */
     @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, @Valid ResourceParam param, BindingResult result, @PathVariable String sign) {
@@ -68,9 +68,9 @@ public class ResourceController {
     }
 
     /**
-     * Show all resources' VO.
+     * Show all {@link com.saintdan.framework.vo.ResourceVO}.
      *
-     * @return          resources' result
+     * @return          {@link com.saintdan.framework.vo.ResourceVO}
      */
     @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO index(@PathVariable String sign) {
@@ -92,10 +92,10 @@ public class ResourceController {
     }
 
     /**
-     * Show resources' page.
+     * Show {@link com.saintdan.framework.vo.ResourceVO} in {@link com.saintdan.framework.vo.PageVO}.
      *
      * @param pageNo        page number
-     * @return              resources' page
+     * @return              {@link com.saintdan.framework.vo.ResourceVO} in {@link com.saintdan.framework.vo.PageVO}.
      */
     @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
@@ -121,10 +121,10 @@ public class ResourceController {
     }
 
     /**
-     * Show resource by ID.
+     * Show {@link com.saintdan.framework.vo.ResourceVO} by ID.
      *
-     * @param id        resource's id
-     * @return          resource's result
+     * @param id        id of resource
+     * @return          {@link com.saintdan.framework.vo.ResourceVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
@@ -149,11 +149,11 @@ public class ResourceController {
     }
 
     /**
-     * Update resource.
+     * Update {@link com.saintdan.framework.po.Resource}.
      *
-     * @param id        resource's id
-     * @param param     resource's params
-     * @return          resource's result
+     * @param id        id of resource
+     * @param param     {@link ResourceParam}
+     * @return          {@link com.saintdan.framework.vo.ResourceVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid ResourceParam param, BindingResult result) {
@@ -178,10 +178,10 @@ public class ResourceController {
     }
 
     /**
-     * Delete resource.
+     * Delete {@link com.saintdan.framework.po.Resource}.
      *
-     * @param id        resource's id
-     * @return          resource's result
+     * @param id        id of resource
+     * @return          {@link com.saintdan.framework.vo.ResourceVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {

@@ -31,7 +31,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
     // ------------------------
 
     /**
-     * Create new client.
+     * Create new {@link Client}.
      *
      * @param currentUser   current user
      * @param param         {@link ClientParam}
@@ -65,7 +65,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
     }
 
     /**
-     * Delete client
+     * Delete {@link Client}
      *
      * @param currentUser   current user
      * @param param         {@link ClientParam}

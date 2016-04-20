@@ -37,7 +37,7 @@ public class LogDomain {
     // ------------------------
 
     /**
-     * Create new log.
+     * Create new {@link Log}.
      *
      * @param currentUser   current user
      * @param param         {@link LogParam}

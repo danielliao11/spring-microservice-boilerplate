@@ -41,7 +41,7 @@ public class UserDomain extends BaseDomain<User, Long> {
     // ------------------------
 
     /**
-     * Create new user.
+     * Create new {@link User}.
      *
      * @param currentUser   current user
      * @param param         {@link UserParam}
@@ -138,7 +138,7 @@ public class UserDomain extends BaseDomain<User, Long> {
     }
 
     /**
-     * Update user.
+     * Update {@link User}.
      *
      * @param param         {@link UserParam}
      * @return              {@link UserVO}
@@ -155,7 +155,7 @@ public class UserDomain extends BaseDomain<User, Long> {
     }
 
     /**
-     * Update user's password
+     * Update password of {@link User}
      *
      * @param currentUser   current user
      * @param param         {@link UserParam}
@@ -172,7 +172,7 @@ public class UserDomain extends BaseDomain<User, Long> {
     }
 
     /**
-     * Delete user.
+     * Delete {@link User}.
      *
      * @param currentUser   current user
      * @param param         {@link UserParam}

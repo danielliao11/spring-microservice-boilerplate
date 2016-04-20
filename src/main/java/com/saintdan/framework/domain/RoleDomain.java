@@ -42,7 +42,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     // ------------------------
 
     /**
-     * Create new role.
+     * Create new {@link Role}.
      *
      * @param currentUser   current user
      * @param param         {@link RoleParam}
@@ -60,7 +60,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     }
 
     /**
-     * Show all roles' VO.
+     * Show all {@link RoleVO}.
      *
      * @return          roles
      * @throws CommonsException        {@link ErrorType#SYS0121} No role exists.
@@ -76,7 +76,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     }
 
     /**
-     * Show roles' page VO.
+     * Show {@link RoleVO} in {@link PageVO}.
      *
      * @param pageable      page
      * @return              {@link RoleVO}
@@ -94,7 +94,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     }
 
     /**
-     * Show roles by ids.
+     * Show Iterable<Role> by ids of roles.
      *
      * @param ids           roles' ids
      * @return              roles' PO
@@ -105,7 +105,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     }
 
     /**
-     * Show role VO by role's id.
+     * Show {@link RoleVO} by id of role.
      *
      * @param param         {@link RoleParam}
      * @return              {@link RoleVO}
@@ -122,7 +122,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     }
 
     /**
-     * Get role's VO by usr.
+     * Get {@link RoleVO} by name of role.
      *
      * @param param         {@link RoleParam}
      * @return              {@link RoleVO}
@@ -139,7 +139,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     }
 
     /**
-     * Update role.
+     * Update {@link Role}.
      *
      * @param param         {@link RoleParam}
      * @return              {@link RoleVO}
@@ -156,7 +156,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     }
 
     /**
-     * Delete role.
+     * Delete {@link Role}.
      *
      * @param currentUser   current user
      * @param param         {@link RoleParam}

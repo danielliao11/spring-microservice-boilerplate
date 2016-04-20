@@ -94,7 +94,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     }
 
     /**
-     * Show groups by ids.
+     * Show Iterable<Group> by ids.
      *
      * @param ids           ids of groups
      * @return              {@link Iterable<Group>}
@@ -105,7 +105,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     }
 
     /**
-     * Show VO of group by id of group.
+     * Show {@link GroupVO} by id of group.
      *
      * @param param         {@link GroupParam}
      * @return              {@link GroupVO}
@@ -122,7 +122,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     }
 
     /**
-     * Show VO of group by name of group.
+     * Show {@link GroupVO} by name of group.
      *
      * @param param         {@link GroupParam}
      * @return              {@link GroupVO}
@@ -139,7 +139,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     }
 
     /**
-     * Update group.
+     * Update {@link Group}.
      *
      * @param currentUser   current user
      * @param param         {@link GroupParam}
@@ -157,7 +157,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     }
 
     /**
-     * Delete group.
+     * Delete {@link Group}.
      *
      * @param currentUser   current user
      * @param param         {@link GroupParam}

@@ -41,7 +41,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     // ------------------------
 
     /**
-     * Create new resource.
+     * Create new {@link Resource}.
      *
      * @param currentUser   current user
      * @param param         {@link ResourceParam}
@@ -155,7 +155,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     }
 
     /**
-     * Update resource.
+     * Update {@link Resource}.
      *
      * @param currentUser   current user
      * @param param         {@link ResourceParam}
@@ -174,7 +174,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     }
 
     /**
-     * Delete resource.
+     * Delete {@link Resource}.
      *
      * @param currentUser   current user
      * @param param         {@link ResourceParam}

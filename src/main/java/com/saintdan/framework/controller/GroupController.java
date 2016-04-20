@@ -43,10 +43,10 @@ public class GroupController {
     // ------------------------
 
     /**
-     * Create new group.
+     * Create new {@link com.saintdan.framework.po.Group}.
      *
-     * @param param     group's param
-     * @return          group's result
+     * @param param     {@link GroupParam}
+     * @return          {@link com.saintdan.framework.vo.GroupVO}
      */
     @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, @Valid GroupParam param, BindingResult result, @PathVariable String sign) {
@@ -68,9 +68,9 @@ public class GroupController {
     }
 
     /**
-     * Show all groups' VO.
+     * Show all {@link com.saintdan.framework.vo.GroupVO}.
      *
-     * @return          groups' result
+     * @return          {@link com.saintdan.framework.vo.GroupVO}
      */
     @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO index(@PathVariable String sign) {
@@ -92,10 +92,10 @@ public class GroupController {
     }
 
     /**
-     * Show groups' page.
+     * Show {@link com.saintdan.framework.vo.GroupVO} in {@link com.saintdan.framework.vo.PageVO}.
      *
      * @param pageNo        page number
-     * @return              groups' page
+     * @return              {@link com.saintdan.framework.vo.GroupVO} in {@link com.saintdan.framework.vo.PageVO}
      */
     @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
@@ -121,10 +121,10 @@ public class GroupController {
     }
 
     /**
-     * Show group by ID.
+     * Show {@link com.saintdan.framework.vo.GroupVO} by ID.
      *
-     * @param id        group's id
-     * @return          group's result
+     * @param id        id of group
+     * @return          {@link com.saintdan.framework.vo.GroupVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
@@ -149,11 +149,11 @@ public class GroupController {
     }
 
     /**
-     * Update group.
+     * Update {@link com.saintdan.framework.po.Group}.
      *
-     * @param id        group's id
-     * @param param     group's params
-     * @return          group's result
+     * @param id        id of group
+     * @param param     {@link GroupParam}
+     * @return          {@link com.saintdan.framework.vo.GroupVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid GroupParam param, BindingResult result) {
@@ -181,7 +181,7 @@ public class GroupController {
      * Delete group.
      *
      * @param id        group's id
-     * @return          group's result
+     * @return          {@link com.saintdan.framework.vo.GroupVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {

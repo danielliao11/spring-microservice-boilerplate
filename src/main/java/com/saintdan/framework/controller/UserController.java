@@ -43,10 +43,10 @@ public class UserController {
     // ------------------------
 
     /**
-     * Create new user.
+     * Create new {@link User}.
      *
-     * @param param     user's param
-     * @return          user's result
+     * @param param     {@link UserParam}
+     * @return          {@link com.saintdan.framework.vo.UserVO}
      */
     @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO create(@CurrentUser User currentUser, @Valid UserParam param, BindingResult result, @PathVariable String sign) {
@@ -68,9 +68,9 @@ public class UserController {
     }
 
     /**
-     * Show all users' VO.
+     * Show all {@link com.saintdan.framework.vo.UserVO}.
      *
-     * @return          users' result
+     * @return          {@link com.saintdan.framework.vo.UserVO}
      */
     @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO index(@PathVariable String sign) {
@@ -92,10 +92,10 @@ public class UserController {
     }
 
     /**
-     * Show users' page.
+     * Show {@link com.saintdan.framework.vo.UserVO} in {@link com.saintdan.framework.vo.PageVO}.
      *
      * @param pageNo        page number
-     * @return              users' page
+     * @return              {@link com.saintdan.framework.vo.UserVO} in {@link com.saintdan.framework.vo.PageVO}
      */
     @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
@@ -121,10 +121,10 @@ public class UserController {
     }
 
     /**
-     * Show user by ID.
+     * Show {@link com.saintdan.framework.vo.UserVO} by ID.
      *
      * @param id        user's id
-     * @return user's result
+     * @return          {@link com.saintdan.framework.vo.UserVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO show(@PathVariable String id, @PathVariable String sign) {
@@ -149,11 +149,11 @@ public class UserController {
     }
 
     /**
-     * Show user information by param usr.
+     * Show {@link com.saintdan.framework.vo.UserVO} by user's usr.
      *
-     * @param usr       usr
+     * @param usr       user's usr
      * @param sign      signature
-     * @return          user's result
+     * @return          {@link com.saintdan.framework.vo.UserVO}
      */
     @RequestMapping(value = "/usr={usr}" + ResourceURL.SIGN, method = RequestMethod.GET)
     public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign) {
@@ -181,11 +181,11 @@ public class UserController {
     }
 
     /**
-     * Update user.
+     * Update {@link User}.
      *
      * @param id        user's id
-     * @param param     user's params
-     * @return          user's result
+     * @param param     {@link UserParam}
+     * @return          {@link com.saintdan.framework.vo.UserVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
     public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid UserParam param, BindingResult result) {
@@ -210,10 +210,10 @@ public class UserController {
     }
 
     /**
-     * Delete user.
+     * Delete {@link User}.
      *
      * @param id        user's id
-     * @return          user's result
+     * @return          {@link com.saintdan.framework.vo.UserVO}
      */
     @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
     public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
