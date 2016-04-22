@@ -54,7 +54,7 @@ or [Advanced REST Client](https://github.com/jarrodek/advanced-rest-client) in y
 url: http://localhost:8080/oauth/token
 POST
 headers: Authorization: Basic <Encrypt client_id:client_secret by HTTP Basic>
-playload: password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app
+payload: password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app
 ```
 
 ### <a name="refresh_token"></a>Get new **access_token** with **refresh_token** [[TOP]](#index)
@@ -69,7 +69,7 @@ or use Advanced REST Client:
 url: http://localhost:8080/oauth/token
 POST
 headers: Authorization: Basic <Encrypt client_id:client_secret by HTTP Basic>
-playload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
+payload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
 ```
 
 ### <a name="welcome"></a>Access to welcome resource [[TOP]](#index)

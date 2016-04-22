@@ -125,3 +125,7 @@
   - Delete redundant codes of domain.
   - Delete update valid flag which is in the [RepositoryWithoutDelete](src/main/java/com/saintdan/framework/repo/RepositoryWithoutDelete.java).
   - Fix some bugs.
+
+- 0.10.0.RELEASE
+  - Add refresh token support.
+  - Fix some bugs.

@@ -1,6 +1,7 @@
 package com.saintdan.framework.config;
 
 import com.saintdan.framework.config.custom.CustomClientDetailsService;
+import com.saintdan.framework.config.custom.CustomUserDetailsService;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.VersionConstant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,12 +127,16 @@ public class OAuth2ServerConfiguration {
         @Autowired
         private CustomClientDetailsService clientDetailsService;
 
+        @Autowired
+        private CustomUserDetailsService userDetailsService;
+
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints)
                 throws Exception {
             endpoints
                     .tokenStore(this.tokenStore)
-                    .authenticationManager(this.authenticationManager);
+                    .authenticationManager(this.authenticationManager)
+                    .userDetailsService(userDetailsService);
         }
 
         @Override
