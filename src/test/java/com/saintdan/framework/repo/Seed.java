@@ -127,7 +127,7 @@ public class Seed extends BaseTest {
         admin.setClientSecretAlias("123456");
         admin.setAuthorizedGrantTypeStr("password,refresh_token,authorization_code");
         admin.setScopeStr("read");
-        admin.setResourceIdStr("rest_api");
+        admin.setResourceIdStr("api");
         admin.setCreatedBy(ROOT_USER);
         admin.setLastModifiedBy(ROOT_USER);
         admin.setRegisteredRedirectUriStr("http://github.com/saintdan");
@@ -141,7 +141,7 @@ public class Seed extends BaseTest {
         ios.setClientSecretAlias("123456");
         ios.setAuthorizedGrantTypeStr("password,refresh_token,authorization_code");
         ios.setScopeStr("read");
-        ios.setResourceIdStr("rest_api");
+        ios.setResourceIdStr("api");
         ios.setCreatedBy(ROOT_USER);
         ios.setLastModifiedBy(ROOT_USER);
         ios.setRegisteredRedirectUriStr("http://www.apple.com");

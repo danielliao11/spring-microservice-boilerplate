@@ -7,7 +7,6 @@ import com.saintdan.framework.constant.VersionConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -17,7 +16,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,10 +27,11 @@ import java.util.List;
  * @since JDK1.8
  */
 @Configuration
+@EnableResourceServer
 public class OAuth2ServerConfiguration {
 
     /**
-     * Resource of admin
+     * Resource of api
      *
      * @return      {@link ResourceServerConfiguration}
      */
@@ -45,11 +45,11 @@ public class OAuth2ServerConfiguration {
             }
         };
 
-        resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerConfigurerAdapter() {
+        resource.setConfigurers(Collections.<ResourceServerConfigurer>singletonList(new ResourceServerConfigurerAdapter() {
 
             @Override
             public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-                resources.resourceId(ADMIN_RESOURCE_ID);
+                resources.resourceId(RESOURCE_ID);
             }
 
             @Override
@@ -66,47 +66,9 @@ public class OAuth2ServerConfiguration {
 
         }));
 
-        resource.setOrder(3);
+        resource.setOrder(1);
 
         return resource;
-    }
-
-    /**
-     * Resource of wechat
-     *
-     * @return      {@link ResourceServerConfiguration}
-     */
-    @Bean
-    protected ResourceServerConfiguration wechatResources() {
-
-        ResourceServerConfiguration resource = new org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfiguration() {
-            // Switch off the Spring Boot @Autowired configurers
-            public void setConfigurers(List<ResourceServerConfigurer> configurers) {
-                super.setConfigurers(configurers);
-            }
-        };
-
-        resource.setConfigurers(Arrays.<ResourceServerConfigurer> asList(new ResourceServerConfigurerAdapter() {
-
-            @Override
-            public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-                resources.resourceId(IOS_RESOURCE_ID);
-            }
-
-            @Override
-            public void configure(HttpSecurity http) throws Exception {
-                http
-                        .csrf().disable()
-                        .authorizeRequests()
-                        .antMatchers(HttpMethod.GET, IOS_URL).hasAnyAuthority("root", "management", "ios");
-            }
-
-        }));
-
-        resource.setOrder(4);
-
-        return resource;
-
     }
 
     /**
@@ -171,14 +133,12 @@ public class OAuth2ServerConfiguration {
         }
     }
 
-    private static final String ADMIN_RESOURCE_ID = "admin";
-    private static final String IOS_RESOURCE_ID = "ios_app";
+    private static final String RESOURCE_ID = "api";
     private static final String CLIENT_URL = getURL(ResourceURL.CLIENTS);
     private static final String USER_URL = getURL(ResourceURL.USERS);
     private static final String ROLE_URL = getURL(ResourceURL.ROLES);
     private static final String GROUP_URL = getURL(ResourceURL.GROUPS);
     private static final String RESOURCE_URL = getURL(ResourceURL.RESOURCES);
-    private static final String IOS_URL = getURL(ResourceURL.IOS);
 
     private static String getURL(CharSequence element) {
         return String.join(ResourceURL.FIX, ResourceURL.RESOURCES, VersionConstant.V1, element, ResourceURL.FIX);
