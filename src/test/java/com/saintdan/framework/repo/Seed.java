@@ -121,6 +121,21 @@ public class Seed extends BaseTest {
      */
     private Iterable<Client> getClients() {
         List<Client> clients = new ArrayList<>();
+
+        Client admin = new Client();
+        admin.setClientIdAlias("admin");
+        admin.setClientSecretAlias("123456");
+        admin.setAuthorizedGrantTypeStr("password,refresh_token,authorization_code");
+        admin.setScopeStr("read");
+        admin.setResourceIdStr("rest_api");
+        admin.setCreatedBy(ROOT_USER);
+        admin.setLastModifiedBy(ROOT_USER);
+        admin.setRegisteredRedirectUriStr("http://github.com/saintdan");
+        admin.setAccessTokenValiditySecondsAlias(1800);
+        admin.setRefreshTokenValiditySecondsAlias(24 * 60 * 60);
+        admin.setPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvpO6M1Ghv4YeEeOFHB41FtzwDLB49ovrjfYU4+YvTvXvwL1AdVlJhKfp/MveMK8tzL5Prya11nsIQnyz/dVdiWhu7xqC6fE/xbWswEskBRa/QUvOFaKZS6ZRenGsst7YTQmiEWlhZwduDvCcPrz4pEusRg+GtETdbWqO3D0O+NF9bmkEGcKvHB1BHKv6Nj8PSL0Zt8h2fbZLWNSEYWPLCA+onhtGL7pAkpGQxAtZLJTYhrTw4oo7+bcSjha/2AHfnsCcMa65EoU1BSjD18bjG+AAE6JNURH5Nl2NgRL7wT4LH1/0vJpUnCxjkWWN46648k22ogciDSr73msJuAzp9wIDAQAB");
+        clients.add(admin);
+
         Client ios = new Client();
         ios.setClientIdAlias("ios_app");
         ios.setClientSecretAlias("123456");
@@ -134,6 +149,7 @@ public class Seed extends BaseTest {
         ios.setRefreshTokenValiditySecondsAlias(24 * 60 * 60);
         ios.setPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvpO6M1Ghv4YeEeOFHB41FtzwDLB49ovrjfYU4+YvTvXvwL1AdVlJhKfp/MveMK8tzL5Prya11nsIQnyz/dVdiWhu7xqC6fE/xbWswEskBRa/QUvOFaKZS6ZRenGsst7YTQmiEWlhZwduDvCcPrz4pEusRg+GtETdbWqO3D0O+NF9bmkEGcKvHB1BHKv6Nj8PSL0Zt8h2fbZLWNSEYWPLCA+onhtGL7pAkpGQxAtZLJTYhrTw4oo7+bcSjha/2AHfnsCcMa65EoU1BSjD18bjG+AAE6JNURH5Nl2NgRL7wT4LH1/0vJpUnCxjkWWN46648k22ogciDSr73msJuAzp9wIDAQAB");
         clients.add(ios);
+
         return clients;
     }
 
