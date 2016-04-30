@@ -129,3 +129,4 @@
 - 0.10.0.RELEASE
   - Add refresh token support.
   - Fix some bugs.
+  - Add log.
