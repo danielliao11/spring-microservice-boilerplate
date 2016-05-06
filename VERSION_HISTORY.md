@@ -128,5 +128,7 @@
 
 - 0.10.0.RELEASE
   - Add refresh token support.
+  - Change StringBuild to String.join
   - Fix some bugs.
+  - Add docker support.
   - Add log.

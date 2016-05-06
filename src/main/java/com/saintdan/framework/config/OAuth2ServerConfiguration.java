@@ -141,6 +141,6 @@ public class OAuth2ServerConfiguration {
     private static final String RESOURCE_URL = getURL(ResourceURL.RESOURCES);
 
     private static String getURL(CharSequence element) {
-        return String.join(ResourceURL.FIX, ResourceURL.RESOURCES, VersionConstant.V1, element, ResourceURL.FIX);
+        return String.join("", ResourceURL.FIX, ResourceURL.RESOURCES, VersionConstant.V1, element, ResourceURL.FIX);
     }
 }

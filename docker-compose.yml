@@ -1,0 +1,24 @@
+spring-rest-oauth2-sample:
+  build: <path of Dockerfile>
+  ports:
+    - "<host port>:8443" # When you use HTTPS
+    - "<host port>:8080" # When you use HTTP
+  environment:
+    - SPRING_PROFILES_ACTIVE=dev
+  volumes:
+    - <local path>:<docker path>
+  links:
+    - db
+
+db:
+  restart: always
+  image: postgres
+  ports:
+    - "<host port>:5432"
+  environment:
+    - PG_PASSWORD=core
+    - DB_USER=core
+    - DB_PASS=core
+    - DB_NAME=core
+  volumes:
+    - <local path>:<docker path>
