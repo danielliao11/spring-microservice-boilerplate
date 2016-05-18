@@ -82,7 +82,7 @@ public class RoleController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return roleDomain.getAllRoles();
+            return resultHelper.successResp(roleDomain.getAllRoles());
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
