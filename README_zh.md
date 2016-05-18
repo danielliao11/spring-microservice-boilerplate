@@ -56,7 +56,7 @@ $ curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: 
 ```
 url: http://localhost:8080/oauth/token
 POST
-headers: Authorization: Basic <Encrypt client_id:client_secret by HTTP Basic>
+headers: Authorization: Basic aW9zX2FwcDoxMjM0NTY= (Encrypt client_id:client_secret by HTTP Basic)
 payload: password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app
 ```
 
@@ -85,9 +85,12 @@ $ curl http://localhost:8080/welcome -H "Authorization: Bearer <access_token_ret
 如果请求成功，将收到以下 JSON 响应：
 
 ```
-{
-	"id":2,
-	"content":"Hello, admin!"
+"code": "200"
+"operationStatus": "SUCCESS"
+"message": "Successfully"
+"data": {
+	"id": 4
+	"content": "Hello, admin!"
 }
 ```
 

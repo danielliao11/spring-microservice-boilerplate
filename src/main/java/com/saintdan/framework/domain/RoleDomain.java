@@ -71,7 +71,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
             throw new CommonsException(ErrorType.SYS0121,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
-        return transformer.pos2VO(ObjectsVO.class, roles);
+        return transformer.pos2VO(RoleVO.class, roles);
     }
 
     /**

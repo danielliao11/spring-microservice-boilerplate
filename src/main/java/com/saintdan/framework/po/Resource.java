@@ -53,7 +53,7 @@ public class Resource implements GrantedAuthority, Serializable {
     @Column(nullable = false)
     private Integer priority;
 
-    @Column(length = 500)
+    @Column(columnDefinition="TEXT")
     private String description;
 
     @Column(nullable = false)

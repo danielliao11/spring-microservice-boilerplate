@@ -21,14 +21,21 @@ public class SignTest {
     @Test
     public void testSign() throws Exception {
         UserParam param = new UserParam();
-        param.setId(4L);
+//        param.setId(29L);
+//        param.setName("tom");
+        param.setUsr("tommy");
+//        param.setPwd("tom12345");
+        System.out.println("Sign content is: " + param.getSignContent());
         param.sign(PRIVATE_KEY);
         String sign = param.getSign();
-        System.out.println(sign);
+        System.out.println("Sign is: " + sign);
         // Encode the sign.
         String encodeSign = new String(Base64.encodeBase64(URLEncoder.encode(sign, SignatureConstant.CHARSET_UTF8).getBytes()));
-        System.out.println(encodeSign);
+        System.out.println("Encode sign is: " + encodeSign);
+        String decodeSign = URLDecoder.decode(new String(Base64.decodeBase64(encodeSign)), SignatureConstant.CHARSET_UTF8);
+        System.out.println("Decode sign is: " + decodeSign);
         Assert.assertTrue(param.isSignValid(PUBLIC_KEY));
+        Assert.assertEquals(sign, decodeSign);
     }
 
     @Test

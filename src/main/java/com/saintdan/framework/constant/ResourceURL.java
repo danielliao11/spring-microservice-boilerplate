@@ -11,9 +11,9 @@ public interface ResourceURL {
 
     String FIX = "/**";
 
-    String RESOURCES = "/resources";
+    String WELCOME = "/welcome";
 
-    String SIGN = "/sign={sign}";
+    String RESOURCES = "/resources";
 
     String USERS = "/users";
 
@@ -22,7 +22,5 @@ public interface ResourceURL {
     String GROUPS = "/groups";
 
     String CLIENTS = "/clients";
-
-    String IOS = "/ios";
 
 }

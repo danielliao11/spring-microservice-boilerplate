@@ -19,15 +19,15 @@ public class ResourceParam extends BaseParam {
     private Long id; // role's ID.
 
     @SignField
-    @NotNull(message = "Name cannnot be null.")
+    @NotNull(message = "Name cannot be null.")
     private String name; // role's name
 
     @SignField
-    @NotNull(message = "Path cannnot be null.")
+    @NotNull(message = "Path cannot be null.")
     private String path;
 
     @SignField
-    @NotNull(message = "Priority cannnot be null.")
+    @NotNull(message = "Priority cannot be null.")
     private Integer priority;
 
     @SignField

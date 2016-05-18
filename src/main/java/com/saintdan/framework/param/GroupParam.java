@@ -19,7 +19,7 @@ public class GroupParam extends BaseParam {
     private Long id; // role's ID.
 
     @SignField
-    @NotNull(message = "Name cannnot be null.")
+    @NotNull(message = "Name cannot be null.")
     private String name; // role's name
 
     @SignField

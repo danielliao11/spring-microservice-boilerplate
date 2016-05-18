@@ -1,6 +1,8 @@
 package com.saintdan.framework.controller;
 
 import com.saintdan.framework.component.ResultHelper;
+import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.ResultVO;
 import com.saintdan.framework.vo.WelcomeVO;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since JDK1.8
  */
 @RestController
+@RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1)
 public class WelcomeController {
 
     // ------------------------
@@ -29,7 +32,7 @@ public class WelcomeController {
      * @param user      user
      * @return          user's name
      */
-    @RequestMapping("/welcome")
+    @RequestMapping(ResourceURL.WELCOME)
 	public ResultVO welcome(@AuthenticationPrincipal User user) {
 		return resultHelper.successResp(new WelcomeVO(user.getId(), String.format(template, user.getName())));
 	}

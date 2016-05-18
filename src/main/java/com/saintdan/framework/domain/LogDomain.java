@@ -58,7 +58,7 @@ public class LogDomain {
             // Throw no log exist exception.
             throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
         }
-        return transformer.pos2VO(ObjectsVO.class, logs);
+        return transformer.pos2VO(LogVO.class, logs);
     }
 
     /**

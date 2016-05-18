@@ -3,10 +3,7 @@ package com.saintdan.framework.controller;
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ControllerConstant;
-import com.saintdan.framework.constant.ResourceURL;
-import com.saintdan.framework.constant.ResultConstant;
+import com.saintdan.framework.constant.*;
 import com.saintdan.framework.domain.ResourceDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
@@ -35,7 +32,7 @@ import javax.validation.Valid;
  * @since JDK1.8
  */
 @RestController
-@RequestMapping(ResourceURL.RESOURCES + ResourceURL.RESOURCES)
+@RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.RESOURCES)
 public class ResourceController {
 
     // ------------------------
@@ -48,11 +45,11 @@ public class ResourceController {
      * @param param     {@link ResourceParam}
      * @return          {@link com.saintdan.framework.vo.ResourceVO}
      */
-    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO create(@CurrentUser User currentUser, @Valid ResourceParam param, BindingResult result, @PathVariable String sign) {
+    @RequestMapping(method = RequestMethod.POST)
+    public ResultVO create(@CurrentUser User currentUser, @Valid ResourceParam param, BindingResult result) {
         try {
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -72,12 +69,13 @@ public class ResourceController {
      *
      * @return          {@link com.saintdan.framework.vo.ResourceVO}
      */
-    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO index(@PathVariable String sign) {
+    @RequestMapping(value = PathConstant.INDEX, method = RequestMethod.GET)
+    public ResultVO index(String sign) {
         try {
             ResourceParam param = new ResourceParam();
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -97,16 +95,17 @@ public class ResourceController {
      * @param pageNo        page number
      * @return              {@link com.saintdan.framework.vo.ResourceVO} in {@link com.saintdan.framework.vo.PageVO}.
      */
-    @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
+    @RequestMapping(method = RequestMethod.GET)
+    public ResultVO page(String pageNo, String sign) {
         try {
             // Init page number.
             if (StringUtils.isBlank(pageNo)) {
                 pageNo = "0";
             }
             ResourceParam param = new ResourceParam();
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -126,15 +125,16 @@ public class ResourceController {
      * @param id        id of resource
      * @return          {@link com.saintdan.framework.vo.ResourceVO}
      */
-    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO show(@PathVariable String id, @PathVariable String sign) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResultVO show(@PathVariable String id, String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             ResourceParam param = new ResourceParam(Long.valueOf(id));
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -155,14 +155,14 @@ public class ResourceController {
      * @param param     {@link ResourceParam}
      * @return          {@link com.saintdan.framework.vo.ResourceVO}
      */
-    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid ResourceParam param, BindingResult result) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid ResourceParam param, BindingResult result) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -183,15 +183,16 @@ public class ResourceController {
      * @param id        id of resource
      * @return          {@link com.saintdan.framework.vo.ResourceVO}
      */
-    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
-    public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             ResourceParam param = new ResourceParam(Long.valueOf(id));
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }

@@ -21,32 +21,32 @@ public class ClientParam extends BaseParam {
     private Long id;
 
     @SignField
-    @NotNull(message = "ClientIdAlias cannnot be null.")
+    @NotNull(message = "ClientIdAlias cannot be null.")
     @Size(min = 6, max = 50)
     private String clientIdAlias;
 
     @SignField
-    @NotNull(message = "ResourceIdStr cannnot be null.")
+    @NotNull(message = "ResourceIdStr cannot be null.")
     private String resourceIdStr;
 
     @SignField
-    @NotNull(message = "ClientSecretAlias cannnot be null.")
+    @NotNull(message = "ClientSecretAlias cannot be null.")
     @Size(min = 8, max = 50)
     private String clientSecretAlias;
 
     @SignField
-    @NotNull(message = "ScopeStr cannnot be null.")
+    @NotNull(message = "ScopeStr cannot be null.")
     private String scopeStr;
 
     @SignField
-    @NotNull(message = "AuthorizedGrantTypeStr cannnot be null.")
+    @NotNull(message = "AuthorizedGrantTypeStr cannot be null.")
     private String authorizedGrantTypeStr;
 
     @SignField
     private String registeredRedirectUriStr;
 
     @SignField
-    @NotNull(message = "AuthoritiesStr cannnot be null.")
+    @NotNull(message = "AuthoritiesStr cannot be null.")
     private String authoritiesStr;
 
     @SignField

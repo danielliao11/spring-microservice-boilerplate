@@ -3,16 +3,14 @@ package com.saintdan.framework.controller;
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ControllerConstant;
-import com.saintdan.framework.constant.ResourceURL;
-import com.saintdan.framework.constant.ResultConstant;
+import com.saintdan.framework.constant.*;
 import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.tools.QueryHelper;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -35,7 +33,7 @@ import javax.validation.Valid;
  * @since JDK1.8
  */
 @RestController
-@RequestMapping(ResourceURL.RESOURCES + ResourceURL.USERS)
+@RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.USERS)
 public class UserController {
 
     // ------------------------
@@ -48,11 +46,11 @@ public class UserController {
      * @param param     {@link UserParam}
      * @return          {@link com.saintdan.framework.vo.UserVO}
      */
-    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO create(@CurrentUser User currentUser, @Valid UserParam param, BindingResult result, @PathVariable String sign) {
+    @RequestMapping(method = RequestMethod.POST)
+    public ResultVO create(@CurrentUser User currentUser, @Valid UserParam param, BindingResult result) {
         try {
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -72,12 +70,13 @@ public class UserController {
      *
      * @return          {@link com.saintdan.framework.vo.UserVO}
      */
-    @RequestMapping(value = ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO index(@PathVariable String sign) {
+    @RequestMapping(value = PathConstant.INDEX, method = RequestMethod.GET)
+    public ResultVO index(String sign) {
         try {
             UserParam param = new UserParam();
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -97,20 +96,22 @@ public class UserController {
      * @param pageNo        page number
      * @return              {@link com.saintdan.framework.vo.UserVO} in {@link com.saintdan.framework.vo.PageVO}
      */
-    @RequestMapping(value = "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
+    @RequestMapping(method = RequestMethod.GET)
+    public ResultVO page(String pageNo, String sign) {
         try {
             // Init page number.
             if (StringUtils.isBlank(pageNo)) {
                 pageNo = "0";
             }
             UserParam param = new UserParam();
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
-            return resultHelper.successResp(userDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE)));
+            PageRequest pageRequest = new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE, QueryHelper.getDefaultSort());
+            return resultHelper.successResp(userDomain.getPage(pageRequest));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -126,15 +127,16 @@ public class UserController {
      * @param id        user's id
      * @return          {@link com.saintdan.framework.vo.UserVO}
      */
-    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO show(@PathVariable String id, @PathVariable String sign) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResultVO show(@PathVariable String id, String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             UserParam param = new UserParam(Long.valueOf(id));
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -155,8 +157,8 @@ public class UserController {
      * @param sign      signature
      * @return          {@link com.saintdan.framework.vo.UserVO}
      */
-    @RequestMapping(value = "/usr={usr}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO showByUsr(@PathVariable String usr, @PathVariable String sign) {
+    @RequestMapping(method = RequestMethod.GET)
+    public ResultVO showByUsr(String usr, String sign) {
         try {
             // If usr or sign is empty, return SYS0002, params error.
             if (StringUtils.isBlank(usr)) {
@@ -164,8 +166,9 @@ public class UserController {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, USR));
             }
             UserParam param = new UserParam(usr);
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -187,14 +190,14 @@ public class UserController {
      * @param param     {@link UserParam}
      * @return          {@link com.saintdan.framework.vo.UserVO}
      */
-    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid UserParam param, BindingResult result) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid UserParam param, BindingResult result) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
@@ -215,15 +218,16 @@ public class UserController {
      * @param id        user's id
      * @return          {@link com.saintdan.framework.vo.UserVO}
      */
-    @RequestMapping(value = "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
-    public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             UserParam param = new UserParam(Long.valueOf(id));
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }

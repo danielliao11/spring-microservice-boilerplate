@@ -57,6 +57,7 @@ public class OAuth2ServerConfiguration {
                 http
                         .csrf().disable()
                         .authorizeRequests()
+                        .antMatchers(WELCOME_URL).authenticated()
                         .antMatchers(CLIENT_URL).hasAnyAuthority("root", "client")
                         .antMatchers(USER_URL).hasAnyAuthority("root", "user")
                         .antMatchers(ROLE_URL).hasAnyAuthority("root", "role")
@@ -134,6 +135,7 @@ public class OAuth2ServerConfiguration {
     }
 
     private static final String RESOURCE_ID = "api";
+    private static final String WELCOME_URL = getURL(ResourceURL.WELCOME);
     private static final String CLIENT_URL = getURL(ResourceURL.CLIENTS);
     private static final String USER_URL = getURL(ResourceURL.USERS);
     private static final String ROLE_URL = getURL(ResourceURL.ROLES);

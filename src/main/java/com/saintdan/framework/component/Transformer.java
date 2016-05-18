@@ -3,6 +3,7 @@ package com.saintdan.framework.component;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
+import com.saintdan.framework.vo.ResultVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -106,27 +107,20 @@ public class Transformer {
         idField.setAccessible(true);
         Field createdByField = type.getDeclaredField("createdBy");
         createdByField.setAccessible(true);
-        Field createdDateField = type.getDeclaredField("createdDate");
-        createdDateField.setAccessible(true);
         Field lastModifiedByField = type.getDeclaredField("lastModifiedBy");
         lastModifiedByField.setAccessible(true);
-        Field lastModifiedDateField = type.getDeclaredField("lastModifiedDate");
-        createdDateField.setAccessible(true);
         // Log operation.
         if (idField.get(po) == null) {
             createdBy = currentUser.getId();
             lastModifiedBy = createdBy;
         } else {
             createdBy = (Long) createdByField.get(po);
-            now = (Date) createdDateField.get(po);
             lastModifiedBy = currentUser.getId();
         }
         // Set param.
         BeanUtils.copyProperties(param, po);
         createdByField.set(po, createdBy);
-        createdDateField.set(po, now);
         lastModifiedByField.set(po, lastModifiedBy);
-        lastModifiedDateField.set(po, now);
         return po;
     }
 
@@ -137,7 +131,6 @@ public class Transformer {
      * @param po        PO
      * @return VO
      */
-    @SuppressWarnings("unchecked")
     public <T> T po2VO(Class<T> clazz, Object po) throws Exception {
         T vo = clazz.newInstance();
         BeanUtils.copyProperties(po, vo);

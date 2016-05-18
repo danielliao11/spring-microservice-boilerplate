@@ -61,7 +61,7 @@ public class User implements Serializable {
     @Column(nullable = false)
     private ValidFlag validFlag = ValidFlag.VALID;
 
-    @Column(length = 500)
+    @Column(columnDefinition="TEXT")
     private String description;
 
     // Last login time

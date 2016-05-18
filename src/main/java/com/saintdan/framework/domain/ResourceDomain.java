@@ -70,7 +70,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
             throw new CommonsException(ErrorType.SYS0121,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
-        return transformer.pos2VO(ObjectsVO.class, resources);
+        return transformer.pos2VO(ResourceVO.class, resources);
     }
 
     /**
