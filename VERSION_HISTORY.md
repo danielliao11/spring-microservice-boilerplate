@@ -138,3 +138,4 @@
   - Modify domain, controller.
   - Modify [Transformer](src/main/java/com/saintdan/framework/component/Transformer.java)
   - Modify [ResultHelper](src/main/java/com/saintdan/framework/component/ResultHelper.java)
+  - Fix some bugs.

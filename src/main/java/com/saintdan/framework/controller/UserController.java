@@ -157,8 +157,8 @@ public class UserController {
      * @param sign      signature
      * @return          {@link com.saintdan.framework.vo.UserVO}
      */
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultVO showByUsr(String usr, String sign) {
+    @RequestMapping(value = "/usr/{usr}", method = RequestMethod.GET)
+    public ResultVO showByUsr(@PathVariable String usr, String sign) {
         try {
             // If usr or sign is empty, return SYS0002, params error.
             if (StringUtils.isBlank(usr)) {
