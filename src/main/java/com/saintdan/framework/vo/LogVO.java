@@ -6,13 +6,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Log's VO.
+ * VO for {@link com.saintdan.framework.po.Log}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/27/15
  * @since JDK1.8
  */
-public class LogVO extends ResultVO implements Serializable {
+public class LogVO implements Serializable {
 
     private static final long serialVersionUID = -8802363013216964724L;
 

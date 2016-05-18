@@ -60,12 +60,7 @@ public class Base64ImageHelper {
      * @return          head
      */
     private static String formHead(String hair, String face, String neck) {
-        StringBuilder builder = new StringBuilder();
-        builder
-                .append(hair)
-                .append(face)
-                .append(neck);
-        return builder.toString();
+        return String.join("", hair, face, neck);
     }
 
     /**

@@ -7,7 +7,6 @@ import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import com.saintdan.framework.vo.ResultVO;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,16 +32,15 @@ public class ValidateHelper {
      * @param result            bind result
      * @param currentUser       current user
      * @param param             param
-     * @param sign              sign
      * @param logger            log
      * @return                  result vo
      * @throws Exception
      */
-    public ResultVO validate(BindingResult result, User currentUser, BaseParam param, String sign, Logger logger) throws Exception {
+    public ResultVO validate(BindingResult result, User currentUser, BaseParam param, Logger logger) throws Exception {
         if (result.hasErrors()) {
             return resultHelper.infoResp(ErrorType.SYS0002, result.toString());
         }
-        return validate(currentUser, param, sign, logger);
+        return validate(currentUser, param, logger);
     }
 
     /**
@@ -50,36 +48,32 @@ public class ValidateHelper {
      *
      * @param currentUser currentUser
      * @param param       param
-     * @param sign        signature
      * @param logger      log
      * @return result VO
      * @throws Exception
      */
-    public ResultVO validate(User currentUser, BaseParam param, String sign, Logger logger)throws Exception {
+    public ResultVO validate(User currentUser, BaseParam param, Logger logger)throws Exception {
         //check currentUser
         if (currentUser == null || currentUser.getId() == null) {
             return resultHelper.infoResp(logger, ErrorType.SYS0003);
         }
-        return validate(param, sign, logger);
+        return validate(param, logger);
     }
 
     /**
      * Validate sign.
      *
      * @param param     param
-     * @param sign      signature
      * @param logger    log
      * @return result VO
      * @throws Exception
      */
 
-    public ResultVO validate(BaseParam param, String sign, Logger logger) throws Exception {
-        // Prepare to validate signature.
-        param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
+    public ResultVO validate(BaseParam param, Logger logger) throws Exception {
         // Get current clientId
         String clientId = SpringSecurityUtils.getCurrentClientId();
         // Sign verification.
-        if (!signHelper.signCheck(getPublicKeyByClientId(clientId), param, sign)) {
+        if (!signHelper.signCheck(getPublicKeyByClientId(clientId), param)) {
             // Return rsa signature failed information and log the exception.
             return resultHelper.infoResp(logger, ErrorType.SYS0004);
         } else
@@ -97,7 +91,7 @@ public class ValidateHelper {
     private SignHelper signHelper;
 
     @Autowired
-    private ClientDomain clientService;
+    private ClientDomain clientDomain;
 
     /**
      * Get public key by client id.
@@ -107,7 +101,7 @@ public class ValidateHelper {
      * @exception Exception
      */
     private String getPublicKeyByClientId(String clientId) throws Exception {
-        return clientService.getClientByClientId(new ClientParam(clientId)).getPublicKey();
+        return clientDomain.getClientByClientId(new ClientParam(clientId)).getPublicKey();
     }
 
 }

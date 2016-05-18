@@ -37,7 +37,7 @@ public class Group implements Serializable {
     @Column(unique = true, nullable = false, length = 20)
     private String name;
 
-    @Column(length = 500)
+    @Column(columnDefinition="TEXT")
     private String description;
 
     @Column(nullable = false)

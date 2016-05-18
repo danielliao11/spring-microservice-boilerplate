@@ -120,3 +120,22 @@
   - Improve the performance of Spring Boot.
     - Remove `JmxAutoConfiguration.class` and `WebSocketAutoConfiguration.class` import.
     - Remove `spring-boot-starter-tomcat`, replace with `spring-boot-starter-undertow`.
+
+- 0.9.7.RELEASE
+  - Delete redundant codes of domain.
+  - Delete update valid flag which is in the [RepositoryWithoutDelete](src/main/java/com/saintdan/framework/repo/RepositoryWithoutDelete.java).
+  - Fix some bugs.
+
+- 0.10.0.RELEASE
+  - Add refresh token support.
+  - Change StringBuild to String.join
+  - Fix some bugs.
+  - Add docker support.
+  - Add log.
+
+- 0.10.1.RELEASE
+  - Modify VO.
+  - Modify domain, controller.
+  - Modify [Transformer](src/main/java/com/saintdan/framework/component/Transformer.java)
+  - Modify [ResultHelper](src/main/java/com/saintdan/framework/component/ResultHelper.java)
+  - Fix some bugs.

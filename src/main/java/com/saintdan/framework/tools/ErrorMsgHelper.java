@@ -20,15 +20,11 @@ public class ErrorMsgHelper {
      */
     public static String getReturnMsg(ErrorType msg, String... args) {
         final String COLON = ": ";
-        StringBuffer stringBuffer = new StringBuffer();
+        final String PREFIX = String.join("", msg.name(), COLON);
         if (args != null) {
-            stringBuffer
-                    .append(msg.name())
-                    .append(COLON)
-                    .append(String.format(msg.description(), args));
+            return String.join("", PREFIX, String.format(msg.description(), args));
         } else {
-            stringBuffer.append(msg.name()).append(COLON).append(msg.description());
+            return String.join("", PREFIX, msg.description());
         }
-        return stringBuffer.toString();
     }
 }

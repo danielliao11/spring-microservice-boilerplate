@@ -4,9 +4,7 @@ import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.ResultVO;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -68,28 +66,23 @@ public class Transformer {
      * @param totalElements         page total
      * @return                      PageVO
      */
-    public PageVO poPage2VO(List content, Pageable pageable, Long totalElements, String msg) {
+    @SuppressWarnings("unchecked")
+    public PageVO poPage2VO(List content, Pageable pageable, Long totalElements) {
         Page page = new PageImpl<>(content, pageable, totalElements);
         PageVO pageVO = new PageVO();
         pageVO.setPage(page);
-        pageVO.setMessage(msg);
-        return (PageVO) resultHelper.successResp(pageVO);
+        return pageVO;
     }
 
     /**
      * Transform VO list to objects' VO.
      *
      * @param list          VO list
-     * @param msg           return message
      * @return              objects' VO
      */
-    public ObjectsVO voList2ObjectsVO(List list, String msg) {
+    public ObjectsVO voList2ObjectsVO(List list) {
         ObjectsVO vo = new ObjectsVO();
-        vo.setObjectsVOList(list);
-        if (StringUtils.isBlank(msg)) {
-            return vo;
-        }
-        vo.setMessage(msg);
+        vo.setObjects(list);
         return vo;
     }
 
@@ -108,14 +101,12 @@ public class Transformer {
         // Init createdBy, lastModifiedBy
         Long createdBy, lastModifiedBy;
         // Init createdDate
-        Date createdDate = new Date();
+        Date now = new Date();
         // Init transformer
         Field idField = type.getDeclaredField("id");
         idField.setAccessible(true);
         Field createdByField = type.getDeclaredField("createdBy");
         createdByField.setAccessible(true);
-        Field createdDateField = type.getDeclaredField("createdDate");
-        createdDateField.setAccessible(true);
         Field lastModifiedByField = type.getDeclaredField("lastModifiedBy");
         lastModifiedByField.setAccessible(true);
         // Log operation.
@@ -124,14 +115,12 @@ public class Transformer {
             lastModifiedBy = createdBy;
         } else {
             createdBy = (Long) createdByField.get(po);
-            createdDate = (Date) createdDateField.get(po);
             lastModifiedBy = currentUser.getId();
         }
         // Set param.
         BeanUtils.copyProperties(param, po);
         createdByField.set(po, createdBy);
-        createdDateField.set(po, createdDate);
-        lastModifiedByField.set(po,lastModifiedBy);
+        lastModifiedByField.set(po, lastModifiedBy);
         return po;
     }
 
@@ -140,18 +129,12 @@ public class Transformer {
      * Transform PO to VO.
      *
      * @param po        PO
-     * @param msg       return message
      * @return VO
      */
-    public <T extends ResultVO> T po2VO(Class<T> type, Object po, String msg) throws Exception {
-        T vo = type.newInstance();
+    public <T> T po2VO(Class<T> clazz, Object po) throws Exception {
+        T vo = clazz.newInstance();
         BeanUtils.copyProperties(po, vo);
-        if (StringUtils.isBlank(msg)) {
-            return vo;
-        }
-        vo.setMessage(msg);
-        // Return success result.
-        return (T) resultHelper.successResp(vo);
+        return vo;
     }
 
 
@@ -159,13 +142,11 @@ public class Transformer {
      * Transform PO to VO
      *
      * @param pos       PO
-     * @param msg       return message
      * @return VO
      */
-    public ObjectsVO pos2VO(Class<? extends ResultVO> type, Iterable pos, String msg) throws Exception {
-        List objList = poList2VOList(type, pos);
-        ObjectsVO vos = voList2ObjectsVO(objList, msg);
-        return (ObjectsVO) resultHelper.successResp(vos);
+    public ObjectsVO pos2VO(Class<?> clazz, Iterable pos) throws Exception {
+        List objList = poList2VOList(clazz, pos);
+        return voList2ObjectsVO(objList);
     }
 
     /**
@@ -174,19 +155,14 @@ public class Transformer {
      * @param pos       PO list
      * @return          VO list
      */
-    public List<?> poList2VOList(Class<? extends ResultVO> type, Iterable pos) throws Exception {
+    @SuppressWarnings("unchecked")
+    public List<?> poList2VOList(Class<?> type, Iterable pos) throws Exception {
         List voList = new ArrayList();
         for (Object po : pos) {
-            Object vo =  po2VO(type, po, "");
+            Object vo =  po2VO(type, po);
             voList.add(vo);
         }
         return voList;
     }
 
-    // --------------------------
-    // PRIVATE FIELDS AND METHODS
-    // --------------------------
-
-    @Autowired
-    private ResultHelper resultHelper;
 }

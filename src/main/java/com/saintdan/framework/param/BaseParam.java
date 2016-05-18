@@ -7,7 +7,6 @@ import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.tools.SignatureUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.validation.constraints.NotNull;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -39,7 +38,6 @@ public class BaseParam implements Serializable {
 
     private static final long serialVersionUID = -103658650614029839L;
 
-    @NotNull(message = "sign could not be null.")
     private String sign;
 
     private UserDetails currentUser;

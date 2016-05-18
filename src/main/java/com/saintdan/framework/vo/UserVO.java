@@ -3,13 +3,13 @@ package com.saintdan.framework.vo;
 import java.io.Serializable;
 
 /**
- * User's VO.
+ * VO for {@link com.saintdan.framework.po.User}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/30/15
  * @since JDK1.8
  */
-public class UserVO extends ResultVO implements Serializable {
+public class UserVO implements Serializable {
 
     private static final long serialVersionUID = 6597728015488383528L;
 

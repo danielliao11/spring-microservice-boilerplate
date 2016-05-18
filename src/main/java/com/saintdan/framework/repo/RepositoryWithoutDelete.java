@@ -1,14 +1,10 @@
 package com.saintdan.framework.repo;
 
 
-import com.saintdan.framework.enums.ValidFlag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 
@@ -92,14 +88,4 @@ public interface RepositoryWithoutDelete<T, ID extends Serializable> extends Rep
      */
     long count();
 
-    /**
-     * Update the valid flag of entity.
-     *
-     * @param validFlag     valid flag
-     * @param id            id of entity
-     */
-    @Modifying
-    @Transactional
-    @Query("update #{#entityName} c set c.validFlag=?1 where c.id=?2")
-    void updateValidFlagFor(ValidFlag validFlag, ID id);
 }

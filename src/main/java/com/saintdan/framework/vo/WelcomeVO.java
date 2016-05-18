@@ -3,7 +3,7 @@ package com.saintdan.framework.vo;
 import java.io.Serializable;
 
 /**
- * Welcome controller vo.
+ * VO for {@link com.saintdan.framework.controller.WelcomeController}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/25/15

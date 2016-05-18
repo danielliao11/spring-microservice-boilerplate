@@ -5,7 +5,7 @@ import com.saintdan.framework.annotation.SignField;
 import javax.validation.constraints.NotNull;
 
 /**
- * Role RESTFul param bean.
+ * Param bean for {@link com.saintdan.framework.domain.RoleDomain}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/16/15
@@ -19,7 +19,7 @@ public class RoleParam extends BaseParam {
     private Long id; // role's ID.
 
     @SignField
-    @NotNull(message = "Name cannnot be null.")
+    @NotNull(message = "Name cannot be null.")
     private String name; // role's name
 
     @SignField

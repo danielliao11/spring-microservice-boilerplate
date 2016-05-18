@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * User RESTFul param bean.
+ * Param bean for {@link com.saintdan.framework.domain.UserDomain}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 9/22/15
@@ -20,17 +20,17 @@ public class UserParam extends BaseParam {
     private Long id; // user's ID
 
     @SignField
-    @NotNull(message = "Usr cannnot be null.")
+    @NotNull(message = "Usr cannot be null.")
     @Size(min = 4, max = 50)
     private String usr; // username
 
     @SignField
-    @NotNull(message = "Pwd cannnot be null.")
+    @NotNull(message = "Pwd cannot be null.")
     @Size(min = 8, max = 50)
     private String pwd; // password
 
     @SignField
-    @NotNull(message = "Name cannnot be null.")
+    @NotNull(message = "Name cannot be null.")
     private String name; // user's name
 
     @SignField

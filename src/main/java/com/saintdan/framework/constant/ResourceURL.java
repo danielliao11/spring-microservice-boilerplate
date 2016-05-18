@@ -9,9 +9,11 @@ package com.saintdan.framework.constant;
  */
 public interface ResourceURL {
 
-    String RESOURCES = "/resources";
+    String FIX = "/**";
 
-    String SIGN = "/sign={sign}";
+    String WELCOME = "/welcome";
+
+    String RESOURCES = "/resources";
 
     String USERS = "/users";
 

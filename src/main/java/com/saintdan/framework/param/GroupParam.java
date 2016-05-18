@@ -5,7 +5,7 @@ import com.saintdan.framework.annotation.SignField;
 import javax.validation.constraints.NotNull;
 
 /**
- * Group RESTFul param bean.
+ * Param bean for {@link com.saintdan.framework.domain.GroupDomain}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 10/16/15
@@ -19,7 +19,7 @@ public class GroupParam extends BaseParam {
     private Long id; // role's ID.
 
     @SignField
-    @NotNull(message = "Name cannnot be null.")
+    @NotNull(message = "Name cannot be null.")
     private String name; // role's name
 
     @SignField

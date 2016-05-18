@@ -3,10 +3,7 @@ package com.saintdan.framework.controller;
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ControllerConstant;
-import com.saintdan.framework.constant.ResourceURL;
-import com.saintdan.framework.constant.ResultConstant;
+import com.saintdan.framework.constant.*;
 import com.saintdan.framework.domain.GroupDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
@@ -35,7 +32,7 @@ import javax.validation.Valid;
  * @since JDK1.8
  */
 @RestController
-@RequestMapping(ResourceURL.RESOURCES)
+@RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.GROUPS)
 public class GroupController {
 
     // ------------------------
@@ -43,21 +40,21 @@ public class GroupController {
     // ------------------------
 
     /**
-     * Create new group.
+     * Create new {@link com.saintdan.framework.po.Group}.
      *
-     * @param param     group's param
-     * @return          group's result
+     * @param param     {@link GroupParam}
+     * @return          {@link com.saintdan.framework.vo.GroupVO}
      */
-    @RequestMapping(value = ResourceURL.GROUPS + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO create(@CurrentUser User currentUser, @Valid GroupParam param, BindingResult result, @PathVariable String sign) {
+    @RequestMapping(method = RequestMethod.POST)
+    public ResultVO create(@CurrentUser User currentUser, @Valid GroupParam param, BindingResult result) {
         try {
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
             // Return result and message.
-            return groupService.create(param, currentUser);
+            return resultHelper.successResp(groupDomain.create(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -68,20 +65,21 @@ public class GroupController {
     }
 
     /**
-     * Show all groups' VO.
+     * Show all {@link com.saintdan.framework.vo.GroupVO}.
      *
-     * @return          groups' result
+     * @return          {@link com.saintdan.framework.vo.GroupVO}
      */
-    @RequestMapping(value = ResourceURL.GROUPS + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO index(@PathVariable String sign) {
+    @RequestMapping(value = PathConstant.INDEX, method = RequestMethod.GET)
+    public ResultVO index(String sign) {
         try {
             GroupParam param = new GroupParam();
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
-            return groupService.getAllGroups();
+            return resultHelper.successResp(groupDomain.getAllGroups());
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -92,25 +90,26 @@ public class GroupController {
     }
 
     /**
-     * Show groups' page.
+     * Show {@link com.saintdan.framework.vo.GroupVO} in {@link com.saintdan.framework.vo.PageVO}.
      *
      * @param pageNo        page number
-     * @return              groups' page
+     * @return              {@link com.saintdan.framework.vo.GroupVO} in {@link com.saintdan.framework.vo.PageVO}
      */
-    @RequestMapping(value = ResourceURL.GROUPS + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
+    @RequestMapping(method = RequestMethod.GET)
+    public ResultVO page(String pageNo, String sign) {
         try {
             // Init page number.
             if (StringUtils.isBlank(pageNo)) {
                 pageNo = "0";
             }
             GroupParam param = new GroupParam();
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
-            return groupService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+            return resultHelper.successResp(groupDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE)));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -121,24 +120,25 @@ public class GroupController {
     }
 
     /**
-     * Show group by ID.
+     * Show {@link com.saintdan.framework.vo.GroupVO} by ID.
      *
-     * @param id        group's id
-     * @return          group's result
+     * @param id        id of group
+     * @return          {@link com.saintdan.framework.vo.GroupVO}
      */
-    @RequestMapping(value = ResourceURL.GROUPS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO show(@PathVariable String id, @PathVariable String sign) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResultVO show(@PathVariable String id, String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             GroupParam param = new GroupParam(Long.valueOf(id));
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
-            return groupService.getGroupById(param);
+            return resultHelper.successResp(groupDomain.getGroupById(param));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -149,25 +149,25 @@ public class GroupController {
     }
 
     /**
-     * Update group.
+     * Update {@link com.saintdan.framework.po.Group}.
      *
-     * @param id        group's id
-     * @param param     group's params
-     * @return          group's result
+     * @param id        id of group
+     * @param param     {@link GroupParam}
+     * @return          {@link com.saintdan.framework.vo.GroupVO}
      */
-    @RequestMapping(value = ResourceURL.GROUPS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid GroupParam param, BindingResult result) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid GroupParam param, BindingResult result) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
             // Update group.
-            return groupService.update(param, currentUser);
+            return resultHelper.successResp(groupDomain.update(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -181,22 +181,23 @@ public class GroupController {
      * Delete group.
      *
      * @param id        group's id
-     * @return          group's result
+     * @return          {@link com.saintdan.framework.vo.GroupVO}
      */
-    @RequestMapping(value = ResourceURL.GROUPS + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
-    public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             GroupParam param = new GroupParam(Long.valueOf(id));
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
             // Delete group.
-            groupService.delete(param, currentUser);
+            groupDomain.delete(param, currentUser);
             final String ROLE = "group";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
         } catch (CommonsException e) {
@@ -221,5 +222,5 @@ public class GroupController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private GroupDomain groupService;
+    private GroupDomain groupDomain;
 }

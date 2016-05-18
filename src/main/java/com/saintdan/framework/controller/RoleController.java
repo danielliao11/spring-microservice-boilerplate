@@ -3,10 +3,7 @@ package com.saintdan.framework.controller;
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ControllerConstant;
-import com.saintdan.framework.constant.ResourceURL;
-import com.saintdan.framework.constant.ResultConstant;
+import com.saintdan.framework.constant.*;
 import com.saintdan.framework.domain.RoleDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
@@ -36,7 +33,7 @@ import javax.validation.Valid;
  * @since JDK1.8
  */
 @RestController
-@RequestMapping(ResourceURL.RESOURCES)
+@RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.ROLES)
 public class RoleController {
 
     // ------------------------
@@ -44,21 +41,21 @@ public class RoleController {
     // ------------------------
 
     /**
-     * Create new role.
+     * Create new {@link com.saintdan.framework.po.Role}.
      *
-     * @param param     role's param
-     * @return          role's result
+     * @param param     {@link RoleParam}
+     * @return          {@link com.saintdan.framework.vo.RoleVO}
      */
-    @RequestMapping(value = ResourceURL.ROLES + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO create(@CurrentUser User currentUser, @Valid RoleParam param, BindingResult result, @PathVariable String sign) {
+    @RequestMapping(method = RequestMethod.POST)
+    public ResultVO create(@CurrentUser User currentUser, @Valid RoleParam param, BindingResult result) {
         try {
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
             // Return result and message.
-            return roleService.create(param, currentUser);
+            return resultHelper.successResp(roleDomain.create(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -69,20 +66,21 @@ public class RoleController {
     }
 
     /**
-     * Show all roles' VO.
+     * Show all {@link com.saintdan.framework.vo.RoleVO}.
      *
-     * @return          roles' result
+     * @return          {@link com.saintdan.framework.vo.RoleVO}
      */
-    @RequestMapping(value = ResourceURL.ROLES + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO index(@PathVariable String sign) {
+    @RequestMapping(value = PathConstant.INDEX, method = RequestMethod.GET)
+    public ResultVO index(String sign) {
         try {
             RoleParam param = new RoleParam();
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
-            return roleService.getAllRoles();
+            return resultHelper.successResp(roleDomain.getAllRoles());
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -93,25 +91,26 @@ public class RoleController {
     }
 
     /**
-     * Show roles' page.
+     * Show {@link com.saintdan.framework.vo.RoleVO} in {@link com.saintdan.framework.vo.PageVO}.
      *
      * @param pageNo        page number
-     * @return              roles' page
+     * @return              {@link com.saintdan.framework.vo.RoleVO} in {@link com.saintdan.framework.vo.PageVO}.
      */
-    @RequestMapping(value = ResourceURL.ROLES + "/pageNo={pageNo}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO page(@PathVariable String pageNo, @PathVariable String sign) {
+    @RequestMapping(method = RequestMethod.GET)
+    public ResultVO page(String pageNo, String sign) {
         try {
             // Init page number.
             if (StringUtils.isBlank(pageNo)) {
                 pageNo = "0";
             }
             RoleParam param = new RoleParam();
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
-            return roleService.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+            return resultHelper.successResp(roleDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE)));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -122,24 +121,25 @@ public class RoleController {
     }
 
     /**
-     * Show role by ID.
+     * Show {@link com.saintdan.framework.vo.RoleVO} by ID.
      *
-     * @param id        role's id
-     * @return          role's result
+     * @param id        id of role
+     * @return          {@link com.saintdan.framework.vo.RoleVO}
      */
-    @RequestMapping(value = ResourceURL.ROLES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.GET)
-    public ResultVO show(@PathVariable String id, @PathVariable String sign) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResultVO show(@PathVariable String id, String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             RoleParam param = new RoleParam(Long.valueOf(id));
+            param.setSign(sign);
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
-            return roleService.getRoleById(param);
+            return resultHelper.successResp(roleDomain.getRoleById(param));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -150,25 +150,25 @@ public class RoleController {
     }
 
     /**
-     * Update role.
+     * Update {@link com.saintdan.framework.po.Role}.
      *
-     * @param id        role's id
+     * @param id        id of role
      * @param param     role's params
-     * @return          role's result
+     * @return          {@link com.saintdan.framework.vo.RoleVO}
      */
-    @RequestMapping(value = ResourceURL.ROLES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.POST)
-    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign, @Valid RoleParam param, BindingResult result) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid RoleParam param, BindingResult result) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             // Validate current user, param and sign.
-            ResultVO resultVO = validateHelper.validate(result, currentUser, param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
             // Update role.
-            return roleService.update(param, currentUser);
+            return resultHelper.successResp(roleDomain.update(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -179,27 +179,28 @@ public class RoleController {
     }
 
     /**
-     * Delete role.
+     * Delete {@link com.saintdan.framework.po.Role}.
      *
-     * @param id        role's id
-     * @return          role's result
+     * @param id        id of role
+     * @return          {@link com.saintdan.framework.vo.RoleVO}
      */
-    @RequestMapping(value = ResourceURL.ROLES + "/{id}" + ResourceURL.SIGN, method = RequestMethod.DELETE)
-    public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, @PathVariable String sign) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, String sign) {
         try {
             if (StringUtils.isBlank(id)) {
                 return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
             }
             RoleParam param = new RoleParam(Long.valueOf(id));
+            param.setSign(sign);
             // Prepare to validate signature.
             param.setSign(new String(Base64.decodeBase64(sign.getBytes())));
             // Sign validate.
-            ResultVO resultVO = validateHelper.validate(param, sign, logger);
+            ResultVO resultVO = validateHelper.validate(param, logger);
             if (resultVO != null) {
                 return resultVO;
             }
             // Delete role.
-            roleService.delete(param, currentUser);
+            roleDomain.delete(param, currentUser);
             final String ROLE = "role";
             return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
         } catch (CommonsException e) {
@@ -224,5 +225,5 @@ public class RoleController {
     private ValidateHelper validateHelper;
 
     @Autowired
-    private RoleDomain roleService;
+    private RoleDomain roleDomain;
 }

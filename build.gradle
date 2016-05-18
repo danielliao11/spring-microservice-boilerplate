@@ -1,6 +1,6 @@
 description = 'spring-rest-oauth2-sample'
 group = 'com.saintdan.framework'
-version = '0.9.6.RELEASE'
+version = '0.10.1.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -12,10 +12,12 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
-        maven { url "https://repo.spring.io/plugins-release" }
+        maven {
+            url 'https://repo.spring.io/plugins-release'
+        }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.2.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE')
     }
 }
 
@@ -23,14 +25,16 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
-        maven { url "https://repo.spring.io/libs-release" }
+        maven {
+            url 'https://repo.spring.io/libs-release'
+        }
     }
 }
 
 idea {
     module {
         inheritOutputDirs = false
-        outputDir = file("$buildDir/classes/main/")
+        outputDir = file('$buildDir/classes/main/')
     }
 }
 
@@ -45,7 +49,7 @@ compileTestJava {
 }
 
 ext {
-    springBootVersion = '1.3.2.RELEASE'
+    springBootVersion = '1.3.4.RELEASE'
     springOAuth2Version = '2.0.8.RELEASE'
 
     fastJsonVersion = '1.2.7'
@@ -86,9 +90,9 @@ dependencies {
 
     // Provide runtime dependencies.
     // Tomcat
-//    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
     // Undertow - Undertow is a lightweight servlet container from JBoss
-    providedRuntime "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
+//    providedRuntime "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
 
     // Test dependencies.
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
@@ -98,9 +102,9 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.10'
+    gradleVersion = '2.13'
 }
 
 task generatePom << {
-    pom{}.writeTo("pom.xml")
+    pom{}.writeTo('pom.xml')
 }

@@ -38,7 +38,7 @@ public class Role implements GrantedAuthority, Serializable {
     @Column(unique = true, nullable = false, length = 20)
 	private String name;
 
-    @Column(length = 500)
+    @Column(columnDefinition="TEXT")
     private String description;
 
     @Column(nullable = false)
