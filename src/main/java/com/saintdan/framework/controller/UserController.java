@@ -57,7 +57,7 @@ public class UserController {
                 return resultVO;
             }
             // Return result and message.
-            return userDomain.create(param, currentUser);
+            return resultHelper.successResp(userDomain.create(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -81,7 +81,7 @@ public class UserController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return userDomain.getAllUsers();
+            return resultHelper.successResp(userDomain.getAllUsers());
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -110,7 +110,7 @@ public class UserController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return userDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+            return resultHelper.successResp(userDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE)));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -138,7 +138,7 @@ public class UserController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return userDomain.getUserById(param);
+            return resultHelper.successResp(userDomain.getUserById(param));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -170,7 +170,7 @@ public class UserController {
                 return resultVO;
             }
             // Return result and message.
-            return userDomain.getUserByUsr(param);
+            return resultHelper.successResp(userDomain.getUserByUsr(param));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -199,7 +199,7 @@ public class UserController {
                 return resultVO;
             }
             // Update user.
-            return userDomain.update(param, currentUser);
+            return resultHelper.successResp(userDomain.update(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());

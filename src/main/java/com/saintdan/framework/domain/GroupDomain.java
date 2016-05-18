@@ -2,7 +2,6 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
@@ -72,7 +71,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
             throw new CommonsException(ErrorType.SYS0121,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
-        return transformer.pos2VO(ObjectsVO.class, groups, String.format(ControllerConstant.INDEX, getClassT()));
+        return transformer.pos2VO(ObjectsVO.class, groups);
     }
 
     /**
@@ -89,8 +88,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
             throw new CommonsException(ErrorType.SYS0121,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
-        return transformer.poPage2VO(transformer.poList2VOList(GroupVO.class, groupPage.getContent()), pageable, groupPage.getTotalElements(),
-                String.format(ControllerConstant.INDEX, getClassT()));
+        return transformer.poPage2VO(transformer.poList2VOList(GroupVO.class, groupPage.getContent()), pageable, groupPage.getTotalElements());
     }
 
     /**
@@ -118,7 +116,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
             throw new CommonsException(ErrorType.SYS0122,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
-        return transformer.po2VO(GroupVO.class, group, String.format(ControllerConstant.SHOW, getClassT()));
+        return transformer.po2VO(GroupVO.class, group);
     }
 
     /**
@@ -135,7 +133,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
             throw new CommonsException(ErrorType.SYS0122,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.NAME));
         }
-        return transformer.po2VO(GroupVO.class, group, String.format(ControllerConstant.SHOW, getClassT()));
+        return transformer.po2VO(GroupVO.class, group);
     }
 
     /**
@@ -181,7 +179,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     // --------------------------
 
     @Autowired
-    private RoleDomain roleService;
+    private RoleDomain roleDomain;
 
     @Autowired
     private ResourceDomain resourceService;
@@ -198,7 +196,6 @@ public class GroupDomain extends BaseDomain<Group, Long> {
      * @param param         {@link GroupParam}
      * @param group         {@link Group}
      * @param currentUser   currentUser
-     * @param group         {@link Group}
      */
     private Group groupParam2PO(GroupParam param, Group group, User currentUser) throws Exception {
         transformer.param2PO(getClassT(), param, group, currentUser);
@@ -207,7 +204,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
             group.setResources(transformer.iterable2Set(resources));
         }
         if (!StringUtils.isBlank(param.getRoleIds())) {
-            Iterable<Role> roles = roleService.getRolesByIds(transformer.idsStr2Iterable(param.getRoleIds()));
+            Iterable<Role> roles = roleDomain.getRolesByIds(transformer.idsStr2Iterable(param.getRoleIds()));
             group.setRoles(transformer.iterable2Set(roles));
         }
         return group;

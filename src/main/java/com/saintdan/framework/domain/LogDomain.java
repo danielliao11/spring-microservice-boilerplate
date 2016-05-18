@@ -1,7 +1,6 @@
 package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
-import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.LogParam;
@@ -44,8 +43,7 @@ public class LogDomain {
      * @return              {@link LogVO}
      */
     public LogVO create(LogParam param, User currentUser) throws Exception {
-        return transformer.po2VO(LogVO.class, logRepository.save(logParam2PO(param, currentUser)),
-                String.format(ControllerConstant.CREATE, LOG));
+        return transformer.po2VO(LogVO.class, logRepository.save(logParam2PO(param, currentUser)));
     }
 
     /**
@@ -60,7 +58,7 @@ public class LogDomain {
             // Throw no log exist exception.
             throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
         }
-        return transformer.pos2VO(ObjectsVO.class, logs, String.format(ControllerConstant.INDEX, LOG));
+        return transformer.pos2VO(ObjectsVO.class, logs);
     }
 
     /**
@@ -76,8 +74,7 @@ public class LogDomain {
             // Throw no log exist exception.
             throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
         }
-        return transformer.poPage2VO(transformer.poList2VOList(LogVO.class, logPage.getContent()), pageable, logPage.getTotalElements(),
-                String.format(ControllerConstant.INDEX, LOG));
+        return transformer.poPage2VO(transformer.poList2VOList(LogVO.class, logPage.getContent()), pageable, logPage.getTotalElements());
     }
 
     // --------------------------

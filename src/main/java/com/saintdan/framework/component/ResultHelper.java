@@ -21,15 +21,16 @@ public class ResultHelper {
     /**
      * Return success result.
      *
-     * @param vo        some vo extends result vo.
+     * @param object    some vo.
      * @return          result vo.
      */
-    public ResultVO successResp(ResultVO vo) {
-        vo.setCode(ResultConstant.OK);
+    public ResultVO successResp(Object object) {
+        ResultVO vo = new ResultVO(ResultConstant.OK);
         vo.setOperationStatus(OperationStatus.SUCCESS);
         if (vo.getMessage() == null) {
             vo.setMessage(ResultConstant.SUCCESS);
         }
+        vo.setData(object);
         return vo;
     }
 

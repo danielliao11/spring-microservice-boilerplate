@@ -57,7 +57,7 @@ public class ResourceController {
                 return resultVO;
             }
             // Return result and message.
-            return resourceDomain.create(param, currentUser);
+            return resultHelper.successResp(resourceDomain.create(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -81,7 +81,7 @@ public class ResourceController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return resourceDomain.getAllResources();
+            return resultHelper.successResp(resourceDomain.getAllResources());
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -110,7 +110,7 @@ public class ResourceController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return resourceDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+            return resultHelper.successResp(resourceDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE)));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -138,7 +138,7 @@ public class ResourceController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return resourceDomain.getResourceById(param);
+            return resultHelper.successResp(resourceDomain.getResourceById(param));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -167,7 +167,7 @@ public class ResourceController {
                 return resultVO;
             }
             // Update resource.
-            return resourceDomain.update(param, currentUser);
+            return resultHelper.successResp(resourceDomain.update(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());

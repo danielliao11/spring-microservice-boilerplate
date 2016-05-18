@@ -1,9 +1,9 @@
 package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
+import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
@@ -71,7 +71,7 @@ public class UserDomain extends BaseDomain<User, Long> {
             throw new CommonsException(ErrorType.SYS0121,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
-        return transformer.pos2VO(ObjectsVO.class, users, String.format(ControllerConstant.INDEX, getClassT()));
+        return transformer.pos2VO(ObjectsVO.class, users);
     }
 
     /**
@@ -88,8 +88,7 @@ public class UserDomain extends BaseDomain<User, Long> {
             throw new CommonsException(ErrorType.SYS0121,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
-        return transformer.poPage2VO(transformer.poList2VOList(UserVO.class, userPage.getContent()), pageable, userPage.getTotalElements(),
-                String.format(ControllerConstant.INDEX, getClassT()));
+        return transformer.poPage2VO(transformer.poList2VOList(UserVO.class, userPage.getContent()), pageable, userPage.getTotalElements());
     }
 
     /**
@@ -117,7 +116,7 @@ public class UserDomain extends BaseDomain<User, Long> {
             throw new CommonsException(ErrorType.SYS0122,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
-        return transformer.po2VO(UserVO.class, user, String.format(ControllerConstant.SHOW, getClassT()));
+        return transformer.po2VO(UserVO.class, user);
     }
 
     /**
@@ -134,7 +133,7 @@ public class UserDomain extends BaseDomain<User, Long> {
             throw new CommonsException(ErrorType.SYS0122,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), USR));
         }
-        return transformer.po2VO(UserVO.class, user, String.format(ControllerConstant.SHOW, getClassT()));
+        return transformer.po2VO(UserVO.class, user);
     }
 
     /**
@@ -168,6 +167,8 @@ public class UserDomain extends BaseDomain<User, Long> {
             throw new CommonsException(ErrorType.SYS0122,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
+        final String USER = "User";
+        logHelper.logUsersOperations(LogType.UPDATE, USER, currentUser);
         userRepository.updatePwdFor(param.getPwd(), param.getId());
     }
 
@@ -196,7 +197,7 @@ public class UserDomain extends BaseDomain<User, Long> {
     // --------------------------
 
     @Autowired
-    private RoleDomain roleService;
+    private RoleDomain roleDomain;
 
     @Autowired
     private UserRepository userRepository;
@@ -206,6 +207,9 @@ public class UserDomain extends BaseDomain<User, Long> {
 
     @Autowired
     private Transformer transformer;
+
+    @Autowired
+    private LogHelper logHelper;
 
     @Autowired
     public UserDomain(UserRepository userRepository) {
@@ -225,7 +229,7 @@ public class UserDomain extends BaseDomain<User, Long> {
     private User userParam2PO(UserParam param, User user, User currentUser) throws Exception {
         transformer.param2PO(getClassT(), param, user, currentUser);
         if (!StringUtils.isBlank(param.getRoleIds())) {
-            Iterable<Role> roles = roleService.getRolesByIds(transformer.idsStr2Iterable(param.getRoleIds()));
+            Iterable<Role> roles = roleDomain.getRolesByIds(transformer.idsStr2Iterable(param.getRoleIds()));
             user.setRoles(transformer.iterable2Set(roles));
         }
         if (!StringUtils.isBlank(param.getPwd())) {

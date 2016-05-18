@@ -13,6 +13,7 @@ import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.ResultVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -57,7 +58,7 @@ public class ClientController {
                 return resultVO;
             }
             // Return result and message.
-            return clientDomain.create(param, currentUser);
+            return resultHelper.successResp(clientDomain.create(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -81,7 +82,7 @@ public class ClientController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return clientDomain.getAll();
+            return resultHelper.successResp(clientDomain.getAll());
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -110,7 +111,8 @@ public class ClientController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return clientDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE), ResultVO.class);
+            return resultHelper.successResp(
+                    clientDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE), PageVO.class));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -138,7 +140,7 @@ public class ClientController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return clientDomain.getById(ResultVO.class, param);
+            return resultHelper.successResp(clientDomain.getById(ResultVO.class, param));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -167,7 +169,7 @@ public class ClientController {
                 return resultVO;
             }
             // Update client.
-            return clientDomain.update(ResultVO.class, param, currentUser);
+            return resultHelper.successResp(clientDomain.update(ResultVO.class, param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());

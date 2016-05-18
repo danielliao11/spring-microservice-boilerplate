@@ -9,7 +9,6 @@ package com.saintdan.framework.domain;
 import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.exception.CommonsException;
@@ -18,7 +17,6 @@ import com.saintdan.framework.repo.RepositoryWithoutDelete;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
-import com.saintdan.framework.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +50,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
      * @return              VO
      * @throws Exception
      */
-    public <VO extends ResultVO> VO create(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
+    public <VO> VO create(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
         T po = transformer.param2PO(getClassT(), inputParam, getClassT().newInstance(), currentUser);
         return createByPO(voType, po, currentUser);
     }
@@ -67,10 +65,9 @@ public abstract class BaseDomain<T, ID extends Serializable> {
      * @return              VO
      * @throws Exception
      */
-    public <VO extends ResultVO> VO createByPO(Class<VO> voType, T inputPO, User currentUser) throws Exception {
+    public <VO> VO createByPO(Class<VO> voType, T inputPO, User currentUser) throws Exception {
         logHelper.logUsersOperations(LogType.CREATE, getClassT().getSimpleName(), currentUser);
-        return transformer.po2VO(voType, repository.save(inputPO),
-                String.format(ControllerConstant.CREATE, getClassT().getSimpleName()));
+        return transformer.po2VO(voType, repository.save(inputPO));
     }
 
     /**
@@ -85,7 +82,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
             // Throw po cannot find exception.
             throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
         }
-        return transformer.pos2VO(ObjectsVO.class, pos, String.format(ControllerConstant.INDEX, getClassT().getSimpleName()));
+        return transformer.pos2VO(ObjectsVO.class, pos);
     }
 
     /**
@@ -105,8 +102,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
         }
         return transformer.poPage2VO(
                 transformer.poList2VOList(voType, (Iterable) poPage.getContent()),
-                pageable, poPage.getTotalElements(),
-                String.format(ControllerConstant.INDEX, getClassT().getSimpleName()));
+                pageable, poPage.getTotalElements());
     }
 
     /**
@@ -119,7 +115,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public <VO extends ResultVO> VO getById(Class<VO> voType, Object inputParam) throws Exception {
+    public <VO> VO getById(Class<VO> voType, Object inputParam) throws Exception {
         Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
         idField.setAccessible(true);
         T po = repository.findOne((ID) idField.get(inputParam));
@@ -127,7 +123,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
             // Throw po cannot find by id parameter exception.
             throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
         }
-        return transformer.po2VO(voType, po, String.format(ControllerConstant.SHOW, getClassT().getSimpleName()));
+        return transformer.po2VO(voType, po);
     }
 
     /**
@@ -141,7 +137,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public <VO extends ResultVO> VO update(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
+    public <VO> VO update(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
         Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
         idField.setAccessible(true);
         T po = repository.findOne((ID) idField.get(inputParam));
@@ -162,10 +158,9 @@ public abstract class BaseDomain<T, ID extends Serializable> {
      * @return              VO
      * @throws Exception
      */
-    public <VO extends ResultVO> VO updateByPO(Class<VO> voType, T inputPO, User currentUser) throws Exception {
+    public <VO> VO updateByPO(Class<VO> voType, T inputPO, User currentUser) throws Exception {
         logHelper.logUsersOperations(LogType.UPDATE, getClassT().getSimpleName(), currentUser);
-        return transformer.po2VO(voType, repository.save(inputPO),
-                String.format(ControllerConstant.UPDATE, getClassT().getSimpleName()));
+        return transformer.po2VO(voType, repository.save(inputPO));
     }
 
     // --------------------------

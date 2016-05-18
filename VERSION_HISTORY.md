@@ -132,3 +132,9 @@
   - Fix some bugs.
   - Add docker support.
   - Add log.
+
+- 0.10.1.RELEASE
+  - Modify VO.
+  - Modify domain, controller.
+  - Modify [Transformer](src/main/java/com/saintdan/framework/component/Transformer.java)
+  - Modify [ResultHelper](src/main/java/com/saintdan/framework/component/ResultHelper.java)

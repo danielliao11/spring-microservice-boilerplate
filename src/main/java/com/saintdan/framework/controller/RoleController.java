@@ -58,7 +58,7 @@ public class RoleController {
                 return resultVO;
             }
             // Return result and message.
-            return roleDomain.create(param, currentUser);
+            return resultHelper.successResp(roleDomain.create(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -111,7 +111,7 @@ public class RoleController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return roleDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+            return resultHelper.successResp(roleDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE)));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -139,7 +139,7 @@ public class RoleController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return roleDomain.getRoleById(param);
+            return resultHelper.successResp(roleDomain.getRoleById(param));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -168,7 +168,7 @@ public class RoleController {
                 return resultVO;
             }
             // Update role.
-            return roleDomain.update(param, currentUser);
+            return resultHelper.successResp(roleDomain.update(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());

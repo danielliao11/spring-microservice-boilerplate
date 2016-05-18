@@ -2,7 +2,6 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
@@ -61,7 +60,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
             throw new CommonsException(ErrorType.SYS0122,
                     ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CLIENT_ID));
         }
-        return transformer.po2VO(ClientVO.class, client, String.format(ControllerConstant.SHOW, getClassT()));
+        return transformer.po2VO(ClientVO.class, client);
     }
 
     /**

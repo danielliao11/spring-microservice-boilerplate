@@ -57,7 +57,7 @@ public class GroupController {
                 return resultVO;
             }
             // Return result and message.
-            return groupDomain.create(param, currentUser);
+            return resultHelper.successResp(groupDomain.create(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -81,7 +81,7 @@ public class GroupController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return groupDomain.getAllGroups();
+            return resultHelper.successResp(groupDomain.getAllGroups());
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -110,7 +110,7 @@ public class GroupController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return groupDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE));
+            return resultHelper.successResp(groupDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE)));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -138,7 +138,7 @@ public class GroupController {
             if (resultVO != null) {
                 return resultVO;
             }
-            return groupDomain.getGroupById(param);
+            return resultHelper.successResp(groupDomain.getGroupById(param));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
@@ -167,7 +167,7 @@ public class GroupController {
                 return resultVO;
             }
             // Update group.
-            return groupDomain.update(param, currentUser);
+            return resultHelper.successResp(groupDomain.update(param, currentUser));
         } catch (CommonsException e) {
             // Return error information and log the exception.
             return resultHelper.infoResp(logger, e.getErrorType());
