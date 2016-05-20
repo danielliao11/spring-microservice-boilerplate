@@ -49,7 +49,7 @@ compileTestJava {
 }
 
 ext {
-    springBootVersion = '1.3.4.RELEASE'
+    springBootVersion = '1.3.5.RELEASE'
     springOAuth2Version = '2.0.8.RELEASE'
 
     fastJsonVersion = '1.2.7'
