@@ -75,10 +75,10 @@ public class Transformer {
     }
 
     /**
-     * Transform VO list to objects' VO.
+     * Transform VO list to VO of objects.
      *
      * @param list          VO list
-     * @return              objects' VO
+     * @return              VO of objects
      */
     public ObjectsVO voList2ObjectsVO(List list) {
         ObjectsVO vo = new ObjectsVO();
@@ -100,8 +100,6 @@ public class Transformer {
     public <T> T param2PO(Class<T> type, Object param, T po, User currentUser) throws Exception {
         // Init createdBy, lastModifiedBy
         Long createdBy, lastModifiedBy;
-        // Init createdDate
-        Date now = new Date();
         // Init transformer
         Field idField = type.getDeclaredField("id");
         idField.setAccessible(true);

@@ -1,6 +1,7 @@
 package com.saintdan.framework.tool;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
+import org.apache.commons.lang3.RandomStringUtils;
 
 /**
  * Generate encode password.
@@ -15,7 +16,6 @@ public class GenerateEncodedPassword {
 
     public static void main(String[] args) {
         String encodedPassword = new CustomPasswordEncoder().encode(RAW_PASSWORD);
-
         System.out.println(encodedPassword);
     }
 }
