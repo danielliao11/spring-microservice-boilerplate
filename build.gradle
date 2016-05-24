@@ -52,7 +52,7 @@ ext {
     springBootVersion = '1.3.5.RELEASE'
     springOAuth2Version = '2.0.8.RELEASE'
 
-    fastJsonVersion = '1.2.7'
+    fastJsonVersion = '1.2.12'
     commonsLang3Version = '3.4'
 
 //    hsqldbVersion = '1.8.0.10'
