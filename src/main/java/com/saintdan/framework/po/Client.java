@@ -28,6 +28,7 @@ public class Client implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition="SERIAL")
     private Long id;
 
     @NotEmpty

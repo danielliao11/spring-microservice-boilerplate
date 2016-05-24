@@ -31,6 +31,7 @@ public class Group implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition="SERIAL")
     private Long id;
 
     @NotEmpty

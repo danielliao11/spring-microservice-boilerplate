@@ -32,6 +32,7 @@ public class Resource implements GrantedAuthority, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition="SERIAL")
     private Long id;
 
     @NotEmpty

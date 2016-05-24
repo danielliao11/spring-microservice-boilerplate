@@ -32,6 +32,7 @@ public class Role implements GrantedAuthority, Serializable {
 
     @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(columnDefinition="SERIAL")
 	private Long id;
 
 	@NotEmpty
