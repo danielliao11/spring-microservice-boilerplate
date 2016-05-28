@@ -2,6 +2,11 @@ package com.saintdan.framework.tools;
 
 import org.springframework.data.domain.Sort;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * Query helper.
  *
@@ -31,5 +36,20 @@ public class QueryHelper {
     public static Sort getSort(String param, Sort.Direction direction) {
         Sort.Order order = new Sort.Order(direction, param);
         return new Sort(order);
+    }
+
+    /**
+     * Get sort
+     *
+     * @param map           sort map
+     * @return              {@link Sort}
+     */
+    public static Sort getSort(TreeMap<String, Sort.Direction> map) {
+        List<Sort.Order> orderList = new ArrayList<>();
+        for (Map.Entry<String, Sort.Direction> entry : map.entrySet()) {
+            Sort.Order order = new Sort.Order(entry.getValue(), entry.getKey());
+            orderList.add(order);
+        }
+        return new Sort(orderList);
     }
 }
