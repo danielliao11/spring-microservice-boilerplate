@@ -5,7 +5,8 @@ version = '0.10.1.RELEASE'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: 'maven'
+//apply plugin: 'maven' // If you want use maven.
+//apply plugin: 'war' // If you want use provide runtime dependencies.
 
 buildscript {
     repositories {
@@ -27,13 +28,6 @@ allprojects {
         maven {
             url 'https://repo.spring.io/libs-release'
         }
-    }
-}
-
-idea {
-    module {
-        inheritOutputDirs = false
-        outputDir = file('$buildDir/classes/main/')
     }
 }
 
@@ -89,7 +83,7 @@ dependencies {
 
     // Provide runtime dependencies.
     // Tomcat
-    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+//    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
     // Undertow - Undertow is a lightweight servlet container from JBoss
 //    providedRuntime "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
 
