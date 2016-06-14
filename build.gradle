@@ -5,7 +5,6 @@ version = '0.10.1.RELEASE'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: 'war'
 apply plugin: 'maven'
 
 buildscript {
