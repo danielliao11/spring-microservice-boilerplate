@@ -14,9 +14,9 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface ResourceRepository extends RepositoryWithoutDelete<Resource, Long> {
 
-    Resource findByName(String name);
+  Resource findByName(String name);
 
-    @Modifying
-    @Query("update Resource r set r.validFlag=?1 where r.id=?2")
-    void updateValidFlagFor(ValidFlag validFlag, Long id);
+  @Modifying
+  @Query("update Resource r set r.validFlag=?1 where r.id=?2")
+  void updateValidFlagFor(ValidFlag validFlag, Long id);
 }

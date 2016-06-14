@@ -28,74 +28,74 @@ import java.util.Date;
 @Service
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    // ------------------------
-    // PUBLIC METHODS
-    // ------------------------
+  // ------------------------
+  // PUBLIC METHODS
+  // ------------------------
 
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
+  @Override
+  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
 
-        // Find user.
-        String username = token.getName();
-        User user = userRepository.findByUsr(username);
-        if (user == null) { //If user does not exists, throw UsernameNotFoundException.
-            throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
-        }
-
-        // Compare password and credentials of authentication.
-        if (!customPasswordEncoder.matches(token.getCredentials().toString(), user.getPwd())) {
-            throw new BadCredentialsException("Invalid username/password");
-        }
-        CustomUserRepositoryUserDetails userDetails = new CustomUserRepositoryUserDetails(user);
-
-        // Get client ip address.
-        String ip = SpringSecurityUtils.getCurrentUserIp();
-
-        // Save user login info.
-        user.setLastLoginIP(ip);
-        user.setLastLoginTime(new Date());
-
-        if (!userDetails.isEnabled()) {
-            throw new DisabledException("User has been disabled.");
-        } else if (!userDetails.isAccountNonExpired()) {
-            throw new AccountExpiredException("Account has been expired.");
-        } else if (!userDetails.isAccountNonLocked()) {
-            throw new LockedException("Account has been locked.");
-        } else if (!userDetails.isCredentialsNonExpired()) {
-            throw new LockedException("Credentials has been expired.");
-        }
-        userRepository.save(user);
-
-        // Save to log.
-        try {
-            logHelper.logUsersOperations(LogType.LOGIN, "login", user);
-        } catch (Exception e) {
-            LogUtils.traceError(logger, e, "Log user login failed.");
-        }
-
-        //Authorize.
-        return new UsernamePasswordAuthenticationToken(userDetails, user.getPwd(), userDetails.getAuthorities());
+    // Find user.
+    String username = token.getName();
+    User user = userRepository.findByUsr(username);
+    if (user == null) { //If user does not exists, throw UsernameNotFoundException.
+      throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
     }
 
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
+    // Compare password and credentials of authentication.
+    if (!customPasswordEncoder.matches(token.getCredentials().toString(), user.getPwd())) {
+      throw new BadCredentialsException("Invalid username/password");
+    }
+    CustomUserRepositoryUserDetails userDetails = new CustomUserRepositoryUserDetails(user);
+
+    // Get client ip address.
+    String ip = SpringSecurityUtils.getCurrentUserIp();
+
+    // Save user login info.
+    user.setLastLoginIP(ip);
+    user.setLastLoginTime(new Date());
+
+    if (!userDetails.isEnabled()) {
+      throw new DisabledException("User has been disabled.");
+    } else if (!userDetails.isAccountNonExpired()) {
+      throw new AccountExpiredException("Account has been expired.");
+    } else if (!userDetails.isAccountNonLocked()) {
+      throw new LockedException("Account has been locked.");
+    } else if (!userDetails.isCredentialsNonExpired()) {
+      throw new LockedException("Credentials has been expired.");
+    }
+    userRepository.save(user);
+
+    // Save to log.
+    try {
+      logHelper.logUsersOperations(LogType.LOGIN, "login", user);
+    } catch (Exception e) {
+      LogUtils.traceError(logger, e, "Log user login failed.");
     }
 
-    // --------------------------
-    // PRIVATE FIELDS AND METHODS
-    // --------------------------
+    //Authorize.
+    return new UsernamePasswordAuthenticationToken(userDetails, user.getPwd(), userDetails.getAuthorities());
+  }
 
-    @Autowired
-    private LogHelper logHelper;
+  @Override
+  public boolean supports(Class<?> authentication) {
+    return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
+  }
 
-    @Autowired
-    private UserRepository userRepository;
+  // --------------------------
+  // PRIVATE FIELDS AND METHODS
+  // --------------------------
 
-    @Autowired
-    private CustomPasswordEncoder customPasswordEncoder;
+  @Autowired
+  private LogHelper logHelper;
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
+  @Autowired
+  private UserRepository userRepository;
+
+  @Autowired
+  private CustomPasswordEncoder customPasswordEncoder;
+
+  private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
 
 }

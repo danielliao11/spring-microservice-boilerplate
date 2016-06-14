@@ -12,11 +12,11 @@ import com.saintdan.framework.enums.ErrorType;
  */
 public class UnknownException extends SystemRuntimeException {
 
-    private static final long serialVersionUID = -7431810328087316293L;
+  private static final long serialVersionUID = -7431810328087316293L;
 
-    private final static ErrorType ERROR_TYPE = ErrorType.UNKNOWN;
+  private final static ErrorType ERROR_TYPE = ErrorType.UNKNOWN;
 
-    public UnknownException() {
-        super(ERROR_TYPE);
-    }
+  public UnknownException() {
+    super(ERROR_TYPE);
+  }
 }

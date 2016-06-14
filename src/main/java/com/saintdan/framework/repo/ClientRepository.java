@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface ClientRepository extends RepositoryWithoutDelete<Client, Long> {
 
-    Client findByClientIdAlias(String clientIdAlias);
+  Client findByClientIdAlias(String clientIdAlias);
 
-    @Modifying
-    @Query("update Client c set c.validFlag=?1 where c.id=?2")
-    void updateValidFlagFor(ValidFlag validFlag, Long id);
+  @Modifying
+  @Query("update Client c set c.validFlag=?1 where c.id=?2")
+  void updateValidFlagFor(ValidFlag validFlag, Long id);
 }

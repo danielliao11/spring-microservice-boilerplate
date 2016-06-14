@@ -19,16 +19,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogHelper {
 
-    public void logUsersOperations(LogType logType, String resource, User currentUser) throws Exception {
-        // Get ip and clientId
-        String ip = SpringSecurityUtils.getCurrentUserIp();
-        ip = StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip;
-        String clientId = SpringSecurityUtils.getCurrentUsername();
+  public void logUsersOperations(LogType logType, String resource, User currentUser) throws Exception {
+    // Get ip and clientId
+    String ip = SpringSecurityUtils.getCurrentUserIp();
+    ip = StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip;
+    String clientId = SpringSecurityUtils.getCurrentUsername();
 
-        // Log users' operations.
-        logDomain.create(new LogParam(ip, logType, clientId, resource), currentUser);
-    }
+    // Log users' operations.
+    logDomain.create(new LogParam(ip, logType, clientId, resource), currentUser);
+  }
 
-    @Autowired
-    private LogDomain logDomain;
+  @Autowired
+  private LogDomain logDomain;
 }

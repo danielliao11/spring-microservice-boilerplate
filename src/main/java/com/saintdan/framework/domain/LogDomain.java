@@ -31,75 +31,75 @@ import java.util.List;
 @Transactional
 public class LogDomain {
 
-    // ------------------------
-    // PUBLIC METHODS
-    // ------------------------
+  // ------------------------
+  // PUBLIC METHODS
+  // ------------------------
 
-    /**
-     * Create new {@link Log}.
-     *
-     * @param currentUser   current user
-     * @param param         {@link LogParam}
-     * @return              {@link LogVO}
-     */
-    public LogVO create(LogParam param, User currentUser) throws Exception {
-        return transformer.po2VO(LogVO.class, logRepository.save(logParam2PO(param, currentUser)));
+  /**
+   * Create new {@link Log}.
+   *
+   * @param currentUser current user
+   * @param param       {@link LogParam}
+   * @return {@link LogVO}
+   */
+  public LogVO create(LogParam param, User currentUser) throws Exception {
+    return transformer.po2VO(LogVO.class, logRepository.save(logParam2PO(param, currentUser)));
+  }
+
+  /**
+   * Show all {@link LogVO}.
+   *
+   * @return {@link ObjectsVO}, {@link LogVO}
+   * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
+   */
+  public ObjectsVO getAllLogs() throws Exception {
+    List<Log> logs = (List<Log>) logRepository.findAll();
+    if (logs.isEmpty()) {
+      // Throw no log exist exception.
+      throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
     }
+    return transformer.pos2VO(LogVO.class, logs);
+  }
 
-    /**
-     * Show all {@link LogVO}.
-     *
-     * @return              {@link ObjectsVO}, {@link LogVO}
-     * @throws CommonsException        {@link ErrorType#SYS0121} No group exists.
-     */
-    public ObjectsVO getAllLogs() throws Exception {
-        List<Log> logs = (List<Log>) logRepository.findAll();
-        if (logs.isEmpty()) {
-            // Throw no log exist exception.
-            throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
-        }
-        return transformer.pos2VO(LogVO.class, logs);
+  /**
+   * Show {@link LogVO} of {@link PageVO}.
+   *
+   * @param pageable {@link Pageable}
+   * @return {@link PageVO}, {@link LogVO}
+   * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
+   */
+  public PageVO getPage(Pageable pageable) throws Exception {
+    Page<Log> logPage = logRepository.findAll(pageable);
+    if (!logPage.hasContent()) {
+      // Throw no log exist exception.
+      throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
     }
+    return transformer.poPage2VO(transformer.poList2VOList(LogVO.class, logPage.getContent()), pageable, logPage.getTotalElements());
+  }
 
-    /**
-     * Show {@link LogVO} of {@link PageVO}.
-     *
-     * @param pageable      {@link Pageable}
-     * @return              {@link PageVO}, {@link LogVO}
-     * @throws CommonsException        {@link ErrorType#SYS0121} No group exists.
-     */
-    public PageVO getPage(Pageable pageable) throws Exception {
-        Page<Log> logPage = logRepository.findAll(pageable);
-        if (!logPage.hasContent()) {
-            // Throw no log exist exception.
-            throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
-        }
-        return transformer.poPage2VO(transformer.poList2VOList(LogVO.class, logPage.getContent()), pageable, logPage.getTotalElements());
-    }
+  // --------------------------
+  // PRIVATE FIELDS AND METHODS
+  // --------------------------
 
-    // --------------------------
-    // PRIVATE FIELDS AND METHODS
-    // --------------------------
+  @Autowired
+  private Transformer transformer;
 
-    @Autowired
-    private Transformer transformer;
+  @Autowired
+  private LogRepository logRepository;
 
-    @Autowired
-    private LogRepository logRepository;
+  private final static String LOG = "log";
 
-    private final static String LOG = "log";
-
-    /**
-     * Transform {@link LogParam} to {@link Log}.
-     *
-     * @param param         {@link LogParam}
-     * @return              {@link Log}
-     */
-    private Log logParam2PO(LogParam param, User currentUser) {
-        Log log = new Log();
-        BeanUtils.copyProperties(param, log);
-        log.setUserId(currentUser.getId());
-        log.setUsername(currentUser.getUsr());
-        return log;
-    }
+  /**
+   * Transform {@link LogParam} to {@link Log}.
+   *
+   * @param param {@link LogParam}
+   * @return {@link Log}
+   */
+  private Log logParam2PO(LogParam param, User currentUser) {
+    Log log = new Log();
+    BeanUtils.copyProperties(param, log);
+    log.setUserId(currentUser.getId());
+    log.setUsername(currentUser.getUsr());
+    return log;
+  }
 }

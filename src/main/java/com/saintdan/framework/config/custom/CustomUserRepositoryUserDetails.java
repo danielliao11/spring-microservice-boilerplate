@@ -21,62 +21,62 @@ import java.util.Set;
  */
 public class CustomUserRepositoryUserDetails extends User implements UserDetails {
 
-    private static final long serialVersionUID = -2502869413772228006L;
+  private static final long serialVersionUID = -2502869413772228006L;
 
-    public CustomUserRepositoryUserDetails(User user) {
-        super(user);
-    }
+  public CustomUserRepositoryUserDetails(User user) {
+    super(user);
+  }
 
-    /**
-     * Get the authorities.
-     *
-     * @return      GrantedAuthorities
-     */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        Set<Role> roles = getRoles();
-        for (Role role : roles) {
-            Set<Group> groups = role.getGroups();
-            for (Group group : groups) {
-                Set<Resource> resources = group.getResources();
-                for (Resource resource : resources) {
-                    GrantedAuthority authority = new SimpleGrantedAuthority(resource.getName());
-                    authorities.add(authority);
-                }
-            }
+  /**
+   * Get the authorities.
+   *
+   * @return GrantedAuthorities
+   */
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    Collection<GrantedAuthority> authorities = new ArrayList<>();
+    Set<Role> roles = getRoles();
+    for (Role role : roles) {
+      Set<Group> groups = role.getGroups();
+      for (Group group : groups) {
+        Set<Resource> resources = group.getResources();
+        for (Resource resource : resources) {
+          GrantedAuthority authority = new SimpleGrantedAuthority(resource.getName());
+          authorities.add(authority);
         }
-        return authorities;
+      }
     }
+    return authorities;
+  }
 
-    @Override
-    public String getUsername() {
-        return getUsr();
-    }
+  @Override
+  public String getUsername() {
+    return getUsr();
+  }
 
-    @Override
-    public String getPassword() {
-        return getPwd();
-    }
+  @Override
+  public String getPassword() {
+    return getPwd();
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return isAccountNonExpiredAlias();
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return isAccountNonExpiredAlias();
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return isAccountNonLockedAlias();
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return isAccountNonLockedAlias();
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpiredAlias();
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return isCredentialsNonExpiredAlias();
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return isEnabledAlias();
-    }
+  @Override
+  public boolean isEnabled() {
+    return isEnabledAlias();
+  }
 
 }

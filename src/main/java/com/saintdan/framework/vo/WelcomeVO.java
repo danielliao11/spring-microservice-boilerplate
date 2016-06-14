@@ -11,23 +11,23 @@ import java.io.Serializable;
  */
 public class WelcomeVO implements Serializable {
 
-    private static final long serialVersionUID = -7734398342573960351L;
+  private static final long serialVersionUID = -7734398342573960351L;
 
-    private final long id;
+  private final long id;
 
-	private final String content;
+  private final String content;
 
-	public long getId() {
-		return id;
-	}
+  public long getId() {
+    return id;
+  }
 
-	public String getContent() {
-		return content;
-	}
+  public String getContent() {
+    return content;
+  }
 
-	public WelcomeVO(long id, String content) {
-		this.id = id;
-		this.content = content;
-	}
+  public WelcomeVO(long id, String content) {
+    this.id = id;
+    this.content = content;
+  }
 
 }

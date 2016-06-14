@@ -14,9 +14,9 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface GroupRepository extends RepositoryWithoutDelete<Group, Long> {
 
-    Group findByName(String name);
+  Group findByName(String name);
 
-    @Modifying
-    @Query("update Group g set g.validFlag=?1 where g.id=?2")
-    void updateValidFlagFor(ValidFlag validFlag, Long id);
+  @Modifying
+  @Query("update Group g set g.validFlag=?1 where g.id=?2")
+  void updateValidFlagFor(ValidFlag validFlag, Long id);
 }

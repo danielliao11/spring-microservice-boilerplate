@@ -21,23 +21,23 @@ import java.net.URLDecoder;
 @Component
 public class SignHelper {
 
-    /**
-     * Check the sign.
-     *
-     * @param publicKey         public key
-     * @return                  success or not
-     * @throws UnsupportedEncodingException
-     * @throws CommonsException
-     */
-    public boolean signCheck(String publicKey, BaseParam params)
-            throws UnsupportedEncodingException, CommonsException {
-        // Prepare to validate signature.
-        if (StringUtils.isEmpty(params.getSign())) {
-            throw new CommonsException(ErrorType.SYS0002);
-        }
-        // Transform encode.
-        params.setSign(URLDecoder.decode(new String(Base64.decodeBase64(params.getSign())), SignatureConstant.CHARSET_UTF8));
-        // Signature
-        return params.isSignValid(publicKey);
+  /**
+   * Check the sign.
+   *
+   * @param publicKey public key
+   * @return success or not
+   * @throws UnsupportedEncodingException
+   * @throws CommonsException
+   */
+  public boolean signCheck(String publicKey, BaseParam params)
+      throws UnsupportedEncodingException, CommonsException {
+    // Prepare to validate signature.
+    if (StringUtils.isEmpty(params.getSign())) {
+      throw new CommonsException(ErrorType.SYS0002);
     }
+    // Transform encode.
+    params.setSign(URLDecoder.decode(new String(Base64.decodeBase64(params.getSign())), SignatureConstant.CHARSET_UTF8));
+    // Signature
+    return params.isSignValid(publicKey);
+  }
 }

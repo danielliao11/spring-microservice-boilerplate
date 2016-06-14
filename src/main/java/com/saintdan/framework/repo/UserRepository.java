@@ -20,16 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserRepository extends RepositoryWithoutDelete<User, Long> {
 
-	User findByUsr(String usr);
+  User findByUsr(String usr);
 
-    Page<User> findAll(Pageable pageable);
+  Page<User> findAll(Pageable pageable);
 
-    @Modifying
-    @Query("update User u set u.pwd=?1 where u.id=?2")
-    void updatePwdFor(String pwd, Long id);
+  @Modifying
+  @Query("update User u set u.pwd=?1 where u.id=?2")
+  void updatePwdFor(String pwd, Long id);
 
-    @Modifying
-    @Query("update User u set u.validFlag=?1 where u.id=?2")
-    void updateValidFlagFor(ValidFlag validFlag, Long id);
+  @Modifying
+  @Query("update User u set u.validFlag=?1 where u.id=?2")
+  void updateValidFlagFor(ValidFlag validFlag, Long id);
 
 }

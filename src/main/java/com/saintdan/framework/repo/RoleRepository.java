@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface RoleRepository extends RepositoryWithoutDelete<Role, Long> {
 
-    Role findByName(String name);
+  Role findByName(String name);
 
-    @Modifying
-    @Query("update Role r set r.validFlag=?1 where r.id=?2")
-    void updateValidFlagFor(ValidFlag validFlag, Long id);
+  @Modifying
+  @Query("update Role r set r.validFlag=?1 where r.id=?2")
+  void updateValidFlagFor(ValidFlag validFlag, Long id);
 }

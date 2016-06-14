@@ -13,68 +13,68 @@ import javax.validation.constraints.NotNull;
  */
 public class GroupParam extends BaseParam {
 
-    private static final long serialVersionUID = 8542867394907970893L;
+  private static final long serialVersionUID = 8542867394907970893L;
 
-    @SignField
-    private Long id; // role's ID.
+  @SignField
+  private Long id; // role's ID.
 
-    @SignField
-    @NotNull(message = "Name cannot be null.")
-    private String name; // role's name
+  @SignField
+  @NotNull(message = "Name cannot be null.")
+  private String name; // role's name
 
-    @SignField
-    private String description;
+  @SignField
+  private String description;
 
-    @SignField
-    private String roleIds; // role ids string
+  @SignField
+  private String roleIds; // role ids string
 
-    @SignField
-    private String resourceIds; // resource ids string
+  @SignField
+  private String resourceIds; // resource ids string
 
-    public GroupParam() {
-    }
+  public GroupParam() {
+  }
 
-    public GroupParam(Long id) {
-        this.id = id;
-    }
+  public GroupParam(Long id) {
+    this.id = id;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public String getRoleIds() {
-        return roleIds;
-    }
+  public String getRoleIds() {
+    return roleIds;
+  }
 
-    public void setRoleIds(String roleIds) {
-        this.roleIds = roleIds;
-    }
+  public void setRoleIds(String roleIds) {
+    this.roleIds = roleIds;
+  }
 
-    public String getResourceIds() {
-        return resourceIds;
-    }
+  public String getResourceIds() {
+    return resourceIds;
+  }
 
-    public void setResourceIds(String resourceIds) {
-        this.resourceIds = resourceIds;
-    }
+  public void setResourceIds(String resourceIds) {
+    this.resourceIds = resourceIds;
+  }
 }

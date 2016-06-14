@@ -28,151 +28,151 @@ import java.util.Set;
 @NamedEntityGraph(name = "Role.groups", attributeNodes = @NamedAttributeNode("groups"))
 public class Role implements GrantedAuthority, Serializable {
 
-    private static final long serialVersionUID = -5193344128221526323L;
+  private static final long serialVersionUID = -5193344128221526323L;
 
-    @Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(columnDefinition="SERIAL")
-	private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(columnDefinition = "SERIAL")
+  private Long id;
 
-	@NotEmpty
-    @Column(unique = true, nullable = false, length = 20)
-	private String name;
+  @NotEmpty
+  @Column(unique = true, nullable = false, length = 20)
+  private String name;
 
-    @Column(columnDefinition="TEXT")
-    private String description;
+  @Column(columnDefinition = "TEXT")
+  private String description;
 
-    @Column(nullable = false)
-    private ValidFlag validFlag = ValidFlag.VALID;
+  @Column(nullable = false)
+  private ValidFlag validFlag = ValidFlag.VALID;
 
-    @CreatedDate
-    @Column(nullable = false)
-    private Date createdDate = new Date();
+  @CreatedDate
+  @Column(nullable = false)
+  private Date createdDate = new Date();
 
-    @CreatedBy
-    @Column(nullable = false)
-    private Long createdBy;
+  @CreatedBy
+  @Column(nullable = false)
+  private Long createdBy;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private Date lastModifiedDate = new Date();
+  @LastModifiedDate
+  @Column(nullable = false)
+  private Date lastModifiedDate = new Date();
 
-    @LastModifiedBy
-    @Column(nullable = false)
-    private Long lastModifiedBy;
+  @LastModifiedBy
+  @Column(nullable = false)
+  private Long lastModifiedBy;
 
-    @Version
-    @Column(nullable = false)
-    private int version;
+  @Version
+  @Column(nullable = false)
+  private int version;
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = {CascadeType.REFRESH})
-	private Set<User> users = new HashSet<>();
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = {CascadeType.REFRESH})
+  private Set<User> users = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
-    @JoinTable(name = "roles_has_groups",
-            joinColumns = { @JoinColumn(name = "role_id") },
-            inverseJoinColumns = { @JoinColumn(name = "group_id") })
-    private Set<Group> groups = new HashSet<>();
+  @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
+  @JoinTable(name = "roles_has_groups",
+      joinColumns = {@JoinColumn(name = "role_id")},
+      inverseJoinColumns = {@JoinColumn(name = "group_id")})
+  private Set<Group> groups = new HashSet<>();
 
-	@Override
-	public String getAuthority() {
-		return name;
-	}
+  @Override
+  public String getAuthority() {
+    return name;
+  }
 
-    public Role() {
+  public Role() {
 
-    }
+  }
 
-    public Role(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+  public Role(String name, String description) {
+    this.name = name;
+    this.description = description;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public ValidFlag getValidFlag() {
-        return validFlag;
-    }
+  public ValidFlag getValidFlag() {
+    return validFlag;
+  }
 
-    public void setValidFlag(ValidFlag validFlag) {
-        this.validFlag = validFlag;
-    }
+  public void setValidFlag(ValidFlag validFlag) {
+    this.validFlag = validFlag;
+  }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
+  public Date getCreatedDate() {
+    return createdDate;
+  }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
+  public void setCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+  }
 
-    public Long getCreatedBy() {
-        return createdBy;
-    }
+  public Long getCreatedBy() {
+    return createdBy;
+  }
 
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
+  public void setCreatedBy(Long createdBy) {
+    this.createdBy = createdBy;
+  }
 
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+  public Date getLastModifiedDate() {
+    return lastModifiedDate;
+  }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+  public void setLastModifiedDate(Date lastModifiedDate) {
+    this.lastModifiedDate = lastModifiedDate;
+  }
 
-    public Long getLastModifiedBy() {
-        return lastModifiedBy;
-    }
+  public Long getLastModifiedBy() {
+    return lastModifiedBy;
+  }
 
-    public void setLastModifiedBy(Long lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+  public void setLastModifiedBy(Long lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+  }
 
-    public int getVersion() {
-        return version;
-    }
+  public int getVersion() {
+    return version;
+  }
 
-    public void setVersion(int version) {
-        this.version = version;
-    }
+  public void setVersion(int version) {
+    this.version = version;
+  }
 
-    public Set<User> getUsers() {
-        return users;
-    }
+  public Set<User> getUsers() {
+    return users;
+  }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
+  public void setUsers(Set<User> users) {
+    this.users = users;
+  }
 
-    public Set<Group> getGroups() {
-        return groups;
-    }
+  public Set<Group> getGroups() {
+    return groups;
+  }
 
-    public void setGroups(Set<Group> groups) {
-        this.groups = groups;
-    }
+  public void setGroups(Set<Group> groups) {
+    this.groups = groups;
+  }
 }

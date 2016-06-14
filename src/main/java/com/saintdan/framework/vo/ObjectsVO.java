@@ -12,15 +12,15 @@ import java.util.List;
  */
 public class ObjectsVO implements Serializable {
 
-    private static final long serialVersionUID = 7822963463824140286L;
+  private static final long serialVersionUID = 7822963463824140286L;
 
-    private List objects;
+  private List objects;
 
-    public List getObjects() {
-        return objects;
-    }
+  public List getObjects() {
+    return objects;
+  }
 
-    public void setObjects(List objects) {
-        this.objects = objects;
-    }
+  public void setObjects(List objects) {
+    this.objects = objects;
+  }
 }

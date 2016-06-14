@@ -9,7 +9,7 @@ package com.saintdan.framework.constant;
  */
 public interface ResultConstant {
 
-    String OK = "200";
+  String OK = "200";
 
-    String SUCCESS = "Successfully";
+  String SUCCESS = "Successfully";
 }

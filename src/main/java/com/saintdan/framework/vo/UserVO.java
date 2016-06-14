@@ -11,45 +11,45 @@ import java.io.Serializable;
  */
 public class UserVO implements Serializable {
 
-    private static final long serialVersionUID = 6597728015488383528L;
+  private static final long serialVersionUID = 6597728015488383528L;
 
-    private Long id;
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private String usr;
+  private String usr;
 
-    private String description;
+  private String description;
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getUsr() {
-        return usr;
-    }
+  public String getUsr() {
+    return usr;
+  }
 
-    public void setUsr(String usr) {
-        this.usr = usr;
-    }
+  public void setUsr(String usr) {
+    this.usr = usr;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 }

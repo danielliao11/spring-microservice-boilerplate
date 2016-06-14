@@ -11,55 +11,55 @@ import java.io.Serializable;
  */
 public class ResourceVO implements Serializable {
 
-    private static final long serialVersionUID = 8917291426920312742L;
+  private static final long serialVersionUID = 8917291426920312742L;
 
-    private Long id;
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private String path;
+  private String path;
 
-    private Integer priority;
+  private Integer priority;
 
-    private String description;
+  private String description;
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getPath() {
-        return path;
-    }
+  public String getPath() {
+    return path;
+  }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
+  public void setPath(String path) {
+    this.path = path;
+  }
 
-    public Integer getPriority() {
-        return priority;
-    }
+  public Integer getPriority() {
+    return priority;
+  }
 
-    public void setPriority(Integer priority) {
-        this.priority = priority;
-    }
+  public void setPriority(Integer priority) {
+    this.priority = priority;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 }

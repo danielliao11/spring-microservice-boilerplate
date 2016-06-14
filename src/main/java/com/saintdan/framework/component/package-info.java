@@ -2,23 +2,23 @@
  * Package of components.
  *
  * <p>
- *     Use {@link org.springframework.stereotype.Component}
+ *   Use {@link org.springframework.stereotype.Component}
  * </p>
  * <pre>
- *     {@link com.saintdan.framework.component.CustomPasswordEncoder}
- *     Encrypt utilities.
+ *   {@link com.saintdan.framework.component.CustomPasswordEncoder}
+ *   Encrypt utilities.
  *
- *     {@link com.saintdan.framework.component.LogHelper}
- *     Log users' operations.
+ *   {@link com.saintdan.framework.component.LogHelper}
+ *   Log users' operations.
  *
- *     {@link com.saintdan.framework.component.ResultHelper}
- *     Log debug message and return result.
+ *   {@link com.saintdan.framework.component.ResultHelper}
+ *   Log debug message and return result.
  *
- *     {@link com.saintdan.framework.component.Transformer}
- *     Ids string transform to iterable helper.
+ *   {@link com.saintdan.framework.component.Transformer}
+ *   Ids string transform to iterable helper.
  *
- *     {@link com.saintdan.framework.component.ValidateHelper}
- *     Custom Validate helper.
+ *   {@link com.saintdan.framework.component.ValidateHelper}
+ *   Custom Validate helper.
  * </pre>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>

@@ -22,28 +22,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1)
 public class WelcomeController {
 
-    // ------------------------
-    // PUBLIC METHODS
-    // ------------------------
+  // ------------------------
+  // PUBLIC METHODS
+  // ------------------------
 
-    /**
-     * Welcome somebody.
-     *
-     * @param user      user
-     * @return          user's name
-     */
-    @RequestMapping(ResourceURL.WELCOME)
-	public ResultVO welcome(@AuthenticationPrincipal User user) {
-		return resultHelper.successResp(new WelcomeVO(user.getId(), String.format(template, user.getName())));
-	}
+  /**
+   * Welcome somebody.
+   *
+   * @param user user
+   * @return user's name
+   */
+  @RequestMapping(ResourceURL.WELCOME)
+  public ResultVO welcome(@AuthenticationPrincipal User user) {
+    return resultHelper.successResp(new WelcomeVO(user.getId(), String.format(template, user.getName())));
+  }
 
-    // ------------------------
-    // PRIVATE FIELDS
-    // ------------------------
+  // ------------------------
+  // PRIVATE FIELDS
+  // ------------------------
 
-    private static final String template = "Hello, %s!";
+  private static final String template = "Hello, %s!";
 
-    @Autowired
-    private ResultHelper resultHelper;
+  @Autowired
+  private ResultHelper resultHelper;
 
 }
