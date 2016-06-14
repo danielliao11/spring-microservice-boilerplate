@@ -1,7 +1,7 @@
 /**
  * Package of test cases.
  * <p>
- *     Spring test must extends {@link com.saintdan.framework.BaseTest}
+ *   Spring test must extends {@link com.saintdan.framework.BaseTest}
  * </p>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
