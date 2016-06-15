@@ -47,13 +47,11 @@ public class OAuth2ServerConfiguration {
 
     resource.setConfigurers(Collections.<ResourceServerConfigurer>singletonList(new ResourceServerConfigurerAdapter() {
 
-      @Override
-      public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+      @Override     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         resources.resourceId(RESOURCE_ID);
       }
 
-      @Override
-      public void configure(HttpSecurity http) throws Exception {
+      @Override     public void configure(HttpSecurity http) throws Exception {
         http
             .csrf().disable()
             .authorizeRequests()
@@ -80,21 +78,7 @@ public class OAuth2ServerConfiguration {
   protected static class AuthorizationServerConfiguration extends
       AuthorizationServerConfigurerAdapter {
 
-    // Token store type.
-    private TokenStore tokenStore = new InMemoryTokenStore();
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    // When you use memory client, you can comment the custom client details service.
-    @Autowired
-    private CustomClientDetailsService clientDetailsService;
-
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints)
+    @Override   public void configure(AuthorizationServerEndpointsConfigurer endpoints)
         throws Exception {
       endpoints
           .tokenStore(this.tokenStore)
@@ -102,8 +86,7 @@ public class OAuth2ServerConfiguration {
           .userDetailsService(userDetailsService);
     }
 
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    @Override   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
       // Use JDBC client.
       // If you have many clients, you can use JDBC client.
       clients.withClientDetails(clientDetailsService);
@@ -132,6 +115,20 @@ public class OAuth2ServerConfiguration {
                     .secret("654321");
             */
     }
+
+    // Token store type.
+    private TokenStore tokenStore = new InMemoryTokenStore();
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    // When you use memory client, you can comment the custom client details service.
+    @Autowired
+    private CustomClientDetailsService clientDetailsService;
+
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
   }
 
   private static final String RESOURCE_ID = "api";

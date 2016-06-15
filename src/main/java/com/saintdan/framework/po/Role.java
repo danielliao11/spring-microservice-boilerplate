@@ -74,8 +74,7 @@ public class Role implements GrantedAuthority, Serializable {
       inverseJoinColumns = {@JoinColumn(name = "group_id")})
   private Set<Group> groups = new HashSet<>();
 
-  @Override
-  public String getAuthority() {
+  @Override public String getAuthority() {
     return name;
   }
 

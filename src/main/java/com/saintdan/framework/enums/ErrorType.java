@@ -44,8 +44,7 @@ public enum ErrorType implements IntentStateWithDescription {
     this.description = description;
   }
 
-  @Override
-  public String description() {
+  @Override public String description() {
     return this.description;
   }
 }

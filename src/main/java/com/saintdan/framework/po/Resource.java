@@ -94,8 +94,7 @@ public class Resource implements GrantedAuthority, Serializable {
     this.description = description;
   }
 
-  @Override
-  public String getAuthority() {
+  @Override public String getAuthority() {
     return name;
   }
 

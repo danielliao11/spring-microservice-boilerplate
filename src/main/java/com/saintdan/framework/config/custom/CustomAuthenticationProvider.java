@@ -32,8 +32,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   // PUBLIC METHODS
   // ------------------------
 
-  @Override
-  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+  @Override public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
 
     // Find user.
@@ -78,8 +77,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     return new UsernamePasswordAuthenticationToken(userDetails, user.getPwd(), userDetails.getAuthorities());
   }
 
-  @Override
-  public boolean supports(Class<?> authentication) {
+  @Override public boolean supports(Class<?> authentication) {
     return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
   }
 

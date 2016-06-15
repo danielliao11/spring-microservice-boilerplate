@@ -32,8 +32,7 @@ public class CustomUserRepositoryUserDetails extends User implements UserDetails
    *
    * @return GrantedAuthorities
    */
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
+  @Override public Collection<? extends GrantedAuthority> getAuthorities() {
     Collection<GrantedAuthority> authorities = new ArrayList<>();
     Set<Role> roles = getRoles();
     for (Role role : roles) {
@@ -49,33 +48,27 @@ public class CustomUserRepositoryUserDetails extends User implements UserDetails
     return authorities;
   }
 
-  @Override
-  public String getUsername() {
+  @Override public String getUsername() {
     return getUsr();
   }
 
-  @Override
-  public String getPassword() {
+  @Override public String getPassword() {
     return getPwd();
   }
 
-  @Override
-  public boolean isAccountNonExpired() {
+  @Override public boolean isAccountNonExpired() {
     return isAccountNonExpiredAlias();
   }
 
-  @Override
-  public boolean isAccountNonLocked() {
+  @Override public boolean isAccountNonLocked() {
     return isAccountNonLockedAlias();
   }
 
-  @Override
-  public boolean isCredentialsNonExpired() {
+  @Override public boolean isCredentialsNonExpired() {
     return isCredentialsNonExpiredAlias();
   }
 
-  @Override
-  public boolean isEnabled() {
+  @Override public boolean isEnabled() {
     return isEnabledAlias();
   }
 

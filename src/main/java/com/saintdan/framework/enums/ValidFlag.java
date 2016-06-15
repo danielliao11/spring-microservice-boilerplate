@@ -23,13 +23,11 @@ public enum ValidFlag implements IntentStateWithCodeAndDescription {
     this.description = description;
   }
 
-  @Override
-  public int code() {
+  @Override public int code() {
     return code;
   }
 
-  @Override
-  public String description() {
+  @Override public String description() {
     return description;
   }
 

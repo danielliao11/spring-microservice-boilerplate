@@ -20,8 +20,7 @@ public class CustomPasswordEncoder implements PasswordEncoder {
    * @param rawPassword raw password
    * @return encoded password
    */
-  @Override
-  public String encode(CharSequence rawPassword) {
+  @Override public String encode(CharSequence rawPassword) {
     String rawPwd = (String) rawPassword;
     return BCrypt.hashpw(rawPwd, BCrypt.gensalt());
   }
@@ -33,8 +32,7 @@ public class CustomPasswordEncoder implements PasswordEncoder {
    * @param encodedPassword encoded password
    * @return match or not
    */
-  @Override
-  public boolean matches(CharSequence rawPassword, String encodedPassword) {
+  @Override public boolean matches(CharSequence rawPassword, String encodedPassword) {
     String rawPwd = (String) rawPassword;
     return BCrypt.checkpw(rawPwd, encodedPassword);
   }
