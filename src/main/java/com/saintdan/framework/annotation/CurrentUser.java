@@ -14,11 +14,11 @@ import java.lang.annotation.Target;
  * <pre>
  * @Controller
  * public class MyController {
- *     @RequestMapping("/user/current/show")
- *     public String show(@CurrentUser CustomUser customUser) {
- *         // do something with CustomUser
- *         return "view";
- *     }
+ *   @RequestMapping("/user/current/show")
+ *   public String show(@CurrentUser CustomUser customUser) {
+ *       // do something with CustomUser
+ *       return "view";
+ *   }
  * </pre>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
