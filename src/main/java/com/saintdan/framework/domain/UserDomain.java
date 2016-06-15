@@ -16,14 +16,13 @@ import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.UserVO;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Domain of {@link User}
@@ -33,7 +32,7 @@ import java.util.List;
  * @since JDK1.8
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class UserDomain extends BaseDomain<User, Long> {
 
   // ------------------------
@@ -48,7 +47,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @return {@link UserVO}
    * @throws CommonsException {@link ErrorType#SYS0111} user already existing, usr taken.
    */
-  public UserVO create(UserParam param, User currentUser) throws Exception {
+  @Transactional public UserVO create(UserParam param, User currentUser) throws Exception {
     User user = userRepository.findByUsr(param.getUsr());
     if (user != null) {
       // Throw user already existing exception, usr taken.
@@ -143,7 +142,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @return {@link UserVO}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any user by id param.
    */
-  public UserVO update(UserParam param, User currentUser) throws Exception {
+  @Transactional public UserVO update(UserParam param, User currentUser) throws Exception {
     User user = userRepository.findByUsr(param.getUsr());
     if (user == null) {
       // Throw cannot find any user by this id param.
@@ -160,7 +159,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @param param       {@link UserParam}
    * @throws CommonsException {@link ErrorType#SYS0122} user's pwd update failed.
    */
-  public void updatePwd(UserParam param, User currentUser) throws Exception {
+  @Transactional public void updatePwd(UserParam param, User currentUser) throws Exception {
     User user = userRepository.findByUsr(param.getUsr());
     if (user == null) {
       // Throw cannot find any user by this id param.
@@ -179,7 +178,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @param param       {@link UserParam}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any user by id param.
    */
-  public void delete(UserParam param, User currentUser) throws Exception {
+  @Transactional public void delete(UserParam param, User currentUser) throws Exception {
     User user = userRepository.findOne(param.getId());
     if (user == null) {
       // Throw cannot find any user by this id param.
@@ -196,23 +195,17 @@ public class UserDomain extends BaseDomain<User, Long> {
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired
-  private RoleDomain roleDomain;
+  @Autowired private RoleDomain roleDomain;
 
-  @Autowired
-  private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-  @Autowired
-  private CustomPasswordEncoder passwordEncoder;
+  @Autowired private CustomPasswordEncoder passwordEncoder;
 
-  @Autowired
-  private Transformer transformer;
+  @Autowired private Transformer transformer;
 
-  @Autowired
-  private LogHelper logHelper;
+  @Autowired private LogHelper logHelper;
 
-  @Autowired
-  public UserDomain(UserRepository userRepository) {
+  @Autowired public UserDomain(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 

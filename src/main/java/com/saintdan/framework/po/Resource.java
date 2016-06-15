@@ -83,9 +83,7 @@ public class Resource implements GrantedAuthority, Serializable {
   @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources", cascade = {CascadeType.REFRESH})
   private Set<Group> groups = new HashSet<>();
 
-  public Resource() {
-
-  }
+  public Resource() {}
 
   public Resource(String name, String path, Integer priority, String description) {
     this.name = name;

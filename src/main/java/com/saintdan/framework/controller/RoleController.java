@@ -218,12 +218,9 @@ public class RoleController {
 
   private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
 
-  @Autowired
-  private ResultHelper resultHelper;
+  @Autowired private ResultHelper resultHelper;
 
-  @Autowired
-  private ValidateHelper validateHelper;
+  @Autowired private ValidateHelper validateHelper;
 
-  @Autowired
-  private RoleDomain roleDomain;
+  @Autowired private RoleDomain roleDomain;
 }

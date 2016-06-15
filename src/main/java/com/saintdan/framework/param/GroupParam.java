@@ -15,24 +15,19 @@ public class GroupParam extends BaseParam {
 
   private static final long serialVersionUID = 8542867394907970893L;
 
-  @SignField
-  private Long id; // role's ID.
+  @SignField private Long id; // role's ID.
 
   @SignField
   @NotNull(message = "Name cannot be null.")
   private String name; // role's name
 
-  @SignField
-  private String description;
+  @SignField private String description;
 
-  @SignField
-  private String roleIds; // role ids string
+  @SignField private String roleIds; // role ids string
 
-  @SignField
-  private String resourceIds; // resource ids string
+  @SignField private String resourceIds; // resource ids string
 
-  public GroupParam() {
-  }
+  public GroupParam() {}
 
   public GroupParam(Long id) {
     this.id = id;

@@ -28,7 +28,7 @@ import java.util.List;
  * @since JDK1.8
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class LogDomain {
 
   // ------------------------
@@ -42,7 +42,7 @@ public class LogDomain {
    * @param param       {@link LogParam}
    * @return {@link LogVO}
    */
-  public LogVO create(LogParam param, User currentUser) throws Exception {
+  @Transactional public LogVO create(LogParam param, User currentUser) throws Exception {
     return transformer.po2VO(LogVO.class, logRepository.save(logParam2PO(param, currentUser)));
   }
 
@@ -81,11 +81,9 @@ public class LogDomain {
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired
-  private Transformer transformer;
+  @Autowired private Transformer transformer;
 
-  @Autowired
-  private LogRepository logRepository;
+  @Autowired private LogRepository logRepository;
 
   private final static String LOG = "log";
 

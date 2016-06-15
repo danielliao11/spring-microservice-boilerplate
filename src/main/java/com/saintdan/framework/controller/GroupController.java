@@ -215,12 +215,9 @@ public class GroupController {
 
   private static final Logger logger = LoggerFactory.getLogger(GroupController.class);
 
-  @Autowired
-  private ResultHelper resultHelper;
+  @Autowired private ResultHelper resultHelper;
 
-  @Autowired
-  private ValidateHelper validateHelper;
+  @Autowired private ValidateHelper validateHelper;
 
-  @Autowired
-  private GroupDomain groupDomain;
+  @Autowired private GroupDomain groupDomain;
 }

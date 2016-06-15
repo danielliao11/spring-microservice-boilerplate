@@ -7,6 +7,7 @@ import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.SpringSecurityUtils;
+import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-
 /**
  * Custom authentication provider.
  *
@@ -25,8 +24,7 @@ import java.util.Date;
  * @date 12/9/15
  * @since JDK1.8
  */
-@Service
-public class CustomAuthenticationProvider implements AuthenticationProvider {
+@Service public class CustomAuthenticationProvider implements AuthenticationProvider {
 
   // ------------------------
   // PUBLIC METHODS
@@ -85,14 +83,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired
-  private LogHelper logHelper;
+  @Autowired private LogHelper logHelper;
 
-  @Autowired
-  private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-  @Autowired
-  private CustomPasswordEncoder customPasswordEncoder;
+  @Autowired private CustomPasswordEncoder customPasswordEncoder;
 
   private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
 

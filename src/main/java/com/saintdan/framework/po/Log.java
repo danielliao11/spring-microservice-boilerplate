@@ -47,9 +47,7 @@ public class Log implements Serializable {
   @Column(nullable = false)
   private Date createDate = new Date();
 
-  public Log() {
-
-  }
+  public Log() {}
 
   public Long getId() {
     return id;

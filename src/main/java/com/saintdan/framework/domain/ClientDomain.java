@@ -14,6 +14,7 @@ import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ClientVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Domain of {@link Client}.
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
  * @since JDK1.8
  */
 @Service
+@Transactional(readOnly = true)
 public class ClientDomain extends BaseDomain<Client, Long> {
 
   // ------------------------
@@ -37,6 +39,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
    * @return {@link ClientVO}
    * @throws CommonsException {@link ErrorType#SYS0111} client already existing, name taken.
    */
+  @Transactional
   public ClientVO create(ClientParam param, User currentUser) throws Exception {
     Client client = clientRepository.findByClientIdAlias(param.getClientIdAlias());
     if (client != null) {
@@ -70,6 +73,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
    * @param param       {@link ClientParam}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any client by id param.
    */
+  @Transactional
   public void delete(ClientParam param, User currentUser) throws Exception {
     Client client = clientRepository.findOne(param.getId());
     if (client == null) {
@@ -87,11 +91,9 @@ public class ClientDomain extends BaseDomain<Client, Long> {
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired
-  private ClientRepository clientRepository;
+  @Autowired private ClientRepository clientRepository;
 
-  @Autowired
-  private Transformer transformer;
+  @Autowired private Transformer transformer;
 
   private final static String CLIENT_ID = "clientId";
 

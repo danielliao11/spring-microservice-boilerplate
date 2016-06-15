@@ -167,14 +167,11 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired
-  private RepositoryWithoutDelete<T, ID> repository;
+  @Autowired private RepositoryWithoutDelete<T, ID> repository;
 
-  @Autowired
-  protected LogHelper logHelper;
+  @Autowired protected LogHelper logHelper;
 
-  @Autowired
-  private Transformer transformer;
+  @Autowired private Transformer transformer;
 
 
   /**

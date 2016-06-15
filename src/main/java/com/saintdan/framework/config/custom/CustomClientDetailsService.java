@@ -19,15 +19,13 @@ import java.util.*;
  * @date 10/23/15
  * @since JDK1.8
  */
-@Service
-public class CustomClientDetailsService implements ClientDetailsService {
+@Service public class CustomClientDetailsService implements ClientDetailsService {
 
   private final ClientRepository clientRepository;
 
   private final static String COMMA = ",";
 
-  @Autowired
-  public CustomClientDetailsService(ClientRepository clientRepository) {
+  @Autowired public CustomClientDetailsService(ClientRepository clientRepository) {
     this.clientRepository = clientRepository;
   }
 

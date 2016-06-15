@@ -139,3 +139,7 @@
   - Modify [Transformer](src/main/java/com/saintdan/framework/component/Transformer.java)
   - Modify [ResultHelper](src/main/java/com/saintdan/framework/component/ResultHelper.java)
   - Fix some bugs.
+
+- 0.10.2.RELEASE
+  - Change code style to google code style.
+  - Modify transaction.

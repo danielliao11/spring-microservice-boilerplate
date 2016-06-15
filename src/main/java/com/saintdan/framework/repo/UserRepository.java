@@ -4,10 +4,8 @@ import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -17,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 6/25/15
  * @since JDK1.8
  */
-@Transactional
 public interface UserRepository extends RepositoryWithoutDelete<User, Long> {
 
   User findByUsr(String usr);

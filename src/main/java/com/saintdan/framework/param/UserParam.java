@@ -16,8 +16,7 @@ public class UserParam extends BaseParam {
 
   private static final long serialVersionUID = -9153801716112918626L;
 
-  @SignField
-  private Long id; // user's ID
+  @SignField private Long id; // user's ID
 
   @SignField
   @NotNull(message = "Usr cannot be null.")
@@ -33,15 +32,11 @@ public class UserParam extends BaseParam {
   @NotNull(message = "Name cannot be null.")
   private String name; // user's name
 
-  @SignField
-  private String description;
+  @SignField private String description;
 
-  @SignField
-  private String roleIds; // role ids string
+  @SignField private String roleIds; // role ids string
 
-  public UserParam() {
-
-  }
+  public UserParam() {}
 
   public UserParam(Long id) {
     this.id = id;

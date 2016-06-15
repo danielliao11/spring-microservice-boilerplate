@@ -23,9 +23,7 @@ public class ResultVO implements Serializable {
 
   private Object data;
 
-  public ResultVO() {
-
-  }
+  public ResultVO() {}
 
   public ResultVO(String code) {
     this.code = code;

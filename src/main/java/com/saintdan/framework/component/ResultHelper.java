@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
  * @date 9/22/15
  * @since JDK1.8
  */
-@Component
-public class ResultHelper {
+@Component public class ResultHelper {
 
   /**
    * Return success result.

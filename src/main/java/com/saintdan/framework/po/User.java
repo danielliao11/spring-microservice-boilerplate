@@ -98,9 +98,7 @@ public class User implements Serializable {
       inverseJoinColumns = {@JoinColumn(name = "role_id")})
   private Set<Role> roles = new HashSet<>();
 
-  public User() {
-
-  }
+  public User() {}
 
   public User(Long id, String name, String usr, String pwd) {
     this.id = id;

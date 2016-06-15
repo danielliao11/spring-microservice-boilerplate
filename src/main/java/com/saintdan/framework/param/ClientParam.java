@@ -17,8 +17,7 @@ public class ClientParam extends BaseParam {
 
   private static final long serialVersionUID = 6065608866944007796L;
 
-  @SignField
-  private Long id;
+  @SignField private Long id;
 
   @SignField
   @NotNull(message = "ClientIdAlias cannot be null.")
@@ -49,18 +48,13 @@ public class ClientParam extends BaseParam {
   @NotNull(message = "AuthoritiesStr cannot be null.")
   private String authoritiesStr;
 
-  @SignField
-  private Integer accessTokenValiditySecondsAlias;
+  @SignField private Integer accessTokenValiditySecondsAlias;
 
-  @SignField
-  private Integer refreshTokenValiditySecondsAlias;
+  @SignField private Integer refreshTokenValiditySecondsAlias;
 
-  @SignField
-  private String additionalInformationStr;
+  @SignField private String additionalInformationStr;
 
-  public ClientParam() {
-
-  }
+  public ClientParam() {}
 
   public ClientParam(String clientIdAlias) {
     this.clientIdAlias = clientIdAlias;

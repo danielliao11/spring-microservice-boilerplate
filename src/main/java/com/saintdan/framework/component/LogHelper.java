@@ -16,8 +16,7 @@ import org.springframework.stereotype.Component;
  * @date 11/6/15
  * @since JDK1.8
  */
-@Component
-public class LogHelper {
+@Component public class LogHelper {
 
   public void logUsersOperations(LogType logType, String resource, User currentUser) throws Exception {
     // Get ip and clientId
@@ -29,6 +28,5 @@ public class LogHelper {
     logDomain.create(new LogParam(ip, logType, clientId, resource), currentUser);
   }
 
-  @Autowired
-  private LogDomain logDomain;
+  @Autowired private LogDomain logDomain;
 }

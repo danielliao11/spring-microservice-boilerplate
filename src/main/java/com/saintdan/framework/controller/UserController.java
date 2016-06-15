@@ -250,13 +250,10 @@ public class UserController {
 
   private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-  @Autowired
-  private ResultHelper resultHelper;
+  @Autowired private ResultHelper resultHelper;
 
-  @Autowired
-  private ValidateHelper validateHelper;
+  @Autowired private ValidateHelper validateHelper;
 
-  @Autowired
-  private UserDomain userDomain;
+  @Autowired private UserDomain userDomain;
 
 }

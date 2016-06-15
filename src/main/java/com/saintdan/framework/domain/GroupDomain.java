@@ -33,7 +33,7 @@ import java.util.List;
  * @since JDK1.8
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class GroupDomain extends BaseDomain<Group, Long> {
 
   // ------------------------
@@ -48,7 +48,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @return {@link GroupVO}
    * @throws CommonsException {@link ErrorType#SYS0111} role already existing, name taken.
    */
-  public GroupVO create(GroupParam param, User currentUser) throws Exception {
+  @Transactional public GroupVO create(GroupParam param, User currentUser) throws Exception {
     Group group = groupRepository.findByName(param.getName());
     if (group != null) {
       // Throw group already existing exception, name taken.
@@ -144,7 +144,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @return {@link GroupVO}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by id param.
    */
-  public GroupVO update(GroupParam param, User currentUser) throws Exception {
+  @Transactional public GroupVO update(GroupParam param, User currentUser) throws Exception {
     Group group = groupRepository.findByName(param.getName());
     if (group == null) {
       // Throw cannot find any group by this id param.
@@ -161,7 +161,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @param param       {@link GroupParam}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by id param.
    */
-  public void delete(GroupParam param, User currentUser) throws Exception {
+  @Transactional public void delete(GroupParam param, User currentUser) throws Exception {
     Group group = groupRepository.findOne(param.getId());
     if (group == null) {
       // Throw cannot find any group by this id param.
@@ -178,17 +178,13 @@ public class GroupDomain extends BaseDomain<Group, Long> {
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired
-  private RoleDomain roleDomain;
+  @Autowired private RoleDomain roleDomain;
 
-  @Autowired
-  private ResourceDomain resourceService;
+  @Autowired private ResourceDomain resourceService;
 
-  @Autowired
-  private GroupRepository groupRepository;
+  @Autowired private GroupRepository groupRepository;
 
-  @Autowired
-  private Transformer transformer;
+  @Autowired private Transformer transformer;
 
   /**
    * Transform group's param to PO.

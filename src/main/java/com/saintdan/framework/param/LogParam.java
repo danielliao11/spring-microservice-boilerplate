@@ -23,9 +23,7 @@ public class LogParam implements Serializable {
 
   private String accessResource;
 
-  public LogParam() {
-
-  }
+  public LogParam() {}
 
   public LogParam(String loginIP, LogType type, String clientId, String accessResource) {
     this.loginIP = loginIP;

@@ -217,12 +217,9 @@ public class ClientController {
 
   private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
 
-  @Autowired
-  private ResultHelper resultHelper;
+  @Autowired private ResultHelper resultHelper;
 
-  @Autowired
-  private ValidateHelper validateHelper;
+  @Autowired private ValidateHelper validateHelper;
 
-  @Autowired
-  private ClientDomain clientDomain;
+  @Autowired private ClientDomain clientDomain;
 }

@@ -15,24 +15,19 @@ public class RoleParam extends BaseParam {
 
   private static final long serialVersionUID = 8542867394907970893L;
 
-  @SignField
-  private Long id; // role's ID.
+  @SignField private Long id; // role's ID.
 
   @SignField
   @NotNull(message = "Name cannot be null.")
   private String name; // role's name
 
-  @SignField
-  private String description;
+  @SignField private String description;
 
-  @SignField
-  private String userIds; // user ids string
+  @SignField private String userIds; // user ids string
 
-  @SignField
-  private String groupIds; // group ids string
+  @SignField private String groupIds; // group ids string
 
-  public RoleParam() {
-  }
+  public RoleParam() {}
 
   public RoleParam(Long id) {
     this.id = id;

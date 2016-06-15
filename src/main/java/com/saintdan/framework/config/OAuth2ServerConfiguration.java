@@ -119,15 +119,12 @@ public class OAuth2ServerConfiguration {
     // Token store type.
     private TokenStore tokenStore = new InMemoryTokenStore();
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    @Autowired   private AuthenticationManager authenticationManager;
 
     // When you use memory client, you can comment the custom client details service.
-    @Autowired
-    private CustomClientDetailsService clientDetailsService;
+    @Autowired   private CustomClientDetailsService clientDetailsService;
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
+    @Autowired   private CustomUserDetailsService userDetailsService;
 
   }
 

@@ -15,8 +15,7 @@ public class ResourceParam extends BaseParam {
 
   private static final long serialVersionUID = 8542867394907970893L;
 
-  @SignField
-  private Long id; // role's ID.
+  @SignField private Long id; // role's ID.
 
   @SignField
   @NotNull(message = "Name cannot be null.")
@@ -30,15 +29,11 @@ public class ResourceParam extends BaseParam {
   @NotNull(message = "Priority cannot be null.")
   private Integer priority;
 
-  @SignField
-  private String description;
+  @SignField private String description;
 
-  @SignField
-  private String groupIds; // role ids string
+  @SignField private String groupIds; // role ids string
 
-  public ResourceParam() {
-
-  }
+  public ResourceParam() {}
 
   public ResourceParam(Long id) {
     this.id = id;

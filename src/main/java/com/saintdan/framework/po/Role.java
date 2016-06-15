@@ -78,9 +78,7 @@ public class Role implements GrantedAuthority, Serializable {
     return name;
   }
 
-  public Role() {
-
-  }
+  public Role() {}
 
   public Role(String name, String description) {
     this.name = name;

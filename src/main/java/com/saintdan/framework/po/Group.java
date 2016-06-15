@@ -73,9 +73,7 @@ public class Group implements Serializable {
       inverseJoinColumns = {@JoinColumn(name = "resource_id")})
   private Set<Resource> resources = new HashSet<>();
 
-  public Group() {
-
-  }
+  public Group() {}
 
   public Group(String name, String description) {
     this.name = name;

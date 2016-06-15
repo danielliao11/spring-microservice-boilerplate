@@ -18,8 +18,7 @@ import java.net.URLDecoder;
  * @date 9/22/15
  * @since JDK1.8
  */
-@Component
-public class SignHelper {
+@Component public class SignHelper {
 
   /**
    * Check the sign.

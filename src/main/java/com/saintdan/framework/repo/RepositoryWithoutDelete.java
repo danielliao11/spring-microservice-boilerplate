@@ -20,8 +20,7 @@ import java.io.Serializable;
  * @date 10/29/15
  * @since JDK1.8
  */
-@NoRepositoryBean
-public interface RepositoryWithoutDelete<T, ID extends Serializable> extends Repository<T, ID> {
+@NoRepositoryBean public interface RepositoryWithoutDelete<T, ID extends Serializable> extends Repository<T, ID> {
 
   /**
    * Saves a given entity. Use the returned instance for further operations as the save operation might have changed the

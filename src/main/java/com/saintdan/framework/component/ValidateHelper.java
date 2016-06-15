@@ -19,8 +19,7 @@ import org.springframework.validation.BindingResult;
  * @date 11/4/15
  * @since JDK1.8
  */
-@Component
-public class ValidateHelper {
+@Component public class ValidateHelper {
 
   // ------------------------
   // PUBLIC METHODS
@@ -84,14 +83,11 @@ public class ValidateHelper {
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired
-  private ResultHelper resultHelper;
+  @Autowired private ResultHelper resultHelper;
 
-  @Autowired
-  private SignHelper signHelper;
+  @Autowired private SignHelper signHelper;
 
-  @Autowired
-  private ClientDomain clientDomain;
+  @Autowired private ClientDomain clientDomain;
 
   /**
    * Get public key by client id.

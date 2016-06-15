@@ -15,14 +15,13 @@ import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.ResourceVO;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Domain of {@link Resource}
@@ -32,7 +31,7 @@ import java.util.List;
  * @since JDK1.8
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ResourceDomain extends BaseDomain<Resource, Long> {
 
   // ------------------------
@@ -47,7 +46,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @return {@link ResourceVO}
    * @throws CommonsException {@link ErrorType#SYS0111} resource already existing, name taken.
    */
-  public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
+  @Transactional public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
     Resource resource = resourceRepository.findByName(param.getName());
     if (resource != null) {
       // Throw group already existing exception, name taken.
@@ -160,7 +159,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @return {@link ResourceVO}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any resource by id param.
    */
-  public ResourceVO update(ResourceParam param, User currentUser) throws Exception {
+  @Transactional public ResourceVO update(ResourceParam param, User currentUser) throws Exception {
     Resource resource = resourceRepository.findOne(param.getId());
     if (resource == null) {
       // Throw resource cannot find by id parameter exception.
@@ -178,7 +177,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @param param       {@link ResourceParam}
    * @throws CommonsException {@link ErrorType#SYS0121} Cannot find any resource by id param.
    */
-  public void delete(ResourceParam param, User currentUser) throws Exception {
+  @Transactional public void delete(ResourceParam param, User currentUser) throws Exception {
     Resource resource = resourceRepository.findOne(param.getId());
     if (resource == null) {
       // Throw resource cannot find by id parameter exception.
@@ -196,14 +195,11 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired
-  private GroupDomain groupDomain;
+  @Autowired private GroupDomain groupDomain;
 
-  @Autowired
-  private ResourceRepository resourceRepository;
+  @Autowired private ResourceRepository resourceRepository;
 
-  @Autowired
-  private Transformer transformer;
+  @Autowired private Transformer transformer;
 
   private static final String PATH = "path";
 

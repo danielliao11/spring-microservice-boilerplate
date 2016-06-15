@@ -72,23 +72,17 @@ public class Seed extends BaseTest {
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired
-  private CustomPasswordEncoder passwordEncoder;
+  @Autowired private CustomPasswordEncoder passwordEncoder;
 
-  @Autowired
-  private ClientRepository clientRepository;
+  @Autowired private ClientRepository clientRepository;
 
-  @Autowired
-  private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-  @Autowired
-  private RoleRepository roleRepository;
+  @Autowired private RoleRepository roleRepository;
 
-  @Autowired
-  private GroupRepository groupRepository;
+  @Autowired private GroupRepository groupRepository;
 
-  @Autowired
-  private ResourceRepository resourceRepository;
+  @Autowired private ResourceRepository resourceRepository;
 
   private static final String ROOT = "root";
   private static final String ADMIN = "admin";

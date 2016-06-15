@@ -22,8 +22,7 @@ import java.util.Set;
  * @date 10/19/15
  * @since JDK1.8
  */
-@Component
-public class Transformer {
+@Component public class Transformer {
 
   // ------------------------
   // PUBLIC METHODS

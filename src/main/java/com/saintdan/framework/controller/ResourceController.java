@@ -215,12 +215,9 @@ public class ResourceController {
 
   private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
-  @Autowired
-  private ResultHelper resultHelper;
+  @Autowired private ResultHelper resultHelper;
 
-  @Autowired
-  private ValidateHelper validateHelper;
+  @Autowired private ValidateHelper validateHelper;
 
-  @Autowired
-  private ResourceDomain resourceDomain;
+  @Autowired private ResourceDomain resourceDomain;
 }

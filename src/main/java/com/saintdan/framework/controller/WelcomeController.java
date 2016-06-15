@@ -43,7 +43,6 @@ public class WelcomeController {
 
   private static final String template = "Hello, %s!";
 
-  @Autowired
-  private ResultHelper resultHelper;
+  @Autowired private ResultHelper resultHelper;
 
 }

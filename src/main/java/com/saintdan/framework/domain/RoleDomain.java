@@ -15,15 +15,14 @@ import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.RoleVO;
+import java.util.List;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * Domain of {@link Role}
@@ -33,7 +32,7 @@ import java.util.Set;
  * @since JDK1.8
  */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class RoleDomain extends BaseDomain<Role, Long> {
 
   // ------------------------
@@ -48,7 +47,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @return {@link RoleVO}
    * @throws CommonsException {@link ErrorType#SYS0111} user already existing, usr taken.
    */
-  public RoleVO create(RoleParam param, User currentUser) throws Exception {
+  @Transactional public RoleVO create(RoleParam param, User currentUser) throws Exception {
     Role role = roleRepository.findByName(param.getName());
     if (role != null) {
       // Throw role already existing exception, name taken.
@@ -143,7 +142,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @return {@link RoleVO}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by id param.
    */
-  public RoleVO update(RoleParam param, User currentUser) throws Exception {
+  @Transactional public RoleVO update(RoleParam param, User currentUser) throws Exception {
     Role role = roleRepository.findByName(param.getName());
     if (role == null) {
       // Throw cannot find any role by this id param.
@@ -160,7 +159,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @param param       {@link RoleParam}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by id param.
    */
-  public void delete(RoleParam param, User currentUser) throws Exception {
+  @Transactional public void delete(RoleParam param, User currentUser) throws Exception {
     Role role = roleRepository.findOne(param.getId());
     if (role == null) {
       // Throw cannot find any role by this id param.
@@ -177,17 +176,13 @@ public class RoleDomain extends BaseDomain<Role, Long> {
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired
-  private UserDomain userDomain;
+  @Autowired private UserDomain userDomain;
 
-  @Autowired
-  private GroupDomain groupService;
+  @Autowired private GroupDomain groupService;
 
-  @Autowired
-  private RoleRepository roleRepository;
+  @Autowired private RoleRepository roleRepository;
 
-  @Autowired
-  private Transformer transformer;
+  @Autowired private Transformer transformer;
 
   /**
    * Transform {@link RoleParam} to {@link Role}.

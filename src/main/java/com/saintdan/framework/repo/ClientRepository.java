@@ -4,7 +4,6 @@ import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Client;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Client's repository.
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/23/15
  * @since JDK1.8
  */
-@Transactional
 public interface ClientRepository extends RepositoryWithoutDelete<Client, Long> {
 
   Client findByClientIdAlias(String clientIdAlias);

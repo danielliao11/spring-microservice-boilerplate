@@ -15,11 +15,9 @@ import org.springframework.stereotype.Service;
  * @date 4/22/16
  * @since JDK1.8
  */
-@Service
-public class CustomUserDetailsService implements UserDetailsService {
+@Service public class CustomUserDetailsService implements UserDetailsService {
 
-  @Autowired
-  private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
   @Override public UserDetails loadUserByUsername(String usr) throws UsernameNotFoundException {
     User user = userRepository.findByUsr(usr);

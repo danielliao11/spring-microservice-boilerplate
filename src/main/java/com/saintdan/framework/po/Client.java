@@ -119,9 +119,7 @@ public class Client implements Serializable {
   @Column(nullable = false, length = 5000)
   private String publicKey;
 
-  public Client() {
-
-  }
+  public Client() {}
 
   public Client(Client client) {
     super();
