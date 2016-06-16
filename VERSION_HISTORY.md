@@ -143,3 +143,5 @@
 - 0.10.2.RELEASE
   - Change code style to google code style.
   - Modify transaction.
+  - Optimize codes.
+  - Fix bugs.
