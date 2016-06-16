@@ -126,13 +126,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by name param.
    */
   public RoleVO getRoleByName(RoleParam param) throws Exception {
-    Role role = roleRepository.findByName(param.getName());
-    if (role == null) {
-      // Throw role cannot find by name parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.NAME));
-    }
-    return transformer.po2VO(RoleVO.class, role);
+    return transformer.po2VO(RoleVO.class, findByName(param.getName()));
   }
 
   /**
@@ -143,12 +137,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by id param.
    */
   @Transactional public RoleVO update(RoleParam param, User currentUser) throws Exception {
-    Role role = roleRepository.findByName(param.getName());
-    if (role == null) {
-      // Throw cannot find any role by this id param.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
+    findByName(param.getName());
     return super.updateByPO(RoleVO.class, roleParam2PO(param, new Role(), currentUser), currentUser);
   }
 
@@ -201,6 +190,23 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     if (!StringUtils.isBlank(param.getGroupIds())) {
       Iterable<Group> groups = groupService.getGroupsByIds(transformer.idsStr2Iterable(param.getGroupIds()));
       role.setGroups((Set<Group>) groups);
+    }
+    return role;
+  }
+
+  /**
+   * Find {@link Role} by name
+   *
+   * @param name      name of {@link Role}
+   * @return          {@link Role}
+   * @throws Exception
+   */
+  private Role findByName(String name) throws Exception {
+    Role role = roleRepository.findByName(name);
+    if (role == null) {
+      // Throw role cannot find by name parameter exception.
+      throw new CommonsException(ErrorType.SYS0122,
+          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.NAME));
     }
     return role;
   }

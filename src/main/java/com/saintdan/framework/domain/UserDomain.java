@@ -126,13 +126,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any user by usr param.
    */
   public UserVO getUserByUsr(UserParam param) throws Exception {
-    User user = userRepository.findByUsr(param.getUsr());
-    if (user == null) {
-      // Throw user cannot find by usr parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), USR));
-    }
-    return transformer.po2VO(UserVO.class, user);
+    return transformer.po2VO(UserVO.class, findByUsr(param.getUsr()));
   }
 
   /**
@@ -143,12 +137,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any user by id param.
    */
   @Transactional public UserVO update(UserParam param, User currentUser) throws Exception {
-    User user = userRepository.findByUsr(param.getUsr());
-    if (user == null) {
-      // Throw cannot find any user by this id param.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
+    findByUsr(param.getUsr());
     return super.updateByPO(UserVO.class, userParam2PO(param, new User(), currentUser), currentUser);
   }
 
@@ -160,12 +149,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} user's pwd update failed.
    */
   @Transactional public void updatePwd(UserParam param, User currentUser) throws Exception {
-    User user = userRepository.findByUsr(param.getUsr());
-    if (user == null) {
-      // Throw cannot find any user by this id param.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
+    findByUsr(param.getUsr());
     final String USER = "User";
     logHelper.logUsersOperations(LogType.UPDATE, USER, currentUser);
     userRepository.updatePwdFor(param.getPwd(), param.getId());
@@ -209,7 +193,7 @@ public class UserDomain extends BaseDomain<User, Long> {
     this.userRepository = userRepository;
   }
 
-  private final static String USR = "usr";
+  private static final String USR = "usr";
 
   /**
    * Transform {@link UserParam} to {@link User}.
@@ -227,6 +211,23 @@ public class UserDomain extends BaseDomain<User, Long> {
     }
     if (!StringUtils.isBlank(param.getPwd())) {
       user.setPwd(passwordEncoder.encode(param.getPwd()));
+    }
+    return user;
+  }
+
+  /**
+   * Find {@link User} by usr
+   *
+   * @param usr     usr of {@link User}
+   * @return        {@link User}
+   * @throws Exception
+   */
+  private User findByUsr(String usr) throws Exception {
+    User user = userRepository.findByUsr(usr);
+    if (user == null) {
+      // Throw cannot find any user by this id param.
+      throw new CommonsException(ErrorType.SYS0122,
+          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), USR));
     }
     return user;
   }

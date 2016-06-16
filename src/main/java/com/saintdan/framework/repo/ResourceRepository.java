@@ -16,6 +16,8 @@ public interface ResourceRepository extends RepositoryWithoutDelete<Resource, Lo
 
   Resource findByName(String name);
 
+  Resource findByPath(String path);
+
   @Modifying
   @Query("update Resource r set r.validFlag=?1 where r.id=?2")
   void updateValidFlagFor(ValidFlag validFlag, Long id);

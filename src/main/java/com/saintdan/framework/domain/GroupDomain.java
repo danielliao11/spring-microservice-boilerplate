@@ -16,14 +16,13 @@ import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.GroupVO;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Domain of {@link Group}
@@ -145,7 +144,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by id param.
    */
   @Transactional public GroupVO update(GroupParam param, User currentUser) throws Exception {
-    Group group = groupRepository.findByName(param.getName());
+    Group group = groupRepository.findOne(param.getId());
     if (group == null) {
       // Throw cannot find any group by this id param.
       throw new CommonsException(ErrorType.SYS0122,

@@ -142,9 +142,9 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any resource by path param.
    */
   public ResourceVO getResourceByPath(ResourceParam param) throws Exception {
-    Resource resource = resourceRepository.findByName(param.getName());
+    Resource resource = resourceRepository.findByPath(param.getPath());
     if (resource == null) {
-      // Throw resource cannot find by name parameter exception.
+      // Throw resource cannot find by path parameter exception.
       throw new CommonsException(ErrorType.SYS0122,
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), PATH));
     }
