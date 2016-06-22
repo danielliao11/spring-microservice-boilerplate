@@ -9,11 +9,11 @@ package com.saintdan.framework.constant;
  */
 public interface SignatureConstant {
 
-    String SIGN_TYPE_RSA = "RSA";
+  String SIGN_TYPE_RSA = "RSA";
 
-    String SIGN_TYPE_MD5 = "MD5";
+  String SIGN_TYPE_MD5 = "MD5";
 
-    String SIGN_ALGORITHMS = "SHA1WithRSA";
+  String SIGN_ALGORITHMS = "SHA1WithRSA";
 
-    String CHARSET_UTF8 = "UTF-8";
+  String CHARSET_UTF8 = "UTF-8";
 }

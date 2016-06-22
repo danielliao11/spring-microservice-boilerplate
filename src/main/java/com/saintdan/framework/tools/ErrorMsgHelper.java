@@ -11,20 +11,20 @@ import com.saintdan.framework.enums.ErrorType;
  */
 public class ErrorMsgHelper {
 
-    /**
-     * Get return error message.
-     *
-     * @param msg           error type
-     * @param args          args
-     * @return              return error message
-     */
-    public static String getReturnMsg(ErrorType msg, String... args) {
-        final String COLON = ": ";
-        final String PREFIX = String.join("", msg.name(), COLON);
-        if (args != null) {
-            return String.join("", PREFIX, String.format(msg.description(), args));
-        } else {
-            return String.join("", PREFIX, msg.description());
-        }
+  /**
+   * Get return error message.
+   *
+   * @param msg  error type
+   * @param args args
+   * @return return error message
+   */
+  public static String getReturnMsg(ErrorType msg, String... args) {
+    final String COLON = ": ";
+    final String PREFIX = String.join("", msg.name(), COLON);
+    if (args != null) {
+      return String.join("", PREFIX, String.format(msg.description(), args));
+    } else {
+      return String.join("", PREFIX, msg.description());
     }
+  }
 }

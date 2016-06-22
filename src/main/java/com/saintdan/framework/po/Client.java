@@ -24,259 +24,258 @@ import java.util.Date;
 @Table(name = "clients")
 public class Client implements Serializable {
 
-    private static final long serialVersionUID = 6500601540965188191L;
+  private static final long serialVersionUID = 6500601540965188191L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(columnDefinition = "SERIAL")
+  private Long id;
 
-    @NotEmpty
-    @Column(length = 50)
-    private String clientIdAlias;
+  @NotEmpty
+  @Column(length = 50)
+  private String clientIdAlias;
 
-    @NotEmpty
-    @Column(length = 100)
-    private String resourceIdStr;
+  @NotEmpty
+  @Column(length = 100)
+  private String resourceIdStr;
 
-    @NotEmpty
-    @Column(length = 100)
-    private String clientSecretAlias;
+  @NotEmpty
+  @Column(length = 100)
+  private String clientSecretAlias;
 
-    /**
-     * Available values: read, write
-     */
-    @NotEmpty
-    @Column(length = 100)
-    private String scopeStr;
+  /**
+   * Available values: read, write
+   */
+  @NotEmpty
+  @Column(length = 100)
+  private String scopeStr;
 
-    /**
-     * grant types include
-     * "authorization_code", "password", "assertion", and "refresh_token".
-     * Default description is "authorization_code,refresh_token".
-     */
-    @NotEmpty
-    @Column(length = 100)
-    private String authorizedGrantTypeStr;
+  /**
+   * grant types include
+   * "authorization_code", "password", "assertion", and "refresh_token".
+   * Default description is "authorization_code,refresh_token".
+   */
+  @NotEmpty
+  @Column(length = 100)
+  private String authorizedGrantTypeStr;
 
-    /**
-     * The redirect URI(s) established during registration (optional, comma separated).
-     */
-    @Column(length = 1024)
-    private String registeredRedirectUriStr;
+  /**
+   * The redirect URI(s) established during registration (optional, comma separated).
+   */
+  @Column(length = 1024)
+  private String registeredRedirectUriStr;
 
-    /**
-     * Authorities that are granted to the client (comma-separated). Distinct from the authorities
-     * granted to the user on behalf of whom the client is acting.
-     * <pre>
-     *     For example: USER
-     * </pre>
-     */
-    @Column(length = 500)
-    private String authoritiesStr;
+  /**
+   * Authorities that are granted to the client (comma-separated). Distinct from the authorities
+   * granted to the user on behalf of whom the client is acting.
+   * <pre>
+   *     For example: USER
+   * </pre>
+   */
+  @Column(length = 500)
+  private String authoritiesStr;
 
-    /**
-     * The access token validity period in seconds (optional).
-     * If unspecified a global default will be applied by the token services.
-     */
-    private Integer accessTokenValiditySecondsAlias;
+  /**
+   * The access token validity period in seconds (optional).
+   * If unspecified a global default will be applied by the token services.
+   */
+  private Integer accessTokenValiditySecondsAlias;
 
-    /**
-     * The refresh token validity period in seconds (optional).
-     * If unspecified a global default will  be applied by the token services.
-     */
-    private Integer refreshTokenValiditySecondsAlias;
+  /**
+   * The refresh token validity period in seconds (optional).
+   * If unspecified a global default will  be applied by the token services.
+   */
+  private Integer refreshTokenValiditySecondsAlias;
 
-    /**
-     * Additional information for this client, not needed by the vanilla OAuth protocol but might be useful, for example,
-     * for storing descriptive information.
-     */
-    private String additionalInformationStr;
+  /**
+   * Additional information for this client, not needed by the vanilla OAuth protocol but might be useful, for example,
+   * for storing descriptive information.
+   */
+  private String additionalInformationStr;
 
-    @Column(nullable = false)
-    private ValidFlag validFlag = ValidFlag.VALID;
+  @Column(nullable = false)
+  private ValidFlag validFlag = ValidFlag.VALID;
 
-    @CreatedDate
-    @Column(nullable = false)
-    private Date createdDate = new Date();
+  @CreatedDate
+  @Column(nullable = false)
+  private Date createdDate = new Date();
 
-    @CreatedBy
-    @Column(nullable = false)
-    private Long createdBy;
+  @CreatedBy
+  @Column(nullable = false)
+  private Long createdBy;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private Date lastModifiedDate = new Date();
+  @LastModifiedDate
+  @Column(nullable = false)
+  private Date lastModifiedDate = new Date();
 
-    @LastModifiedBy
-    @Column(nullable = false)
-    private Long lastModifiedBy;
+  @LastModifiedBy
+  @Column(nullable = false)
+  private Long lastModifiedBy;
 
-    @Version
-    @Column(nullable = false)
-    private int version;
+  @Version
+  @Column(nullable = false)
+  private int version;
 
-    @Column(nullable = false, length = 5000)
-    private String publicKey;
+  @Column(nullable = false, length = 5000)
+  private String publicKey;
 
-    public Client() {
+  public Client() {}
 
-    }
+  public Client(Client client) {
+    super();
+    this.clientIdAlias = client.getClientIdAlias();
+    this.resourceIdStr = client.getResourceIdStr();
+    this.clientSecretAlias = client.getClientSecretAlias();
+    this.scopeStr = client.getScopeStr();
+    this.authorizedGrantTypeStr = client.getAuthorizedGrantTypeStr();
+    this.registeredRedirectUriStr = client.getRegisteredRedirectUriStr();
+    this.authoritiesStr = client.getAuthoritiesStr();
+    this.accessTokenValiditySecondsAlias = client.getAccessTokenValiditySecondsAlias();
+    this.refreshTokenValiditySecondsAlias = client.getRefreshTokenValiditySecondsAlias();
+    this.additionalInformationStr = client.getAdditionalInformationStr();
+  }
 
-    public Client(Client client) {
-        super();
-        this.clientIdAlias = client.getClientIdAlias();
-        this.resourceIdStr = client.getResourceIdStr();
-        this.clientSecretAlias = client.getClientSecretAlias();
-        this.scopeStr = client.getScopeStr();
-        this.authorizedGrantTypeStr = client.getAuthorizedGrantTypeStr();
-        this.registeredRedirectUriStr = client.getRegisteredRedirectUriStr();
-        this.authoritiesStr = client.getAuthoritiesStr();
-        this.accessTokenValiditySecondsAlias = client.getAccessTokenValiditySecondsAlias();
-        this.refreshTokenValiditySecondsAlias = client.getRefreshTokenValiditySecondsAlias();
-        this.additionalInformationStr = client.getAdditionalInformationStr();
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public String getClientIdAlias() {
+    return clientIdAlias;
+  }
 
-    public String getClientIdAlias() {
-        return clientIdAlias;
-    }
+  public void setClientIdAlias(String clientIdAlias) {
+    this.clientIdAlias = clientIdAlias;
+  }
 
-    public void setClientIdAlias(String clientIdAlias) {
-        this.clientIdAlias = clientIdAlias;
-    }
+  public String getResourceIdStr() {
+    return resourceIdStr;
+  }
 
-    public String getResourceIdStr() {
-        return resourceIdStr;
-    }
+  public void setResourceIdStr(String resourceIdStr) {
+    this.resourceIdStr = resourceIdStr;
+  }
 
-    public void setResourceIdStr(String resourceIdStr) {
-        this.resourceIdStr = resourceIdStr;
-    }
+  public String getClientSecretAlias() {
+    return clientSecretAlias;
+  }
 
-    public String getClientSecretAlias() {
-        return clientSecretAlias;
-    }
+  public void setClientSecretAlias(String clientSecretAlias) {
+    this.clientSecretAlias = clientSecretAlias;
+  }
 
-    public void setClientSecretAlias(String clientSecretAlias) {
-        this.clientSecretAlias = clientSecretAlias;
-    }
+  public String getScopeStr() {
+    return scopeStr;
+  }
 
-    public String getScopeStr() {
-        return scopeStr;
-    }
+  public void setScopeStr(String scopeStr) {
+    this.scopeStr = scopeStr;
+  }
 
-    public void setScopeStr(String scopeStr) {
-        this.scopeStr = scopeStr;
-    }
+  public String getAuthorizedGrantTypeStr() {
+    return authorizedGrantTypeStr;
+  }
 
-    public String getAuthorizedGrantTypeStr() {
-        return authorizedGrantTypeStr;
-    }
+  public void setAuthorizedGrantTypeStr(String authorizedGrantTypeStr) {
+    this.authorizedGrantTypeStr = authorizedGrantTypeStr;
+  }
 
-    public void setAuthorizedGrantTypeStr(String authorizedGrantTypeStr) {
-        this.authorizedGrantTypeStr = authorizedGrantTypeStr;
-    }
+  public String getRegisteredRedirectUriStr() {
+    return registeredRedirectUriStr;
+  }
 
-    public String getRegisteredRedirectUriStr() {
-        return registeredRedirectUriStr;
-    }
+  public void setRegisteredRedirectUriStr(String registeredRedirectUriStr) {
+    this.registeredRedirectUriStr = registeredRedirectUriStr;
+  }
 
-    public void setRegisteredRedirectUriStr(String registeredRedirectUriStr) {
-        this.registeredRedirectUriStr = registeredRedirectUriStr;
-    }
+  public String getAuthoritiesStr() {
+    return authoritiesStr;
+  }
 
-    public String getAuthoritiesStr() {
-        return authoritiesStr;
-    }
+  public void setAuthoritiesStr(String authoritiesStr) {
+    this.authoritiesStr = authoritiesStr;
+  }
 
-    public void setAuthoritiesStr(String authoritiesStr) {
-        this.authoritiesStr = authoritiesStr;
-    }
+  public Integer getAccessTokenValiditySecondsAlias() {
+    return accessTokenValiditySecondsAlias;
+  }
 
-    public Integer getAccessTokenValiditySecondsAlias() {
-        return accessTokenValiditySecondsAlias;
-    }
+  public void setAccessTokenValiditySecondsAlias(Integer accessTokenValiditySecondsAlias) {
+    this.accessTokenValiditySecondsAlias = accessTokenValiditySecondsAlias;
+  }
 
-    public void setAccessTokenValiditySecondsAlias(Integer accessTokenValiditySecondsAlias) {
-        this.accessTokenValiditySecondsAlias = accessTokenValiditySecondsAlias;
-    }
+  public Integer getRefreshTokenValiditySecondsAlias() {
+    return refreshTokenValiditySecondsAlias;
+  }
 
-    public Integer getRefreshTokenValiditySecondsAlias() {
-        return refreshTokenValiditySecondsAlias;
-    }
+  public void setRefreshTokenValiditySecondsAlias(Integer refreshTokenValiditySecondsAlias) {
+    this.refreshTokenValiditySecondsAlias = refreshTokenValiditySecondsAlias;
+  }
 
-    public void setRefreshTokenValiditySecondsAlias(Integer refreshTokenValiditySecondsAlias) {
-        this.refreshTokenValiditySecondsAlias = refreshTokenValiditySecondsAlias;
-    }
+  public String getAdditionalInformationStr() {
+    return additionalInformationStr;
+  }
 
-    public String getAdditionalInformationStr() {
-        return additionalInformationStr;
-    }
+  public void setAdditionalInformationStr(String additionalInformationStr) {
+    this.additionalInformationStr = additionalInformationStr;
+  }
 
-    public void setAdditionalInformationStr(String additionalInformationStr) {
-        this.additionalInformationStr = additionalInformationStr;
-    }
+  public ValidFlag getValidFlag() {
+    return validFlag;
+  }
 
-    public ValidFlag getValidFlag() {
-        return validFlag;
-    }
+  public void setValidFlag(ValidFlag validFlag) {
+    this.validFlag = validFlag;
+  }
 
-    public void setValidFlag(ValidFlag validFlag) {
-        this.validFlag = validFlag;
-    }
+  public Date getCreatedDate() {
+    return createdDate;
+  }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
+  public void setCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+  }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
+  public Long getCreatedBy() {
+    return createdBy;
+  }
 
-    public Long getCreatedBy() {
-        return createdBy;
-    }
+  public void setCreatedBy(Long createdBy) {
+    this.createdBy = createdBy;
+  }
 
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
+  public Date getLastModifiedDate() {
+    return lastModifiedDate;
+  }
 
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+  public void setLastModifiedDate(Date lastModifiedDate) {
+    this.lastModifiedDate = lastModifiedDate;
+  }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+  public Long getLastModifiedBy() {
+    return lastModifiedBy;
+  }
 
-    public Long getLastModifiedBy() {
-        return lastModifiedBy;
-    }
+  public void setLastModifiedBy(Long lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+  }
 
-    public void setLastModifiedBy(Long lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+  public int getVersion() {
+    return version;
+  }
 
-    public int getVersion() {
-        return version;
-    }
+  public void setVersion(int version) {
+    this.version = version;
+  }
 
-    public void setVersion(int version) {
-        this.version = version;
-    }
+  public String getPublicKey() {
+    return publicKey;
+  }
 
-    public String getPublicKey() {
-        return publicKey;
-    }
-
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
-    }
+  public void setPublicKey(String publicKey) {
+    this.publicKey = publicKey;
+  }
 }

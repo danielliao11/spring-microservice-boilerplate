@@ -28,236 +28,235 @@ import java.util.Set;
 @NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 2680591198337929454L;
+  private static final long serialVersionUID = 2680591198337929454L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(columnDefinition = "SERIAL")
+  private Long id;
 
-    @NotEmpty
-    @Column(length = 50)
-    private String name;
+  @NotEmpty
+  @Column(length = 50)
+  private String name;
 
-    @NotEmpty
-    @Column(unique = true, nullable = false, length = 20)
-    private String usr;
+  @NotEmpty
+  @Column(unique = true, nullable = false, length = 20)
+  private String usr;
 
-    @NotEmpty
-    @Column(nullable = false, length = 200)
-    private String pwd;
+  @NotEmpty
+  @Column(nullable = false, length = 200)
+  private String pwd;
 
-    @Column(nullable = false)
-    private boolean isAccountNonExpiredAlias = Boolean.TRUE;
+  @Column(nullable = false)
+  private boolean isAccountNonExpiredAlias = Boolean.TRUE;
 
-    @Column(nullable = false)
-    private boolean isAccountNonLockedAlias = Boolean.TRUE;
+  @Column(nullable = false)
+  private boolean isAccountNonLockedAlias = Boolean.TRUE;
 
-    @Column(nullable = false)
-    private boolean isCredentialsNonExpiredAlias = Boolean.TRUE;
+  @Column(nullable = false)
+  private boolean isCredentialsNonExpiredAlias = Boolean.TRUE;
 
-    @Column(nullable = false)
-    private boolean isEnabledAlias = Boolean.TRUE;
+  @Column(nullable = false)
+  private boolean isEnabledAlias = Boolean.TRUE;
 
-    @Column(nullable = false)
-    private ValidFlag validFlag = ValidFlag.VALID;
+  @Column(nullable = false)
+  private ValidFlag validFlag = ValidFlag.VALID;
 
-    @Column(columnDefinition="TEXT")
-    private String description;
+  @Column(columnDefinition = "TEXT")
+  private String description;
 
-    // Last login time
-    private Date lastLoginTime;
+  // Last login time
+  private Date lastLoginTime;
 
-    // Last login IP address
-    @Column(name = "last_login_ip")
-    private String lastLoginIP;
+  // Last login IP address
+  @Column(name = "last_login_ip")
+  private String lastLoginIP;
 
-    @CreatedDate
-    @Column(nullable = false)
-    private Date createdDate = new Date();
+  @CreatedDate
+  @Column(nullable = false)
+  private Date createdDate = new Date();
 
-    @CreatedBy
-    @Column(nullable = false)
-    private Long createdBy;
+  @CreatedBy
+  @Column(nullable = false)
+  private Long createdBy;
 
-    @LastModifiedDate
-    @Column(nullable = false)
-    private Date lastModifiedDate = new Date();
+  @LastModifiedDate
+  @Column(nullable = false)
+  private Date lastModifiedDate = new Date();
 
-    @LastModifiedBy
-    @Column(nullable = false)
-    private Long lastModifiedBy;
+  @LastModifiedBy
+  @Column(nullable = false)
+  private Long lastModifiedBy;
 
-    @Version
-    @Column(nullable = false)
-    private int version;
+  @Version
+  @Column(nullable = false)
+  private int version;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
-    @JoinTable(name = "users_has_roles",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private Set<Role> roles = new HashSet<>();
+  @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
+  @JoinTable(name = "users_has_roles",
+      joinColumns = {@JoinColumn(name = "user_id")},
+      inverseJoinColumns = {@JoinColumn(name = "role_id")})
+  private Set<Role> roles = new HashSet<>();
 
-    public User() {
+  public User() {}
 
-    }
+  public User(Long id, String name, String usr, String pwd) {
+    this.id = id;
+    this.name = name;
+    this.usr = usr;
+    this.pwd = pwd;
+  }
 
-    public User(Long id, String name, String usr, String pwd) {
-        this.id = id;
-        this.name = name;
-        this.usr = usr;
-        this.pwd = pwd;
-    }
+  public User(User user) {
+    super();
+    this.id = user.getId();
+    this.name = user.getName();
+    this.usr = user.getUsr();
+    this.pwd = user.getPwd();
+    this.roles = user.getRoles();
+  }
 
-    public User(User user) {
-        super();
-        this.id = user.getId();
-        this.name = user.getName();
-        this.usr = user.getUsr();
-        this.pwd = user.getPwd();
-        this.roles = user.getRoles();
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getUsr() {
+    return usr;
+  }
 
-    public String getUsr() {
-        return usr;
-    }
+  public void setUsr(String usr) {
+    this.usr = usr;
+  }
 
-    public void setUsr(String usr) {
-        this.usr = usr;
-    }
+  public String getPwd() {
+    return pwd;
+  }
 
-    public String getPwd() {
-        return pwd;
-    }
+  public void setPwd(String pwd) {
+    this.pwd = pwd;
+  }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
+  public boolean isAccountNonExpiredAlias() {
+    return isAccountNonExpiredAlias;
+  }
 
-    public boolean isAccountNonExpiredAlias() {
-        return isAccountNonExpiredAlias;
-    }
+  public void setAccountNonExpiredAlias(boolean accountNonExpiredAlias) {
+    isAccountNonExpiredAlias = accountNonExpiredAlias;
+  }
 
-    public void setAccountNonExpiredAlias(boolean accountNonExpiredAlias) {
-        isAccountNonExpiredAlias = accountNonExpiredAlias;
-    }
+  public boolean isAccountNonLockedAlias() {
+    return isAccountNonLockedAlias;
+  }
 
-    public boolean isAccountNonLockedAlias() {
-        return isAccountNonLockedAlias;
-    }
+  public void setAccountNonLockedAlias(boolean accountNonLockedAlias) {
+    isAccountNonLockedAlias = accountNonLockedAlias;
+  }
 
-    public void setAccountNonLockedAlias(boolean accountNonLockedAlias) {
-        isAccountNonLockedAlias = accountNonLockedAlias;
-    }
+  public boolean isCredentialsNonExpiredAlias() {
+    return isCredentialsNonExpiredAlias;
+  }
 
-    public boolean isCredentialsNonExpiredAlias() {
-        return isCredentialsNonExpiredAlias;
-    }
+  public void setCredentialsNonExpiredAlias(boolean credentialsNonExpiredAlias) {
+    isCredentialsNonExpiredAlias = credentialsNonExpiredAlias;
+  }
 
-    public void setCredentialsNonExpiredAlias(boolean credentialsNonExpiredAlias) {
-        isCredentialsNonExpiredAlias = credentialsNonExpiredAlias;
-    }
+  public boolean isEnabledAlias() {
+    return isEnabledAlias;
+  }
 
-    public boolean isEnabledAlias() {
-        return isEnabledAlias;
-    }
+  public void setEnabledAlias(boolean enabledAlias) {
+    isEnabledAlias = enabledAlias;
+  }
 
-    public void setEnabledAlias(boolean enabledAlias) {
-        isEnabledAlias = enabledAlias;
-    }
+  public ValidFlag getValidFlag() {
+    return validFlag;
+  }
 
-    public ValidFlag getValidFlag() {
-        return validFlag;
-    }
+  public void setValidFlag(ValidFlag validFlag) {
+    this.validFlag = validFlag;
+  }
 
-    public void setValidFlag(ValidFlag validFlag) {
-        this.validFlag = validFlag;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public Date getLastLoginTime() {
+    return lastLoginTime;
+  }
 
-    public Date getLastLoginTime() {
-        return lastLoginTime;
-    }
+  public void setLastLoginTime(Date lastLoginTime) {
+    this.lastLoginTime = lastLoginTime;
+  }
 
-    public void setLastLoginTime(Date lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
+  public String getLastLoginIP() {
+    return lastLoginIP;
+  }
 
-    public String getLastLoginIP() {
-        return lastLoginIP;
-    }
+  public void setLastLoginIP(String lastLoginIP) {
+    this.lastLoginIP = lastLoginIP;
+  }
 
-    public void setLastLoginIP(String lastLoginIP) {
-        this.lastLoginIP = lastLoginIP;
-    }
+  public Date getCreatedDate() {
+    return createdDate;
+  }
 
-    public Date getCreatedDate() {
-        return createdDate;
-    }
+  public void setCreatedDate(Date createdDate) {
+    this.createdDate = createdDate;
+  }
 
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
+  public Long getCreatedBy() {
+    return createdBy;
+  }
 
-    public Long getCreatedBy() {
-        return createdBy;
-    }
+  public void setCreatedBy(Long createdBy) {
+    this.createdBy = createdBy;
+  }
 
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
+  public Date getLastModifiedDate() {
+    return lastModifiedDate;
+  }
 
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+  public void setLastModifiedDate(Date lastModifiedDate) {
+    this.lastModifiedDate = lastModifiedDate;
+  }
 
-    public void setLastModifiedDate(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+  public Long getLastModifiedBy() {
+    return lastModifiedBy;
+  }
 
-    public Long getLastModifiedBy() {
-        return lastModifiedBy;
-    }
+  public void setLastModifiedBy(Long lastModifiedBy) {
+    this.lastModifiedBy = lastModifiedBy;
+  }
 
-    public void setLastModifiedBy(Long lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+  public int getVersion() {
+    return version;
+  }
 
-    public int getVersion() {
-        return version;
-    }
+  public void setVersion(int version) {
+    this.version = version;
+  }
 
-    public void setVersion(int version) {
-        this.version = version;
-    }
+  public Set<Role> getRoles() {
+    return roles;
+  }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
+  }
 }

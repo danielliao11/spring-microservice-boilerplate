@@ -19,89 +19,85 @@ import org.springframework.validation.BindingResult;
  * @date 11/4/15
  * @since JDK1.8
  */
-@Component
-public class ValidateHelper {
+@Component public class ValidateHelper {
 
-    // ------------------------
-    // PUBLIC METHODS
-    // ------------------------
+  // ------------------------
+  // PUBLIC METHODS
+  // ------------------------
 
-    /**
-     * Validate current user, param and sign.
-     *
-     * @param result            bind result
-     * @param currentUser       current user
-     * @param param             param
-     * @param logger            log
-     * @return                  result vo
-     * @throws Exception
-     */
-    public ResultVO validate(BindingResult result, User currentUser, BaseParam param, Logger logger) throws Exception {
-        if (result.hasErrors()) {
-            return resultHelper.infoResp(ErrorType.SYS0002, result.toString());
-        }
-        return validate(currentUser, param, logger);
+  /**
+   * Validate current user, param and sign.
+   *
+   * @param result      bind result
+   * @param currentUser current user
+   * @param param       param
+   * @param logger      log
+   * @return result vo
+   * @throws Exception
+   */
+  public ResultVO validate(BindingResult result, User currentUser, BaseParam param, Logger logger) throws Exception {
+    if (result.hasErrors()) {
+      return resultHelper.infoResp(ErrorType.SYS0002, result.toString());
     }
+    return validate(currentUser, param, logger);
+  }
 
-    /**
-     * Validate current user and sign.
-     *
-     * @param currentUser currentUser
-     * @param param       param
-     * @param logger      log
-     * @return result VO
-     * @throws Exception
-     */
-    public ResultVO validate(User currentUser, BaseParam param, Logger logger)throws Exception {
-        //check currentUser
-        if (currentUser == null || currentUser.getId() == null) {
-            return resultHelper.infoResp(logger, ErrorType.SYS0003);
-        }
-        return validate(param, logger);
+  /**
+   * Validate current user and sign.
+   *
+   * @param currentUser currentUser
+   * @param param       param
+   * @param logger      log
+   * @return result VO
+   * @throws Exception
+   */
+  public ResultVO validate(User currentUser, BaseParam param, Logger logger) throws Exception {
+    //check currentUser
+    if (currentUser == null || currentUser.getId() == null) {
+      return resultHelper.infoResp(logger, ErrorType.SYS0003);
     }
+    return validate(param, logger);
+  }
 
-    /**
-     * Validate sign.
-     *
-     * @param param     param
-     * @param logger    log
-     * @return result VO
-     * @throws Exception
-     */
+  /**
+   * Validate sign.
+   *
+   * @param param  param
+   * @param logger log
+   * @return result VO
+   * @throws Exception
+   */
 
-    public ResultVO validate(BaseParam param, Logger logger) throws Exception {
-        // Get current clientId
-        String clientId = SpringSecurityUtils.getCurrentClientId();
-        // Sign verification.
-        if (!signHelper.signCheck(getPublicKeyByClientId(clientId), param)) {
-            // Return rsa signature failed information and log the exception.
-            return resultHelper.infoResp(logger, ErrorType.SYS0004);
-        } else
-            return null;
-    }
+  public ResultVO validate(BaseParam param, Logger logger) throws Exception {
+    // Get current clientId
+    String clientId = SpringSecurityUtils.getCurrentClientId();
+    // Sign verification.
+    if (!signHelper.signCheck(getPublicKeyByClientId(clientId), param)) {
+      // Return rsa signature failed information and log the exception.
+      return resultHelper.infoResp(logger, ErrorType.SYS0004);
+    } else
+      return null;
+  }
 
-    // --------------------------
-    // PRIVATE FIELDS AND METHODS
-    // --------------------------
+  // --------------------------
+  // PRIVATE FIELDS AND METHODS
+  // --------------------------
 
-    @Autowired
-    private ResultHelper resultHelper;
+  @Autowired private ResultHelper resultHelper;
 
-    @Autowired
-    private SignHelper signHelper;
+  @Autowired private SignHelper signHelper;
 
-    @Autowired
-    private ClientDomain clientDomain;
+  @Autowired private ClientDomain clientDomain;
 
-    /**
-     * Get public key by client id.
-     *
-     * @param clientId      client id
-     * @return              public key
-     * @exception Exception
-     */
-    private String getPublicKeyByClientId(String clientId) throws Exception {
-        return clientDomain.getClientByClientId(new ClientParam(clientId)).getPublicKey();
-    }
+  /**
+   * Get public key by client id.
+   *
+   * @param clientId client id
+   * @return public key
+   * @throws Exception
+   */
+  private String getPublicKeyByClientId(String clientId) throws Exception {
+    return clientDomain.getClientByClientId(new ClientParam(clientId)).getPublicKey();
+  }
 
 }

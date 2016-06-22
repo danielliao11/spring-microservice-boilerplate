@@ -18,31 +18,31 @@ import java.util.HashMap;
  */
 public class GenerateRSAKeyPair {
 
-    private HashMap<String, Object> getKeys() throws NoSuchAlgorithmException {
-        HashMap<String, Object> map = new HashMap<>();
-        KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
-        keyPairGen.initialize(2048);
-        KeyPair keyPair = keyPairGen.generateKeyPair();
-        RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-        map.put("public", publicKey);
-        map.put("private", privateKey);
-        return map;
-    }
+  private HashMap<String, Object> getKeys() throws NoSuchAlgorithmException {
+    HashMap<String, Object> map = new HashMap<>();
+    KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
+    keyPairGen.initialize(2048);
+    KeyPair keyPair = keyPairGen.generateKeyPair();
+    RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
+    RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+    map.put("public", publicKey);
+    map.put("private", privateKey);
+    return map;
+  }
 
-    public static void main(String[] args) {
-        HashMap<String, Object> rsaMap = null;
-        try {
-            rsaMap = new GenerateRSAKeyPair().getKeys();
-        } catch (NoSuchAlgorithmException e) {
-            System.out.println(e);
-        }
-        RSAPublicKey publicKey = (RSAPublicKey) rsaMap.get("public");
-        String publicKeyStr = new String(Base64.encodeBase64(publicKey.getEncoded()));
-        System.out.println("Public key is: " + publicKeyStr);
-
-        RSAPrivateKey privateKey = (RSAPrivateKey) rsaMap.get("private");
-        String privateKeyStr = new String(Base64.encodeBase64(privateKey.getEncoded()));
-        System.out.println("Private Key is: " + privateKeyStr);
+  public static void main(String[] args) {
+    HashMap<String, Object> rsaMap = null;
+    try {
+      rsaMap = new GenerateRSAKeyPair().getKeys();
+    } catch (NoSuchAlgorithmException e) {
+      System.out.println(e);
     }
+    RSAPublicKey publicKey = (RSAPublicKey) rsaMap.get("public");
+    String publicKeyStr = new String(Base64.encodeBase64(publicKey.getEncoded()));
+    System.out.println("Public key is: " + publicKeyStr);
+
+    RSAPrivateKey privateKey = (RSAPrivateKey) rsaMap.get("private");
+    String privateKeyStr = new String(Base64.encodeBase64(privateKey.getEncoded()));
+    System.out.println("Private Key is: " + privateKeyStr);
+  }
 }

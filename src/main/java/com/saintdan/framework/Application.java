@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 /**
  * Entrance of <p>spring-rest-oauth2</p>
  * <p>
- *     "Engine start"
+ * "Engine start"
  * </p>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
@@ -21,22 +21,22 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 // I don't use Jmx and web socket, so I comment them.
 @Import({
-        DispatcherServletAutoConfiguration.class,
-        EmbeddedServletContainerAutoConfiguration.class,
-        ErrorMvcAutoConfiguration.class,
-        HttpEncodingAutoConfiguration.class,
-        HttpMessageConvertersAutoConfiguration.class,
-        JacksonAutoConfiguration.class,
+    DispatcherServletAutoConfiguration.class,
+    EmbeddedServletContainerAutoConfiguration.class,
+    ErrorMvcAutoConfiguration.class,
+    HttpEncodingAutoConfiguration.class,
+    HttpMessageConvertersAutoConfiguration.class,
+    JacksonAutoConfiguration.class,
 //        JmxAutoConfiguration.class,
-        MultipartAutoConfiguration.class,
-        ServerPropertiesAutoConfiguration.class,
-        PropertyPlaceholderAutoConfiguration.class,
-        ThymeleafAutoConfiguration.class,
-        WebMvcAutoConfiguration.class,
+    MultipartAutoConfiguration.class,
+    ServerPropertiesAutoConfiguration.class,
+    PropertyPlaceholderAutoConfiguration.class,
+    ThymeleafAutoConfiguration.class,
+    WebMvcAutoConfiguration.class,
 //        WebSocketAutoConfiguration.class,
 })
 public class Application {
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
+  }
 }

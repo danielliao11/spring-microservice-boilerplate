@@ -12,10 +12,10 @@ import org.apache.commons.lang3.RandomStringUtils;
  */
 public class GenerateEncodedPassword {
 
-    private static final String RAW_PASSWORD = "root";
+  private static final String RAW_PASSWORD = "root";
 
-    public static void main(String[] args) {
-        String encodedPassword = new CustomPasswordEncoder().encode(RAW_PASSWORD);
-        System.out.println(encodedPassword);
-    }
+  public static void main(String[] args) {
+    String encodedPassword = new CustomPasswordEncoder().encode(RAW_PASSWORD);
+    System.out.println(encodedPassword);
+  }
 }

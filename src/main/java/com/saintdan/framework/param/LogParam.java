@@ -13,56 +13,54 @@ import java.io.Serializable;
  */
 public class LogParam implements Serializable {
 
-    private static final long serialVersionUID = 891050528216283300L;
+  private static final long serialVersionUID = 891050528216283300L;
 
-    private String loginIP;
+  private String loginIP;
 
-    private LogType type;
+  private LogType type;
 
-    private String clientId;
+  private String clientId;
 
-    private String accessResource;
+  private String accessResource;
 
-    public LogParam() {
+  public LogParam() {}
 
-    }
+  public LogParam(String loginIP, LogType type, String clientId, String accessResource) {
+    this.loginIP = loginIP;
+    this.type = type;
+    this.clientId = clientId;
+    this.accessResource = accessResource;
+  }
 
-    public LogParam(String loginIP, LogType type, String clientId, String accessResource) {
-        this.loginIP = loginIP;
-        this.type = type;
-        this.clientId = clientId;
-        this.accessResource = accessResource;
-    }
+  public String getLoginIP() {
+    return loginIP;
+  }
 
-    public String getLoginIP() {
-        return loginIP;
-    }
+  public void setLoginIP(String loginIP) {
+    this.loginIP = loginIP;
+  }
 
-    public void setLoginIP(String loginIP) {
-        this.loginIP = loginIP;
-    }
+  public LogType getType() {
+    return type;
+  }
 
-    public LogType getType() {
-        return type;
-    }
+  public void setType(LogType type) {
+    this.type = type;
+  }
 
-    public void setType(LogType type) {
-        this.type = type;
-    }
+  public String getClientId() {
+    return clientId;
+  }
 
-    public String getClientId() {
-        return clientId;
-    }
+  public void setClientId(String clientId) {
+    this.clientId = clientId;
+  }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
+  public String getAccessResource() {
+    return accessResource;
+  }
 
-    public String getAccessResource() {
-        return accessResource;
-    }
-
-    public void setAccessResource(String accessResource) {
-        this.accessResource = accessResource;
-    }
+  public void setAccessResource(String accessResource) {
+    this.accessResource = accessResource;
+  }
 }

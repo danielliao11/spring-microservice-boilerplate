@@ -13,15 +13,15 @@ import java.io.Serializable;
  */
 public class PageVO implements Serializable {
 
-    private static final long serialVersionUID = 2808529039303273022L;
+  private static final long serialVersionUID = 2808529039303273022L;
 
-    private Page page;
+  private Page page;
 
-    public Page getPage() {
-        return page;
-    }
+  public Page getPage() {
+    return page;
+  }
 
-    public void setPage(Page page) {
-        this.page = page;
-    }
+  public void setPage(Page page) {
+    this.page = page;
+  }
 }

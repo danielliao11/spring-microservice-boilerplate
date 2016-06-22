@@ -13,7 +13,7 @@ package com.saintdan.framework.enums;
  */
 public interface IntentStateWithCodeAndDescription {
 
-    int code();
+  int code();
 
-    String description();
+  String description();
 }

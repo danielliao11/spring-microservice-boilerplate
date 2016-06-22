@@ -9,23 +9,23 @@ package com.saintdan.framework.enums;
  */
 public enum LogType {
 
-    LOGIN(0),
-    CREATE(1),
-    READ(2),
-    UPDATE(3),
-    DELETE(4);
+  LOGIN(0),
+  CREATE(1),
+  READ(2),
+  UPDATE(3),
+  DELETE(4);
 
-    private int code;
+  int code;
 
-    LogType(int code) {
-        this.code = code;
-    }
+  LogType(int code) {
+    this.code = code;
+  }
 
-    public int getCode() {
-        return code;
-    }
+  public int getCode() {
+    return code;
+  }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
+  public void setCode(int code) {
+    this.code = code;
+  }
 }

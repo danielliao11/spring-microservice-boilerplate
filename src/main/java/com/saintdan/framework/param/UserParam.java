@@ -14,88 +14,83 @@ import javax.validation.constraints.Size;
  */
 public class UserParam extends BaseParam {
 
-    private static final long serialVersionUID = -9153801716112918626L;
+  private static final long serialVersionUID = -9153801716112918626L;
 
-    @SignField
-    private Long id; // user's ID
+  @SignField private Long id; // user's ID
 
-    @SignField
-    @NotNull(message = "Usr cannot be null.")
-    @Size(min = 4, max = 50)
-    private String usr; // username
+  @SignField
+  @NotNull(message = "Usr cannot be null.")
+  @Size(min = 4, max = 50)
+  private String usr; // username
 
-    @SignField
-    @NotNull(message = "Pwd cannot be null.")
-    @Size(min = 8, max = 50)
-    private String pwd; // password
+  @SignField
+  @NotNull(message = "Pwd cannot be null.")
+  @Size(min = 8, max = 50)
+  private String pwd; // password
 
-    @SignField
-    @NotNull(message = "Name cannot be null.")
-    private String name; // user's name
+  @SignField
+  @NotNull(message = "Name cannot be null.")
+  private String name; // user's name
 
-    @SignField
-    private String description;
+  @SignField private String description;
 
-    @SignField
-    private String roleIds; // role ids string
+  @SignField private String roleIds; // role ids string
 
-    public UserParam() {
+  public UserParam() {}
 
-    }
+  public UserParam(Long id) {
+    this.id = id;
+  }
 
-    public UserParam(Long id) {
-        this.id = id;
-    }
+  public UserParam(String usr) {
+    this.usr = usr;
+  }
 
-    public UserParam(String usr) {
-        this.usr = usr;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public String getUsr() {
+    return usr;
+  }
 
-    public String getUsr() {
-        return usr;
-    }
+  public void setUsr(String usr) {
+    this.usr = usr;
+  }
 
-    public void setUsr(String usr) {
-        this.usr = usr;
-    }
+  public String getPwd() {
+    return pwd;
+  }
 
-    public String getPwd() {
-        return pwd;
-    }
+  public void setPwd(String pwd) {
+    this.pwd = pwd;
+  }
 
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public String getRoleIds() {
+    return roleIds;
+  }
 
-    public String getRoleIds() {
-        return roleIds;
-    }
-
-    public void setRoleIds(String roleIds) {
-        this.roleIds = roleIds;
-    }
+  public void setRoleIds(String roleIds) {
+    this.roleIds = roleIds;
+  }
 }

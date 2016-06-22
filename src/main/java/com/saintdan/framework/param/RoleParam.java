@@ -13,68 +13,63 @@ import javax.validation.constraints.NotNull;
  */
 public class RoleParam extends BaseParam {
 
-    private static final long serialVersionUID = 8542867394907970893L;
+  private static final long serialVersionUID = 8542867394907970893L;
 
-    @SignField
-    private Long id; // role's ID.
+  @SignField private Long id; // role's ID.
 
-    @SignField
-    @NotNull(message = "Name cannot be null.")
-    private String name; // role's name
+  @SignField
+  @NotNull(message = "Name cannot be null.")
+  private String name; // role's name
 
-    @SignField
-    private String description;
+  @SignField private String description;
 
-    @SignField
-    private String userIds; // user ids string
+  @SignField private String userIds; // user ids string
 
-    @SignField
-    private String groupIds; // group ids string
+  @SignField private String groupIds; // group ids string
 
-    public RoleParam() {
-    }
+  public RoleParam() {}
 
-    public RoleParam(Long id) {
-        this.id = id;
-    }
+  public RoleParam(Long id) {
+    this.id = id;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public String getUserIds() {
-        return userIds;
-    }
+  public String getUserIds() {
+    return userIds;
+  }
 
-    public void setUserIds(String userIds) {
-        this.userIds = userIds;
-    }
+  public void setUserIds(String userIds) {
+    this.userIds = userIds;
+  }
 
-    public String getGroupIds() {
-        return groupIds;
-    }
+  public String getGroupIds() {
+    return groupIds;
+  }
 
-    public void setGroupIds(String groupIds) {
-        this.groupIds = groupIds;
-    }
+  public void setGroupIds(String groupIds) {
+    this.groupIds = groupIds;
+  }
 }

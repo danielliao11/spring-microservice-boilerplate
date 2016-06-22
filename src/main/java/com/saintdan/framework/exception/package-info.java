@@ -1,8 +1,8 @@
 /**
  * Package of exceptions.
  * <p>
- *     Extends {@link com.saintdan.framework.exception.SystemException}
- *     And add error type to {@link com.saintdan.framework.enums.ErrorType}
+ *   Extends {@link com.saintdan.framework.exception.SystemException}
+ *   And add error type to {@link com.saintdan.framework.enums.ErrorType}
  * </p>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>

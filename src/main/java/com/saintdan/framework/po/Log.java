@@ -19,98 +19,97 @@ import java.util.Date;
 @Table(name = "logs")
 public class Log implements Serializable {
 
-    private static final long serialVersionUID = 7088091769901805623L;
+  private static final long serialVersionUID = 7088091769901805623L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(columnDefinition = "SERIAL")
+  private Long id;
 
-    @NotEmpty
-    @Column(name = "login_ip", nullable = false, length = 50)
-    private String loginIP;
+  @NotEmpty
+  @Column(name = "login_ip", nullable = false, length = 50)
+  private String loginIP;
 
-    @Column(nullable = false)
-    private Long userId;
+  @Column(nullable = false)
+  private Long userId;
 
-    @Column(nullable = false)
-    private String username;
+  @Column(nullable = false)
+  private String username;
 
-    private String clientId;
+  private String clientId;
 
-    private String accessResource;
+  private String accessResource;
 
-    @Column(nullable = false)
-    private LogType type;
+  @Column(nullable = false)
+  private LogType type;
 
-    @CreatedDate
-    @Column(nullable = false)
-    private Date createDate = new Date();
+  @CreatedDate
+  @Column(nullable = false)
+  private Date createDate = new Date();
 
-    public Log() {
+  public Log() {}
 
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public String getLoginIP() {
+    return loginIP;
+  }
 
-    public String getLoginIP() {
-        return loginIP;
-    }
+  public void setLoginIP(String loginIP) {
+    this.loginIP = loginIP;
+  }
 
-    public void setLoginIP(String loginIP) {
-        this.loginIP = loginIP;
-    }
+  public Long getUserId() {
+    return userId;
+  }
 
-    public Long getUserId() {
-        return userId;
-    }
+  public void setUserId(Long userId) {
+    this.userId = userId;
+  }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public String getUsername() {
-        return username;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public String getClientId() {
+    return clientId;
+  }
 
-    public String getClientId() {
-        return clientId;
-    }
+  public void setClientId(String clientId) {
+    this.clientId = clientId;
+  }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
+  public String getAccessResource() {
+    return accessResource;
+  }
 
-    public String getAccessResource() {
-        return accessResource;
-    }
+  public void setAccessResource(String accessResource) {
+    this.accessResource = accessResource;
+  }
 
-    public void setAccessResource(String accessResource) {
-        this.accessResource = accessResource;
-    }
+  public LogType getType() {
+    return type;
+  }
 
-    public LogType getType() {
-        return type;
-    }
+  public void setType(LogType type) {
+    this.type = type;
+  }
 
-    public void setType(LogType type) {
-        this.type = type;
-    }
+  public Date getCreateDate() {
+    return createDate;
+  }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+  public void setCreateDate(Date createDate) {
+    this.createDate = createDate;
+  }
 }

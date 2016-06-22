@@ -9,6 +9,6 @@ package com.saintdan.framework.constant;
  */
 public interface PathConstant {
 
-    String INDEX = "/index";
+  String INDEX = "/index";
 
 }

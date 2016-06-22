@@ -14,49 +14,49 @@ import java.util.Date;
  */
 public class LogVO implements Serializable {
 
-    private static final long serialVersionUID = -8802363013216964724L;
+  private static final long serialVersionUID = -8802363013216964724L;
 
-    private String username;
+  private String username;
 
-    private String loginIP;
+  private String loginIP;
 
-    private LogType type;
+  private LogType type;
 
-    private Date createDate;
+  private Date createDate;
 
-    public String getUsername() {
-        return username;
-    }
+  public String getUsername() {
+    return username;
+  }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
-    public String getLoginIP() {
-        return loginIP;
-    }
+  public String getLoginIP() {
+    return loginIP;
+  }
 
-    public void setLoginIP(String loginIP) {
-        this.loginIP = loginIP;
-    }
+  public void setLoginIP(String loginIP) {
+    this.loginIP = loginIP;
+  }
 
-    public LogType getType() {
-        return type;
-    }
+  public LogType getType() {
+    return type;
+  }
 
-    public void setType(LogType type) {
-        this.type = type;
-    }
+  public void setType(LogType type) {
+    this.type = type;
+  }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
+  public Date getCreateDate() {
+    return createDate;
+  }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
+  public void setCreateDate(Date createDate) {
+    this.createDate = createDate;
+  }
 
-    public String getLogType() {
-        return getType().name();
-    }
+  public String getLogType() {
+    return getType().name();
+  }
 }

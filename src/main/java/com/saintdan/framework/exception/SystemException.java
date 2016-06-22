@@ -14,86 +14,86 @@ import java.io.Serializable;
  */
 public abstract class SystemException extends Exception implements Serializable {
 
-    private static final long serialVersionUID = 3327217472962035232L;
+  private static final long serialVersionUID = 3327217472962035232L;
 
-    /**
-     * Error Type
-     */
-    private ErrorType errorType;
+  /**
+   * Error Type
+   */
+  private ErrorType errorType;
 
-    /**
-     * Constructs an {@code SystemException} with the specified message and root cause.
-     *
-     * @param type  the {@link ErrorType}
-     * @param t     the root cause
-     * @param msg   the error message
-     */
-    public SystemException(ErrorType type, Throwable t, String msg) {
-        super(msg, t);
-        this.errorType = type;
+  /**
+   * Constructs an {@code SystemException} with the specified message and root cause.
+   *
+   * @param type the {@link ErrorType}
+   * @param t    the root cause
+   * @param msg  the error message
+   */
+  public SystemException(ErrorType type, Throwable t, String msg) {
+    super(msg, t);
+    this.errorType = type;
+  }
+
+  /**
+   * Constructs an {@code SystemException} with the specified message and root cause.
+   *
+   * @param type the {@link ErrorType}
+   * @param msg  the error message
+   */
+  public SystemException(ErrorType type, String msg) {
+    super(msg);
+    this.errorType = type;
+  }
+
+  /**
+   * Constructs an {@code SystemException} with the specified message and no root cause.
+   *
+   * @param type the {@link ErrorType}
+   */
+  public SystemException(ErrorType type) {
+    super(type.name() + ": " + type.description());
+    this.errorType = type;
+  }
+
+  /**
+   * Constructs an {@code SystemException}
+   */
+  public SystemException() {
+    this(ErrorType.SYS0001);
+  }
+
+
+  private ErrorType obtainErrorType() {
+    if (errorType == null) {
+      return ErrorType.SYS0001;
     }
+    return errorType;
 
-    /**
-     * Constructs an {@code SystemException} with the specified message and root cause.
-     *
-     * @param type  the {@link ErrorType}
-     * @param msg   the error message
-     */
-    public SystemException(ErrorType type, String msg) {
-        super(msg);
-        this.errorType = type;
-    }
+  }
 
-    /**
-     * Constructs an {@code SystemException} with the specified message and no root cause.
-     *
-     * @param type the {@link ErrorType}
-     */
-    public SystemException(ErrorType type) {
-        super(type.name() + ": " + type.description());
-        this.errorType = type;
-    }
+  /**
+   * Get error type
+   *
+   * @return {@link ErrorType}
+   */
+  public ErrorType getErrorType() {
+    return obtainErrorType();
+  }
 
-    /**
-     * Constructs an {@code SystemException}
-     */
-    public SystemException() {
-        this(ErrorType.SYS0001);
-    }
+  /**
+   * Get error code
+   *
+   * @return error code
+   */
+  public String getErrorCode() {
+    return obtainErrorType().name();
+  }
 
-
-    private ErrorType obtainErrorType() {
-        if (errorType == null) {
-            return ErrorType.SYS0001;
-        }
-        return errorType;
-
-    }
-
-    /**
-     * Get error type
-     *
-     * @return {@link ErrorType}
-     */
-    public ErrorType getErrorType() {
-        return obtainErrorType();
-    }
-
-    /**
-     * Get error code
-     *
-     * @return error code
-     */
-    public String getErrorCode() {
-        return obtainErrorType().name();
-    }
-
-    /**
-     * Get error msg
-     *
-     * @return error msg
-     */
-    public String getErrorMsg() {
-        return obtainErrorType().description();
-    }
+  /**
+   * Get error msg
+   *
+   * @return error msg
+   */
+  public String getErrorMsg() {
+    return obtainErrorType().description();
+  }
 }

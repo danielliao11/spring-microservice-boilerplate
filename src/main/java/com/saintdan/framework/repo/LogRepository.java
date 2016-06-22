@@ -18,9 +18,9 @@ import org.springframework.data.repository.Repository;
  */
 public interface LogRepository extends Repository<Log, Long> {
 
-    Log save(Log log);
+  Log save(Log log);
 
-    Iterable<Log> findAll();
+  Iterable<Log> findAll();
 
-    Page<Log> findAll(Pageable pageable);
+  Page<Log> findAll(Pageable pageable);
 }

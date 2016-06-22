@@ -9,18 +9,18 @@ package com.saintdan.framework.constant;
  */
 public interface ResourceURL {
 
-    String FIX = "/**";
+  String FIX = "/**";
 
-    String WELCOME = "/welcome";
+  String WELCOME = "/welcome";
 
-    String RESOURCES = "/resources";
+  String RESOURCES = "/resources";
 
-    String USERS = "/users";
+  String USERS = "/users";
 
-    String ROLES = "/roles";
+  String ROLES = "/roles";
 
-    String GROUPS = "/groups";
+  String GROUPS = "/groups";
 
-    String CLIENTS = "/clients";
+  String CLIENTS = "/clients";
 
 }

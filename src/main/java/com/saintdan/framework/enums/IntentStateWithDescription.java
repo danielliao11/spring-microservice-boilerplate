@@ -12,6 +12,6 @@ package com.saintdan.framework.enums;
  */
 public interface IntentStateWithDescription {
 
-    // Enum translation.
-    String description();
+  // Enum translation.
+  String description();
 }

@@ -25,99 +25,99 @@ import java.security.spec.X509EncodedKeySpec;
  */
 public class SignatureUtils {
 
-    /**
-     * Check the sign content.
-     *
-     * @param content       src content
-     * @param sign          signature content
-     * @param publicKey     opposite end public key
-     * @param charset       charset
-     * @return              true/false
-     * @throws CommonsException
-     */
-    public static boolean rsaCheckContent(String content, String sign, String publicKey, String charset)
-            throws CommonsException {
-        try {
-            PublicKey pubKey = getPublicKeyFromX509(SignatureConstant.SIGN_TYPE_RSA, new ByteArrayInputStream(publicKey
-                    .getBytes()));
+  /**
+   * Check the sign content.
+   *
+   * @param content   src content
+   * @param sign      signature content
+   * @param publicKey opposite end public key
+   * @param charset   charset
+   * @return true/false
+   * @throws CommonsException
+   */
+  public static boolean rsaCheckContent(String content, String sign, String publicKey, String charset)
+      throws CommonsException {
+    try {
+      PublicKey pubKey = getPublicKeyFromX509(SignatureConstant.SIGN_TYPE_RSA, new ByteArrayInputStream(publicKey
+          .getBytes()));
 
-            java.security.Signature signature = java.security.Signature
-                    .getInstance(SignatureConstant.SIGN_ALGORITHMS);
+      java.security.Signature signature = java.security.Signature
+          .getInstance(SignatureConstant.SIGN_ALGORITHMS);
 
-            signature.initVerify(pubKey);
+      signature.initVerify(pubKey);
 
-            if (StringUtils.isEmpty(charset)) {
-                signature.update(content.getBytes());
-            } else {
-                signature.update(content.getBytes(charset));
-            }
+      if (StringUtils.isEmpty(charset)) {
+        signature.update(content.getBytes());
+      } else {
+        signature.update(content.getBytes(charset));
+      }
 
-            return signature.verify(Base64.decodeBase64(sign.getBytes()));
-        } catch (Exception e) {
-            throw new CommonsException(ErrorType.SYS0004);
-        }
+      return signature.verify(Base64.decodeBase64(sign.getBytes()));
+    } catch (Exception e) {
+      throw new CommonsException(ErrorType.SYS0004);
+    }
+  }
+
+  /**
+   * Signature by local private key.
+   *
+   * @param content    src
+   * @param privateKey local private key
+   * @param charset    charset
+   * @return signature
+   * @throws CommonsException
+   */
+  public static String rsaSign(String content, String privateKey, String charset)
+      throws CommonsException {
+    try {
+      PrivateKey priKey = getPrivateKeyFromPKCS8(SignatureConstant.SIGN_TYPE_RSA,
+          new ByteArrayInputStream(privateKey.getBytes()));
+
+      java.security.Signature signature = java.security.Signature
+          .getInstance(SignatureConstant.SIGN_ALGORITHMS);
+
+      signature.initSign(priKey);
+
+      if (StringUtils.isEmpty(charset)) {
+        signature.update(content.getBytes());
+      } else {
+        signature.update(content.getBytes(charset));
+      }
+
+      byte[] signed = signature.sign();
+
+      return new String(Base64.encodeBase64(signed));
+    } catch (Exception e) {
+      throw new CommonsException(ErrorType.SYS0004);
+    }
+  }
+
+  public static PublicKey getPublicKeyFromX509(String algorithm, InputStream ins)
+      throws Exception {
+    KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
+
+    StringWriter writer = new StringWriter();
+    StreamUtils.io(new InputStreamReader(ins), writer);
+
+    byte[] encodedKey = writer.toString().getBytes();
+
+    encodedKey = Base64.decodeBase64(encodedKey);
+
+    return keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+  }
+
+  public static PrivateKey getPrivateKeyFromPKCS8(String algorithm, InputStream ins)
+      throws Exception {
+    if (ins == null || StringUtils.isEmpty(algorithm)) {
+      return null;
     }
 
-    /**
-     * Signature by local private key.
-     *
-     * @param content           src
-     * @param privateKey        local private key
-     * @param charset           charset
-     * @return                  signature
-     * @throws CommonsException
-     */
-    public static String rsaSign(String content, String privateKey, String charset)
-            throws CommonsException {
-        try {
-            PrivateKey priKey = getPrivateKeyFromPKCS8(SignatureConstant.SIGN_TYPE_RSA,
-                    new ByteArrayInputStream(privateKey.getBytes()));
+    KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
 
-            java.security.Signature signature = java.security.Signature
-                    .getInstance(SignatureConstant.SIGN_ALGORITHMS);
+    byte[] encodedKey = StreamUtils.readText(ins).getBytes();
 
-            signature.initSign(priKey);
+    encodedKey = Base64.decodeBase64(encodedKey);
 
-            if (StringUtils.isEmpty(charset)) {
-                signature.update(content.getBytes());
-            } else {
-                signature.update(content.getBytes(charset));
-            }
-
-            byte[] signed = signature.sign();
-
-            return new String(Base64.encodeBase64(signed));
-        } catch (Exception e) {
-            throw new CommonsException(ErrorType.SYS0004);
-        }
-    }
-
-    public static PublicKey getPublicKeyFromX509(String algorithm, InputStream ins)
-            throws Exception {
-        KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
-
-        StringWriter writer = new StringWriter();
-        StreamUtils.io(new InputStreamReader(ins), writer);
-
-        byte[] encodedKey = writer.toString().getBytes();
-
-        encodedKey = Base64.decodeBase64(encodedKey);
-
-        return keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-    }
-
-    public static PrivateKey getPrivateKeyFromPKCS8(String algorithm, InputStream ins)
-            throws Exception {
-        if (ins == null || StringUtils.isEmpty(algorithm)) {
-            return null;
-        }
-
-        KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
-
-        byte[] encodedKey = StreamUtils.readText(ins).getBytes();
-
-        encodedKey = Base64.decodeBase64(encodedKey);
-
-        return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
-    }
+    return keyFactory.generatePrivate(new PKCS8EncodedKeySpec(encodedKey));
+  }
 }
