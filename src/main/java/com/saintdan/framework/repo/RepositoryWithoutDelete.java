@@ -1,12 +1,12 @@
 package com.saintdan.framework.repo;
 
 
+import java.io.Serializable;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
-
-import java.io.Serializable;
 
 /**
  * Custom repository.
@@ -47,7 +47,7 @@ import java.io.Serializable;
    * @return the entity with the given id or {@literal null} if none found
    * @throws IllegalArgumentException if {@code id} is {@literal null}
    */
-  T findOne(ID id);
+  Optional<T> findOne(ID id);
 
   /**
    * Returns whether an entity with the given id exists.

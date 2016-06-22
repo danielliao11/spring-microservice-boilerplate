@@ -9,16 +9,16 @@ package com.saintdan.framework.constant;
  */
 public interface ResourceConstant {
 
-  String LOGIN = "Login";
+  String WELCOME = "welcome";
 
-  String USER = "User";
+  String RESOURCES = "resources";
 
-  String ROLE = "Role";
+  String USERS = "users";
 
-  String GROUP = "Group";
+  String ROLES = "roles";
 
-  String RESOURCE = "Resource";
+  String GROUPS = "groups";
 
-  String CLIENT = "Client";
+  String CLIENTS = "clients";
 
 }

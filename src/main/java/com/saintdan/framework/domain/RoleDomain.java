@@ -2,6 +2,7 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
@@ -48,8 +49,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} user already existing, usr taken.
    */
   @Transactional public RoleVO create(RoleParam param, User currentUser) throws Exception {
-    Role role = roleRepository.findByName(param.getName());
-    if (role != null) {
+    if (roleRepository.findByName(param.getName()).isPresent()) {
       // Throw role already existing exception, name taken.
       throw new CommonsException(ErrorType.SYS0111,
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
@@ -109,13 +109,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by id param.
    */
   public RoleVO getRoleById(RoleParam param) throws Exception {
-    Role role = roleRepository.findOne(param.getId());
-    if (role == null) {
-      // Throw role cannot find by id parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
-    return transformer.po2VO(RoleVO.class, role);
+    return transformer.po2VO(RoleVO.class, findById(param.getId()));
   }
 
   /**
@@ -149,12 +143,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by id param.
    */
   @Transactional public void delete(RoleParam param, User currentUser) throws Exception {
-    Role role = roleRepository.findOne(param.getId());
-    if (role == null) {
-      // Throw cannot find any role by this id param.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
+    Role role = findById(param.getId());
     // Log delete operation.
     logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.
@@ -194,21 +183,17 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     return role;
   }
 
-  /**
-   * Find {@link Role} by name
-   *
-   * @param name      name of {@link Role}
-   * @return          {@link Role}
-   * @throws Exception
-   */
+
+  private Role findById(Long id) throws Exception {
+    return roleRepository.findOne(id).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.ROLES, CommonsConstant.ID)));
+  }
+
   private Role findByName(String name) throws Exception {
-    Role role = roleRepository.findByName(name);
-    if (role == null) {
-      // Throw role cannot find by name parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.NAME));
-    }
-    return role;
+    return roleRepository.findByName(name).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.ROLES, CommonsConstant.NAME)));
   }
 
 }

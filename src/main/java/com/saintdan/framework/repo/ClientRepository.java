@@ -2,6 +2,7 @@ package com.saintdan.framework.repo;
 
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Client;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,7 +15,7 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface ClientRepository extends RepositoryWithoutDelete<Client, Long> {
 
-  Client findByClientIdAlias(String clientIdAlias);
+  Optional<Client> findByClientIdAlias(String clientIdAlias);
 
   @Modifying
   @Query("update Client c set c.validFlag=?1 where c.id=?2")

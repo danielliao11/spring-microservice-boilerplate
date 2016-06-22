@@ -2,6 +2,7 @@ package com.saintdan.framework.repo;
 
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.User;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,7 +18,7 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface UserRepository extends RepositoryWithoutDelete<User, Long> {
 
-  User findByUsr(String usr);
+  Optional<User> findByUsr(String usr);
 
   Page<User> findAll(Pageable pageable);
 

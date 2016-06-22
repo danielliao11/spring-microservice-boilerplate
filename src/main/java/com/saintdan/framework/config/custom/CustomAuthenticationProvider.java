@@ -11,7 +11,12 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,10 +40,9 @@ import org.springframework.stereotype.Service;
 
     // Find user.
     String username = token.getName();
-    User user = userRepository.findByUsr(username);
-    if (user == null) { //If user does not exists, throw UsernameNotFoundException.
-      throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
-    }
+    User user = userRepository.findByUsr(username).orElseThrow(
+        // Throw cannot find any user by this usr param.
+        () -> new UsernameNotFoundException(String.format("User %s does not exist!", username)));
 
     // Compare password and credentials of authentication.
     if (!customPasswordEncoder.matches(token.getCredentials().toString(), user.getPwd())) {

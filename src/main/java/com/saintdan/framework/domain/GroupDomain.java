@@ -2,6 +2,7 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
@@ -48,8 +49,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} role already existing, name taken.
    */
   @Transactional public GroupVO create(GroupParam param, User currentUser) throws Exception {
-    Group group = groupRepository.findByName(param.getName());
-    if (group != null) {
+    if (groupRepository.findByName(param.getName()).isPresent()) {
       // Throw group already existing exception, name taken.
       throw new CommonsException(ErrorType.SYS0111,
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
@@ -109,13 +109,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by id param.
    */
   public GroupVO getGroupById(GroupParam param) throws Exception {
-    Group group = groupRepository.findOne(param.getId());
-    if (group == null) {
-      // Throw group cannot find by id parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
-    return transformer.po2VO(GroupVO.class, group);
+    return transformer.po2VO(GroupVO.class, findById(param.getId()));
   }
 
   /**
@@ -126,13 +120,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by name param.
    */
   public GroupVO getGroupByName(GroupParam param) throws Exception {
-    Group group = groupRepository.findByName(param.getName());
-    if (group == null) {
-      // Throw group cannot find by name parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.NAME));
-    }
-    return transformer.po2VO(GroupVO.class, group);
+    return transformer.po2VO(GroupVO.class, findByName(param.getName()));
   }
 
   /**
@@ -144,12 +132,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by id param.
    */
   @Transactional public GroupVO update(GroupParam param, User currentUser) throws Exception {
-    Group group = groupRepository.findOne(param.getId());
-    if (group == null) {
-      // Throw cannot find any group by this id param.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
+    findById(param.getId());
     return super.updateByPO(GroupVO.class, groupParam2PO(param, new Group(), currentUser), currentUser);
   }
 
@@ -161,12 +144,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by id param.
    */
   @Transactional public void delete(GroupParam param, User currentUser) throws Exception {
-    Group group = groupRepository.findOne(param.getId());
-    if (group == null) {
-      // Throw cannot find any group by this id param.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
+    Group group = findById(param.getId());
     // Log delete operation.
     logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.
@@ -203,6 +181,18 @@ public class GroupDomain extends BaseDomain<Group, Long> {
       group.setRoles(transformer.iterable2Set(roles));
     }
     return group;
+  }
+
+  private Group findById(Long id) throws Exception {
+    return groupRepository.findOne(id).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.GROUPS, CommonsConstant.ID)));
+  }
+
+  private Group findByName(String name) throws Exception {
+    return groupRepository.findByName(name).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.GROUPS, CommonsConstant.NAME)));
   }
 
 }

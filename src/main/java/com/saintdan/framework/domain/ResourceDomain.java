@@ -2,6 +2,7 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
@@ -47,8 +48,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} resource already existing, name taken.
    */
   @Transactional public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
-    Resource resource = resourceRepository.findByName(param.getName());
-    if (resource != null) {
+    if (resourceRepository.findByName(param.getName()).isPresent()) {
       // Throw group already existing exception, name taken.
       throw new CommonsException(ErrorType.SYS0111,
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
@@ -108,13 +108,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any resource by id param.
    */
   public ResourceVO getResourceById(ResourceParam param) throws Exception {
-    Resource resource = resourceRepository.findOne(param.getId());
-    if (resource == null) {
-      // Throw resource cannot find by id parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
-    return transformer.po2VO(ResourceVO.class, resource);
+    return transformer.po2VO(ResourceVO.class, findById(param.getId()));
   }
 
   /**
@@ -125,13 +119,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any resource by name param.
    */
   public ResourceVO getResourceByName(ResourceParam param) throws Exception {
-    Resource resource = resourceRepository.findByName(param.getName());
-    if (resource == null) {
-      // Throw resource cannot find by name parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.NAME));
-    }
-    return transformer.po2VO(ResourceVO.class, resource);
+    return transformer.po2VO(ResourceVO.class, findByName(param.getName()));
   }
 
   /**
@@ -142,13 +130,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any resource by path param.
    */
   public ResourceVO getResourceByPath(ResourceParam param) throws Exception {
-    Resource resource = resourceRepository.findByPath(param.getPath());
-    if (resource == null) {
-      // Throw resource cannot find by path parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), PATH));
-    }
-    return transformer.po2VO(ResourceVO.class, resource);
+    return transformer.po2VO(ResourceVO.class, findByPath(param.getPath()));
   }
 
   /**
@@ -160,13 +142,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any resource by id param.
    */
   @Transactional public ResourceVO update(ResourceParam param, User currentUser) throws Exception {
-    Resource resource = resourceRepository.findOne(param.getId());
-    if (resource == null) {
-      // Throw resource cannot find by id parameter exception.
-      // Throw cannot find any group by this id param.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
+    findById(param.getId());
     return super.updateByPO(ResourceVO.class, resourceParam2PO(param, new Resource(), currentUser), currentUser);
   }
 
@@ -178,12 +154,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} Cannot find any resource by id param.
    */
   @Transactional public void delete(ResourceParam param, User currentUser) throws Exception {
-    Resource resource = resourceRepository.findOne(param.getId());
-    if (resource == null) {
-      // Throw resource cannot find by id parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
+    Resource resource = findById(param.getId());
     // Log delete operation.
     logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.
@@ -218,6 +189,24 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
       resource.setGroups(transformer.iterable2Set(groups));
     }
     return resource;
+  }
+
+  private Resource findById(Long id) throws Exception {
+    return resourceRepository.findOne(id).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, CommonsConstant.ID)));
+  }
+
+  private Resource findByName(String name) throws Exception {
+    return resourceRepository.findByName(name).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, CommonsConstant.NAME)));
+  }
+
+  private Resource findByPath(String path) throws Exception {
+    return resourceRepository.findByName(path).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, PATH)));
   }
 
 }

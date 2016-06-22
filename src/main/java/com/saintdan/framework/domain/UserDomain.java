@@ -4,6 +4,7 @@ import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
@@ -48,11 +49,9 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} user already existing, usr taken.
    */
   @Transactional public UserVO create(UserParam param, User currentUser) throws Exception {
-    User user = userRepository.findByUsr(param.getUsr());
-    if (user != null) {
-      // Throw user already existing exception, usr taken.
-      throw new CommonsException(ErrorType.SYS0111,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), USR));
+    if (userRepository.findByUsr(param.getUsr()).isPresent()) {
+      // Throw user already exists error, usr taken.
+      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ResourceConstant.USERS, USR));
     }
     return super.createByPO(UserVO.class, userParam2PO(param, new User(), currentUser), currentUser);
   }
@@ -109,13 +108,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any user by id param.
    */
   public UserVO getUserById(UserParam param) throws Exception {
-    User user = userRepository.findOne(param.getId());
-    if (user == null) {
-      // Throw user cannot find by id parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
-    return transformer.po2VO(UserVO.class, user);
+    return transformer.po2VO(UserVO.class, findById(param.getId()));
   }
 
   /**
@@ -163,14 +156,9 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any user by id param.
    */
   @Transactional public void delete(UserParam param, User currentUser) throws Exception {
-    User user = userRepository.findOne(param.getId());
-    if (user == null) {
-      // Throw cannot find any user by this id param.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
+    User user = findById(param.getId());
     // Log delete operation.
-    logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
+    logHelper.logUsersOperations(LogType.DELETE, ResourceConstant.USERS, currentUser);
     // Change valid flag to invalid.
     userRepository.updateValidFlagFor(ValidFlag.INVALID, user.getId());
   }
@@ -215,21 +203,16 @@ public class UserDomain extends BaseDomain<User, Long> {
     return user;
   }
 
-  /**
-   * Find {@link User} by usr
-   *
-   * @param usr     usr of {@link User}
-   * @return        {@link User}
-   * @throws Exception
-   */
-  private User findByUsr(String usr) throws Exception {
-    User user = userRepository.findByUsr(usr);
-    if (user == null) {
-      // Throw cannot find any user by this id param.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), USR));
-    }
-    return user;
+  private User findById(Long id) throws Exception {
+    return userRepository.findOne(id).orElseThrow(
+        // Throw cannot find any user by this id param.
+        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, CommonsConstant.ID)));
+  }
+
+  public User findByUsr(String usr) throws Exception {
+    return userRepository.findByUsr(usr).orElseThrow(
+        // Throw cannot find any user by this usr param.
+        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, USR)));
   }
 
 }

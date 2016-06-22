@@ -2,16 +2,19 @@ package com.saintdan.framework.repo;
 
 import com.saintdan.framework.BaseTest;
 import com.saintdan.framework.component.CustomPasswordEncoder;
-import com.saintdan.framework.po.*;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.saintdan.framework.po.Client;
+import com.saintdan.framework.po.Group;
+import com.saintdan.framework.po.Resource;
+import com.saintdan.framework.po.Role;
+import com.saintdan.framework.po.User;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Seed data.
@@ -317,24 +320,24 @@ public class Seed extends BaseTest {
   private void userAndRole() throws Exception {
     // root user -- root role
     Set<Role> rootRoles = new HashSet<>();
-    User rootAccount = userRepository.findByUsr(ROOT);
-    Role rootRole = roleRepository.findByName(ROOT);
+    User rootAccount = userRepository.findByUsr(ROOT).get();
+    Role rootRole = roleRepository.findByName(ROOT).get();
     rootRoles.add(rootRole);
     rootAccount.setRoles(rootRoles);
     userRepository.save(rootAccount);
 
     // admin user -- admin role
     Set<Role> adminRoles = new HashSet<>();
-    User adminAccount = userRepository.findByUsr(ADMIN);
-    Role adminRole = roleRepository.findByName(ADMIN);
+    User adminAccount = userRepository.findByUsr(ADMIN).get();
+    Role adminRole = roleRepository.findByName(ADMIN).get();
     adminRoles.add(adminRole);
     adminAccount.setRoles(adminRoles);
     userRepository.save(adminAccount);
 
     // guest user -- guest role
     Set<Role> guestRoles = new HashSet<>();
-    User guestAccount = userRepository.findByUsr(GUEST);
-    Role guestRole = roleRepository.findByName(GUEST);
+    User guestAccount = userRepository.findByUsr(GUEST).get();
+    Role guestRole = roleRepository.findByName(GUEST).get();
     guestRoles.add(guestRole);
     guestAccount.setRoles(guestRoles);
     userRepository.save(guestAccount);
@@ -348,20 +351,20 @@ public class Seed extends BaseTest {
   private void roleAndGroup() throws Exception {
     // root role -- root group
     Set<Group> rootGroups = new HashSet<>();
-    Role rootRole = roleRepository.findByName(ROOT);
-    Group rootGroup = groupRepository.findByName(ROOT);
+    Role rootRole = roleRepository.findByName(ROOT).get();
+    Group rootGroup = groupRepository.findByName(ROOT).get();
     rootGroups.add(rootGroup);
     rootRole.setGroups(rootGroups);
     roleRepository.save(rootRole);
 
     // admin role -- user, authority, resource, guest group
     Set<Group> adminGroups = new HashSet<>();
-    Role adminRole = roleRepository.findByName(ADMIN);
-    Group clientGroup = groupRepository.findByName("client");
-    Group userGroup = groupRepository.findByName("user");
-    Group authGroup = groupRepository.findByName("authority");
-    Group resourceGroup = groupRepository.findByName("resource");
-    Group guestGroup = groupRepository.findByName(GUEST);
+    Role adminRole = roleRepository.findByName(ADMIN).get();
+    Group clientGroup = groupRepository.findByName("client").get();
+    Group userGroup = groupRepository.findByName("user").get();
+    Group authGroup = groupRepository.findByName("authority").get();
+    Group resourceGroup = groupRepository.findByName("resource").get();
+    Group guestGroup = groupRepository.findByName(GUEST).get();
     adminGroups.add(clientGroup);
     adminGroups.add(userGroup);
     adminGroups.add(authGroup);
@@ -372,7 +375,7 @@ public class Seed extends BaseTest {
 
     // guest role -- guest, message group
     Set<Group> guestGroups = new HashSet<>();
-    Role guestRole = roleRepository.findByName(GUEST);
+    Role guestRole = roleRepository.findByName(GUEST).get();
     guestGroups.add(guestGroup);
     guestRole.setGroups(guestGroups);
     roleRepository.save(guestRole);
@@ -386,25 +389,25 @@ public class Seed extends BaseTest {
   private void groupAndResource() throws Exception {
     // root group -- root resource
     Set<Resource> rootResources = new HashSet<>();
-    Group rootGroup = groupRepository.findByName(ROOT);
-    Resource rootResource = resourceRepository.findByName(ROOT);
+    Group rootGroup = groupRepository.findByName(ROOT).get();
+    Resource rootResource = resourceRepository.findByName(ROOT).get();
     rootResources.add(rootResource);
     rootGroup.setResources(rootResources);
     groupRepository.save(rootGroup);
 
     // client group -- client resource
     Set<Resource> clientResources = new HashSet<>();
-    Group clientGroup = groupRepository.findByName("client");
-    Resource clientResource = resourceRepository.findByName("client");
+    Group clientGroup = groupRepository.findByName("client").get();
+    Resource clientResource = resourceRepository.findByName("client").get();
     clientResources.add(clientResource);
     clientGroup.setResources(clientResources);
     groupRepository.save(clientGroup);
 
     // guest group -- guest resource
     Set<Resource> guestResources = new HashSet<>();
-    Group guestGroup = groupRepository.findByName(GUEST);
-    Resource welcomeResource = resourceRepository.findByName("welcome");
-    Resource messageResource = resourceRepository.findByName("message");
+    Group guestGroup = groupRepository.findByName(GUEST).get();
+    Resource welcomeResource = resourceRepository.findByName("welcome").get();
+    Resource messageResource = resourceRepository.findByName("message").get();
     guestResources.add(welcomeResource);
     guestResources.add(messageResource);
     guestGroup.setResources(guestResources);
@@ -412,17 +415,17 @@ public class Seed extends BaseTest {
 
     // user group -- user resource
     Set<Resource> userResources = new HashSet<>();
-    Group userGroup = groupRepository.findByName("user");
-    Resource userResource = resourceRepository.findByName("user");
+    Group userGroup = groupRepository.findByName("user").get();
+    Resource userResource = resourceRepository.findByName("user").get();
     userResources.add(userResource);
     userGroup.setResources(userResources);
     groupRepository.save(userGroup);
 
     // authority group -- role, group resource
     Set<Resource> authResources = new HashSet<>();
-    Group authGroup = groupRepository.findByName("authority");
-    Resource roleResource = resourceRepository.findByName("role");
-    Resource groupResource = resourceRepository.findByName("group");
+    Group authGroup = groupRepository.findByName("authority").get();
+    Resource roleResource = resourceRepository.findByName("role").get();
+    Resource groupResource = resourceRepository.findByName("group").get();
     authResources.add(roleResource);
     authResources.add(groupResource);
     authGroup.setResources(authResources);
@@ -430,8 +433,8 @@ public class Seed extends BaseTest {
 
     // resource group -- resource resource
     Set<Resource> resResources = new HashSet<>();
-    Group resourceGroup = groupRepository.findByName("resource");
-    Resource resourceResource = resourceRepository.findByName("resource");
+    Group resourceGroup = groupRepository.findByName("resource").get();
+    Resource resourceResource = resourceRepository.findByName("resource").get();
     resResources.add(resourceResource);
     resourceGroup.setResources(resResources);
     groupRepository.save(resourceGroup);

@@ -3,17 +3,16 @@ package com.saintdan.framework.component;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
 /**
  * Ids string transform to iterable helper.
@@ -100,7 +99,8 @@ import java.util.Set;
    */
   public <T> T param2PO(Class<T> type, Object param, T po, User currentUser) throws Exception {
     // Init createdBy, lastModifiedBy
-    Long createdBy, lastModifiedBy;
+    Long createdBy;
+    Long lastModifiedBy;
     // Init transformer
     Field idField = type.getDeclaredField("id");
     idField.setAccessible(true);

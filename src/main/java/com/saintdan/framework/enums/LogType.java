@@ -13,9 +13,9 @@ public enum LogType {
   CREATE(1),
   READ(2),
   UPDATE(3),
-  DELETE(4),;
+  DELETE(4);
 
-  private int code;
+  int code;
 
   LogType(int code) {
     this.code = code;

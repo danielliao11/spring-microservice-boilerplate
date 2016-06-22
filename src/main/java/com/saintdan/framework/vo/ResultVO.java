@@ -1,7 +1,6 @@
 package com.saintdan.framework.vo;
 
 import com.saintdan.framework.enums.OperationStatus;
-
 import java.io.Serializable;
 
 /**

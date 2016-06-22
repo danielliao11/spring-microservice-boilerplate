@@ -20,10 +20,9 @@ import org.springframework.stereotype.Service;
   @Autowired private UserRepository userRepository;
 
   @Override public UserDetails loadUserByUsername(String usr) throws UsernameNotFoundException {
-    User user = userRepository.findByUsr(usr);
-    if (user == null) {
-      throw new UsernameNotFoundException(String.format("User %s does not exist!", usr));
-    }
+    User user = userRepository.findByUsr(usr).orElseThrow(
+        // Throw cannot find any user by this usr param.
+        () -> new UsernameNotFoundException(String.format("User %s does not exist!", usr)));
     return new CustomUserRepositoryUserDetails(user);
   }
 }

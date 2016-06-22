@@ -2,6 +2,7 @@ package com.saintdan.framework.repo;
 
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Group;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,7 +15,7 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface GroupRepository extends RepositoryWithoutDelete<Group, Long> {
 
-  Group findByName(String name);
+  Optional<Group> findByName(String name);
 
   @Modifying
   @Query("update Group g set g.validFlag=?1 where g.id=?2")

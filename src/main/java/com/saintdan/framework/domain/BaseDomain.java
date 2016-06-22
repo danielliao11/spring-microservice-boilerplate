@@ -17,15 +17,14 @@ import com.saintdan.framework.repo.RepositoryWithoutDelete;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Abstract base service implement.
@@ -116,14 +115,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    */
   @SuppressWarnings("unchecked")
   public <VO> VO getById(Class<VO> voType, Object inputParam) throws Exception {
-    Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
-    idField.setAccessible(true);
-    T po = repository.findOne((ID) idField.get(inputParam));
-    if (po == null) {
-      // Throw po cannot find by id parameter exception.
-      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
-    return transformer.po2VO(voType, po);
+    return transformer.po2VO(voType, findById(inputParam));
   }
 
   /**
@@ -136,16 +128,8 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @return VO
    * @throws Exception
    */
-  @SuppressWarnings("unchecked")
   public <VO> VO update(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
-    Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
-    idField.setAccessible(true);
-    T po = repository.findOne((ID) idField.get(inputParam));
-    if (po == null) {
-      // Throw po cannot find by id parameter exception.
-      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
-    return updateByPO(voType, po, currentUser);
+    return updateByPO(voType, findById(inputParam), currentUser);
   }
 
   /**
@@ -184,5 +168,21 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   protected Class<T> getClassT() throws Exception {
     Type type = getClass().getGenericSuperclass();
     return (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
+  }
+
+  /**
+   * Find class by id.
+   *
+   * @param inputParam    id
+   * @return              class
+   * @throws Exception
+   */
+  @SuppressWarnings("unchecked")
+  private T findById(Object inputParam) throws Exception {
+    Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
+    idField.setAccessible(true);
+    String className = getClassT().getSimpleName();
+    return repository.findOne((ID) idField.get(inputParam)).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, className, CommonsConstant.ID)));
   }
 }

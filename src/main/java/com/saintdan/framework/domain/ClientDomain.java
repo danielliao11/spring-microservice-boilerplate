@@ -2,6 +2,7 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.LogType;
 import com.saintdan.framework.enums.ValidFlag;
@@ -41,8 +42,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
    */
   @Transactional
   public ClientVO create(ClientParam param, User currentUser) throws Exception {
-    Client client = clientRepository.findByClientIdAlias(param.getClientIdAlias());
-    if (client != null) {
+    if (clientRepository.findByClientIdAlias(param.getClientIdAlias()).isPresent()) {
       // Throw client already existing exception, clientId taken.
       throw new CommonsException(ErrorType.SYS0111,
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CLIENT_ID));
@@ -58,12 +58,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any client by name param.
    */
   public ClientVO getClientByClientId(ClientParam param) throws Exception {
-    Client client = clientRepository.findByClientIdAlias(param.getClientIdAlias());
-    if (client == null) {
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CLIENT_ID));
-    }
-    return transformer.po2VO(ClientVO.class, client);
+    return transformer.po2VO(ClientVO.class, findClientByClientId(param.getClientIdAlias()));
   }
 
   /**
@@ -75,12 +70,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
    */
   @Transactional
   public void delete(ClientParam param, User currentUser) throws Exception {
-    Client client = clientRepository.findOne(param.getId());
-    if (client == null) {
-      // Throw client cannot find by id parameter exception.
-      throw new CommonsException(ErrorType.SYS0122,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
+    Client client = findById(param.getId());
     // Log delete operation.
     logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.
@@ -96,5 +86,17 @@ public class ClientDomain extends BaseDomain<Client, Long> {
   @Autowired private Transformer transformer;
 
   private final static String CLIENT_ID = "clientId";
+
+  private Client findById(Long id) throws Exception {
+    return clientRepository.findOne(id).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.CLIENTS, CommonsConstant.ID)));
+  }
+
+  private Client findClientByClientId(String clientId) throws Exception {
+    return clientRepository.findByClientIdAlias(clientId).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.CLIENTS, CLIENT_ID)));
+  }
 
 }
