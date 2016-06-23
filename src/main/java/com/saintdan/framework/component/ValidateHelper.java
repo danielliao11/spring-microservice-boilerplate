@@ -54,7 +54,7 @@ import org.springframework.validation.BindingResult;
   public ResultVO validate(User currentUser, BaseParam param, Logger logger) throws Exception {
     //check currentUser
     if (currentUser == null || currentUser.getId() == null) {
-      return resultHelper.infoResp(logger, ErrorType.SYS0003);
+      return resultHelper.infoResp(logger, ErrorType.SYS0003, ErrorType.SYS0003.description());
     }
     return validate(param, logger);
   }
@@ -74,7 +74,7 @@ import org.springframework.validation.BindingResult;
     // Sign verification.
     if (!signHelper.signCheck(getPublicKeyByClientId(clientId), param)) {
       // Return rsa signature failed information and log the exception.
-      return resultHelper.infoResp(logger, ErrorType.SYS0004);
+      return resultHelper.infoResp(logger, ErrorType.SYS0004, ErrorType.SYS0004.description());
     } else
       return null;
   }

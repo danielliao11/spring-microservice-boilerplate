@@ -58,7 +58,7 @@ public class ClientController {
       return resultHelper.successResp(clientDomain.create(param, currentUser));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -83,7 +83,7 @@ public class ClientController {
       return resultHelper.successResp(clientDomain.getAll());
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -114,7 +114,7 @@ public class ClientController {
           clientDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE), PageVO.class));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -143,7 +143,7 @@ public class ClientController {
       return resultHelper.successResp(clientDomain.getById(ResultVO.class, param));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -172,7 +172,7 @@ public class ClientController {
       return resultHelper.successResp(clientDomain.update(ResultVO.class, param, currentUser));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -204,7 +204,7 @@ public class ClientController {
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());

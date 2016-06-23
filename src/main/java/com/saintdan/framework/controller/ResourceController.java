@@ -57,7 +57,7 @@ public class ResourceController {
       return resultHelper.successResp(resourceDomain.create(param, currentUser));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -82,7 +82,7 @@ public class ResourceController {
       return resultHelper.successResp(resourceDomain.getAllResources());
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -112,7 +112,7 @@ public class ResourceController {
       return resultHelper.successResp(resourceDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE)));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -141,7 +141,7 @@ public class ResourceController {
       return resultHelper.successResp(resourceDomain.getResourceById(param));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -170,7 +170,7 @@ public class ResourceController {
       return resultHelper.successResp(resourceDomain.update(param, currentUser));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -202,7 +202,7 @@ public class ResourceController {
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());

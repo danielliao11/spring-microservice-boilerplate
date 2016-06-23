@@ -1,11 +1,9 @@
 package com.saintdan.framework.tools;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.SimpleDateFormat;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 
 /**
  * Log utilities.
@@ -80,7 +78,5 @@ public class LogUtils {
     }
     return w.toString();
   }
-
-  private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 }
