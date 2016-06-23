@@ -209,7 +209,7 @@ public class UserDomain extends BaseDomain<User, Long> {
         () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, CommonsConstant.ID)));
   }
 
-  public User findByUsr(String usr) throws Exception {
+  private User findByUsr(String usr) throws Exception {
     return userRepository.findByUsr(usr).orElseThrow(
         // Throw cannot find any user by this usr param.
         () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, USR)));

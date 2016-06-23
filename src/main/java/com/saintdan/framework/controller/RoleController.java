@@ -58,7 +58,7 @@ public class RoleController {
       return resultHelper.successResp(roleDomain.create(param, currentUser));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -83,7 +83,7 @@ public class RoleController {
       return resultHelper.successResp(roleDomain.getAllRoles());
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -113,7 +113,7 @@ public class RoleController {
       return resultHelper.successResp(roleDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE)));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -142,7 +142,7 @@ public class RoleController {
       return resultHelper.successResp(roleDomain.getRoleById(param));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -171,7 +171,7 @@ public class RoleController {
       return resultHelper.successResp(roleDomain.update(param, currentUser));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -205,7 +205,7 @@ public class RoleController {
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());

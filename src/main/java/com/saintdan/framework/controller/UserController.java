@@ -3,7 +3,12 @@ package com.saintdan.framework.controller;
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.*;
+import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.constant.ControllerConstant;
+import com.saintdan.framework.constant.PathConstant;
+import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.ResultConstant;
+import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
@@ -12,6 +17,7 @@ import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.QueryHelper;
 import com.saintdan.framework.vo.ResultVO;
+import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +28,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 /**
  * Controller of user.
@@ -58,7 +62,7 @@ public class UserController {
       return resultHelper.successResp(userDomain.create(param, currentUser));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -83,7 +87,7 @@ public class UserController {
       return resultHelper.successResp(userDomain.getAllUsers());
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -114,7 +118,7 @@ public class UserController {
       return resultHelper.successResp(userDomain.getPage(pageRequest));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -143,7 +147,7 @@ public class UserController {
       return resultHelper.successResp(userDomain.getUserById(param));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -176,7 +180,7 @@ public class UserController {
       return resultHelper.successResp(userDomain.getUserByUsr(param));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -205,7 +209,7 @@ public class UserController {
       return resultHelper.successResp(userDomain.update(param, currentUser));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
@@ -237,7 +241,7 @@ public class UserController {
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, USER));
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());

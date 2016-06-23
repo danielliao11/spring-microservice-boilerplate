@@ -149,3 +149,4 @@
 - 0.10.3.RELEASE
   - Add Optional for PO.
   - Optimize codes.
+  - Fix bug of error message.

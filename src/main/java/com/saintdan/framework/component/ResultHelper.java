@@ -62,15 +62,15 @@ import org.springframework.stereotype.Component;
    * Return error information.
    *
    * @param logger    Log
-   * @param errorType error type
+   * @param errorMsg  error message
    * @return result vo
    */
-  public ResultVO infoResp(Logger logger, ErrorType errorType) {
-    LogUtils.trackInfo(logger, errorType.description());
+  public ResultVO infoResp(Logger logger, ErrorType errorType, String errorMsg) {
+    LogUtils.trackInfo(logger, errorMsg);
     return new ResultVO(
         errorType.name(),
         OperationStatus.FAILURE,
-        errorType.description()
+        errorMsg
     );
   }
 
