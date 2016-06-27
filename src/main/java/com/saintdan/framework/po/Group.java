@@ -30,8 +30,8 @@ public class Group implements Serializable {
   private static final long serialVersionUID = - 5730702381589572733L;
 
   @Id
-  @GeneratedValue( generator = "groups_seq", strategy = GenerationType.SEQUENCE )
   @SequenceGenerator( name = "groups_seq", sequenceName = "groups_seq", allocationSize = 1 )
+  @GeneratedValue( generator = "groups_seq", strategy = GenerationType.SEQUENCE )
   @Column(updatable = false)
   private Long id;
 

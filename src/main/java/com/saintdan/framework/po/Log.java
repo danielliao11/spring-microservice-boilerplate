@@ -22,8 +22,8 @@ public class Log implements Serializable {
   private static final long serialVersionUID = 7088091769901805623L;
 
   @Id
-  @GeneratedValue( generator = "logs_seq", strategy = GenerationType.SEQUENCE )
   @SequenceGenerator( name = "logs_seq", sequenceName = "logs_seq", allocationSize = 1 )
+  @GeneratedValue( generator = "logs_seq", strategy = GenerationType.SEQUENCE )
   @Column(updatable = false)
   private Long id;
 

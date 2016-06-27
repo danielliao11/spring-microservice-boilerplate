@@ -31,8 +31,8 @@ public class Resource implements GrantedAuthority, Serializable {
   private static final long serialVersionUID = 6298843159549723556L;
 
   @Id
-  @GeneratedValue( generator = "resources_seq", strategy = GenerationType.SEQUENCE )
   @SequenceGenerator( name = "resources_seq", sequenceName = "resources_seq", allocationSize = 1 )
+  @GeneratedValue( generator = "resources_seq", strategy = GenerationType.SEQUENCE )
   @Column(updatable = false)
   private Long id;
 

@@ -27,8 +27,8 @@ public class Client implements Serializable {
   private static final long serialVersionUID = 6500601540965188191L;
 
   @Id
-  @GeneratedValue( generator = "clients_seq", strategy = GenerationType.SEQUENCE )
   @SequenceGenerator( name = "clients_seq", sequenceName = "clients_seq", allocationSize = 1 )
+  @GeneratedValue( generator = "clients_seq", strategy = GenerationType.SEQUENCE )
   @Column(updatable = false)
   private Long id;
 
