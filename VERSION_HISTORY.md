@@ -150,3 +150,7 @@
   - Add Optional for PO.
   - Optimize codes.
   - Fix bug of error message.
+
+- 0.11.1.RELEASE
+  - Use Stream and Optional.
+  - Fix sequence bug.

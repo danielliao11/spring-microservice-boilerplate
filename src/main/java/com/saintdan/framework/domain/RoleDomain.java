@@ -64,8 +64,8 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No role exists.
    */
   public ObjectsVO getAllRoles() throws Exception {
-    Iterable roles = roleRepository.findAll();
-    if (((List) roles).isEmpty()) {
+    List roles = roleRepository.findAll();
+    if (roles.isEmpty()) {
       // Throw no role exists exception.
       throw new CommonsException(ErrorType.SYS0121,
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
@@ -97,7 +97,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @return roles' PO
    * @throws CommonsException {@link ErrorType#SYS0120} No role exists.
    */
-  public Iterable<Role> getRolesByIds(Iterable<Long> ids) throws Exception {
+  public List<Role> getRolesByIds(List<Long> ids) throws Exception {
     return roleRepository.findAll(ids);
   }
 
@@ -121,6 +121,12 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    */
   public RoleVO getRoleByName(RoleParam param) throws Exception {
     return transformer.po2VO(RoleVO.class, findByName(param.getName()));
+  }
+
+  public Role findByName(String name) throws Exception {
+    return roleRepository.findByName(name).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.ROLES, CommonsConstant.NAME)));
   }
 
   /**
@@ -173,11 +179,11 @@ public class RoleDomain extends BaseDomain<Role, Long> {
   private Role roleParam2PO(RoleParam param, Role role, User currentUser) throws Exception {
     transformer.param2PO(getClassT(), param, role, currentUser);
     if (!StringUtils.isBlank(param.getUserIds())) {
-      Iterable<User> roles = userDomain.getUsersByIds(transformer.idsStr2Iterable(param.getUserIds()));
-      role.setUsers(transformer.iterable2Set(roles));
+      List<User> users = userDomain.getUsersByIds(transformer.idsStr2List(param.getUserIds()));
+      role.setUsers(transformer.list2Set(users));
     }
     if (!StringUtils.isBlank(param.getGroupIds())) {
-      Iterable<Group> groups = groupService.getGroupsByIds(transformer.idsStr2Iterable(param.getGroupIds()));
+      Iterable<Group> groups = groupService.getGroupsByIds(transformer.idsStr2List(param.getGroupIds()));
       role.setGroups((Set<Group>) groups);
     }
     return role;
@@ -188,12 +194,6 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     return roleRepository.findOne(id).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.ROLES, CommonsConstant.ID)));
-  }
-
-  private Role findByName(String name) throws Exception {
-    return roleRepository.findByName(name).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.ROLES, CommonsConstant.NAME)));
   }
 
 }

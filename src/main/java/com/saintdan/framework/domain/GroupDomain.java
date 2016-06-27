@@ -64,8 +64,8 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
    */
   public ObjectsVO getAllGroups() throws Exception {
-    Iterable groups = groupRepository.findAll();
-    if (((List) groups).isEmpty()) {
+    List groups = groupRepository.findAll();
+    if (groups.isEmpty()) {
       // Throw no group exists exception.
       throw new CommonsException(ErrorType.SYS0121,
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
@@ -91,13 +91,13 @@ public class GroupDomain extends BaseDomain<Group, Long> {
   }
 
   /**
-   * Show Iterable<Group> by ids.
+   * Show {@link List<Group>} by ids.
    *
    * @param ids ids of groups
-   * @return {@link Iterable<Group>}
+   * @return {@link List<Group>}
    * @throws CommonsException {@link ErrorType#SYS0120} No group exists.
    */
-  public Iterable<Group> getGroupsByIds(Iterable<Long> ids) throws Exception {
+  public List<Group> getGroupsByIds(List<Long> ids) throws Exception {
     return groupRepository.findAll(ids);
   }
 
@@ -121,6 +121,12 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    */
   public GroupVO getGroupByName(GroupParam param) throws Exception {
     return transformer.po2VO(GroupVO.class, findByName(param.getName()));
+  }
+
+  public Group findByName(String name) throws Exception {
+    return groupRepository.findByName(name).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.GROUPS, CommonsConstant.NAME)));
   }
 
   /**
@@ -173,12 +179,12 @@ public class GroupDomain extends BaseDomain<Group, Long> {
   private Group groupParam2PO(GroupParam param, Group group, User currentUser) throws Exception {
     transformer.param2PO(getClassT(), param, group, currentUser);
     if (!StringUtils.isBlank(param.getResourceIds())) {
-      Iterable<Resource> resources = resourceService.getResourcesByIds(transformer.idsStr2Iterable(param.getResourceIds()));
-      group.setResources(transformer.iterable2Set(resources));
+      List<Resource> resources = resourceService.getResourcesByIds(transformer.idsStr2List(param.getResourceIds()));
+      group.setResources(transformer.list2Set(resources));
     }
     if (!StringUtils.isBlank(param.getRoleIds())) {
-      Iterable<Role> roles = roleDomain.getRolesByIds(transformer.idsStr2Iterable(param.getRoleIds()));
-      group.setRoles(transformer.iterable2Set(roles));
+      List<Role> roles = roleDomain.getRolesByIds(transformer.idsStr2List(param.getRoleIds()));
+      group.setRoles(transformer.list2Set(roles));
     }
     return group;
   }
@@ -187,12 +193,6 @@ public class GroupDomain extends BaseDomain<Group, Long> {
     return groupRepository.findOne(id).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.GROUPS, CommonsConstant.ID)));
-  }
-
-  private Group findByName(String name) throws Exception {
-    return groupRepository.findByName(name).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.GROUPS, CommonsConstant.NAME)));
   }
 
 }

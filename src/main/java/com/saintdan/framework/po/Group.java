@@ -22,58 +22,60 @@ import java.util.Set;
  * @since JDK1.8
  */
 @Entity
-@EntityListeners({AuditingEntityListener.class})
-@Table(name = "groups")
-@NamedEntityGraph(name = "Group.resources", attributeNodes = @NamedAttributeNode("resources"))
+@EntityListeners( {AuditingEntityListener.class} )
+@Table( name = "groups" )
+@NamedEntityGraph( name = "Group.resources", attributeNodes = @NamedAttributeNode( "resources" ) )
 public class Group implements Serializable {
 
-  private static final long serialVersionUID = -5730702381589572733L;
+  private static final long serialVersionUID = - 5730702381589572733L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(columnDefinition = "SERIAL")
+  @GeneratedValue( generator = "groups_seq", strategy = GenerationType.SEQUENCE )
+  @SequenceGenerator( name = "groups_seq", sequenceName = "groups_seq", allocationSize = 1 )
+  @Column(updatable = false)
   private Long id;
 
   @NotEmpty
-  @Column(unique = true, nullable = false, length = 20)
+  @Column( unique = true, nullable = false, length = 20 )
   private String name;
 
-  @Column(columnDefinition = "TEXT")
+  @Column( columnDefinition = "TEXT" )
   private String description;
 
-  @Column(nullable = false)
+  @Column( nullable = false )
   private ValidFlag validFlag = ValidFlag.VALID;
 
   @CreatedDate
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Date createdDate = new Date();
 
   @CreatedBy
-  @Column(nullable = false, columnDefinition = "BIGINT")
+  @Column( nullable = false, columnDefinition = "BIGINT" )
   private Long createdBy;
 
   @LastModifiedDate
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Date lastModifiedDate = new Date();
 
   @LastModifiedBy
-  @Column(nullable = false, columnDefinition = "BIGINT")
+  @Column( nullable = false, columnDefinition = "BIGINT" )
   private Long lastModifiedBy;
 
   @Version
-  @Column(nullable = false)
+  @Column( nullable = false )
   private int version;
 
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groups", cascade = {CascadeType.REFRESH})
+  @ManyToMany( fetch = FetchType.LAZY, mappedBy = "groups", cascade = {CascadeType.REFRESH} )
   private Set<Role> roles = new HashSet<>();
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
-  @JoinTable(name = "groups_has_resources",
-      joinColumns = {@JoinColumn(name = "group_id")},
-      inverseJoinColumns = {@JoinColumn(name = "resource_id")})
+  @ManyToMany( fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH} )
+  @JoinTable( name = "groups_has_resources",
+      joinColumns = {@JoinColumn( name = "group_id" )},
+      inverseJoinColumns = {@JoinColumn( name = "resource_id" )} )
   private Set<Resource> resources = new HashSet<>();
 
-  public Group() {}
+  public Group() {
+  }
 
   public Group(String name, String description) {
     this.name = name;

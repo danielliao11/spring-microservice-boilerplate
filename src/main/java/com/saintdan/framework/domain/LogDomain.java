@@ -11,14 +11,13 @@ import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.LogVO;
 import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
+import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Domain of {@link Log}
@@ -53,7 +52,7 @@ public class LogDomain {
    * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
    */
   public ObjectsVO getAllLogs() throws Exception {
-    List<Log> logs = (List<Log>) logRepository.findAll();
+    List<Log> logs = logRepository.findAll();
     if (logs.isEmpty()) {
       // Throw no log exist exception.
       throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));

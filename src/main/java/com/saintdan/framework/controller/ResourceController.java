@@ -3,7 +3,12 @@ package com.saintdan.framework.controller;
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.*;
+import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.constant.ControllerConstant;
+import com.saintdan.framework.constant.PathConstant;
+import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.ResultConstant;
+import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.ResourceDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
@@ -11,6 +16,7 @@ import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.ResultVO;
+import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +27,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 /**
  * Controller of resource.

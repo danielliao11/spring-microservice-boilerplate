@@ -20,34 +20,35 @@ import java.util.Date;
  * @since JDK1.8
  */
 @Entity
-@EntityListeners({AuditingEntityListener.class})
-@Table(name = "clients")
+@EntityListeners( {AuditingEntityListener.class} )
+@Table( name = "clients" )
 public class Client implements Serializable {
 
   private static final long serialVersionUID = 6500601540965188191L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(columnDefinition = "SERIAL")
+  @GeneratedValue( generator = "clients_seq", strategy = GenerationType.SEQUENCE )
+  @SequenceGenerator( name = "clients_seq", sequenceName = "clients_seq", allocationSize = 1 )
+  @Column(updatable = false)
   private Long id;
 
   @NotEmpty
-  @Column(length = 50)
+  @Column( length = 50 )
   private String clientIdAlias;
 
   @NotEmpty
-  @Column(length = 100)
+  @Column( length = 100 )
   private String resourceIdStr;
 
   @NotEmpty
-  @Column(length = 100)
+  @Column( length = 100 )
   private String clientSecretAlias;
 
   /**
    * Available values: read, write
    */
   @NotEmpty
-  @Column(length = 100)
+  @Column( length = 100 )
   private String scopeStr;
 
   /**
@@ -56,13 +57,13 @@ public class Client implements Serializable {
    * Default description is "authorization_code,refresh_token".
    */
   @NotEmpty
-  @Column(length = 100)
+  @Column( length = 100 )
   private String authorizedGrantTypeStr;
 
   /**
    * The redirect URI(s) established during registration (optional, comma separated).
    */
-  @Column(length = 1024)
+  @Column( length = 1024 )
   private String registeredRedirectUriStr;
 
   /**
@@ -72,7 +73,7 @@ public class Client implements Serializable {
    *     For example: USER
    * </pre>
    */
-  @Column(length = 500)
+  @Column( length = 500 )
   private String authoritiesStr;
 
   /**
@@ -93,33 +94,34 @@ public class Client implements Serializable {
    */
   private String additionalInformationStr;
 
-  @Column(nullable = false)
+  @Column( nullable = false )
   private ValidFlag validFlag = ValidFlag.VALID;
 
   @CreatedDate
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Date createdDate = new Date();
 
   @CreatedBy
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Long createdBy;
 
   @LastModifiedDate
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Date lastModifiedDate = new Date();
 
   @LastModifiedBy
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Long lastModifiedBy;
 
   @Version
-  @Column(nullable = false)
+  @Column( nullable = false )
   private int version;
 
-  @Column(nullable = false, length = 5000)
+  @Column( nullable = false, length = 5000 )
   private String publicKey;
 
-  public Client() {}
+  public Client() {
+  }
 
   public Client(Client client) {
     super();

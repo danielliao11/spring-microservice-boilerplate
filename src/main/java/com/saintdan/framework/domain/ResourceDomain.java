@@ -63,7 +63,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No resource exists.
    */
   public ObjectsVO getAllResources() throws Exception {
-    List<Resource> resources = (List<Resource>) resourceRepository.findAll();
+    List<Resource> resources = resourceRepository.findAll();
     if (resources.isEmpty()) {
       // Throw no resource exist exception.
       throw new CommonsException(ErrorType.SYS0121,
@@ -90,13 +90,13 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
   }
 
   /**
-   * Show {@link Iterable<Resource>} by ids.
+   * Show {@link List<Resource>} by ids.
    *
    * @param ids ids of resources
-   * @return {@link Iterable<Resource>}
+   * @return {@link List<Resource>}
    * @throws CommonsException {@link ErrorType#SYS0120} No resource exists.
    */
-  public Iterable<Resource> getResourcesByIds(Iterable<Long> ids) throws Exception {
+  public List<Resource> getResourcesByIds(List<Long> ids) throws Exception {
     return resourceRepository.findAll(ids);
   }
 
@@ -131,6 +131,12 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    */
   public ResourceVO getResourceByPath(ResourceParam param) throws Exception {
     return transformer.po2VO(ResourceVO.class, findByPath(param.getPath()));
+  }
+
+  public Resource findByName(String name) throws Exception {
+    return resourceRepository.findByName(name).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, CommonsConstant.NAME)));
   }
 
   /**
@@ -185,8 +191,8 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
   private Resource resourceParam2PO(ResourceParam param, Resource resource, User currentUser) throws Exception {
     transformer.param2PO(getClassT(), param, resource, currentUser);
     if (!StringUtils.isBlank(param.getGroupIds())) {
-      Iterable<Group> groups = groupDomain.getGroupsByIds(transformer.idsStr2Iterable(param.getGroupIds()));
-      resource.setGroups(transformer.iterable2Set(groups));
+      List<Group> groups = groupDomain.getGroupsByIds(transformer.idsStr2List(param.getGroupIds()));
+      resource.setGroups(transformer.list2Set(groups));
     }
     return resource;
   }
@@ -195,12 +201,6 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     return resourceRepository.findOne(id).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, CommonsConstant.ID)));
-  }
-
-  private Resource findByName(String name) throws Exception {
-    return resourceRepository.findByName(name).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, CommonsConstant.NAME)));
   }
 
   private Resource findByPath(String path) throws Exception {

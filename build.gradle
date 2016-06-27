@@ -48,6 +48,7 @@ ext {
 
   fastJsonVersion = '1.2.12'
   commonsLang3Version = '3.4'
+  guavaVersion = '19.0'
 
 //  hsqldbVersion = '1.8.0.10'
 //  mysqlVersion = '5.1.36'
@@ -70,6 +71,7 @@ dependencies {
   // Other dependencies.
   compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
   compile "com.alibaba:fastjson:${fastJsonVersion}"
+  compile "com.google.guava:guava:${guavaVersion}"
 
   // DB dependencies.
   // You can choose one of them.

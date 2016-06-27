@@ -2,6 +2,7 @@ package com.saintdan.framework.repo;
 
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -63,7 +64,7 @@ import org.springframework.data.repository.Repository;
    *
    * @return all entities
    */
-  Iterable<T> findAll();
+  List<T> findAll();
 
   /**
    * Returns all instances of the type with the given IDs.
@@ -71,7 +72,7 @@ import org.springframework.data.repository.Repository;
    * @param ids PO's ids
    * @return POs
    */
-  Iterable<T> findAll(Iterable<ID> ids);
+  List<T> findAll(Iterable<ID> ids);
 
   /**
    * Returns all instances of the type with the given pageable.
