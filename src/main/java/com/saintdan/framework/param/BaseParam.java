@@ -4,7 +4,6 @@ import com.saintdan.framework.annotation.SignField;
 import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.CommonsException;
-import com.saintdan.framework.tools.CheckHelper;
 import com.saintdan.framework.tools.SignatureUtils;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
@@ -94,7 +93,7 @@ public class BaseParam implements Serializable {
         Field field = null;
         String itemName = pd.getName();
         try {
-          field = CheckHelper.checkContains(baseFields.toArray(), itemName) ? BaseParam.class.getDeclaredField(itemName) :
+          field = baseFields.contains(itemName) ? BaseParam.class.getDeclaredField(itemName) :
           this.getClass().getDeclaredField(itemName);
         } catch (Exception ignored) {
           // Ignore

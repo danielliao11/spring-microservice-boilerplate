@@ -5,6 +5,9 @@ import java.util.List;
 
 /**
  * Helper for checking.
+ * <p>
+ *   Array or list must be sorted.
+ * </p>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/28/16
