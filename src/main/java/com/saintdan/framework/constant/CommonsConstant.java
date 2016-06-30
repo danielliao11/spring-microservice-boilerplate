@@ -14,4 +14,6 @@ public interface CommonsConstant {
   String ID = "id";
 
   String NAME = "name";
+
+  String COMMA = ",";
 }

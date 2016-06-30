@@ -1,8 +1,5 @@
 package com.saintdan.framework.tools;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Helper for checking.
  * <p>
@@ -15,11 +12,12 @@ import java.util.List;
  */
 public class CheckHelper {
 
-  public static boolean checkContains(List list, Object val) {
-    return Arrays.binarySearch(list.toArray(), val) > 0;
-  }
-
-  public static boolean checkContains(Object[] array, Object val) {
-    return Arrays.binarySearch(array, val) > 0;
+  public static boolean checkContains(String[] array, String val) {
+    for (String str : array) {
+      if (str.equals(val)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
