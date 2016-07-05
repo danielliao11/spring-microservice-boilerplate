@@ -76,8 +76,8 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @throws Exception
    */
   public ObjectsVO getAll() throws Exception {
-    Iterable pos = repository.findAll();
-    if (((List) pos).isEmpty()) {
+    List pos = repository.findAll();
+    if (pos.isEmpty()) {
       // Throw po cannot find exception.
       throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
     }
@@ -99,8 +99,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
       // Throw po cannot find exception.
       throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
     }
-    return transformer.poPage2VO(
-        transformer.poList2VOList(voType, (Iterable) poPage.getContent()),
+    return transformer.poPage2VO( transformer.poList2VOList(voType, poPage.getContent()),
         pageable, poPage.getTotalElements());
   }
 

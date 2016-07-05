@@ -5,9 +5,11 @@ import com.saintdan.framework.vo.ObjectsVO;
 import com.saintdan.framework.vo.PageVO;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,29 +35,18 @@ import org.springframework.stereotype.Component;
    * @param idsStr ids String
    * @return ids iterable
    */
-  public Iterable<Long> idsStr2Iterable(String idsStr) {
-    List<Long> ids = new ArrayList<>();
-    // Transform ids string to ids array.
-    String[] idsArray = idsStr.split(",");
-    // Generate id list.
-    for (String id : idsArray) {
-      ids.add(Long.valueOf(id));
-    }
-    return ids;
+  public List<Long> idsStr2List(String idsStr) {
+    return Arrays.asList(idsStr.split(",")).stream().map(Long::valueOf).collect(Collectors.toList());
   }
 
   /**
-   * Transform object iterable to hash set.
+   * Transform object list to hash set.
    *
    * @param objects object iterable
    * @return object hash set
    */
-  public <T> Set<T> iterable2Set(Iterable<T> objects) {
-    Set<T> objectSet = new HashSet<>();
-    for (T object : objects) {
-      objectSet.add(object);
-    }
-    return objectSet;
+  public <T> Set<T> list2Set(List<T> objects) {
+    return new HashSet<>(objects);
   }
 
   /**
@@ -123,29 +114,14 @@ import org.springframework.stereotype.Component;
     return po;
   }
 
-
-  /**
-   * Transform PO to VO.
-   *
-   * @param po PO
-   * @return VO
-   */
-  public <T> T po2VO(Class<T> clazz, Object po) throws Exception {
-    T vo = clazz.newInstance();
-    BeanUtils.copyProperties(po, vo);
-    return vo;
-  }
-
-
   /**
    * Transform PO to VO
    *
    * @param pos PO
    * @return VO
    */
-  public ObjectsVO pos2VO(Class<?> clazz, Iterable pos) throws Exception {
-    List objList = poList2VOList(clazz, pos);
-    return voList2ObjectsVO(objList);
+  public ObjectsVO pos2VO(Class<?> clazz, List pos) throws Exception {
+    return voList2ObjectsVO(poList2VOList(clazz, pos));
   }
 
   /**
@@ -155,13 +131,25 @@ import org.springframework.stereotype.Component;
    * @return VO list
    */
   @SuppressWarnings("unchecked")
-  public List<?> poList2VOList(Class<?> type, Iterable pos) throws Exception {
+  public List<?> poList2VOList(Class<?> type, List pos) throws InstantiationException, IllegalAccessException {
     List voList = new ArrayList();
     for (Object po : pos) {
       Object vo = po2VO(type, po);
       voList.add(vo);
     }
     return voList;
+  }
+
+  /**
+   * Transform PO to VO.
+   *
+   * @param po PO
+   * @return VO
+   */
+  public <T> T po2VO(Class<T> clazz, Object po) throws InstantiationException, IllegalAccessException {
+    T vo = clazz.newInstance();
+    BeanUtils.copyProperties(po, vo);
+    return vo;
   }
 
 }

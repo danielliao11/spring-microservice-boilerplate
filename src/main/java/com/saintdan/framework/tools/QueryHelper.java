@@ -1,11 +1,16 @@
 package com.saintdan.framework.tools;
 
-import org.springframework.data.domain.Sort;
-
+import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.param.BaseParam;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 /**
  * Query helper.
@@ -16,8 +21,12 @@ import java.util.TreeMap;
  */
 public class QueryHelper {
 
+  public static PageRequest getPageRequest(BaseParam param) {
+    return new PageRequest(param.getPageNo() == null ? 0 : param.getPageNo() - 1, param.getPageSize(), QueryHelper.getSort(param.getSortBy()));
+  }
+
   /**
-   * Get default sort.
+   * Get default {@link Sort}.
    *
    * @return {@link Sort}
    */
@@ -27,7 +36,7 @@ public class QueryHelper {
   }
 
   /**
-   * Get sort
+   * Get {@link Sort}
    *
    * @param param     sort param
    * @param direction {@link Sort.Direction}
@@ -39,7 +48,7 @@ public class QueryHelper {
   }
 
   /**
-   * Get sort
+   * Get {@link Sort}
    *
    * @param map sort map
    * @return {@link Sort}
@@ -51,5 +60,26 @@ public class QueryHelper {
       orderList.add(order);
     }
     return new Sort(orderList);
+  }
+
+  /**
+   * Get {@link Sort}
+   *
+   * @param sortBy  sortedBy
+   * @return {@link Sort}
+   */
+  public static Sort getSort(String sortBy) {
+    return StringUtils.isBlank(sortBy) ? getDefaultSort() : new Sort(Arrays.asList(sortBy.split(CommonsConstant.COMMA)).stream().map(
+        (orders) -> getOrder(orders.split(CommonsConstant.COLON))).collect(Collectors.toList()));
+  }
+
+  /**
+   * Get {@link Sort.Order}
+   *
+   * @param orders    orders
+   * @return {@link Sort.Order}
+   */
+  private static Sort.Order getOrder(String[] orders) {
+    return new Sort.Order(Sort.Direction.fromString(orders[1]), orders[0]);
   }
 }

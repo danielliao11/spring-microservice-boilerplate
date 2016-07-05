@@ -3,9 +3,7 @@ package com.saintdan.framework.controller;
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ControllerConstant;
-import com.saintdan.framework.constant.PathConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.constant.VersionConstant;
@@ -22,7 +20,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,52 +67,26 @@ public class UserController {
   }
 
   /**
-   * Show all {@link com.saintdan.framework.vo.UserVO}.
-   *
-   * @return {@link com.saintdan.framework.vo.UserVO}
-   */
-  @RequestMapping(value = PathConstant.INDEX, method = RequestMethod.GET)
-  public ResultVO index(String sign) {
-    try {
-      UserParam param = new UserParam();
-      param.setSign(sign);
-      // Sign validate.
-      ResultVO resultVO = validateHelper.validate(param, logger);
-      if (resultVO != null) {
-        return resultVO;
-      }
-      return resultHelper.successResp(userDomain.getAllUsers());
-    } catch (CommonsException e) {
-      // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
-    } catch (Exception e) {
-      // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
-    }
-  }
-
-  /**
    * Show {@link com.saintdan.framework.vo.UserVO} in {@link com.saintdan.framework.vo.PageVO}.
    *
-   * @param pageNo page number
+   * @param param {@link UserParam}
    * @return {@link com.saintdan.framework.vo.UserVO} in {@link com.saintdan.framework.vo.PageVO}
    */
   @RequestMapping(method = RequestMethod.GET)
-  public ResultVO page(String pageNo, String sign) {
+  public ResultVO show(UserParam param) {
     try {
-      // Init page number.
-      if (StringUtils.isBlank(pageNo)) {
-        pageNo = "0";
-      }
-      UserParam param = new UserParam();
-      param.setSign(sign);
       // Sign validate.
       ResultVO resultVO = validateHelper.validate(param, logger);
       if (resultVO != null) {
         return resultVO;
       }
-      PageRequest pageRequest = new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE, QueryHelper.getDefaultSort());
-      return resultHelper.successResp(userDomain.getPage(pageRequest));
+      if (StringUtils.isNotBlank(param.getUsr())) {
+        return resultHelper.successResp(userDomain.getUserByUsr(param));
+      }
+      if (param.getPageNo() == null) {
+        return resultHelper.successResp(userDomain.getAllUsers());
+      }
+      return resultHelper.successResp(userDomain.getPage(QueryHelper.getPageRequest(param)));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
@@ -155,46 +126,13 @@ public class UserController {
   }
 
   /**
-   * Show {@link com.saintdan.framework.vo.UserVO} by user's usr.
-   *
-   * @param usr  user's usr
-   * @param sign signature
-   * @return {@link com.saintdan.framework.vo.UserVO}
-   */
-  @RequestMapping(value = "/usr/{usr}", method = RequestMethod.GET)
-  public ResultVO showByUsr(@PathVariable String usr, String sign) {
-    try {
-      // If usr or sign is empty, return SYS0002, params error.
-      if (StringUtils.isBlank(usr)) {
-        final String USR = "usr";
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, USR));
-      }
-      UserParam param = new UserParam(usr);
-      param.setSign(sign);
-      // Sign validate.
-      ResultVO resultVO = validateHelper.validate(param, logger);
-      if (resultVO != null) {
-        return resultVO;
-      }
-      // Return result and message.
-      return resultHelper.successResp(userDomain.getUserByUsr(param));
-    } catch (CommonsException e) {
-      // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
-    } catch (Exception e) {
-      // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
-    }
-  }
-
-  /**
    * Update {@link User}.
    *
    * @param id    user's id
    * @param param {@link UserParam}
    * @return {@link com.saintdan.framework.vo.UserVO}
    */
-  @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+  @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid UserParam param, BindingResult result) {
     try {
       if (StringUtils.isBlank(id)) {

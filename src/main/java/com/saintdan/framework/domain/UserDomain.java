@@ -1,5 +1,6 @@
 package com.saintdan.framework.domain;
 
+import com.google.common.collect.Lists;
 import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
@@ -63,8 +64,8 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No user exists.
    */
   public ObjectsVO getAllUsers() throws Exception {
-    Iterable users = userRepository.findAll();
-    if (((List) users).isEmpty()) {
+    List<User> users = userRepository.findAll();
+    if (users.isEmpty()) {
       // Throw no user exists exception.
       throw new CommonsException(ErrorType.SYS0121,
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
@@ -90,14 +91,14 @@ public class UserDomain extends BaseDomain<User, Long> {
   }
 
   /**
-   * Show {@link Iterable<User>} by ids.
+   * Show {@link List<User>} by ids.
    *
    * @param ids users' ids
-   * @return {@link Iterable<User>}
+   * @return {@link List<User>}
    * @throws CommonsException {@link ErrorType#SYS0120} No user exists.
    */
-  public Iterable<User> getUsersByIds(Iterable<Long> ids) throws Exception {
-    return userRepository.findAll(ids);
+  public List<User> getUsersByIds(List<Long> ids) throws Exception {
+    return userRepository.findAll(Lists.newArrayList(ids));
   }
 
   /**
@@ -120,6 +121,12 @@ public class UserDomain extends BaseDomain<User, Long> {
    */
   public UserVO getUserByUsr(UserParam param) throws Exception {
     return transformer.po2VO(UserVO.class, findByUsr(param.getUsr()));
+  }
+
+  public User findByUsr(String usr) throws Exception {
+    return userRepository.findByUsr(usr).orElseThrow(
+        // Throw cannot find any user by this usr param.
+        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, USR)));
   }
 
   /**
@@ -194,8 +201,8 @@ public class UserDomain extends BaseDomain<User, Long> {
   private User userParam2PO(UserParam param, User user, User currentUser) throws Exception {
     transformer.param2PO(getClassT(), param, user, currentUser);
     if (!StringUtils.isBlank(param.getRoleIds())) {
-      Iterable<Role> roles = roleDomain.getRolesByIds(transformer.idsStr2Iterable(param.getRoleIds()));
-      user.setRoles(transformer.iterable2Set(roles));
+      List<Role> roles = roleDomain.getRolesByIds(transformer.idsStr2List(param.getRoleIds()));
+      user.setRoles(transformer.list2Set(roles));
     }
     if (!StringUtils.isBlank(param.getPwd())) {
       user.setPwd(passwordEncoder.encode(param.getPwd()));
@@ -207,12 +214,6 @@ public class UserDomain extends BaseDomain<User, Long> {
     return userRepository.findOne(id).orElseThrow(
         // Throw cannot find any user by this id param.
         () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, CommonsConstant.ID)));
-  }
-
-  private User findByUsr(String usr) throws Exception {
-    return userRepository.findByUsr(usr).orElseThrow(
-        // Throw cannot find any user by this usr param.
-        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, USR)));
   }
 
 }

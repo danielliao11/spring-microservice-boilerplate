@@ -1,6 +1,6 @@
 description = 'spring-rest-oauth2-sample'
 group = 'com.saintdan.framework'
-version = '0.10.3.RELEASE'
+version = '0.11.2.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -17,7 +17,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE')
+    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.3.6.RELEASE')
   }
 }
 
@@ -42,12 +42,13 @@ compileTestJava {
 }
 
 ext {
-  springBootVersion = '1.3.5.RELEASE'
+  springBootVersion = '1.3.6.RELEASE'
   springDataJpaVersion = '1.10.2.RELEASE'
-  springOAuth2Version = '2.0.8.RELEASE'
+  springOAuth2Version = '2.0.10.RELEASE'
 
   fastJsonVersion = '1.2.12'
   commonsLang3Version = '3.4'
+  guavaVersion = '19.0'
 
 //  hsqldbVersion = '1.8.0.10'
 //  mysqlVersion = '5.1.36'
@@ -70,6 +71,7 @@ dependencies {
   // Other dependencies.
   compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
   compile "com.alibaba:fastjson:${fastJsonVersion}"
+  compile "com.google.guava:guava:${guavaVersion}"
 
   // DB dependencies.
   // You can choose one of them.
@@ -97,8 +99,4 @@ dependencies {
 
 task wrapper(type: Wrapper) {
   gradleVersion = '2.13'
-}
-
-task generatePom << {
-  pom{}.writeTo('pom.xml')
 }

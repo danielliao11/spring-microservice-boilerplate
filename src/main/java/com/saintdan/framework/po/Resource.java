@@ -24,19 +24,20 @@ import java.util.Set;
  * @since JDK1.8
  */
 @Entity
-@EntityListeners({AuditingEntityListener.class})
-@Table(name = "resources")
+@EntityListeners( {AuditingEntityListener.class} )
+@Table( name = "resources" )
 public class Resource implements GrantedAuthority, Serializable {
 
   private static final long serialVersionUID = 6298843159549723556L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(columnDefinition = "SERIAL")
+  @SequenceGenerator( name = "resources_seq", sequenceName = "resources_seq", allocationSize = 1 )
+  @GeneratedValue( generator = "resources_seq", strategy = GenerationType.SEQUENCE )
+  @Column(updatable = false)
   private Long id;
 
   @NotEmpty
-  @Column(unique = true, nullable = false, length = 20)
+  @Column( unique = true, nullable = false, length = 20 )
   private String name;
 
   /**
@@ -44,46 +45,47 @@ public class Resource implements GrantedAuthority, Serializable {
    * <p><b>NOTE: Using ANT path mode</b></p>
    */
   @NotEmpty
-  @Column(unique = true, length = 1024, nullable = false)
+  @Column( unique = true, length = 1024, nullable = false )
   private String path;
 
   /**
    * The priority. the smaller the description the higher the priority.
    */
   @NotNull
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Integer priority;
 
-  @Column(columnDefinition = "TEXT")
+  @Column( columnDefinition = "TEXT" )
   private String description;
 
-  @Column(nullable = false)
+  @Column( nullable = false )
   private ValidFlag validFlag = ValidFlag.VALID;
 
   @CreatedDate
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Date createdDate = new Date();
 
   @CreatedBy
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Long createdBy;
 
   @LastModifiedDate
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Date lastModifiedDate = new Date();
 
   @LastModifiedBy
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Long lastModifiedBy;
 
   @Version
-  @Column(nullable = false)
+  @Column( nullable = false )
   private int version;
 
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources", cascade = {CascadeType.REFRESH})
+  @ManyToMany( fetch = FetchType.LAZY, mappedBy = "resources", cascade = {CascadeType.REFRESH} )
   private Set<Group> groups = new HashSet<>();
 
-  public Resource() {}
+  public Resource() {
+  }
 
   public Resource(String name, String path, Integer priority, String description) {
     this.name = name;
@@ -92,7 +94,8 @@ public class Resource implements GrantedAuthority, Serializable {
     this.description = description;
   }
 
-  @Override public String getAuthority() {
+  @Override
+  public String getAuthority() {
     return name;
   }
 

@@ -5,15 +5,17 @@ import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.tools.SignatureUtils;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Base param.
@@ -35,9 +37,39 @@ public class BaseParam implements Serializable {
 
   private static final long serialVersionUID = -103658650614029839L;
 
+  private Integer pageNo;
+
+  private Integer pageSize = 20;
+
+  private String sortBy;
+
   private String sign;
 
   private UserDetails currentUser;
+
+  public Integer getPageNo() {
+    return pageNo;
+  }
+
+  public void setPageNo(Integer pageNo) {
+    this.pageNo = pageNo;
+  }
+
+  public Integer getPageSize() {
+    return pageSize;
+  }
+
+  public void setPageSize(Integer pageSize) {
+    this.pageSize = pageSize;
+  }
+
+  public String getSortBy() {
+    return sortBy;
+  }
+
+  public void setSortBy(String sortBy) {
+    this.sortBy = sortBy;
+  }
 
   public String getSign() {
     return sign;
@@ -82,11 +114,7 @@ public class BaseParam implements Serializable {
     try {
       BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
       PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
-      Arrays.sort(pds, new Comparator<PropertyDescriptor>() {
-        public int compare(PropertyDescriptor o1, PropertyDescriptor o2) {
-          return (o1.getName().compareTo(o2.getName()));
-        }
-      });
+      Arrays.sort(pds, (o1, o2) -> (o1.getName().compareTo(o2.getName())));
       for (PropertyDescriptor pd : pds) {
         Method method = pd.getReadMethod();
         if (method == null) { // Ignore read-only field
@@ -95,13 +123,10 @@ public class BaseParam implements Serializable {
         Field field = null;
         String itemName = pd.getName();
         try {
-          if (baseFields.contains(itemName)) {
-            field = BaseParam.class.getDeclaredField(itemName);
-          } else {
-            field = this.getClass().getDeclaredField(itemName);
-          }
+          field = baseFields.contains(itemName) ? BaseParam.class.getDeclaredField(itemName) :
+          this.getClass().getDeclaredField(itemName);
         } catch (Exception ignored) {
-
+          // Ignore
         }
 
         if (field == null || !field.isAnnotationPresent(SignField.class)) {
@@ -115,9 +140,7 @@ public class BaseParam implements Serializable {
         buffer.append(itemName).append(EQUAL);
         if (itemValue.getClass().isAssignableFrom(List.class)) {
           List<?> list = (List<?>) itemValue;
-          for (Object object : list) {
-            buffer.append(object);
-          }
+          list.forEach(buffer::append);
         } else {
           buffer.append(itemValue);
         }

@@ -1,6 +1,7 @@
 package com.saintdan.framework.repo;
 
 import com.saintdan.framework.po.Log;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
@@ -20,7 +21,7 @@ public interface LogRepository extends Repository<Log, Long> {
 
   Log save(Log log);
 
-  Iterable<Log> findAll();
+  List<Log> findAll();
 
   Page<Log> findAll(Pageable pageable);
 }

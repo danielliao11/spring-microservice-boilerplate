@@ -1,18 +1,32 @@
 package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Version;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Authorized users, provide for spring security oauth2.
@@ -23,79 +37,80 @@ import java.util.Set;
  * @since JDK1.8
  */
 @Entity
-@EntityListeners({AuditingEntityListener.class})
-@Table(name = "users")
-@NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
+@EntityListeners( {AuditingEntityListener.class} )
+@Table( name = "users" )
+@NamedEntityGraph( name = "User.roles", attributeNodes = @NamedAttributeNode( "roles" ) )
 public class User implements Serializable {
 
   private static final long serialVersionUID = 2680591198337929454L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(columnDefinition = "SERIAL")
+  @SequenceGenerator( name = "users_seq", sequenceName = "users_seq", allocationSize = 1 )
+  @GeneratedValue( generator = "users_seq", strategy = GenerationType.SEQUENCE )
+  @Column(updatable = false)
   private Long id;
 
   @NotEmpty
-  @Column(length = 50)
+  @Column( length = 50 )
   private String name;
 
   @NotEmpty
-  @Column(unique = true, nullable = false, length = 20)
+  @Column( unique = true, nullable = false, length = 20 )
   private String usr;
 
   @NotEmpty
-  @Column(nullable = false, length = 200)
+  @Column( nullable = false, length = 200 )
   private String pwd;
 
-  @Column(nullable = false)
+  @Column( nullable = false )
   private boolean isAccountNonExpiredAlias = Boolean.TRUE;
 
-  @Column(nullable = false)
+  @Column( nullable = false )
   private boolean isAccountNonLockedAlias = Boolean.TRUE;
 
-  @Column(nullable = false)
+  @Column( nullable = false )
   private boolean isCredentialsNonExpiredAlias = Boolean.TRUE;
 
-  @Column(nullable = false)
+  @Column( nullable = false )
   private boolean isEnabledAlias = Boolean.TRUE;
 
-  @Column(nullable = false)
+  @Column( nullable = false )
   private ValidFlag validFlag = ValidFlag.VALID;
 
-  @Column(columnDefinition = "TEXT")
+  @Column( columnDefinition = "TEXT" )
   private String description;
 
   // Last login time
   private Date lastLoginTime;
 
   // Last login IP address
-  @Column(name = "last_login_ip")
+  @Column( name = "last_login_ip" )
   private String lastLoginIP;
 
   @CreatedDate
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Date createdDate = new Date();
 
   @CreatedBy
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Long createdBy;
 
   @LastModifiedDate
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Date lastModifiedDate = new Date();
 
   @LastModifiedBy
-  @Column(nullable = false)
+  @Column( nullable = false )
   private Long lastModifiedBy;
 
   @Version
-  @Column(nullable = false)
+  @Column( nullable = false )
   private int version;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
-  @JoinTable(name = "users_has_roles",
-      joinColumns = {@JoinColumn(name = "user_id")},
-      inverseJoinColumns = {@JoinColumn(name = "role_id")})
+  @ManyToMany( fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH} )
+  @JoinTable( name = "users_has_roles",
+      joinColumns = {@JoinColumn( name = "user_id" )},
+      inverseJoinColumns = {@JoinColumn( name = "role_id" )} )
   private Set<Role> roles = new HashSet<>();
 
   public User() {}

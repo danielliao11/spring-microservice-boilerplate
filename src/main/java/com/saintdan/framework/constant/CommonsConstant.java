@@ -9,9 +9,11 @@ package com.saintdan.framework.constant;
  */
 public interface CommonsConstant {
 
-  Integer PAGE_SIZE = 20;
-
   String ID = "id";
 
   String NAME = "name";
+
+  String COMMA = ",";
+
+  String COLON = ":";
 }
