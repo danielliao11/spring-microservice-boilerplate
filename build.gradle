@@ -44,7 +44,7 @@ compileTestJava {
 ext {
   springBootVersion = '1.3.6.RELEASE'
   springDataJpaVersion = '1.10.2.RELEASE'
-  springOAuth2Version = '2.0.8.RELEASE'
+  springOAuth2Version = '2.0.10.RELEASE'
 
   fastJsonVersion = '1.2.12'
   commonsLang3Version = '3.4'
