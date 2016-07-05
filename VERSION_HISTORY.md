@@ -1,156 +1,160 @@
 # VERSION HISTORY
 
 - 0.0.1.SNAPSHOT
-  - Initial version.
+  - [ADD] Initial version.
   
 - 0.1.0.RELEASE
-  - Release version.
+  - [ADD] Release version.
   
 - 0.2.0.RELEASE
-  - Change authorities to resources.
-  - Add https.
-  - Fix some bugs.
+  - [ADD] Add https.
+  - [MOD] Change authorities to resources.
+  - [FIX] Fix some bugs.
   
 - 0.2.1.RELEASE
-  - Add name to Resource PO.
-  - Change getAuthorities().
-  - Change import.sql.
+  - [ADD] Add name to Resource PO.
+  - [MOD] Change getAuthorities().
+  - [MOD] Change import.sql.
   
 - 0.3.0.RELEASE
-  - Add /bo, /enums, /exception.
-  - Add UserService and its implement.
+  - [ADD] Add /bo, /enums, /exception.
+  - [ADD] Add UserService and its implement.
   
 - 0.3.1.RELEASE
-  - Modify build.gradle.
-  - Add refresh token usage.
-  
+  - [ADD] Add refresh token usage.
+  - [MOD] Modify build.gradle.
+
 - 0.3.2.RELEASE
-  - Fix some hidden bugs.
-  - Add SystemRuntimeException and UnknownException.
-  
+  - [ADD] Add SystemRuntimeException and UnknownException.
+  - [FIX] Fix some hidden bugs.
+
 - 0.4.0.RELEASE
-  - Add RSA signature.(You can generate your own RSA key pair with ssh-keygen, or get it in [GenerateRSAKeyPair](/src/test/java/com/saintdan/framework/GenerateRSAKeyPair.java).
+  - [ADD] Add RSA signature.(You can generate your own RSA key pair with ssh-keygen, or get it in [GenerateRSAKeyPair](/src/test/java/com/saintdan/framework/GenerateRSAKeyPair.java).
   
 - 0.4.1.RELEASE
-  - Add [LogUtils](/src/main/java/com/saintdan/framework/tools/LogUtils.java) to trace info, warn, debug, error.
+  - [ADD] Add [LogUtils](/src/main/java/com/saintdan/framework/tools/LogUtils.java) to trace info, warn, debug, error.
   
 - 0.4.2.RELEASE
-  - Optimize some codes.
+  - [MOD] Optimize some codes.
   
 - 0.4.3.RELEASE
-  - Add [Base64ImageHelper](/src/main/java/com/saintdan/framework/tools/Base64ImageHelper.java).
+  - [ADD] Add [Base64ImageHelper](/src/main/java/com/saintdan/framework/tools/Base64ImageHelper.java).
   
 - 0.4.4.RELEASE
-  - Fix the error: "Could not find or load main class org.gradle.wrapper.GradleWrapperMain."  
+  - [FIX] Fix the error: "Could not find or load main class org.gradle.wrapper.GradleWrapperMain."
     Add gradle-wrapper.jar
     Thanks [cbweixin](https://github.com/cbweixin) for reminding me.
     
 - 0.5.0.RELEASE
-  - Extract the elements with similar return results and integrate them into one --> [ResultHelper](/src/main/java/saintdan/framework/component/ResultHelper.java);
-  - Extract the elements with similar signature and integrate them into one --> [SignHelper](/src/main/java/saintdan/framework/component/SignHelper.java);
-  - Add package of RESTFul parameters.
-  - Optimize code of services, implements, controllers.
+  - [ADD] Add package of RESTFul parameters.
+  - [MOD] Extract the elements with similar return results and integrate them into one --> [ResultHelper](/src/main/java/saintdan/framework/component/ResultHelper.java);
+  - [MOD] Extract the elements with similar signature and integrate them into one --> [SignHelper](/src/main/java/saintdan/framework/component/SignHelper.java);
+  - [MOD] Optimize code of services, implements, controllers.
   
 - 0.5.1.RELEASE
-  - Add success result response to [ResultHelper](/src/main/java/saintdan/framework/component/ResultHelper.java);
-  - Optimize code of user service and controller.
-  - Update Spring Boot to 2.0.7.RELEASE
-  - Fix the signature bugs, and changes the test sign.
+  - [ADD] Add success result response to [ResultHelper](/src/main/java/saintdan/framework/component/ResultHelper.java);
+  - [MOD] Optimize code of user service and controller.
+  - [MOD] Update Spring Boot to 2.0.7.RELEASE
+  - [FIX] Fix the signature bugs, and changes the test sign.
   
 - 0.6.0.RELEASE
-  - Add Maven support.
+  - [ADD] Add Maven support.
   
 - 0.7.0.RELEASE
-  - Add MySql support.
+  - [ADD] Add MySql support.
   
 - 0.8.0.RELEASE
-  - Add CRUD of user, role, group, resource.
-  - Add some components, constants, exceptions.
-  - Add [Seed](src/test/java/com/saintdan/framework/repo/Seed.java).
+  - [ADD] Add CRUD of user, role, group, resource.
+  - [ADD] Add some components, constants, exceptions.
+  - [ADD] Add [Seed](src/test/java/com/saintdan/framework/repo/Seed.java).
   
 - 0.8.1.RELEASE
-  - Modify table's name.
+  - [MOD] Modify table's name.
   
 - 0.8.2.RELEASE
-  - Add [CustomClientDetailsService](src/main/java/com/saintdan/framework/config/custom/CustomClientDetailsService.java), add jdbc client choice.
-  - Add createdBy, createdDate, lastModifiedBy, lastModifiedDate to POs.
-  - Add [SpringSecurityUtils](src/main/java/com/saintdan/framework/tools/SpringSecurityUtils.java), trace user's ip address.
-  - Modify [Seed](src/test/java/com/saintdan/framework/repo/Seed.java).
+  - [ADD] Add [CustomClientDetailsService](src/main/java/com/saintdan/framework/config/custom/CustomClientDetailsService.java), add jdbc client choice.
+  - [ADD] Add createdBy, createdDate, lastModifiedBy, lastModifiedDate to POs.
+  - [ADD] Add [SpringSecurityUtils](src/main/java/com/saintdan/framework/tools/SpringSecurityUtils.java), trace user's ip address.
+  - [MOD] Modify [Seed](src/test/java/com/saintdan/framework/repo/Seed.java).
   
 - 0.8.3.RELEASE
-  - Extract the elements with similar xxxsVO into one -> [ObjectsVO](src/main/java/com/saintdan/framework/vo/ObjectsVO.java).
-  - Add show all resources in page.
-  - Add log resource, hide the update & delete interface.
+  - [ADD] Add show all resources in page.
+  - [ADD] Add log resource, hide the update & delete interface.
+  - [MOD] Extract the elements with similar xxxsVO into one -> [ObjectsVO](src/main/java/com/saintdan/framework/vo/ObjectsVO.java).
   
 - 0.8.4.RELEASE
-  - Add valid flag. When you don't want to delete something, you can set the valid flag to 'invalid'.
-  - Add [RepositoryWithoutDelete](src/main/java/com/saintdan/framework/repo/RepositoryWithoutDelete.java) to hide delete interface.
+  - [ADD] Add valid flag. When you don't want to delete something, you can set the valid flag to 'invalid'.
+  - [ADD] Add [RepositoryWithoutDelete](src/main/java/com/saintdan/framework/repo/RepositoryWithoutDelete.java) to hide delete interface.
 
 - 0.8.5.RELEASE
-  - Add [@CurrentUser](src/main/java/com/saintdan/framework/annotation/CurrentUser.java), annotate param with it can get current login user.
-  - Separate the SignField to SignField and [ValidationField](src/main/java/com/saintdan/framework/annotation/ValidationField.java).
-  - Add some code comments.
+  - [ADD] Add [@CurrentUser](src/main/java/com/saintdan/framework/annotation/CurrentUser.java), annotate param with it can get current login user.
+  - [ADD] Add some code comments.
+  - [MOD] Separate the SignField to SignField and [ValidationField](src/main/java/com/saintdan/framework/annotation/ValidationField.java).
 
 - 0.9.0.RELEASE
-  - Add [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java), can validate current user, param, sign.
-  - Add [CommonsException](src/main/java/com/saintdan/framework/exception/CommonsException.java) and modify the [ErrorType](src/main/java/com/saintdan/framework/enums/ErrorType.java)
+  - [ADD] Add [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java), can validate current user, param, sign.
+  - [ADD] Add [CommonsException](src/main/java/com/saintdan/framework/exception/CommonsException.java) and modify the [ErrorType](src/main/java/com/saintdan/framework/enums/ErrorType.java)
 
 - 0.9.1.RELEASE
-  - Modify the [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java).
-  - Remove the @ValidateField.
-  - Use @Valid and BindingResult to validate param.
+  - [ADD] Use @Valid and BindingResult to validate param.
+  - [MOD] Modify the [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java).
+  - [DEL] Remove the @ValidateField.
 
 - 0.9.2.RELEASE
-  - Change project to DDD.
-  - Add PostgreSQL support.
+  - [ADD] Add PostgreSQL support.
+  - [MOD] Change project to DDD.
 
 - 0.9.3.RELEASE
-  - Fix antMatcher bug.
-  - Change the log of login.
-  - Delete some outdated classes and codes.
+  - [MOD] Change the log of login.
+  - [FIX] Fix antMatcher bug.
+  - [DEL] Delete some outdated classes and codes.
 
 - 0.9.4.RELEASE
-  - Add login with authorization_code.
+  - [ADD] Add login with authorization_code.
 
 - 0.9.5.RELEASE
-  - Add devtools support.
-  - Replace commons-logging with slf4j.
+  - [ADD] Add devtools support.
+  - [MOD] Replace commons-logging with slf4j.
 
 - 0.9.6.RELEASE
-  - Improve the performance of Spring Boot.
-    - Remove `JmxAutoConfiguration.class` and `WebSocketAutoConfiguration.class` import.
-    - Remove `spring-boot-starter-tomcat`, replace with `spring-boot-starter-undertow`.
+  - [MOD] Improve the performance of Spring Boot.
+    - [DEL] Remove `JmxAutoConfiguration.class` and `WebSocketAutoConfiguration.class` import.
+    - [DEL] Remove `spring-boot-starter-tomcat`, replace with `spring-boot-starter-undertow`.
 
 - 0.9.7.RELEASE
-  - Delete redundant codes of domain.
-  - Delete update valid flag which is in the [RepositoryWithoutDelete](src/main/java/com/saintdan/framework/repo/RepositoryWithoutDelete.java).
-  - Fix some bugs.
+  - [FIX] Fix some bugs.
+  - [DEL] Delete redundant codes of domain.
+  - [DEL] Delete update valid flag which is in the [RepositoryWithoutDelete](src/main/java/com/saintdan/framework/repo/RepositoryWithoutDelete.java).
 
 - 0.10.0.RELEASE
-  - Add refresh token support.
-  - Change StringBuild to String.join
-  - Fix some bugs.
-  - Add docker support.
-  - Add log.
+  - [ADD] Add refresh token support.
+  - [ADD] Add docker support.
+  - [ADD] Add log.
+  - [MOD] Change StringBuild to String.join
+  - [FIX] Fix some bugs.
 
 - 0.10.1.RELEASE
-  - Modify VO.
-  - Modify domain, controller.
-  - Modify [Transformer](src/main/java/com/saintdan/framework/component/Transformer.java)
-  - Modify [ResultHelper](src/main/java/com/saintdan/framework/component/ResultHelper.java)
-  - Fix some bugs.
+  - [MOD] Modify VO.
+  - [MOD] Modify domain, controller.
+  - [MOD] Modify [Transformer](src/main/java/com/saintdan/framework/component/Transformer.java)
+  - [MOD] Modify [ResultHelper](src/main/java/com/saintdan/framework/component/ResultHelper.java)
+  - [FIX] Fix some bugs.
 
 - 0.10.2.RELEASE
-  - Change code style to google code style.
-  - Modify transaction.
-  - Optimize codes.
-  - Fix bugs.
+  - [MOD] Change code style to google code style.
+  - [MOD] Modify transaction.
+  - [MOD] Optimize codes.
+  - [FIX] Fix bugs.
 
 - 0.10.3.RELEASE
-  - Add Optional for PO.
-  - Optimize codes.
-  - Fix bug of error message.
+  - [ADD] Add Optional for PO.
+  - [MOD] Optimize codes.
+  - [FIX] Fix bug of error message.
 
 - 0.11.1.RELEASE
-  - Use Stream and Optional.
-  - Fix sequence bug.
+  - [MOD] Use Stream and Optional.
+  - [FIX] Fix sequence bug.
+
+- 0.11.2.RELEASE
+  - [MOD] Modify #showAll(), #showPage()
+  - [MOD] Modify README.

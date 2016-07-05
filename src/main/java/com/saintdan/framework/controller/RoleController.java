@@ -3,27 +3,29 @@ package com.saintdan.framework.controller;
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.*;
+import com.saintdan.framework.constant.ControllerConstant;
+import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.ResultConstant;
+import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.RoleDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.tools.QueryHelper;
 import com.saintdan.framework.vo.ResultVO;
+import javax.validation.Valid;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 /**
  * Controller of role.
@@ -66,51 +68,23 @@ public class RoleController {
   }
 
   /**
-   * Show all {@link com.saintdan.framework.vo.RoleVO}.
-   *
-   * @return {@link com.saintdan.framework.vo.RoleVO}
-   */
-  @RequestMapping(value = PathConstant.INDEX, method = RequestMethod.GET)
-  public ResultVO index(String sign) {
-    try {
-      RoleParam param = new RoleParam();
-      param.setSign(sign);
-      // Sign validate.
-      ResultVO resultVO = validateHelper.validate(param, logger);
-      if (resultVO != null) {
-        return resultVO;
-      }
-      return resultHelper.successResp(roleDomain.getAllRoles());
-    } catch (CommonsException e) {
-      // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
-    } catch (Exception e) {
-      // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
-    }
-  }
-
-  /**
    * Show {@link com.saintdan.framework.vo.RoleVO} in {@link com.saintdan.framework.vo.PageVO}.
    *
-   * @param pageNo page number
+   * @param param {@link RoleParam}
    * @return {@link com.saintdan.framework.vo.RoleVO} in {@link com.saintdan.framework.vo.PageVO}.
    */
   @RequestMapping(method = RequestMethod.GET)
-  public ResultVO page(String pageNo, String sign) {
+  public ResultVO show(RoleParam param) {
     try {
-      // Init page number.
-      if (StringUtils.isBlank(pageNo)) {
-        pageNo = "0";
-      }
-      RoleParam param = new RoleParam();
-      param.setSign(sign);
       // Sign validate.
       ResultVO resultVO = validateHelper.validate(param, logger);
       if (resultVO != null) {
         return resultVO;
       }
-      return resultHelper.successResp(roleDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE)));
+      if (param.getPageNo() == null) {
+        return resultHelper.successResp(roleDomain.getAllRoles());
+      }
+      return resultHelper.successResp(roleDomain.getPage(QueryHelper.getPageRequest(param)));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
@@ -156,7 +130,7 @@ public class RoleController {
    * @param param role's params
    * @return {@link com.saintdan.framework.vo.RoleVO}
    */
-  @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+  @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid RoleParam param, BindingResult result) {
     try {
       if (StringUtils.isBlank(id)) {

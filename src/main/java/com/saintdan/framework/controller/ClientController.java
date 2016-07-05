@@ -3,27 +3,29 @@ package com.saintdan.framework.controller;
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.*;
+import com.saintdan.framework.constant.ControllerConstant;
+import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.ResultConstant;
+import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.tools.QueryHelper;
 import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.ResultVO;
+import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 /**
  * Controller of client.
@@ -66,52 +68,23 @@ public class ClientController {
   }
 
   /**
-   * Show all {@link com.saintdan.framework.vo.ClientVO}.
-   *
-   * @return {@link com.saintdan.framework.vo.ClientVO}
-   */
-  @RequestMapping(value = PathConstant.INDEX, method = RequestMethod.GET)
-  public ResultVO index(String sign) {
-    try {
-      ClientParam param = new ClientParam();
-      param.setSign(sign);
-      // Sign validate.
-      ResultVO resultVO = validateHelper.validate(param, logger);
-      if (resultVO != null) {
-        return resultVO;
-      }
-      return resultHelper.successResp(clientDomain.getAll());
-    } catch (CommonsException e) {
-      // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
-    } catch (Exception e) {
-      // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
-    }
-  }
-
-  /**
    * Show {@link com.saintdan.framework.vo.ClientVO} in {@link com.saintdan.framework.vo.PageVO}.
    *
-   * @param pageNo page number
+   * @param param {@link ClientParam}
    * @return {@link com.saintdan.framework.vo.ClientVO} in
    */
   @RequestMapping(method = RequestMethod.GET)
-  public ResultVO page(String pageNo, String sign) {
+  public ResultVO show(ClientParam param) {
     try {
-      // Init page number.
-      if (StringUtils.isBlank(pageNo)) {
-        pageNo = "0";
-      }
-      ClientParam param = new ClientParam();
-      param.setSign(sign);
       // Sign validate.
       ResultVO resultVO = validateHelper.validate(param, logger);
       if (resultVO != null) {
         return resultVO;
       }
-      return resultHelper.successResp(
-          clientDomain.getPage(new PageRequest(Integer.valueOf(pageNo), CommonsConstant.PAGE_SIZE), PageVO.class));
+      if (param.getPageNo() == null) {
+        return resultHelper.successResp(clientDomain.getAll());
+      }
+      return resultHelper.successResp(clientDomain.getPage(QueryHelper.getPageRequest(param), PageVO.class));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());

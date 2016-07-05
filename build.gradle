@@ -1,6 +1,6 @@
 description = 'spring-rest-oauth2-sample'
 group = 'com.saintdan.framework'
-version = '0.10.3.RELEASE'
+version = '0.11.2.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -17,7 +17,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE')
+    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.3.6.RELEASE')
   }
 }
 
@@ -42,7 +42,7 @@ compileTestJava {
 }
 
 ext {
-  springBootVersion = '1.3.5.RELEASE'
+  springBootVersion = '1.3.6.RELEASE'
   springDataJpaVersion = '1.10.2.RELEASE'
   springOAuth2Version = '2.0.8.RELEASE'
 
@@ -99,8 +99,4 @@ dependencies {
 
 task wrapper(type: Wrapper) {
   gradleVersion = '2.13'
-}
-
-task generatePom << {
-  pom{}.writeTo('pom.xml')
 }

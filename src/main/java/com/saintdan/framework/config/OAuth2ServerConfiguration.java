@@ -4,20 +4,24 @@ import com.saintdan.framework.config.custom.CustomClientDetailsService;
 import com.saintdan.framework.config.custom.CustomUserDetailsService;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.VersionConstant;
+import java.util.Collections;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.*;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfiguration;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * OAuth2 server configuration.
@@ -35,8 +39,7 @@ public class OAuth2ServerConfiguration {
    *
    * @return {@link ResourceServerConfiguration}
    */
-  @Bean
-  protected ResourceServerConfiguration adminResources() {
+  @Bean protected ResourceServerConfiguration adminResources() {
 
     ResourceServerConfiguration resource = new org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfiguration() {
       // Switch off the Spring Boot @Autowired configurers
@@ -45,13 +48,13 @@ public class OAuth2ServerConfiguration {
       }
     };
 
-    resource.setConfigurers(Collections.<ResourceServerConfigurer>singletonList(new ResourceServerConfigurerAdapter() {
+    resource.setConfigurers(Collections.singletonList(new ResourceServerConfigurerAdapter() {
 
-      @Override     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+      @Override public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         resources.resourceId(RESOURCE_ID);
       }
 
-      @Override     public void configure(HttpSecurity http) throws Exception {
+      @Override public void configure(HttpSecurity http) throws Exception {
         http
             .csrf().disable()
             .authorizeRequests()
@@ -78,7 +81,7 @@ public class OAuth2ServerConfiguration {
   protected static class AuthorizationServerConfiguration extends
       AuthorizationServerConfigurerAdapter {
 
-    @Override   public void configure(AuthorizationServerEndpointsConfigurer endpoints)
+    @Override public void configure(AuthorizationServerEndpointsConfigurer endpoints)
         throws Exception {
       endpoints
           .tokenStore(this.tokenStore)
@@ -86,7 +89,7 @@ public class OAuth2ServerConfiguration {
           .userDetailsService(userDetailsService);
     }
 
-    @Override   public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    @Override public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
       // Use JDBC client.
       // If you have many clients, you can use JDBC client.
       clients.withClientDetails(clientDetailsService);
