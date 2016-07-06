@@ -13,7 +13,12 @@ import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.ClientRepository;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ClientVO;
+import com.saintdan.framework.vo.ObjectsVO;
+import com.saintdan.framework.vo.PageVO;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +53,39 @@ public class ClientDomain extends BaseDomain<Client, Long> {
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CLIENT_ID));
     }
     return super.createByPO(ClientVO.class, transformer.param2PO(getClassT(), param, new Client(), currentUser), currentUser);
+  }
+
+  /**
+   * Show all {@link ClientVO}.
+   *
+   * @return {@link ObjectsVO}, {@link ClientVO}
+   * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
+   */
+  public ObjectsVO getAllGroups() throws Exception {
+    List clients = clientRepository.findAllByValidFlag(ValidFlag.VALID);
+    if (clients.isEmpty()) {
+      // Throw no group exists exception.
+      throw new CommonsException(ErrorType.SYS0121,
+          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
+    }
+    return transformer.pos2VO(ClientVO.class, clients);
+  }
+
+  /**
+   * Show {@link ClientVO} of {@link PageVO}.
+   *
+   * @param pageable {@link Pageable}
+   * @return {@link PageVO}, {@link ClientVO}
+   * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
+   */
+  public PageVO getPage(Pageable pageable) throws Exception {
+    Page<Client> clientPage = clientRepository.findAllByValidFlag(pageable, ValidFlag.VALID);
+    if (!clientPage.hasContent()) {
+      // Throw no group exists exception.
+      throw new CommonsException(ErrorType.SYS0121,
+          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
+    }
+    return transformer.poPage2VO(transformer.poList2VOList(ClientVO.class, clientPage.getContent()), pageable, clientPage.getTotalElements());
   }
 
   /**

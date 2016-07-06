@@ -63,7 +63,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No resource exists.
    */
   public ObjectsVO getAllResources() throws Exception {
-    List<Resource> resources = resourceRepository.findAll();
+    List<Resource> resources = resourceRepository.findAllByValidFlag(ValidFlag.VALID);
     if (resources.isEmpty()) {
       // Throw no resource exist exception.
       throw new CommonsException(ErrorType.SYS0121,
@@ -80,7 +80,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No resource exists.
    */
   public PageVO getPage(Pageable pageable) throws Exception {
-    Page<Resource> resourcePage = resourceRepository.findAll(pageable);
+    Page<Resource> resourcePage = resourceRepository.findAllByValidFlag(pageable, ValidFlag.VALID);
     if (!resourcePage.hasContent()) {
       // Throw no resource exist exception.
       throw new CommonsException(ErrorType.SYS0121,

@@ -64,7 +64,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No user exists.
    */
   public ObjectsVO getAllUsers() throws Exception {
-    List<User> users = userRepository.findAll();
+    List<User> users = userRepository.findAllByValidFlag(ValidFlag.VALID);
     if (users.isEmpty()) {
       // Throw no user exists exception.
       throw new CommonsException(ErrorType.SYS0121,
@@ -81,7 +81,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No user exists.
    */
   public PageVO getPage(Pageable pageable) throws Exception {
-    Page<User> userPage = userRepository.findAll(pageable);
+    Page<User> userPage = userRepository.findAllByValidFlag(pageable, ValidFlag.VALID);
     if (!userPage.hasContent()) {
       // Throw no user exists exception.
       throw new CommonsException(ErrorType.SYS0121,

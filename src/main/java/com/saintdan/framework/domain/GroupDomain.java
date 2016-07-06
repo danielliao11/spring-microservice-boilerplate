@@ -64,7 +64,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
    */
   public ObjectsVO getAllGroups() throws Exception {
-    List groups = groupRepository.findAll();
+    List groups = groupRepository.findAllByValidFlag(ValidFlag.VALID);
     if (groups.isEmpty()) {
       // Throw no group exists exception.
       throw new CommonsException(ErrorType.SYS0121,
@@ -81,7 +81,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
    */
   public PageVO getPage(Pageable pageable) throws Exception {
-    Page<Group> groupPage = groupRepository.findAll(pageable);
+    Page<Group> groupPage = groupRepository.findAllByValidFlag(pageable, ValidFlag.VALID);
     if (!groupPage.hasContent()) {
       // Throw no group exists exception.
       throw new CommonsException(ErrorType.SYS0121,

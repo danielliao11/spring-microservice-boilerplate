@@ -2,7 +2,10 @@ package com.saintdan.framework.repo;
 
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Resource;
+import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
@@ -18,6 +21,10 @@ public interface ResourceRepository extends RepositoryWithoutDelete<Resource, Lo
   Optional<Resource> findByName(String name);
 
   Optional<Resource> findByPath(String path);
+
+  List<Resource> findAllByValidFlag(ValidFlag validFlag);
+
+  Page<Resource> findAllByValidFlag(Pageable pageable, ValidFlag validFlag);
 
   @Modifying
   @Query("update Resource r set r.validFlag=?1 where r.id=?2")

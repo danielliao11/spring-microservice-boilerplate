@@ -2,6 +2,7 @@ package com.saintdan.framework.repo;
 
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.User;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,9 @@ public interface UserRepository extends RepositoryWithoutDelete<User, Long> {
 
   Optional<User> findByUsr(String usr);
 
-  Page<User> findAll(Pageable pageable);
+  List<User> findAllByValidFlag(ValidFlag validFlag);
+
+  Page<User> findAllByValidFlag(Pageable pageable, ValidFlag validFlag);
 
   @Modifying
   @Query("update User u set u.pwd=?1 where u.id=?2")

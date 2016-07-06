@@ -64,7 +64,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No role exists.
    */
   public ObjectsVO getAllRoles() throws Exception {
-    List roles = roleRepository.findAll();
+    List roles = roleRepository.findAllByValidFlag(ValidFlag.VALID);
     if (roles.isEmpty()) {
       // Throw no role exists exception.
       throw new CommonsException(ErrorType.SYS0121,
@@ -81,7 +81,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0121} No role exists.
    */
   public PageVO getPage(Pageable pageable) throws Exception {
-    Page<Role> rolePage = roleRepository.findAll(pageable);
+    Page<Role> rolePage = roleRepository.findAllByValidFlag(pageable, ValidFlag.VALID);
     if (!rolePage.hasContent()) {
       // Throw no role exists exception.
       throw new CommonsException(ErrorType.SYS0121,
