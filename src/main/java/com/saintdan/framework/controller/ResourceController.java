@@ -12,7 +12,6 @@ import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
-import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.QueryHelper;
 import com.saintdan.framework.vo.ResultVO;
@@ -74,7 +73,7 @@ public class ResourceController {
    * @return {@link com.saintdan.framework.vo.ResourceVO} in {@link com.saintdan.framework.vo.PageVO}.
    */
   @RequestMapping(method = RequestMethod.GET)
-  public ResultVO show(UserParam param) {
+  public ResultVO show(ResourceParam param) {
     try {
       // Sign validate.
       ResultVO resultVO = validateHelper.validate(param, logger);
