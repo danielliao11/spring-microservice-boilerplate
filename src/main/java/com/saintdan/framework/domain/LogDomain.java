@@ -9,8 +9,6 @@ import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.LogRepository;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.LogVO;
-import com.saintdan.framework.vo.ObjectsVO;
-import com.saintdan.framework.vo.PageVO;
 import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,10 +46,11 @@ public class LogDomain {
   /**
    * Show all {@link LogVO}.
    *
-   * @return {@link ObjectsVO}, {@link LogVO}
+   * @return {@link List<LogVO>}
    * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
    */
-  public ObjectsVO getAllLogs() throws Exception {
+  @SuppressWarnings("unchecked")
+  public List<LogVO> getAllLogs() throws Exception {
     List<Log> logs = logRepository.findAll();
     if (logs.isEmpty()) {
       // Throw no log exist exception.
@@ -61,13 +60,13 @@ public class LogDomain {
   }
 
   /**
-   * Show {@link LogVO} of {@link PageVO}.
+   * Show {@link LogVO} of {@link Page}.
    *
    * @param pageable {@link Pageable}
-   * @return {@link PageVO}, {@link LogVO}
+   * @return {@link Page}, {@link LogVO}
    * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
    */
-  public PageVO getPage(Pageable pageable) throws Exception {
+  public Page getPage(Pageable pageable) throws Exception {
     Page<Log> logPage = logRepository.findAll(pageable);
     if (!logPage.hasContent()) {
       // Throw no log exist exception.

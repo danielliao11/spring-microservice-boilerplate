@@ -1,6 +1,5 @@
 package com.saintdan.framework.domain;
 
-import com.google.common.collect.Lists;
 import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
@@ -15,14 +14,10 @@ import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.ErrorMsgHelper;
-import com.saintdan.framework.vo.ObjectsVO;
-import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.UserVO;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,61 +50,6 @@ public class UserDomain extends BaseDomain<User, Long> {
       throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ResourceConstant.USERS, USR));
     }
     return super.createByPO(UserVO.class, userParam2PO(param, new User(), currentUser), currentUser);
-  }
-
-  /**
-   * Show all {@link UserVO}.
-   *
-   * @return users
-   * @throws CommonsException {@link ErrorType#SYS0121} No user exists.
-   */
-  public ObjectsVO getAllUsers() throws Exception {
-    List<User> users = userRepository.findAllByValidFlag(ValidFlag.VALID);
-    if (users.isEmpty()) {
-      // Throw no user exists exception.
-      throw new CommonsException(ErrorType.SYS0121,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
-    }
-    return transformer.pos2VO(UserVO.class, users);
-  }
-
-  /**
-   * Show {@link UserVO} in {@link PageVO}.
-   *
-   * @param pageable {@link Pageable}
-   * @return {@link PageVO}, {@link UserVO}
-   * @throws CommonsException {@link ErrorType#SYS0121} No user exists.
-   */
-  public PageVO getPage(Pageable pageable) throws Exception {
-    Page<User> userPage = userRepository.findAllByValidFlag(pageable, ValidFlag.VALID);
-    if (!userPage.hasContent()) {
-      // Throw no user exists exception.
-      throw new CommonsException(ErrorType.SYS0121,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
-    }
-    return transformer.poPage2VO(transformer.poList2VOList(UserVO.class, userPage.getContent()), pageable, userPage.getTotalElements());
-  }
-
-  /**
-   * Show {@link List<User>} by ids.
-   *
-   * @param ids users' ids
-   * @return {@link List<User>}
-   * @throws CommonsException {@link ErrorType#SYS0120} No user exists.
-   */
-  public List<User> getUsersByIds(List<Long> ids) throws Exception {
-    return userRepository.findAll(Lists.newArrayList(ids));
-  }
-
-  /**
-   * Show {@link UserVO} by user's id.
-   *
-   * @param param {@link UserParam}
-   * @return {@link UserVO}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any user by id param.
-   */
-  public UserVO getUserById(UserParam param) throws Exception {
-    return transformer.po2VO(UserVO.class, findById(param.getId()));
   }
 
   /**
@@ -201,7 +141,7 @@ public class UserDomain extends BaseDomain<User, Long> {
   private User userParam2PO(UserParam param, User user, User currentUser) throws Exception {
     transformer.param2PO(getClassT(), param, user, currentUser);
     if (!StringUtils.isBlank(param.getRoleIds())) {
-      List<Role> roles = roleDomain.getRolesByIds(transformer.idsStr2List(param.getRoleIds()));
+      List<Role> roles = roleDomain.getAllByIds(transformer.idsStr2List(param.getRoleIds()));
       user.setRoles(transformer.list2Set(roles));
     }
     if (!StringUtils.isBlank(param.getPwd())) {
@@ -211,7 +151,7 @@ public class UserDomain extends BaseDomain<User, Long> {
   }
 
   private User findById(Long id) throws Exception {
-    return userRepository.findOne(id).orElseThrow(
+    return userRepository.findById(id).orElseThrow(
         // Throw cannot find any user by this id param.
         () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, CommonsConstant.ID)));
   }

@@ -15,11 +15,18 @@ import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.QueryHelper;
 import com.saintdan.framework.vo.ResultVO;
+import com.saintdan.framework.vo.UserVO;
 import javax.validation.Valid;
+import net.kaczmarzyk.spring.data.jpa.domain.DateBetween;
+import net.kaczmarzyk.spring.data.jpa.domain.In;
+import net.kaczmarzyk.spring.data.jpa.domain.Like;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +58,7 @@ public class UserController {
   public ResultVO create(@CurrentUser User currentUser, @Valid UserParam param, BindingResult result) {
     try {
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
+      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
       if (resultVO != null) {
         return resultVO;
       }
@@ -67,26 +74,25 @@ public class UserController {
   }
 
   /**
-   * Show {@link com.saintdan.framework.vo.UserVO} in {@link com.saintdan.framework.vo.PageVO}.
+   * Show all.
    *
    * @param param {@link UserParam}
-   * @return {@link com.saintdan.framework.vo.UserVO} in {@link com.saintdan.framework.vo.PageVO}
+   * @return users
    */
   @RequestMapping(method = RequestMethod.GET)
-  public ResultVO show(UserParam param) {
+  public ResultVO all(
+      @And({
+          @Spec(path = "usr", spec = Like.class),
+          @Spec(path = "name", spec = Like.class),
+          @Spec(path = "validFlag", constVal = "VALID", spec = In.class),
+          @Spec(path = "createdDate", params = {"createdDateAfter", "createdDateBefore"}, spec = DateBetween.class)}) Specification<User> userSpecification,
+      UserParam param
+  ) {
     try {
-      // Sign validate.
-      ResultVO resultVO = validateHelper.validate(param, logger);
-      if (resultVO != null) {
-        return resultVO;
-      }
-      if (StringUtils.isNotBlank(param.getUsr())) {
-        return resultHelper.successResp(userDomain.getUserByUsr(param));
-      }
       if (param.getPageNo() == null) {
-        return resultHelper.successResp(userDomain.getAllUsers());
+        return resultHelper.successResp(userDomain.getAll(userSpecification, QueryHelper.getSort(param.getSortBy()), UserVO.class));
       }
-      return resultHelper.successResp(userDomain.getPage(QueryHelper.getPageRequest(param)));
+      return resultHelper.successResp(userDomain.getPage(userSpecification, QueryHelper.getPageRequest(param), UserVO.class));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
@@ -103,19 +109,12 @@ public class UserController {
    * @return {@link com.saintdan.framework.vo.UserVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public ResultVO show(@PathVariable String id, String sign) {
+  public ResultVO detail(@PathVariable String id) {
     try {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
       }
-      UserParam param = new UserParam(Long.valueOf(id));
-      param.setSign(sign);
-      // Sign validate.
-      ResultVO resultVO = validateHelper.validate(param, logger);
-      if (resultVO != null) {
-        return resultVO;
-      }
-      return resultHelper.successResp(userDomain.getUserById(param));
+      return resultHelper.successResp(userDomain.getById(new UserParam(Long.valueOf(id)), UserVO.class));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
@@ -139,7 +138,7 @@ public class UserController {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
       }
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
+      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
       if (resultVO != null) {
         return resultVO;
       }
@@ -161,20 +160,17 @@ public class UserController {
    * @return {@link com.saintdan.framework.vo.UserVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-  public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, String sign) {
+  public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id) {
     try {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
       }
-      UserParam param = new UserParam(Long.valueOf(id));
-      param.setSign(sign);
-      // Sign validate.
-      ResultVO resultVO = validateHelper.validate(param, logger);
+      ResultVO resultVO = validateHelper.validateWithOutSignCheck(currentUser, logger);
       if (resultVO != null) {
         return resultVO;
       }
       // Delete user.
-      userDomain.delete(param, currentUser);
+      userDomain.delete(new UserParam(Long.valueOf(id)), currentUser);
       final String USER = "user";
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, USER));
     } catch (CommonsException e) {

@@ -158,3 +158,10 @@
 - 0.11.2.RELEASE
   - [MOD] Modify #showAll(), #showPage()
   - [MOD] Modify README.
+
+- 0.12.1.RELEASE
+  - [ADD] Add [specification-arg-resolver](https://github.com/tkaczmarzyk/specification-arg-resolver) for filter.
+  - [ADD] Add `validateWithOutSignCheck` of [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java)
+  - [MOD] Modify `validate` to `validateWithSignCheck` of [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java)
+  - [DEL] Delete ObjectsVO.java and PageVO.java.
+  - [DEL] Delete redundant code.

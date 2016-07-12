@@ -30,16 +30,48 @@ import org.springframework.validation.BindingResult;
    *
    * @param result      bind result
    * @param currentUser current user
+   * @param logger      log
+   * @return result vo
+   * @throws Exception
+   */
+  public ResultVO validateWithOutSignCheck(BindingResult result, User currentUser, Logger logger) throws Exception {
+    if (result.hasErrors()) {
+      return resultHelper.infoResp(ErrorType.SYS0002, result.toString());
+    }
+    return validateWithOutSignCheck(currentUser, logger);
+  }
+
+  /**
+   * Validate current user and sign.
+   *
+   * @param currentUser currentUser
+   * @param logger      log
+   * @return result VO
+   * @throws Exception
+   */
+  public ResultVO validateWithOutSignCheck(User currentUser, Logger logger) throws Exception {
+    //check currentUser
+    if (currentUser == null || currentUser.getId() == null) {
+      return resultHelper.infoResp(logger, ErrorType.SYS0003, ErrorType.SYS0003.description());
+    }
+    return null;
+  }
+
+  /**
+   * Validate current user, param and sign.
+   *
+   * @param result      bind result
+   * @param currentUser current user
    * @param param       param
    * @param logger      log
    * @return result vo
    * @throws Exception
    */
-  public ResultVO validate(BindingResult result, User currentUser, BaseParam param, Logger logger) throws Exception {
+  public ResultVO validateWithSignCheck(BindingResult result, User currentUser, BaseParam param, Logger logger) throws Exception {
     if (result.hasErrors()) {
       return resultHelper.infoResp(ErrorType.SYS0002, result.toString());
     }
-    return validate(currentUser, param, logger);
+    return validateWithSignCheck(currentUser, param, logger);
   }
 
   /**
@@ -51,12 +83,12 @@ import org.springframework.validation.BindingResult;
    * @return result VO
    * @throws Exception
    */
-  public ResultVO validate(User currentUser, BaseParam param, Logger logger) throws Exception {
+  public ResultVO validateWithSignCheck(User currentUser, BaseParam param, Logger logger) throws Exception {
     //check currentUser
     if (currentUser == null || currentUser.getId() == null) {
       return resultHelper.infoResp(logger, ErrorType.SYS0003, ErrorType.SYS0003.description());
     }
-    return validate(param, logger);
+    return validateWithSignCheck(param, logger);
   }
 
   /**
@@ -68,7 +100,7 @@ import org.springframework.validation.BindingResult;
    * @throws Exception
    */
 
-  public ResultVO validate(BaseParam param, Logger logger) throws Exception {
+  public ResultVO validateWithSignCheck(BaseParam param, Logger logger) throws Exception {
     // Get current clientId
     String clientId = SpringSecurityUtils.getCurrentClientId();
     // Sign verification.
