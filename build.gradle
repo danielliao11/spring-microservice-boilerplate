@@ -5,7 +5,7 @@ version = '0.11.2.RELEASE'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-//apply plugin: 'maven' // If you want use maven.
+apply plugin: 'maven' // If you want use maven.
 //apply plugin: 'war' // If you want use provide runtime dependencies.
 
 buildscript {
@@ -102,4 +102,19 @@ dependencies {
 
 task wrapper(type: Wrapper) {
   gradleVersion = '2.13'
+}
+
+task generatePom << {
+  pom {
+    project {
+      inceptionYear '2015'
+      licenses {
+        license {
+          name 'The Apache Software License, Version 2.0'
+          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          distribution 'repo'
+        }
+      }
+    }
+  }.writeTo("pom.xml")
 }
