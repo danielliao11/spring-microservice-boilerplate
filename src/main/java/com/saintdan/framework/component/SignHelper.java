@@ -30,7 +30,7 @@ import java.net.URLDecoder;
    */
   public boolean signCheck(String publicKey, BaseParam params)
       throws UnsupportedEncodingException, CommonsException {
-    // Prepare to validate signature.
+    // Prepare to validateWithOutSignCheck signature.
     if (StringUtils.isEmpty(params.getSign())) {
       throw new CommonsException(ErrorType.SYS0002);
     }

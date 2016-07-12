@@ -15,8 +15,6 @@ import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.RepositoryWithoutDelete;
 import com.saintdan.framework.tools.ErrorMsgHelper;
-import com.saintdan.framework.vo.ObjectsVO;
-import com.saintdan.framework.vo.PageVO;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -25,6 +23,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 
 /**
  * Abstract base service implement.
@@ -75,45 +75,58 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @return <T>s
    * @throws Exception
    */
-  public ObjectsVO getAll() throws Exception {
-    List pos = repository.findAll();
+  @SuppressWarnings("unchecked")
+  public <VO> List<VO> getAll(Specification<T> specification, Sort sort, Class<VO> voType) throws Exception {
+    List pos = repository.findAll(specification, sort);
     if (pos.isEmpty()) {
       // Throw po cannot find exception.
       throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
     }
-    return transformer.pos2VO(ObjectsVO.class, pos);
+    return transformer.pos2VO(voType, pos);
   }
 
   /**
    * Get page of <T>.
    *
-   * @param pageable pageable
-   * @param voType   VO of some class
+   * @param specification {@link Specification}
+   * @param pageable      pageable
+   * @param voType        VO of some class
    * @return page of <T>
    * @throws Exception
    */
   @SuppressWarnings("unchecked")
-  public PageVO getPage(Pageable pageable, Class voType) throws Exception {
-    Page<T> poPage = repository.findAll(pageable);
+  public Page getPage(Specification<T> specification, Pageable pageable, Class voType) throws Exception {
+    Page<T> poPage = repository.findAll(specification, pageable);
     if (poPage.getSize() == 0) {
       // Throw po cannot find exception.
       throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
     }
-    return transformer.poPage2VO( transformer.poList2VOList(voType, poPage.getContent()),
+    return transformer.poPage2VO(transformer.poList2VOList(voType, poPage.getContent()),
         pageable, poPage.getTotalElements());
+  }
+
+  /**
+   * Get page of <T>.
+   *
+   * @param ids ids
+   * @return page of <T>
+   * @throws Exception
+   */
+  public List<T> getAllByIds(List<ID> ids) throws Exception {
+    return repository.findAll(ids);
   }
 
   /**
    * Get <T> by id.
    *
-   * @param voType     VO of some class
    * @param inputParam input param
+   * @param voType     VO of some class
    * @param <VO>       VO extends to ResultVO
    * @return <T>
    * @throws Exception
    */
   @SuppressWarnings("unchecked")
-  public <VO> VO getById(Class<VO> voType, Object inputParam) throws Exception {
+  public <VO> VO getById(Object inputParam, Class<VO> voType) throws Exception {
     return transformer.po2VO(voType, findById(inputParam));
   }
 
@@ -181,7 +194,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
     idField.setAccessible(true);
     String className = getClassT().getSimpleName();
-    return repository.findOne((ID) idField.get(inputParam)).orElseThrow(
+    return repository.findById((ID) idField.get(inputParam)).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, className, CommonsConstant.ID)));
   }
 }

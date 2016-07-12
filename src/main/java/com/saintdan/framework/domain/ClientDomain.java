@@ -88,7 +88,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
   private final static String CLIENT_ID = "clientId";
 
   private Client findById(Long id) throws Exception {
-    return clientRepository.findOne(id).orElseThrow(
+    return clientRepository.findById(id).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.CLIENTS, CommonsConstant.ID)));
   }

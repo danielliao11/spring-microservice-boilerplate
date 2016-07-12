@@ -13,15 +13,11 @@ import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.RoleRepository;
 import com.saintdan.framework.tools.ErrorMsgHelper;
-import com.saintdan.framework.vo.ObjectsVO;
-import com.saintdan.framework.vo.PageVO;
 import com.saintdan.framework.vo.RoleVO;
 import java.util.List;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,61 +51,6 @@ public class RoleDomain extends BaseDomain<Role, Long> {
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
     }
     return super.createByPO(RoleVO.class, roleParam2PO(param, new Role(), currentUser), currentUser);
-  }
-
-  /**
-   * Show all {@link RoleVO}.
-   *
-   * @return roles
-   * @throws CommonsException {@link ErrorType#SYS0121} No role exists.
-   */
-  public ObjectsVO getAllRoles() throws Exception {
-    List roles = roleRepository.findAll();
-    if (roles.isEmpty()) {
-      // Throw no role exists exception.
-      throw new CommonsException(ErrorType.SYS0121,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
-    }
-    return transformer.pos2VO(RoleVO.class, roles);
-  }
-
-  /**
-   * Show {@link RoleVO} in {@link PageVO}.
-   *
-   * @param pageable page
-   * @return {@link RoleVO}
-   * @throws CommonsException {@link ErrorType#SYS0121} No role exists.
-   */
-  public PageVO getPage(Pageable pageable) throws Exception {
-    Page<Role> rolePage = roleRepository.findAll(pageable);
-    if (!rolePage.hasContent()) {
-      // Throw no role exists exception.
-      throw new CommonsException(ErrorType.SYS0121,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
-    }
-    return transformer.poPage2VO(transformer.poList2VOList(RoleVO.class, rolePage.getContent()), pageable, rolePage.getTotalElements());
-  }
-
-  /**
-   * Show Iterable<Role> by ids of roles.
-   *
-   * @param ids roles' ids
-   * @return roles' PO
-   * @throws CommonsException {@link ErrorType#SYS0120} No role exists.
-   */
-  public List<Role> getRolesByIds(List<Long> ids) throws Exception {
-    return roleRepository.findAll(ids);
-  }
-
-  /**
-   * Show {@link RoleVO} by id of role.
-   *
-   * @param param {@link RoleParam}
-   * @return {@link RoleVO}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by id param.
-   */
-  public RoleVO getRoleById(RoleParam param) throws Exception {
-    return transformer.po2VO(RoleVO.class, findById(param.getId()));
   }
 
   /**
@@ -179,11 +120,11 @@ public class RoleDomain extends BaseDomain<Role, Long> {
   private Role roleParam2PO(RoleParam param, Role role, User currentUser) throws Exception {
     transformer.param2PO(getClassT(), param, role, currentUser);
     if (!StringUtils.isBlank(param.getUserIds())) {
-      List<User> users = userDomain.getUsersByIds(transformer.idsStr2List(param.getUserIds()));
+      List<User> users = userDomain.getAllByIds(transformer.idsStr2List(param.getUserIds()));
       role.setUsers(transformer.list2Set(users));
     }
     if (!StringUtils.isBlank(param.getGroupIds())) {
-      Iterable<Group> groups = groupService.getGroupsByIds(transformer.idsStr2List(param.getGroupIds()));
+      Iterable<Group> groups = groupService.getAllByIds(transformer.idsStr2List(param.getGroupIds()));
       role.setGroups((Set<Group>) groups);
     }
     return role;
@@ -191,7 +132,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
 
 
   private Role findById(Long id) throws Exception {
-    return roleRepository.findOne(id).orElseThrow(
+    return roleRepository.findById(id).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.ROLES, CommonsConstant.ID)));
   }

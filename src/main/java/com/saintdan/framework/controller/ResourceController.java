@@ -12,15 +12,22 @@ import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
-import com.saintdan.framework.param.UserParam;
+import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.QueryHelper;
+import com.saintdan.framework.vo.ResourceVO;
 import com.saintdan.framework.vo.ResultVO;
 import javax.validation.Valid;
+import net.kaczmarzyk.spring.data.jpa.domain.DateBetween;
+import net.kaczmarzyk.spring.data.jpa.domain.In;
+import net.kaczmarzyk.spring.data.jpa.domain.Like;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +59,7 @@ public class ResourceController {
   public ResultVO create(@CurrentUser User currentUser, @Valid ResourceParam param, BindingResult result) {
     try {
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
+      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
       if (resultVO != null) {
         return resultVO;
       }
@@ -68,23 +75,24 @@ public class ResourceController {
   }
 
   /**
-   * Show {@link com.saintdan.framework.vo.ResourceVO} in {@link com.saintdan.framework.vo.PageVO}.
+   * Show all.
    *
    * @param param {@link ResourceParam}
-   * @return {@link com.saintdan.framework.vo.ResourceVO} in {@link com.saintdan.framework.vo.PageVO}.
+   * @return all resources.
    */
   @RequestMapping(method = RequestMethod.GET)
-  public ResultVO show(UserParam param) {
+  public ResultVO all(
+      @And({
+          @Spec(path = "name", spec = Like.class),
+          @Spec(path = "path", spec = Like.class),
+          @Spec(path = "validFlag", constVal = "VALID", spec = In.class),
+          @Spec(path = "createdDate", params = {"createdDateAfter, createdDateBefore"}, spec = DateBetween.class)}) Specification<Resource> resourceSpecification,
+      ResourceParam param) {
     try {
-      // Sign validate.
-      ResultVO resultVO = validateHelper.validate(param, logger);
-      if (resultVO != null) {
-        return resultVO;
-      }
       if (param.getPageNo() == null) {
-        return resultHelper.successResp(resourceDomain.getAllResources());
+        return resultHelper.successResp(resourceDomain.getAll(resourceSpecification, QueryHelper.getSort(param.getSortBy()), ResourceVO.class));
       }
-      return resultHelper.successResp(resourceDomain.getPage(QueryHelper.getPageRequest(param)));
+      return resultHelper.successResp(resourceDomain.getPage(resourceSpecification, QueryHelper.getPageRequest(param), ResourceVO.class));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
@@ -101,19 +109,12 @@ public class ResourceController {
    * @return {@link com.saintdan.framework.vo.ResourceVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public ResultVO show(@PathVariable String id, String sign) {
+  public ResultVO detail(@PathVariable String id) {
     try {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
       }
-      ResourceParam param = new ResourceParam(Long.valueOf(id));
-      param.setSign(sign);
-      // Sign validate.
-      ResultVO resultVO = validateHelper.validate(param, logger);
-      if (resultVO != null) {
-        return resultVO;
-      }
-      return resultHelper.successResp(resourceDomain.getResourceById(param));
+      return resultHelper.successResp(resourceDomain.getById(new ResourceParam(Long.valueOf(id)), ResourceVO.class));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
@@ -137,7 +138,7 @@ public class ResourceController {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
       }
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validate(result, currentUser, param, logger);
+      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
       if (resultVO != null) {
         return resultVO;
       }
@@ -164,15 +165,12 @@ public class ResourceController {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
       }
-      ResourceParam param = new ResourceParam(Long.valueOf(id));
-      param.setSign(sign);
-      // Sign validate.
-      ResultVO resultVO = validateHelper.validate(param, logger);
+      ResultVO resultVO = validateHelper.validateWithOutSignCheck(currentUser, logger);
       if (resultVO != null) {
         return resultVO;
       }
       // Delete resource.
-      resourceDomain.delete(param, currentUser);
+      resourceDomain.delete(new ResourceParam(Long.valueOf(id)), currentUser);
       final String ROLE = "resource";
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
     } catch (CommonsException e) {

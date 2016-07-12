@@ -1,8 +1,6 @@
 package com.saintdan.framework.component;
 
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.vo.ObjectsVO;
-import com.saintdan.framework.vo.PageVO;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,23 +56,8 @@ import org.springframework.stereotype.Component;
    * @return PageVO
    */
   @SuppressWarnings("unchecked")
-  public PageVO poPage2VO(List content, Pageable pageable, Long totalElements) {
-    Page page = new PageImpl<>(content, pageable, totalElements);
-    PageVO pageVO = new PageVO();
-    pageVO.setPage(page);
-    return pageVO;
-  }
-
-  /**
-   * Transform VO list to VO of objects.
-   *
-   * @param list VO list
-   * @return VO of objects
-   */
-  public ObjectsVO voList2ObjectsVO(List list) {
-    ObjectsVO vo = new ObjectsVO();
-    vo.setObjects(list);
-    return vo;
+  public Page poPage2VO(List content, Pageable pageable, Long totalElements) {
+    return new PageImpl<>(content, pageable, totalElements);
   }
 
   /**
@@ -120,8 +103,8 @@ import org.springframework.stereotype.Component;
    * @param pos PO
    * @return VO
    */
-  public ObjectsVO pos2VO(Class<?> clazz, List pos) throws Exception {
-    return voList2ObjectsVO(poList2VOList(clazz, pos));
+  public List pos2VO(Class<?> clazz, List pos) throws Exception {
+    return poList2VOList(clazz, pos);
   }
 
   /**

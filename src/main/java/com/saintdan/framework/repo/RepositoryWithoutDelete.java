@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.Repository;
 
 /**
@@ -21,7 +23,8 @@ import org.springframework.data.repository.Repository;
  * @date 10/29/15
  * @since JDK1.8
  */
-@NoRepositoryBean public interface RepositoryWithoutDelete<T, ID extends Serializable> extends Repository<T, ID> {
+@NoRepositoryBean public interface RepositoryWithoutDelete<T, ID extends Serializable>
+    extends PagingAndSortingRepository<T, ID>, JpaSpecificationExecutor<T> {
 
   /**
    * Saves a given entity. Use the returned instance for further operations as the save operation might have changed the
@@ -48,7 +51,7 @@ import org.springframework.data.repository.Repository;
    * @return the entity with the given id or {@literal null} if none found
    * @throws IllegalArgumentException if {@code id} is {@literal null}
    */
-  Optional<T> findOne(ID id);
+  Optional<T> findById(ID id);
 
   /**
    * Returns whether an entity with the given id exists.
