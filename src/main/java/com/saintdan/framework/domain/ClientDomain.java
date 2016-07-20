@@ -65,12 +65,12 @@ public class ClientDomain extends BaseDomain<Client, Long> {
    * Delete {@link Client}
    *
    * @param currentUser current user
-   * @param param       {@link ClientParam}
+   * @param id          {@link Client#id}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any client by id param.
    */
   @Transactional
-  public void delete(ClientParam param, User currentUser) throws Exception {
-    Client client = findById(param.getId());
+  public void delete(Long id, User currentUser) throws Exception {
+    Client client = findById(id);
     // Log delete operation.
     logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.

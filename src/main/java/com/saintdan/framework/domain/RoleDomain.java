@@ -78,7 +78,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by id param.
    */
   @Transactional public RoleVO update(RoleParam param, User currentUser) throws Exception {
-    findByName(param.getName());
+    findById(param.getId());
     return super.updateByPO(RoleVO.class, roleParam2PO(param, new Role(), currentUser), currentUser);
   }
 
@@ -86,11 +86,11 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * Delete {@link Role}.
    *
    * @param currentUser current user
-   * @param param       {@link RoleParam}
+   * @param id          {@link Role#id}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by id param.
    */
-  @Transactional public void delete(RoleParam param, User currentUser) throws Exception {
-    Role role = findById(param.getId());
+  @Transactional public void delete(Long id, User currentUser) throws Exception {
+    Role role = findById(id);
     // Log delete operation.
     logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.

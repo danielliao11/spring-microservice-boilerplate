@@ -97,11 +97,11 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * Delete {@link Resource}.
    *
    * @param currentUser current user
-   * @param param       {@link ResourceParam}
+   * @param id          {@link Resource#id}
    * @throws CommonsException {@link ErrorType#SYS0121} Cannot find any resource by id param.
    */
-  @Transactional public void delete(ResourceParam param, User currentUser) throws Exception {
-    Resource resource = findById(param.getId());
+  @Transactional public void delete(Long id, User currentUser) throws Exception {
+    Resource resource = findById(id);
     // Log delete operation.
     logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.

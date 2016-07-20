@@ -142,6 +142,7 @@ public class UserController {
       if (resultVO != null) {
         return resultVO;
       }
+      param.setId(Long.valueOf(id));
       // Update user.
       return resultHelper.successResp(userDomain.update(param, currentUser));
     } catch (CommonsException e) {
@@ -170,7 +171,7 @@ public class UserController {
         return resultVO;
       }
       // Delete user.
-      userDomain.delete(new UserParam(Long.valueOf(id)), currentUser);
+      userDomain.delete(Long.valueOf(id), currentUser);
       final String USER = "user";
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, USER));
     } catch (CommonsException e) {

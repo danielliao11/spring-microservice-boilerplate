@@ -142,6 +142,7 @@ public class ResourceController {
       if (resultVO != null) {
         return resultVO;
       }
+      param.setId(Long.valueOf(id));
       // Update resource.
       return resultHelper.successResp(resourceDomain.update(param, currentUser));
     } catch (CommonsException e) {
@@ -170,7 +171,7 @@ public class ResourceController {
         return resultVO;
       }
       // Delete resource.
-      resourceDomain.delete(new ResourceParam(Long.valueOf(id)), currentUser);
+      resourceDomain.delete(Long.valueOf(id), currentUser);
       final String ROLE = "resource";
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
     } catch (CommonsException e) {
