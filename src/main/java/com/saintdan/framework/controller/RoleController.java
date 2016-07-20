@@ -141,6 +141,7 @@ public class RoleController {
       if (resultVO != null) {
         return resultVO;
       }
+      param.setId(Long.valueOf(id));
       // Update role.
       return resultHelper.successResp(roleDomain.update(param, currentUser));
     } catch (CommonsException e) {
@@ -169,7 +170,7 @@ public class RoleController {
         return resultVO;
       }
       // Delete role.
-      roleDomain.delete(new RoleParam(Long.valueOf(id)), currentUser);
+      roleDomain.delete(Long.valueOf(id), currentUser);
       final String ROLE = "role";
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
     } catch (CommonsException e) {

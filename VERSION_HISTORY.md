@@ -165,3 +165,7 @@
   - [MOD] Modify `validate` to `validateWithSignCheck` of [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java)
   - [DEL] Delete ObjectsVO.java and PageVO.java.
   - [DEL] Delete redundant code.
+
+- 0.12.2.RELEASE
+  - [DEL] Delete redundant code.
+  - [FIX] Fix some bugs.

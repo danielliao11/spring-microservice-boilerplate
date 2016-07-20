@@ -141,6 +141,7 @@ public class GroupController {
       if (resultVO != null) {
         return resultVO;
       }
+      param.setId(Long.valueOf(id));
       // Update group.
       return resultHelper.successResp(groupDomain.update(param, currentUser));
     } catch (CommonsException e) {
@@ -169,7 +170,7 @@ public class GroupController {
         return resultVO;
       }
       // Delete group.
-      groupDomain.delete(new GroupParam(Long.valueOf(id)), currentUser);
+      groupDomain.delete(Long.valueOf(id), currentUser);
       final String ROLE = "group";
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
     } catch (CommonsException e) {

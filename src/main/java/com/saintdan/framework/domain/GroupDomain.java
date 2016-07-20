@@ -87,11 +87,11 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * Delete {@link Group}.
    *
    * @param currentUser current user
-   * @param param       {@link GroupParam}
+   * @param id          {@link Group#id}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by id param.
    */
-  @Transactional public void delete(GroupParam param, User currentUser) throws Exception {
-    Group group = findById(param.getId());
+  @Transactional public void delete(Long id, User currentUser) throws Exception {
+    Group group = findById(id);
     // Log delete operation.
     logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.

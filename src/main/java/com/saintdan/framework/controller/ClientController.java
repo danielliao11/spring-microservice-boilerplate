@@ -164,13 +164,12 @@ public class ClientController {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
       }
-      ClientParam param = new ClientParam(Long.valueOf(id));
       ResultVO resultVO = validateHelper.validateWithOutSignCheck(currentUser, logger);
       if (resultVO != null) {
         return resultVO;
       }
       // Delete client.
-      clientDomain.delete(param, currentUser);
+      clientDomain.delete(Long.valueOf(id), currentUser);
       final String ROLE = "client";
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
     } catch (CommonsException e) {
