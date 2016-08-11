@@ -4,7 +4,7 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.LogType;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
@@ -92,9 +92,15 @@ public class RoleDomain extends BaseDomain<Role, Long> {
   @Transactional public void delete(Long id, User currentUser) throws Exception {
     Role role = findById(id);
     // Log delete operation.
-    logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.
     roleRepository.updateValidFlagFor(ValidFlag.INVALID, role.getId());
+  }
+
+  public Role findById(Long id) throws Exception {
+    return roleRepository.findById(id).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.ROLES, CommonsConstant.ID)));
   }
 
   // --------------------------
@@ -128,13 +134,6 @@ public class RoleDomain extends BaseDomain<Role, Long> {
       role.setGroups((Set<Group>) groups);
     }
     return role;
-  }
-
-
-  private Role findById(Long id) throws Exception {
-    return roleRepository.findById(id).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.ROLES, CommonsConstant.ID)));
   }
 
 }

@@ -13,6 +13,8 @@ public interface CommonsConstant {
 
   String NAME = "name";
 
+  String VALID_FLAG = "validFlag";
+
   String COMMA = ",";
 
   String COLON = ":";

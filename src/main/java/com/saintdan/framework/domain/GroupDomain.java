@@ -4,7 +4,7 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.LogType;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.GroupParam;
@@ -93,9 +93,15 @@ public class GroupDomain extends BaseDomain<Group, Long> {
   @Transactional public void delete(Long id, User currentUser) throws Exception {
     Group group = findById(id);
     // Log delete operation.
-    logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.
     groupRepository.updateValidFlagFor(ValidFlag.INVALID, group.getId());
+  }
+
+  public Group findById(Long id) throws Exception {
+    return groupRepository.findById(id).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.GROUPS, CommonsConstant.ID)));
   }
 
   // --------------------------
@@ -128,12 +134,6 @@ public class GroupDomain extends BaseDomain<Group, Long> {
       group.setRoles(transformer.list2Set(roles));
     }
     return group;
-  }
-
-  private Group findById(Long id) throws Exception {
-    return groupRepository.findById(id).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.GROUPS, CommonsConstant.ID)));
   }
 
 }
