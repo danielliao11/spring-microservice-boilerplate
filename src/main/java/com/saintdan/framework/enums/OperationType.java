@@ -7,7 +7,7 @@ package com.saintdan.framework.enums;
  * @date 10/27/15
  * @since JDK1.8
  */
-public enum LogType {
+public enum OperationType {
 
   LOGIN(0),
   CREATE(1),
@@ -17,7 +17,7 @@ public enum LogType {
 
   int code;
 
-  LogType(int code) {
+  OperationType(int code) {
     this.code = code;
   }
 

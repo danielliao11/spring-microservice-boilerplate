@@ -2,7 +2,7 @@ package com.saintdan.framework.config.custom;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.LogHelper;
-import com.saintdan.framework.enums.LogType;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.LogUtils;
@@ -70,7 +70,7 @@ import org.springframework.stereotype.Service;
 
     // Save to log.
     try {
-      logHelper.logUsersOperations(LogType.LOGIN, "login", user);
+      logHelper.logUsersOperations(OperationType.LOGIN, "login", user);
     } catch (Exception e) {
       LogUtils.traceError(logger, e, "Log user login failed.");
     }

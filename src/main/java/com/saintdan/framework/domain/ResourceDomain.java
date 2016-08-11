@@ -4,7 +4,7 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.LogType;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
@@ -103,11 +103,16 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
   @Transactional public void delete(Long id, User currentUser) throws Exception {
     Resource resource = findById(id);
     // Log delete operation.
-    logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.
     resourceRepository.updateValidFlagFor(ValidFlag.INVALID, resource.getId());
   }
 
+  public Resource findById(Long id) throws Exception {
+    return resourceRepository.findById(id).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, CommonsConstant.ID)));
+  }
 
   // --------------------------
   // PRIVATE FIELDS AND METHODS
@@ -136,12 +141,6 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
       resource.setGroups(transformer.list2Set(groups));
     }
     return resource;
-  }
-
-  private Resource findById(Long id) throws Exception {
-    return resourceRepository.findById(id).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, CommonsConstant.ID)));
   }
 
   private Resource findByPath(String path) throws Exception {

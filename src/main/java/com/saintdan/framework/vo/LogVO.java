@@ -1,6 +1,6 @@
 package com.saintdan.framework.vo;
 
-import com.saintdan.framework.enums.LogType;
+import com.saintdan.framework.enums.OperationType;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,7 +20,7 @@ public class LogVO implements Serializable {
 
   private String loginIP;
 
-  private LogType type;
+  private OperationType type;
 
   private Date createDate;
 
@@ -40,11 +40,11 @@ public class LogVO implements Serializable {
     this.loginIP = loginIP;
   }
 
-  public LogType getType() {
+  public OperationType getType() {
     return type;
   }
 
-  public void setType(LogType type) {
+  public void setType(OperationType type) {
     this.type = type;
   }
 

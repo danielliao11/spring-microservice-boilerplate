@@ -1,6 +1,6 @@
 package com.saintdan.framework.param;
 
-import com.saintdan.framework.enums.LogType;
+import com.saintdan.framework.enums.OperationType;
 
 import java.io.Serializable;
 
@@ -17,7 +17,7 @@ public class LogParam implements Serializable {
 
   private String loginIP;
 
-  private LogType type;
+  private OperationType type;
 
   private String clientId;
 
@@ -25,7 +25,7 @@ public class LogParam implements Serializable {
 
   public LogParam() {}
 
-  public LogParam(String loginIP, LogType type, String clientId, String accessResource) {
+  public LogParam(String loginIP, OperationType type, String clientId, String accessResource) {
     this.loginIP = loginIP;
     this.type = type;
     this.clientId = clientId;
@@ -40,11 +40,11 @@ public class LogParam implements Serializable {
     this.loginIP = loginIP;
   }
 
-  public LogType getType() {
+  public OperationType getType() {
     return type;
   }
 
-  public void setType(LogType type) {
+  public void setType(OperationType type) {
     this.type = type;
   }
 

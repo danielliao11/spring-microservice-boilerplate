@@ -1,13 +1,10 @@
 package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
-import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.LogType;
-import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.Role;
@@ -81,33 +78,10 @@ public class UserDomain extends BaseDomain<User, Long> {
     return super.updateByPO(UserVO.class, userParam2PO(param, new User(), currentUser), currentUser);
   }
 
-  /**
-   * Update password of {@link User}
-   *
-   * @param currentUser current user
-   * @param param       {@link UserParam}
-   * @throws CommonsException {@link ErrorType#SYS0122} user's pwd update failed.
-   */
-  @Transactional public void updatePwd(UserParam param, User currentUser) throws Exception {
-    findById(param.getId());
-    final String USER = "User";
-    logHelper.logUsersOperations(LogType.UPDATE, USER, currentUser);
-    userRepository.updatePwdFor(param.getPwd(), param.getId());
-  }
-
-  /**
-   * Delete {@link User}.
-   *
-   * @param currentUser current user
-   * @param id          {@link User#id}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any user by id param.
-   */
-  @Transactional public void delete(Long id, User currentUser) throws Exception {
-    User user = findById(id);
-    // Log delete operation.
-    logHelper.logUsersOperations(LogType.DELETE, ResourceConstant.USERS, currentUser);
-    // Change valid flag to invalid.
-    userRepository.updateValidFlagFor(ValidFlag.INVALID, user.getId());
+  public User findById(Long id) throws Exception {
+    return userRepository.findById(id).orElseThrow(
+        // Throw cannot find any user by this id param.
+        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, CommonsConstant.ID)));
   }
 
   // --------------------------
@@ -121,8 +95,6 @@ public class UserDomain extends BaseDomain<User, Long> {
   @Autowired private CustomPasswordEncoder passwordEncoder;
 
   @Autowired private Transformer transformer;
-
-  @Autowired private LogHelper logHelper;
 
   @Autowired public UserDomain(UserRepository userRepository) {
     this.userRepository = userRepository;
@@ -148,12 +120,6 @@ public class UserDomain extends BaseDomain<User, Long> {
       user.setPwd(passwordEncoder.encode(param.getPwd()));
     }
     return user;
-  }
-
-  private User findById(Long id) throws Exception {
-    return userRepository.findById(id).orElseThrow(
-        // Throw cannot find any user by this id param.
-        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, CommonsConstant.ID)));
   }
 
 }

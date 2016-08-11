@@ -4,7 +4,7 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.LogType;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
@@ -72,9 +72,15 @@ public class ClientDomain extends BaseDomain<Client, Long> {
   public void delete(Long id, User currentUser) throws Exception {
     Client client = findById(id);
     // Log delete operation.
-    logHelper.logUsersOperations(LogType.DELETE, getClassT().getSimpleName(), currentUser);
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
     // Change valid flag to invalid.
     clientRepository.updateValidFlagFor(ValidFlag.INVALID, client.getId());
+  }
+
+  public Client findById(Long id) throws Exception {
+    return clientRepository.findById(id).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122,
+            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.CLIENTS, CommonsConstant.ID)));
   }
 
   // --------------------------
@@ -86,12 +92,6 @@ public class ClientDomain extends BaseDomain<Client, Long> {
   @Autowired private Transformer transformer;
 
   private final static String CLIENT_ID = "clientId";
-
-  private Client findById(Long id) throws Exception {
-    return clientRepository.findById(id).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.CLIENTS, CommonsConstant.ID)));
-  }
 
   private Client findClientByClientId(String clientId) throws Exception {
     return clientRepository.findByClientIdAlias(clientId).orElseThrow(

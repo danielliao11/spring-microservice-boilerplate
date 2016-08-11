@@ -10,6 +10,7 @@ import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
@@ -58,7 +59,7 @@ public class UserController {
   public ResultVO create(@CurrentUser User currentUser, @Valid UserParam param, BindingResult result) {
     try {
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
+      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.CREATE);
       if (resultVO != null) {
         return resultVO;
       }
@@ -105,7 +106,7 @@ public class UserController {
   /**
    * Show {@link com.saintdan.framework.vo.UserVO} by ID.
    *
-   * @param id user's id
+   * @param id {@link User#id}
    * @return {@link com.saintdan.framework.vo.UserVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -114,7 +115,7 @@ public class UserController {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
       }
-      return resultHelper.successResp(userDomain.getById(new UserParam(Long.valueOf(id)), UserVO.class));
+      return resultHelper.successResp(userDomain.getById(Long.valueOf(id), UserVO.class));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
@@ -127,22 +128,19 @@ public class UserController {
   /**
    * Update {@link User}.
    *
-   * @param id    user's id
+   * @param id    {@link User#id}
    * @param param {@link UserParam}
    * @return {@link com.saintdan.framework.vo.UserVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid UserParam param, BindingResult result) {
     try {
-      if (StringUtils.isBlank(id)) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
-      }
+      param.setId(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
+      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.UPDATE);
       if (resultVO != null) {
         return resultVO;
       }
-      param.setId(Long.valueOf(id));
       // Update user.
       return resultHelper.successResp(userDomain.update(param, currentUser));
     } catch (CommonsException e) {
@@ -157,21 +155,20 @@ public class UserController {
   /**
    * Delete {@link User}.
    *
-   * @param id user's id
+   * @param id {@link User#id}
    * @return {@link com.saintdan.framework.vo.UserVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id) {
     try {
-      if (StringUtils.isBlank(id)) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
-      }
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(currentUser, logger);
+      UserParam param = new UserParam(StringUtils.isBlank(id) ? null : Long.valueOf(id));
+      // Validate current user and param.
+      ResultVO resultVO = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
       if (resultVO != null) {
         return resultVO;
       }
       // Delete user.
-      userDomain.delete(Long.valueOf(id), currentUser);
+      userDomain.delete(param, currentUser);
       final String USER = "user";
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, USER));
     } catch (CommonsException e) {

@@ -10,6 +10,7 @@ import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.Client;
@@ -59,7 +60,7 @@ public class ClientController {
   public ResultVO create(@CurrentUser User currentUser, @Valid ClientParam param, BindingResult result) {
     try {
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
+      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.CREATE);
       if (resultVO != null) {
         return resultVO;
       }
@@ -113,7 +114,7 @@ public class ClientController {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
       }
-      return resultHelper.successResp(clientDomain.getById(new ClientParam(Long.valueOf(id)), ResultVO.class));
+      return resultHelper.successResp(clientDomain.getById(Long.valueOf(id), ResultVO.class));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
@@ -133,16 +134,14 @@ public class ClientController {
   @RequestMapping(value = "/{id}", method = RequestMethod.POST)
   public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid ClientParam param, BindingResult result) {
     try {
-      if (StringUtils.isBlank(id)) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
-      }
+      param.setId(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
+      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.UPDATE);
       if (resultVO != null) {
         return resultVO;
       }
       // Update client.
-      return resultHelper.successResp(clientDomain.update(ResultVO.class, param, currentUser));
+      return resultHelper.successResp(clientDomain.update(ClientVO.class, param, currentUser));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
@@ -161,17 +160,16 @@ public class ClientController {
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id) {
     try {
-      if (StringUtils.isBlank(id)) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
-      }
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(currentUser, logger);
+      ClientParam param = new ClientParam(StringUtils.isBlank(id) ? null : Long.valueOf(id));
+      // Validate current user and param.
+      ResultVO resultVO = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
       if (resultVO != null) {
         return resultVO;
       }
       // Delete client.
-      clientDomain.delete(Long.valueOf(id), currentUser);
-      final String ROLE = "client";
-      return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
+      clientDomain.delete(param, currentUser);
+      final String USER = "user";
+      return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, USER));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
