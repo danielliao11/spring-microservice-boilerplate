@@ -1,7 +1,7 @@
 package com.saintdan.framework.component;
 
 import com.saintdan.framework.domain.LogDomain;
-import com.saintdan.framework.enums.LogType;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.SpringSecurityUtils;
@@ -18,14 +18,14 @@ import org.springframework.stereotype.Component;
  */
 @Component public class LogHelper {
 
-  public void logUsersOperations(LogType logType, String resource, User currentUser) throws Exception {
+  public void logUsersOperations(OperationType operationType, String resource, User currentUser) throws Exception {
     // Get ip and clientId
     String ip = SpringSecurityUtils.getCurrentUserIp();
     ip = StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip;
     String clientId = SpringSecurityUtils.getCurrentUsername();
 
     // Log users' operations.
-    logDomain.create(new LogParam(ip, logType, clientId, resource), currentUser);
+    logDomain.create(new LogParam(ip, operationType, clientId, resource), currentUser);
   }
 
   @Autowired private LogDomain logDomain;

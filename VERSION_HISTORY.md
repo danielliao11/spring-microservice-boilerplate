@@ -169,3 +169,8 @@
 - 0.12.2.RELEASE
   - [DEL] Delete redundant code.
   - [FIX] Fix some bugs.
+
+- 0.13.0.RELEASE
+  - [ADD] ADD [NotNullField](src/main/java/com/saintdan/framework/annotation/NotNullField.java)
+  - [MOD] Modify validate helper and BaseDomain.
+  - [FIX] Fix bugs.

@@ -1,6 +1,6 @@
 package com.saintdan.framework.po;
 
-import com.saintdan.framework.enums.LogType;
+import com.saintdan.framework.enums.OperationType;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -42,7 +42,7 @@ public class Log implements Serializable {
   private String accessResource;
 
   @Column( nullable = false )
-  private LogType type;
+  private OperationType type;
 
   @CreatedDate
   @Column( nullable = false )
@@ -99,11 +99,11 @@ public class Log implements Serializable {
     this.accessResource = accessResource;
   }
 
-  public LogType getType() {
+  public OperationType getType() {
     return type;
   }
 
-  public void setType(LogType type) {
+  public void setType(OperationType type) {
     this.type = type;
   }
 

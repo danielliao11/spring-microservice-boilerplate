@@ -10,21 +10,25 @@ import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.LogType;
+import com.saintdan.framework.enums.OperationType;
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.RepositoryWithoutDelete;
+import com.saintdan.framework.tools.BeanUtils;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Abstract base service implement.
@@ -49,7 +53,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @return VO
    * @throws Exception
    */
-  public <VO> VO create(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
+  @Transactional public <VO> VO create(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
     T po = transformer.param2PO(getClassT(), inputParam, getClassT().newInstance(), currentUser);
     return createByPO(voType, po, currentUser);
   }
@@ -64,9 +68,13 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @return VO
    * @throws Exception
    */
-  public <VO> VO createByPO(Class<VO> voType, T inputPO, User currentUser) throws Exception {
-    logHelper.logUsersOperations(LogType.CREATE, getClassT().getSimpleName(), currentUser);
-    return transformer.po2VO(voType, repository.save(inputPO));
+  @Transactional public <VO> VO createByPO(Class<VO> voType, T inputPO, User currentUser) throws Exception {
+    return transformer.po2VO(voType, createByPO(inputPO, currentUser));
+  }
+
+  @Transactional public T createByPO(T inputPO, User currentUser) throws Exception {
+    logHelper.logUsersOperations(OperationType.CREATE, getClassT().getSimpleName(), currentUser);
+    return repository.save(inputPO);
   }
 
   /**
@@ -119,15 +127,15 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   /**
    * Get <T> by id.
    *
-   * @param inputParam input param
-   * @param voType     VO of some class
-   * @param <VO>       VO extends to ResultVO
+   * @param id     id
+   * @param voType VO of some class
+   * @param <VO>   VO extends to ResultVO
    * @return <T>
    * @throws Exception
    */
   @SuppressWarnings("unchecked")
-  public <VO> VO getById(Object inputParam, Class<VO> voType) throws Exception {
-    return transformer.po2VO(voType, findById(inputParam));
+  public <VO> VO getById(Long id, Class<VO> voType) throws Exception {
+    return transformer.po2VO(voType, findById(id));
   }
 
   /**
@@ -140,8 +148,10 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @return VO
    * @throws Exception
    */
-  public <VO> VO update(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
-    return updateByPO(voType, findById(inputParam), currentUser);
+  @Transactional public <VO> VO update(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
+    T po = findByIdParam(inputParam);
+    BeanUtils.copyPropertiesIgnoreNull(inputParam, po);
+    return updateByPO(voType, po, currentUser);
   }
 
   /**
@@ -154,9 +164,93 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @return VO
    * @throws Exception
    */
-  public <VO> VO updateByPO(Class<VO> voType, T inputPO, User currentUser) throws Exception {
-    logHelper.logUsersOperations(LogType.UPDATE, getClassT().getSimpleName(), currentUser);
-    return transformer.po2VO(voType, repository.save(inputPO));
+  @Transactional public <VO> VO updateByPO(Class<VO> voType, T inputPO, User currentUser) throws Exception {
+    return transformer.po2VO(voType, updateByPO(inputPO, currentUser));
+  }
+
+
+  /**
+   * Update <T> by param.
+   *
+   * @param inputPO     input PO
+   * @param currentUser current user
+   * @return VO
+   * @throws Exception
+   */
+  @Transactional public T updateByPO(T inputPO, User currentUser) throws Exception {
+    logHelper.logUsersOperations(OperationType.UPDATE, getClassT().getSimpleName(), currentUser);
+    Field lastModifiedByField = inputPO.getClass().getDeclaredField("lastModifiedBy");
+    lastModifiedByField.setAccessible(true);
+    lastModifiedByField.set(inputPO, currentUser.getId());
+    Field lastModifiedDateField = inputPO.getClass().getDeclaredField("lastModifiedDate");
+    lastModifiedDateField.setAccessible(true);
+    lastModifiedDateField.set(inputPO, new Date());
+    return repository.save(inputPO);
+  }
+
+
+  /**
+   * Delete <T>, update valid flag to invalid.
+   *
+   * @param inputParam  input param
+   * @param currentUser current user
+   * @throws Exception
+   */
+  @Transactional public void delete(Object inputParam, User currentUser) throws Exception {
+    T po = findByIdParam(inputParam);
+    BeanUtils.copyPropertiesIgnoreNull(inputParam, po);
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+    repository.save(setInvalid(po));
+  }
+
+  /**
+   * update valid flag to invalid.by id
+   * @param id
+   * @param currentUser
+   * @throws Exception
+   */
+  @Transactional public void deleteById(String id,User currentUser) throws Exception {
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+    repository.save(setInvalid(findById(Long.valueOf(id))));
+  }
+
+  /**
+   * update valid flag to invalid.by ids
+   * @param ids
+   * @param currentUser
+   * @throws Exception
+   */
+  @Transactional public void deleteByIds(String ids, User currentUser) throws Exception  {
+    transformer.idsStr2List(ids).forEach(id -> {
+      try {
+        this.deleteById(id.toString(), currentUser);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
+  /**
+   * Find class by id.
+   *
+   * @param inputParam id
+   * @return class
+   * @throws Exception
+   */
+  @SuppressWarnings("unchecked")
+  public T findByIdParam(Object inputParam) throws Exception {
+    Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
+    idField.setAccessible(true);
+    String className = getClassT().getSimpleName();
+    return repository.findById((ID) idField.get(inputParam)).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, className, CommonsConstant.ID)));
+  }
+
+  @SuppressWarnings("unchecked")
+  public T findById(Long id) throws Exception {
+    String className = getClassT().getSimpleName();
+    return repository.findById((ID) id).orElseThrow(
+        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, className, CommonsConstant.ID)));
   }
 
   // --------------------------
@@ -183,18 +277,16 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   }
 
   /**
-   * Find class by id.
+   * Set invalid flag
    *
-   * @param inputParam    id
-   * @return              class
+   * @param po po
+   * @return po with invalid flag
    * @throws Exception
    */
-  @SuppressWarnings("unchecked")
-  private T findById(Object inputParam) throws Exception {
-    Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
-    idField.setAccessible(true);
-    String className = getClassT().getSimpleName();
-    return repository.findById((ID) idField.get(inputParam)).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, className, CommonsConstant.ID)));
+  private T setInvalid(T po) throws Exception {
+    Field validFlagField = po.getClass().getDeclaredField(CommonsConstant.VALID_FLAG);
+    validFlagField.setAccessible(true);
+    validFlagField.set(po, ValidFlag.INVALID);
+    return po;
   }
 }

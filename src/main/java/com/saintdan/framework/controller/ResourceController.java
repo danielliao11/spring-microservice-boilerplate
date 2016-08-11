@@ -10,6 +10,7 @@ import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.ResourceDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.Resource;
@@ -59,7 +60,7 @@ public class ResourceController {
   public ResultVO create(@CurrentUser User currentUser, @Valid ResourceParam param, BindingResult result) {
     try {
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
+      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.CREATE);
       if (resultVO != null) {
         return resultVO;
       }
@@ -105,7 +106,7 @@ public class ResourceController {
   /**
    * Show {@link com.saintdan.framework.vo.ResourceVO} by ID.
    *
-   * @param id id of resource
+   * @param id    {@link Resource#id}
    * @return {@link com.saintdan.framework.vo.ResourceVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -114,7 +115,7 @@ public class ResourceController {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
       }
-      return resultHelper.successResp(resourceDomain.getById(new ResourceParam(Long.valueOf(id)), ResourceVO.class));
+      return resultHelper.successResp(resourceDomain.getById(Long.valueOf(id), ResourceVO.class));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
@@ -127,22 +128,19 @@ public class ResourceController {
   /**
    * Update {@link com.saintdan.framework.po.Resource}.
    *
-   * @param id    id of resource
+   * @param id    {@link Resource#id}
    * @param param {@link ResourceParam}
    * @return {@link com.saintdan.framework.vo.ResourceVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid ResourceParam param, BindingResult result) {
     try {
-      if (StringUtils.isBlank(id)) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
-      }
+      param.setId(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
+      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.UPDATE);
       if (resultVO != null) {
         return resultVO;
       }
-      param.setId(Long.valueOf(id));
       // Update resource.
       return resultHelper.successResp(resourceDomain.update(param, currentUser));
     } catch (CommonsException e) {
@@ -163,17 +161,16 @@ public class ResourceController {
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id, String sign) {
     try {
-      if (StringUtils.isBlank(id)) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
-      }
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(currentUser, logger);
+      ResourceParam param = new ResourceParam(StringUtils.isBlank(id) ? null : Long.valueOf(id));
+      // Validate current user and param.
+      ResultVO resultVO = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
       if (resultVO != null) {
         return resultVO;
       }
       // Delete resource.
-      resourceDomain.delete(Long.valueOf(id), currentUser);
-      final String ROLE = "resource";
-      return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
+      resourceDomain.delete(param, currentUser);
+      final String RESOURCE = "resource";
+      return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, RESOURCE));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());

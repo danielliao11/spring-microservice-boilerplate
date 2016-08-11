@@ -10,6 +10,7 @@ import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.RoleDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationStatus;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.Role;
@@ -59,7 +60,7 @@ public class RoleController {
   public ResultVO create(@CurrentUser User currentUser, @Valid RoleParam param, BindingResult result) {
     try {
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
+      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.CREATE);
       if (resultVO != null) {
         return resultVO;
       }
@@ -104,7 +105,7 @@ public class RoleController {
   /**
    * Show {@link com.saintdan.framework.vo.RoleVO} by ID.
    *
-   * @param id id of role
+   * @param id {@link Role#id}
    * @return {@link com.saintdan.framework.vo.RoleVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -113,7 +114,7 @@ public class RoleController {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
       }
-      return resultHelper.successResp(roleDomain.getById(new RoleParam(Long.valueOf(id)), RoleVO.class));
+      return resultHelper.successResp(roleDomain.getById(Long.valueOf(id), RoleVO.class));
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
@@ -126,22 +127,19 @@ public class RoleController {
   /**
    * Update {@link com.saintdan.framework.po.Role}.
    *
-   * @param id    id of role
-   * @param param role's params
+   * @param id    {@link Role#id}
+   * @param param {@link RoleParam}
    * @return {@link com.saintdan.framework.vo.RoleVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid RoleParam param, BindingResult result) {
     try {
-      if (StringUtils.isBlank(id)) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
-      }
+      param.setId(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(result, currentUser, logger);
+      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.UPDATE);
       if (resultVO != null) {
         return resultVO;
       }
-      param.setId(Long.valueOf(id));
       // Update role.
       return resultHelper.successResp(roleDomain.update(param, currentUser));
     } catch (CommonsException e) {
@@ -156,21 +154,20 @@ public class RoleController {
   /**
    * Delete {@link com.saintdan.framework.po.Role}.
    *
-   * @param id id of role
+   * @param id {@link Role#id}
    * @return {@link com.saintdan.framework.vo.RoleVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id) {
     try {
-      if (StringUtils.isBlank(id)) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
-      }
-      ResultVO resultVO = validateHelper.validateWithOutSignCheck(currentUser, logger);
+      RoleParam param = new RoleParam(StringUtils.isBlank(id) ? null : Long.valueOf(id));
+      // Validate current user and param.
+      ResultVO resultVO = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
       if (resultVO != null) {
         return resultVO;
       }
       // Delete role.
-      roleDomain.delete(Long.valueOf(id), currentUser);
+      roleDomain.delete(param, currentUser);
       final String ROLE = "role";
       return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
     } catch (CommonsException e) {
