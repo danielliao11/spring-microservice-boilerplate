@@ -103,18 +103,8 @@ import org.springframework.stereotype.Component;
    * @param pos PO
    * @return VO
    */
-  public List pos2VO(Class<?> clazz, List pos) throws Exception {
-    return poList2VOList(clazz, pos);
-  }
-
-  /**
-   * Transform PO list to VO list.
-   *
-   * @param pos PO list
-   * @return VO list
-   */
   @SuppressWarnings("unchecked")
-  public List<?> poList2VOList(Class<?> type, List pos) throws InstantiationException, IllegalAccessException {
+  public List pos2VOs(Class<?> type, List pos) throws Exception {
     List voList = new ArrayList();
     for (Object po : pos) {
       Object vo = po2VO(type, po);

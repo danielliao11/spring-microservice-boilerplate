@@ -1,11 +1,5 @@
 package com.saintdan.framework.domain;
 
-/**
- * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 11/6/15
- * @since JDK1.8
- */
-
 import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
@@ -90,7 +84,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
       // Throw po cannot find exception.
       throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
     }
-    return transformer.pos2VO(voType, pos);
+    return transformer.pos2VOs(voType, pos);
   }
 
   /**
@@ -109,7 +103,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
       // Throw po cannot find exception.
       throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
     }
-    return transformer.poPage2VO(transformer.poList2VOList(voType, poPage.getContent()),
+    return transformer.poPage2VO(transformer.pos2VOs(voType, poPage.getContent()),
         pageable, poPage.getTotalElements());
   }
 
@@ -192,13 +186,13 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   /**
    * Delete <T>, update valid flag to invalid.
    *
-   * @param inputParam  input param
+   * @param input       input param
    * @param currentUser current user
    * @throws Exception
    */
-  @Transactional public void delete(Object inputParam, User currentUser) throws Exception {
-    T po = findByIdParam(inputParam);
-    BeanUtils.copyPropertiesIgnoreNull(inputParam, po);
+  @Transactional public void delete(Object input, User currentUser) throws Exception {
+    T po = findByIdParam(input);
+    BeanUtils.copyPropertiesIgnoreNull(input, po);
     logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
     repository.save(setInvalid(po));
   }

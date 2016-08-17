@@ -28,10 +28,7 @@ public class BaseParam implements Serializable {
 
   private static final Set<String> baseFields = new HashSet<>();
 
-  static {
-    baseFields.add("sign");
-    baseFields.add("currentUser");
-  }
+  static {}
 
   private static final String EQUAL = "=";
 

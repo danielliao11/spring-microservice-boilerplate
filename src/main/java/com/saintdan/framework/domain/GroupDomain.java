@@ -4,7 +4,6 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.GroupParam;
@@ -28,9 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/17/15
  * @since JDK1.8
  */
-@Service
-@Transactional(readOnly = true)
-public class GroupDomain extends BaseDomain<Group, Long> {
+@Service @Transactional(readOnly = true) public class GroupDomain extends BaseDomain<Group, Long> {
 
   // ------------------------
   // PUBLIC METHODS
@@ -45,7 +42,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} role already existing, name taken.
    */
   @Transactional public GroupVO create(GroupParam param, User currentUser) throws Exception {
-    if (groupRepository.findByName(param.getName()).isPresent()) {
+    if (groupRepository.findByNameAndValidFlag(param.getName(), ValidFlag.VALID).isPresent()) {
       // Throw group already existing exception, name taken.
       throw new CommonsException(ErrorType.SYS0111,
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
@@ -65,7 +62,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
   }
 
   public Group findByName(String name) throws Exception {
-    return groupRepository.findByName(name).orElseThrow(
+    return groupRepository.findByNameAndValidFlag(name, ValidFlag.VALID).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.GROUPS, CommonsConstant.NAME)));
   }
@@ -81,21 +78,6 @@ public class GroupDomain extends BaseDomain<Group, Long> {
   @Transactional public GroupVO update(GroupParam param, User currentUser) throws Exception {
     findById(param.getId());
     return super.updateByPO(GroupVO.class, groupParam2PO(param, new Group(), currentUser), currentUser);
-  }
-
-  /**
-   * Delete {@link Group}.
-   *
-   * @param currentUser current user
-   * @param id          {@link Group#id}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by id param.
-   */
-  @Transactional public void delete(Long id, User currentUser) throws Exception {
-    Group group = findById(id);
-    // Log delete operation.
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
-    // Change valid flag to invalid.
-    groupRepository.updateValidFlagFor(ValidFlag.INVALID, group.getId());
   }
 
   public Group findById(Long id) throws Exception {

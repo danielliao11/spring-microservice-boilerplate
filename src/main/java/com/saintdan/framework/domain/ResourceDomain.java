@@ -4,7 +4,6 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
@@ -27,9 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/17/15
  * @since JDK1.8
  */
-@Service
-@Transactional(readOnly = true)
-public class ResourceDomain extends BaseDomain<Resource, Long> {
+@Service @Transactional(readOnly = true) public class ResourceDomain extends BaseDomain<Resource, Long> {
 
   // ------------------------
   // PUBLIC METHODS
@@ -44,7 +41,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} resource already existing, name taken.
    */
   @Transactional public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
-    if (resourceRepository.findByName(param.getName()).isPresent()) {
+    if (resourceRepository.findByNameAndValidFlag(param.getName(), ValidFlag.VALID).isPresent()) {
       // Throw group already existing exception, name taken.
       throw new CommonsException(ErrorType.SYS0111,
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
@@ -75,7 +72,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
   }
 
   public Resource findByName(String name) throws Exception {
-    return resourceRepository.findByName(name).orElseThrow(
+    return resourceRepository.findByNameAndValidFlag(name, ValidFlag.VALID).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, CommonsConstant.NAME)));
   }
@@ -91,21 +88,6 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
   @Transactional public ResourceVO update(ResourceParam param, User currentUser) throws Exception {
     findById(param.getId());
     return super.updateByPO(ResourceVO.class, resourceParam2PO(param, new Resource(), currentUser), currentUser);
-  }
-
-  /**
-   * Delete {@link Resource}.
-   *
-   * @param currentUser current user
-   * @param id          {@link Resource#id}
-   * @throws CommonsException {@link ErrorType#SYS0121} Cannot find any resource by id param.
-   */
-  @Transactional public void delete(Long id, User currentUser) throws Exception {
-    Resource resource = findById(id);
-    // Log delete operation.
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
-    // Change valid flag to invalid.
-    resourceRepository.updateValidFlagFor(ValidFlag.INVALID, resource.getId());
   }
 
   public Resource findById(Long id) throws Exception {
@@ -144,7 +126,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
   }
 
   private Resource findByPath(String path) throws Exception {
-    return resourceRepository.findByName(path).orElseThrow(
+    return resourceRepository.findByNameAndValidFlag(path, ValidFlag.VALID).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, PATH)));
   }

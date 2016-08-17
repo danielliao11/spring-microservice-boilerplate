@@ -1,5 +1,6 @@
 package com.saintdan.framework.config.custom;
 
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Client;
 import com.saintdan.framework.repo.ClientRepository;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import org.springframework.stereotype.Service;
   }
 
   @Override public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-    Client client = clientRepository.findByClientIdAlias(clientId).orElseThrow(
+    Client client = clientRepository.findByClientIdAliasAndValidFlag(clientId, ValidFlag.VALID).orElseThrow(
         () -> new ClientRegistrationException(String.format("Client %s does not exist!", clientId)));
     return new ClientRepositoryClientDetails(client);
   }

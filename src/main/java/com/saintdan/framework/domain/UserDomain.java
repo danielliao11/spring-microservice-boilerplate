@@ -5,6 +5,7 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.Role;
@@ -25,9 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 7/21/15
  * @since JDK1.8
  */
-@Service
-@Transactional(readOnly = true)
-public class UserDomain extends BaseDomain<User, Long> {
+@Service @Transactional(readOnly = true) public class UserDomain extends BaseDomain<User, Long> {
 
   // ------------------------
   // PUBLIC METHODS
@@ -42,7 +41,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} user already existing, usr taken.
    */
   @Transactional public UserVO create(UserParam param, User currentUser) throws Exception {
-    if (userRepository.findByUsr(param.getUsr()).isPresent()) {
+    if (userRepository.findByUsrAndValidFlag(param.getUsr(), ValidFlag.VALID).isPresent()) {
       // Throw user already exists error, usr taken.
       throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ResourceConstant.USERS, USR));
     }
@@ -61,7 +60,7 @@ public class UserDomain extends BaseDomain<User, Long> {
   }
 
   public User findByUsr(String usr) throws Exception {
-    return userRepository.findByUsr(usr).orElseThrow(
+    return userRepository.findByUsrAndValidFlag(usr, ValidFlag.VALID).orElseThrow(
         // Throw cannot find any user by this usr param.
         () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, USR)));
   }
