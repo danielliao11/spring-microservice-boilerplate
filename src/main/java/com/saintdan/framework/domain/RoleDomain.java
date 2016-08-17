@@ -4,7 +4,6 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
@@ -28,9 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/17/15
  * @since JDK1.8
  */
-@Service
-@Transactional(readOnly = true)
-public class RoleDomain extends BaseDomain<Role, Long> {
+@Service @Transactional(readOnly = true) public class RoleDomain extends BaseDomain<Role, Long> {
 
   // ------------------------
   // PUBLIC METHODS
@@ -45,7 +42,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} user already existing, usr taken.
    */
   @Transactional public RoleVO create(RoleParam param, User currentUser) throws Exception {
-    if (roleRepository.findByName(param.getName()).isPresent()) {
+    if (roleRepository.findByNameAndValidFlag(param.getName(), ValidFlag.VALID).isPresent()) {
       // Throw role already existing exception, name taken.
       throw new CommonsException(ErrorType.SYS0111,
           ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
@@ -65,7 +62,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
   }
 
   public Role findByName(String name) throws Exception {
-    return roleRepository.findByName(name).orElseThrow(
+    return roleRepository.findByNameAndValidFlag(name, ValidFlag.VALID).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.ROLES, CommonsConstant.NAME)));
   }
@@ -80,21 +77,6 @@ public class RoleDomain extends BaseDomain<Role, Long> {
   @Transactional public RoleVO update(RoleParam param, User currentUser) throws Exception {
     findById(param.getId());
     return super.updateByPO(RoleVO.class, roleParam2PO(param, new Role(), currentUser), currentUser);
-  }
-
-  /**
-   * Delete {@link Role}.
-   *
-   * @param currentUser current user
-   * @param id          {@link Role#id}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by id param.
-   */
-  @Transactional public void delete(Long id, User currentUser) throws Exception {
-    Role role = findById(id);
-    // Log delete operation.
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
-    // Change valid flag to invalid.
-    roleRepository.updateValidFlagFor(ValidFlag.INVALID, role.getId());
   }
 
   public Role findById(Long id) throws Exception {

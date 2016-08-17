@@ -48,6 +48,7 @@ public class SpringSecurityUtils {
    * @param <T> user details
    * @return user details
    */
+  @SuppressWarnings("unchecked")
   public static <T extends UserDetails> T getCurrentUser() {
     Authentication authentication = getAuthentication();
     if (authentication == null) {

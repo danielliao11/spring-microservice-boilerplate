@@ -2,12 +2,7 @@ package com.saintdan.framework.repo;
 
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Client;
-import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 
 /**
  * Client's repository.
@@ -18,13 +13,6 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface ClientRepository extends RepositoryWithoutDelete<Client, Long> {
 
-  Optional<Client> findByClientIdAlias(String clientIdAlias);
+  Optional<Client> findByClientIdAliasAndValidFlag(String clientIdAlias, ValidFlag validFlag);
 
-  List<Client> findAllByValidFlag(ValidFlag validFlag);
-
-  Page<Client> findAllByValidFlag(Pageable pageable, ValidFlag validFlag);
-
-  @Modifying
-  @Query("update Client c set c.validFlag=?1 where c.id=?2")
-  void updateValidFlagFor(ValidFlag validFlag, Long id);
 }

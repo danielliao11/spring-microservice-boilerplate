@@ -22,7 +22,7 @@ public class ErrorMsgHelper {
     final String COLON = ": ";
     final String PREFIX = String.join("", msg.name(), COLON);
     if (args != null) {
-      return String.join("", PREFIX, String.format(msg.description(), args));
+      return String.join("", PREFIX, String.format(msg.description(), (Object) args));
     } else {
       return String.join("", PREFIX, msg.description());
     }

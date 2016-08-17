@@ -18,7 +18,7 @@ public class LogVO implements Serializable {
 
   private String username;
 
-  private String loginIP;
+  private String ip;
 
   private OperationType type;
 
@@ -32,12 +32,12 @@ public class LogVO implements Serializable {
     this.username = username;
   }
 
-  public String getLoginIP() {
-    return loginIP;
+  public String getIp() {
+    return ip;
   }
 
-  public void setLoginIP(String loginIP) {
-    this.loginIP = loginIP;
+  public void setIp(String ip) {
+    this.ip = ip;
   }
 
   public OperationType getType() {
