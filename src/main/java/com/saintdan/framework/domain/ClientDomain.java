@@ -4,7 +4,6 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
@@ -54,21 +53,6 @@ import org.springframework.transaction.annotation.Transactional;
     return transformer.po2VO(ClientVO.class, findClientByClientId(param.getClientIdAlias()));
   }
 
-  /**
-   * Delete {@link Client}
-   *
-   * @param currentUser current user
-   * @param id          {@link Client#id}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any client by id param.
-   */
-  @Transactional public void delete(Long id, User currentUser) throws Exception {
-    Client client = findById(id);
-    // Log delete operation.
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
-    // Change valid flag to invalid.
-    clientRepository.updateValidFlagFor(ValidFlag.INVALID, client.getId());
-  }
-
   public Client findById(Long id) throws Exception {
     return clientRepository.findById(id).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
@@ -86,13 +70,13 @@ import org.springframework.transaction.annotation.Transactional;
   private final static String CLIENT_ID = "clientId";
 
   private Client findClientByClientId(String clientId) throws Exception {
-    return clientRepository.findByClientIdAlias(clientId).orElseThrow(
+    return clientRepository.findByClientIdAliasAndValidFlag(clientId, ValidFlag.VALID).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.CLIENTS, CLIENT_ID)));
   }
 
   private void clientIdExists(String clientId) throws Exception {
-    if (clientRepository.findByClientIdAlias(clientId).isPresent()) {
+    if (clientRepository.findByClientIdAliasAndValidFlag(clientId, ValidFlag.VALID).isPresent()) {
       // Throw client already existing exception, clientId taken.
       throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CLIENT_ID));
     }

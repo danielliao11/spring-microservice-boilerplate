@@ -5,6 +5,7 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.Role;
@@ -56,7 +57,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   public User findByUsr(String usr) throws Exception {
-    return userRepository.findByUsr(usr).orElseThrow(
+    return userRepository.findByUsrAndValidFlag(usr, ValidFlag.VALID).orElseThrow(
         // Throw cannot find any user by this usr param.
         () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, USR)));
   }
@@ -121,7 +122,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   private void usrExists(String usr) throws Exception {
-    if (userRepository.findByUsr(usr).isPresent()) {
+    if (userRepository.findByUsrAndValidFlag(usr, ValidFlag.VALID).isPresent()) {
       // Throw user already exists error, usr taken.
       throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ResourceConstant.USERS, USR));
     }

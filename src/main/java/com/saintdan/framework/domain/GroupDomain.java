@@ -4,7 +4,6 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.GroupParam;
@@ -59,7 +58,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   public Group findByName(String name) throws Exception {
-    return groupRepository.findByName(name).orElseThrow(
+    return groupRepository.findByNameAndValidFlag(name, ValidFlag.VALID).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.GROUPS, CommonsConstant.NAME)));
   }
@@ -78,21 +77,6 @@ import org.springframework.transaction.annotation.Transactional;
       nameExists(param.getName());
     }
     return super.updateByPO(GroupVO.class, groupParam2PO(param, group, currentUser), currentUser);
-  }
-
-  /**
-   * Delete {@link Group}.
-   *
-   * @param currentUser current user
-   * @param id          {@link Group#id}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by id param.
-   */
-  @Transactional public void delete(Long id, User currentUser) throws Exception {
-    Group group = findById(id);
-    // Log delete operation.
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
-    // Change valid flag to invalid.
-    groupRepository.updateValidFlagFor(ValidFlag.INVALID, group.getId());
   }
 
   public Group findById(Long id) throws Exception {
@@ -134,7 +118,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   private void nameExists(String name) throws Exception {
-    if (groupRepository.findByName(name).isPresent()) {
+    if (groupRepository.findByNameAndValidFlag(name, ValidFlag.VALID).isPresent()) {
       // Throw group already existing exception, name taken.
       throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
     }
