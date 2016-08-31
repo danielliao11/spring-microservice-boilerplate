@@ -178,3 +178,6 @@
 - 0.13.1.RELEASE
   - [ADD] Add init.sql;
   - [MOD] Modify base domain.
+
+- 0.13.2.RELEASE
+  - [FIX] Fix validate bugs.

@@ -25,9 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 7/21/15
  * @since JDK1.8
  */
-@Service
-@Transactional(readOnly = true)
-public class UserDomain extends BaseDomain<User, Long> {
+@Service @Transactional(readOnly = true) public class UserDomain extends BaseDomain<User, Long> {
 
   // ------------------------
   // PUBLIC METHODS
@@ -42,10 +40,7 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} user already existing, usr taken.
    */
   @Transactional public UserVO create(UserParam param, User currentUser) throws Exception {
-    if (userRepository.findByUsr(param.getUsr()).isPresent()) {
-      // Throw user already exists error, usr taken.
-      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ResourceConstant.USERS, USR));
-    }
+    usrExists(param.getUsr());
     return super.createByPO(UserVO.class, userParam2PO(param, new User(), currentUser), currentUser);
   }
 
@@ -74,8 +69,11 @@ public class UserDomain extends BaseDomain<User, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any user by id param.
    */
   @Transactional public UserVO update(UserParam param, User currentUser) throws Exception {
-    findById(param.getId());
-    return super.updateByPO(UserVO.class, userParam2PO(param, new User(), currentUser), currentUser);
+    User user = findById(param.getId());
+    if (!param.getUsr().equals(user.getUsr())) {
+      usrExists(param.getUsr());
+    }
+    return super.updateByPO(UserVO.class, userParam2PO(param, user, currentUser), currentUser);
   }
 
   public User findById(Long id) throws Exception {
@@ -120,6 +118,13 @@ public class UserDomain extends BaseDomain<User, Long> {
       user.setPwd(passwordEncoder.encode(param.getPwd()));
     }
     return user;
+  }
+
+  private void usrExists(String usr) throws Exception {
+    if (userRepository.findByUsr(usr).isPresent()) {
+      // Throw user already exists error, usr taken.
+      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ResourceConstant.USERS, USR));
+    }
   }
 
 }

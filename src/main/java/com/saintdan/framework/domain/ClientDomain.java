@@ -24,9 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/25/15
  * @since JDK1.8
  */
-@Service
-@Transactional(readOnly = true)
-public class ClientDomain extends BaseDomain<Client, Long> {
+@Service @Transactional(readOnly = true) public class ClientDomain extends BaseDomain<Client, Long> {
 
   // ------------------------
   // PUBLIC METHODS
@@ -40,13 +38,8 @@ public class ClientDomain extends BaseDomain<Client, Long> {
    * @return {@link ClientVO}
    * @throws CommonsException {@link ErrorType#SYS0111} client already existing, name taken.
    */
-  @Transactional
-  public ClientVO create(ClientParam param, User currentUser) throws Exception {
-    if (clientRepository.findByClientIdAlias(param.getClientIdAlias()).isPresent()) {
-      // Throw client already existing exception, clientId taken.
-      throw new CommonsException(ErrorType.SYS0111,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CLIENT_ID));
-    }
+  @Transactional public ClientVO create(ClientParam param, User currentUser) throws Exception {
+    clientIdExists(param.getClientIdAlias());
     return super.createByPO(ClientVO.class, transformer.param2PO(getClassT(), param, new Client(), currentUser), currentUser);
   }
 
@@ -68,8 +61,7 @@ public class ClientDomain extends BaseDomain<Client, Long> {
    * @param id          {@link Client#id}
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any client by id param.
    */
-  @Transactional
-  public void delete(Long id, User currentUser) throws Exception {
+  @Transactional public void delete(Long id, User currentUser) throws Exception {
     Client client = findById(id);
     // Log delete operation.
     logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
@@ -97,6 +89,13 @@ public class ClientDomain extends BaseDomain<Client, Long> {
     return clientRepository.findByClientIdAlias(clientId).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.CLIENTS, CLIENT_ID)));
+  }
+
+  private void clientIdExists(String clientId) throws Exception {
+    if (clientRepository.findByClientIdAlias(clientId).isPresent()) {
+      // Throw client already existing exception, clientId taken.
+      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CLIENT_ID));
+    }
   }
 
 }

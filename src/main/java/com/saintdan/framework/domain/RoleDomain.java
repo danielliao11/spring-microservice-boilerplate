@@ -28,9 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/17/15
  * @since JDK1.8
  */
-@Service
-@Transactional(readOnly = true)
-public class RoleDomain extends BaseDomain<Role, Long> {
+@Service @Transactional(readOnly = true) public class RoleDomain extends BaseDomain<Role, Long> {
 
   // ------------------------
   // PUBLIC METHODS
@@ -45,11 +43,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} user already existing, usr taken.
    */
   @Transactional public RoleVO create(RoleParam param, User currentUser) throws Exception {
-    if (roleRepository.findByName(param.getName()).isPresent()) {
-      // Throw role already existing exception, name taken.
-      throw new CommonsException(ErrorType.SYS0111,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
-    }
+    nameExists(param.getName());
     return super.createByPO(RoleVO.class, roleParam2PO(param, new Role(), currentUser), currentUser);
   }
 
@@ -78,7 +72,10 @@ public class RoleDomain extends BaseDomain<Role, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by id param.
    */
   @Transactional public RoleVO update(RoleParam param, User currentUser) throws Exception {
-    findById(param.getId());
+    Role role = findById(param.getId());
+    if (param.getName().equals(role.getName())) {
+      nameExists(param.getName());
+    }
     return super.updateByPO(RoleVO.class, roleParam2PO(param, new Role(), currentUser), currentUser);
   }
 
@@ -134,6 +131,13 @@ public class RoleDomain extends BaseDomain<Role, Long> {
       role.setGroups((Set<Group>) groups);
     }
     return role;
+  }
+
+  private void nameExists(String name) throws Exception {
+    if (roleRepository.findByName(name).isPresent()) {
+      // Throw role already existing exception, name taken.
+      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
+    }
   }
 
 }

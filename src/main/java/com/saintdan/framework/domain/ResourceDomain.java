@@ -27,9 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/17/15
  * @since JDK1.8
  */
-@Service
-@Transactional(readOnly = true)
-public class ResourceDomain extends BaseDomain<Resource, Long> {
+@Service @Transactional(readOnly = true) public class ResourceDomain extends BaseDomain<Resource, Long> {
 
   // ------------------------
   // PUBLIC METHODS
@@ -44,11 +42,7 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} resource already existing, name taken.
    */
   @Transactional public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
-    if (resourceRepository.findByName(param.getName()).isPresent()) {
-      // Throw group already existing exception, name taken.
-      throw new CommonsException(ErrorType.SYS0111,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
-    }
+    nameExists(param.getName());
     return super.createByPO(ResourceVO.class, resourceParam2PO(param, new Resource(), currentUser), currentUser);
   }
 
@@ -89,8 +83,11 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any resource by id param.
    */
   @Transactional public ResourceVO update(ResourceParam param, User currentUser) throws Exception {
-    findById(param.getId());
-    return super.updateByPO(ResourceVO.class, resourceParam2PO(param, new Resource(), currentUser), currentUser);
+    Resource resource = findById(param.getId());
+    if (!param.getName().equals(resource.getName())) {
+      nameExists(param.getName());
+    }
+    return super.updateByPO(ResourceVO.class, resourceParam2PO(param, resource, currentUser), currentUser);
   }
 
   /**
@@ -147,6 +144,13 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     return resourceRepository.findByName(path).orElseThrow(
         () -> new CommonsException(ErrorType.SYS0122,
             ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, PATH)));
+  }
+
+  private void nameExists(String name) throws Exception {
+    if (resourceRepository.findByName(name).isPresent()) {
+      // Throw group already existing exception, name taken.
+      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
+    }
   }
 
 }

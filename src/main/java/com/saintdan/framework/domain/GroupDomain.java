@@ -28,9 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/17/15
  * @since JDK1.8
  */
-@Service
-@Transactional(readOnly = true)
-public class GroupDomain extends BaseDomain<Group, Long> {
+@Service @Transactional(readOnly = true) public class GroupDomain extends BaseDomain<Group, Long> {
 
   // ------------------------
   // PUBLIC METHODS
@@ -45,11 +43,7 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0111} role already existing, name taken.
    */
   @Transactional public GroupVO create(GroupParam param, User currentUser) throws Exception {
-    if (groupRepository.findByName(param.getName()).isPresent()) {
-      // Throw group already existing exception, name taken.
-      throw new CommonsException(ErrorType.SYS0111,
-          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
-    }
+    nameExists(param.getName());
     return super.createByPO(GroupVO.class, groupParam2PO(param, new Group(), currentUser), currentUser);
   }
 
@@ -79,8 +73,11 @@ public class GroupDomain extends BaseDomain<Group, Long> {
    * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by id param.
    */
   @Transactional public GroupVO update(GroupParam param, User currentUser) throws Exception {
-    findById(param.getId());
-    return super.updateByPO(GroupVO.class, groupParam2PO(param, new Group(), currentUser), currentUser);
+    Group group = findById(param.getId());
+    if (!param.getName().equals(group.getName())) {
+      nameExists(param.getName());
+    }
+    return super.updateByPO(GroupVO.class, groupParam2PO(param, group, currentUser), currentUser);
   }
 
   /**
@@ -134,6 +131,13 @@ public class GroupDomain extends BaseDomain<Group, Long> {
       group.setRoles(transformer.list2Set(roles));
     }
     return group;
+  }
+
+  private void nameExists(String name) throws Exception {
+    if (groupRepository.findByName(name).isPresent()) {
+      // Throw group already existing exception, name taken.
+      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
+    }
   }
 
 }
