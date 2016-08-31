@@ -76,7 +76,7 @@ import org.springframework.transaction.annotation.Transactional;
     if (param.getName().equals(role.getName())) {
       nameExists(param.getName());
     }
-    return super.updateByPO(RoleVO.class, roleParam2PO(param, new Role(), currentUser), currentUser);
+    return super.updateByPO(RoleVO.class, roleParam2PO(param, role, currentUser), currentUser);
   }
 
   /**

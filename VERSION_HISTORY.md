@@ -181,3 +181,4 @@
 
 - 0.13.2.RELEASE
   - [FIX] Fix validate bugs.
+  - [FIX] Fix update bugs
