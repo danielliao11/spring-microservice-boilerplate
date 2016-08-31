@@ -56,7 +56,7 @@ public class LogDomain {
       // Throw no log exist exception.
       throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
     }
-    return transformer.pos2VO(LogVO.class, logs);
+    return transformer.pos2VOs(LogVO.class, logs);
   }
 
   /**
@@ -72,7 +72,7 @@ public class LogDomain {
       // Throw no log exist exception.
       throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
     }
-    return transformer.poPage2VO(transformer.poList2VOList(LogVO.class, logPage.getContent()), pageable, logPage.getTotalElements());
+    return transformer.poPage2VO(transformer.pos2VOs(LogVO.class, logPage.getContent()), pageable, logPage.getTotalElements());
   }
 
   // --------------------------

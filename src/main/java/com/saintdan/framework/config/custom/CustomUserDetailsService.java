@@ -1,5 +1,6 @@
 package com.saintdan.framework.config.custom;
 
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
   @Autowired private UserRepository userRepository;
 
   @Override public UserDetails loadUserByUsername(String usr) throws UsernameNotFoundException {
-    User user = userRepository.findByUsr(usr).orElseThrow(
+    User user = userRepository.findByUsrAndValidFlag(usr, ValidFlag.VALID).orElseThrow(
         // Throw cannot find any user by this usr param.
         () -> new UsernameNotFoundException(String.format("User %s does not exist!", usr)));
     return new CustomUserRepositoryUserDetails(user);

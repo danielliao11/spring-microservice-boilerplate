@@ -3,6 +3,7 @@ package com.saintdan.framework.config.custom;
 import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.enums.OperationType;
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.LogUtils;
@@ -40,7 +41,7 @@ import org.springframework.stereotype.Service;
 
     // Find user.
     String username = token.getName();
-    User user = userRepository.findByUsr(username).orElseThrow(
+    User user = userRepository.findByUsrAndValidFlag(username, ValidFlag.VALID).orElseThrow(
         // Throw cannot find any user by this usr param.
         () -> new UsernameNotFoundException(String.format("User %s does not exist!", username)));
 
@@ -54,7 +55,7 @@ import org.springframework.stereotype.Service;
     String ip = SpringSecurityUtils.getCurrentUserIp();
 
     // Save user login info.
-    user.setLastLoginIP(ip);
+    user.setIp(ip);
     user.setLastLoginTime(new Date());
 
     if (!userDetails.isEnabled()) {

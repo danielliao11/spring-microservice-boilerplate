@@ -15,37 +15,35 @@ import java.util.Date;
  * @date 10/27/15
  * @since JDK1.8
  */
-@Entity
-@Table( name = "logs" )
-public class Log implements Serializable {
+@Entity @Table(name = "logs") public class Log implements Serializable {
 
   private static final long serialVersionUID = 7088091769901805623L;
 
   @Id
-  @SequenceGenerator( name = "logs_seq", sequenceName = "logs_seq", allocationSize = 1 )
-  @GeneratedValue( generator = "logs_seq", strategy = GenerationType.SEQUENCE )
+  @SequenceGenerator(name = "logs_seq", sequenceName = "logs_seq", allocationSize = 1)
+  @GeneratedValue(generator = "logs_seq", strategy = GenerationType.SEQUENCE)
   @Column(updatable = false)
   private Long id;
 
   @NotEmpty
-  @Column( name = "login_ip", nullable = false, length = 50 )
-  private String loginIP;
+  @Column(nullable = false, length = 50)
+  private String ip;
 
-  @Column( nullable = false )
+  @Column(nullable = false)
   private Long userId;
 
-  @Column( nullable = false )
+  @Column(nullable = false)
   private String username;
 
   private String clientId;
 
   private String accessResource;
 
-  @Column( nullable = false )
+  @Column(nullable = false)
   private OperationType type;
 
   @CreatedDate
-  @Column( nullable = false )
+  @Column(nullable = false)
   private Date createDate = new Date();
 
   public Log() {
@@ -59,12 +57,12 @@ public class Log implements Serializable {
     this.id = id;
   }
 
-  public String getLoginIP() {
-    return loginIP;
+  public String getIp() {
+    return ip;
   }
 
-  public void setLoginIP(String loginIP) {
-    this.loginIP = loginIP;
+  public void setIp(String ip) {
+    this.ip = ip;
   }
 
   public Long getUserId() {

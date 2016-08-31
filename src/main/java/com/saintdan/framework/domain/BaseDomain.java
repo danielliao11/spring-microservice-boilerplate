@@ -1,11 +1,5 @@
 package com.saintdan.framework.domain;
 
-/**
- * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 11/6/15
- * @since JDK1.8
- */
-
 import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
@@ -90,7 +84,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
       // Throw po cannot find exception.
       throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
     }
-    return transformer.pos2VO(voType, pos);
+    return transformer.pos2VOs(voType, pos);
   }
 
   /**
@@ -109,7 +103,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
       // Throw po cannot find exception.
       throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
     }
-    return transformer.poPage2VO(transformer.poList2VOList(voType, poPage.getContent()),
+    return transformer.poPage2VO(transformer.pos2VOs(voType, poPage.getContent()),
         pageable, poPage.getTotalElements());
   }
 
@@ -172,20 +166,20 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   /**
    * Update <T> by param.
    *
-   * @param inputPO     input PO
+   * @param po     input PO
    * @param currentUser current user
    * @return VO
    * @throws Exception
    */
-  @Transactional public T updateByPO(T inputPO, User currentUser) throws Exception {
+  @Transactional public T updateByPO(T po, User currentUser) throws Exception {
     logHelper.logUsersOperations(OperationType.UPDATE, getClassT().getSimpleName(), currentUser);
-    Field lastModifiedByField = inputPO.getClass().getDeclaredField("lastModifiedBy");
+    Field lastModifiedByField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_BY);
     lastModifiedByField.setAccessible(true);
-    lastModifiedByField.set(inputPO, currentUser.getId());
-    Field lastModifiedDateField = inputPO.getClass().getDeclaredField("lastModifiedDate");
+    lastModifiedByField.set(po, currentUser.getId());
+    Field lastModifiedDateField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
     lastModifiedDateField.setAccessible(true);
-    lastModifiedDateField.set(inputPO, new Date());
-    return repository.save(inputPO);
+    lastModifiedDateField.set(po, new Date());
+    return repository.save(po);
   }
 
 
@@ -199,6 +193,12 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   @Transactional public void delete(Object inputParam, User currentUser) throws Exception {
     T po = findByIdParam(inputParam);
     BeanUtils.copyPropertiesIgnoreNull(inputParam, po);
+    Field lastModifiedByField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_BY);
+    lastModifiedByField.setAccessible(true);
+    lastModifiedByField.set(po, currentUser.getId());
+    Field lastModifiedDateField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
+    lastModifiedDateField.setAccessible(true);
+    lastModifiedDateField.set(po, new Date());
     logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
     repository.save(setInvalid(po));
   }
@@ -211,7 +211,14 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    */
   @Transactional public void deleteById(String id,User currentUser) throws Exception {
     logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
-    repository.save(setInvalid(findById(Long.valueOf(id))));
+    T po = findById(Long.valueOf(id));
+    Field lastModifiedByField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_BY);
+    lastModifiedByField.setAccessible(true);
+    lastModifiedByField.set(po, currentUser);
+    Field lastModifiedDateField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
+    lastModifiedDateField.setAccessible(true);
+    lastModifiedDateField.set(po, new Date());
+    repository.save(setInvalid(po));
   }
 
   /**

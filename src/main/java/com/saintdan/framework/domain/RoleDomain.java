@@ -28,7 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/17/15
  * @since JDK1.8
  */
-@Service @Transactional(readOnly = true) public class RoleDomain extends BaseDomain<Role, Long> {
+@Service
+@Transactional(readOnly = true)
+public class RoleDomain extends BaseDomain<Role, Long> {
 
   // ------------------------
   // PUBLIC METHODS
