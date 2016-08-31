@@ -166,33 +166,39 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   /**
    * Update <T> by param.
    *
-   * @param inputPO     input PO
+   * @param po     input PO
    * @param currentUser current user
    * @return VO
    * @throws Exception
    */
-  @Transactional public T updateByPO(T inputPO, User currentUser) throws Exception {
+  @Transactional public T updateByPO(T po, User currentUser) throws Exception {
     logHelper.logUsersOperations(OperationType.UPDATE, getClassT().getSimpleName(), currentUser);
-    Field lastModifiedByField = inputPO.getClass().getDeclaredField("lastModifiedBy");
+    Field lastModifiedByField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_BY);
     lastModifiedByField.setAccessible(true);
-    lastModifiedByField.set(inputPO, currentUser.getId());
-    Field lastModifiedDateField = inputPO.getClass().getDeclaredField("lastModifiedDate");
+    lastModifiedByField.set(po, currentUser.getId());
+    Field lastModifiedDateField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
     lastModifiedDateField.setAccessible(true);
-    lastModifiedDateField.set(inputPO, new Date());
-    return repository.save(inputPO);
+    lastModifiedDateField.set(po, new Date());
+    return repository.save(po);
   }
 
 
   /**
    * Delete <T>, update valid flag to invalid.
    *
-   * @param input       input param
+   * @param inputParam  input param
    * @param currentUser current user
    * @throws Exception
    */
-  @Transactional public void delete(Object input, User currentUser) throws Exception {
-    T po = findByIdParam(input);
-    BeanUtils.copyPropertiesIgnoreNull(input, po);
+  @Transactional public void delete(Object inputParam, User currentUser) throws Exception {
+    T po = findByIdParam(inputParam);
+    BeanUtils.copyPropertiesIgnoreNull(inputParam, po);
+    Field lastModifiedByField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_BY);
+    lastModifiedByField.setAccessible(true);
+    lastModifiedByField.set(po, currentUser.getId());
+    Field lastModifiedDateField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
+    lastModifiedDateField.setAccessible(true);
+    lastModifiedDateField.set(po, new Date());
     logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
     repository.save(setInvalid(po));
   }
@@ -205,7 +211,14 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    */
   @Transactional public void deleteById(String id,User currentUser) throws Exception {
     logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
-    repository.save(setInvalid(findById(Long.valueOf(id))));
+    T po = findById(Long.valueOf(id));
+    Field lastModifiedByField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_BY);
+    lastModifiedByField.setAccessible(true);
+    lastModifiedByField.set(po, currentUser);
+    Field lastModifiedDateField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
+    lastModifiedDateField.setAccessible(true);
+    lastModifiedDateField.set(po, new Date());
+    repository.save(setInvalid(po));
   }
 
   /**
