@@ -174,3 +174,7 @@
   - [ADD] ADD [NotNullField](src/main/java/com/saintdan/framework/annotation/NotNullField.java)
   - [MOD] Modify validate helper and BaseDomain.
   - [FIX] Fix bugs.
+
+- 0.13.1.RELEASE
+  - [ADD] Add init.sql;
+  - [MOD] Modify base domain.
