@@ -1,9 +1,9 @@
 package com.saintdan.framework.param;
 
+import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.annotation.SignField;
 import com.saintdan.framework.domain.ClientDomain;
-
-import javax.validation.constraints.NotNull;
+import com.saintdan.framework.enums.OperationType;
 import javax.validation.constraints.Size;
 
 /**
@@ -17,35 +17,37 @@ public class ClientParam extends BaseParam {
 
   private static final long serialVersionUID = 6065608866944007796L;
 
-  @SignField private Long id;
+  @SignField
+  @NotNullField(value = {OperationType.UPDATE, OperationType.DELETE}, message = "id cannot be null.")
+  private Long id;
 
   @SignField
-  @NotNull(message = "ClientIdAlias cannot be null.")
+  @NotNullField(value = OperationType.CREATE, message = "clientIdAlias cannot be null.")
   @Size(min = 6, max = 50)
   private String clientIdAlias;
 
   @SignField
-  @NotNull(message = "ResourceIdStr cannot be null.")
+  @NotNullField(value = OperationType.CREATE, message = "resourceIdStr cannot be null.")
   private String resourceIdStr;
 
   @SignField
-  @NotNull(message = "ClientSecretAlias cannot be null.")
+  @NotNullField(value = OperationType.CREATE, message = "clientSecretAlias cannot be null.")
   @Size(min = 8, max = 50)
   private String clientSecretAlias;
 
   @SignField
-  @NotNull(message = "ScopeStr cannot be null.")
+  @NotNullField(value = OperationType.CREATE, message = "scopeStr cannot be null.")
   private String scopeStr;
 
   @SignField
-  @NotNull(message = "AuthorizedGrantTypeStr cannot be null.")
+  @NotNullField(value = OperationType.CREATE, message = "authorizedGrantTypeStr cannot be null.")
   private String authorizedGrantTypeStr;
 
   @SignField
   private String registeredRedirectUriStr;
 
   @SignField
-  @NotNull(message = "AuthoritiesStr cannot be null.")
+  @NotNullField(value = OperationType.CREATE, message = "authoritiesStr cannot be null.")
   private String authoritiesStr;
 
   @SignField private Integer accessTokenValiditySecondsAlias;

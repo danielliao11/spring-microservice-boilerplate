@@ -1,8 +1,8 @@
 package com.saintdan.framework.param;
 
+import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.annotation.SignField;
-
-import javax.validation.constraints.NotNull;
+import com.saintdan.framework.enums.OperationType;
 import javax.validation.constraints.Size;
 
 /**
@@ -16,20 +16,22 @@ public class UserParam extends BaseParam {
 
   private static final long serialVersionUID = -9153801716112918626L;
 
-  @SignField private Long id; // user's ID
+  @SignField
+  @NotNullField(value = {OperationType.UPDATE, OperationType.DELETE}, message = "id cannot be null.")
+  private Long id; // user's ID
 
   @SignField
-  @NotNull(message = "Usr cannot be null.")
+  @NotNullField(value = OperationType.CREATE, message = "usr cannot be null.")
   @Size(min = 4, max = 50)
   private String usr; // username
 
   @SignField
-  @NotNull(message = "Pwd cannot be null.")
+  @NotNullField(value = OperationType.CREATE, message = "pwd cannot be null.")
   @Size(min = 8, max = 50)
   private String pwd; // password
 
   @SignField
-  @NotNull(message = "Name cannot be null.")
+  @NotNullField(value = OperationType.CREATE, message = "name cannot be null.")
   private String name; // user's name
 
   @SignField private String description;
