@@ -185,4 +185,7 @@
   - [FIX] Fix valid bugs.
 
 - 0.14.0.RELEASE
-  - [MOD] Upgrade spring boot to 1.4.
+  - [MOD] Upgrade spring boot to 1.4.x
+
+- 0.14.1.RELEASE
+  - [MOD] Change param null validate.

@@ -1,8 +1,8 @@
 package com.saintdan.framework.param;
 
+import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.annotation.SignField;
-
-import javax.validation.constraints.NotNull;
+import com.saintdan.framework.enums.OperationType;
 
 /**
  * Param bean for {@link com.saintdan.framework.domain.RoleDomain}
@@ -15,10 +15,11 @@ public class RoleParam extends BaseParam {
 
   private static final long serialVersionUID = 8542867394907970893L;
 
+  @NotNullField(value = {OperationType.UPDATE, OperationType.DELETE}, message = "id cannot be null.")
   @SignField private Long id; // role's ID.
 
   @SignField
-  @NotNull(message = "Name cannot be null.")
+  @NotNullField(value = OperationType.CREATE, message = "name cannot be null.")
   private String name; // role's name
 
   @SignField private String description;
