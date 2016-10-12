@@ -17,7 +17,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE')
+    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE')
   }
 }
 
@@ -42,7 +42,7 @@ compileTestJava {
 }
 
 ext {
-  springBootVersion = '1.4.0.RELEASE'
+  springBootVersion = '1.4.1.RELEASE'
   springDataJpaVersion = '1.10.2.RELEASE'
   springOAuth2Version = '2.0.11.RELEASE'
 

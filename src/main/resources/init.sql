@@ -24,9 +24,6 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
 --
 
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -339,7 +336,7 @@ CREATE TABLE users (
     is_account_non_locked_alias boolean NOT NULL,
     is_credentials_non_expired_alias boolean NOT NULL,
     is_enabled_alias boolean NOT NULL,
-    last_login_ip character varying(255),
+    ip character varying(255),
     last_login_time timestamp without time zone,
     last_modified_by bigint NOT NULL,
     last_modified_date timestamp without time zone NOT NULL,
@@ -437,7 +434,7 @@ SELECT pg_catalog.setval('groups_seq', 6, true);
 -- Data for Name: logs; Type: TABLE DATA; Schema: public; Owner: core
 --
 
-COPY logs (id, access_resource, client_id, create_date, login_ip, type, user_id, username) FROM stdin;
+COPY logs (id, access_resource, client_id, create_date, ip, type, user_id, username) FROM stdin;
 \.
 
 
@@ -556,7 +553,7 @@ SELECT pg_catalog.setval('roles_seq', 3, true);
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: core
 --
 
-COPY users (id, created_by, created_date, description, is_account_non_expired_alias, is_account_non_locked_alias, is_credentials_non_expired_alias, is_enabled_alias, last_login_ip, last_login_time, last_modified_by, last_modified_date, name, pwd, usr, valid_flag, version) FROM stdin;
+COPY users (id, created_by, created_date, description, is_account_non_expired_alias, is_account_non_locked_alias, is_credentials_non_expired_alias, is_enabled_alias, ip, last_login_time, last_modified_by, last_modified_date, name, pwd, usr, valid_flag, version) FROM stdin;
 1	0	2016-06-27 14:24:50.081	root account	t	t	t	t	\N	\N	0	2016-06-27 14:24:50.081	root	$2a$10$ZBqt0Z73hxXZWCGUM51g8OLqti.8XqBEQRpmIgjw/wcEtyXlG9Jey	root	1	2
 3	1	2016-06-27 14:24:50.352	guest account	t	t	t	t	\N	\N	1	2016-06-27 14:24:50.352	guest	$2a$10$L45.IZTSKhdKD4bqBjHJHOpCY9x6eUse1URqoBn5Z0saFD/x.p92i	guest	1	2
 2	1	2016-06-27 14:24:50.352	admin account	t	t	t	t	0:0:0:0:0:0:0:1	2016-07-14 11:23:53.7	1	2016-06-27 14:24:50.352	admin	$2a$10$QTh9AVEsHEexICX3Yu/rCuM/N4wDDslcx8bLJTU9oFBMeW0etPjGS	admin	1	66

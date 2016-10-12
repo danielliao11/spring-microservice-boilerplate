@@ -189,3 +189,9 @@
 
 - 0.14.1.RELEASE
   - [MOD] Change param null validate.
+
+- 0.14.2.RELEASE
+  - [MOD] Modify build.gradle, application.properties, init.sql, logback.xml.
+  - [MOD] Regenerate pom.xml
+  - [MOD] Replace deprecated APIs.
+  - [DEL] Delete Seed.

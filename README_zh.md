@@ -7,6 +7,7 @@
 - [编译运行](#build)
 - [使用](#usage)
   - [数据格式](#data_format)
+  - [导入init.sql](#init)
   - [获取 **access_token**](#access_token)
   - [使用 **refresh_token** 来获取新的 **access_token**](#refresh_token)
   - [访问welcome资源](#welcome)
@@ -59,7 +60,7 @@ Windows 下，直接双击 gradlew.bat 运行。
 }
 ```
 
-### <a name="seed">先运行[Seed](src/test/java/com/saintdan/framework/repo/Seed.java) [[TOP]](#index)
+### <a name="init">导入[init.sql](src/main/resources/init.sql)到您的数据库，建议使用 [PostgreSQL](https://www.postgresql.org/) [[TOP]](#index)
 
 ### <a name="access_token"></a>获取 access_token [[TOP]](#index)
 
