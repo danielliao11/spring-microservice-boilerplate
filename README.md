@@ -7,7 +7,7 @@
 - [Build and Run](#build)
 - [Usage](#usage)
   - [Data Format](#data_format)
-  - [Use the Seed](#seed)
+  - [Import init.sql](#init)
   - [Get **access_token**](#access_token)
   - [Get New **access_token** with **refresh_token**](#refresh_token)
   - [Access to Welcome Resource](#welcome)
@@ -56,7 +56,7 @@ Data format of response：
 }
 ```
 
-### <a name="seed"></a>Use the [Seed](src/test/java/com/saintdan/framework/repo/Seed.java) [[TOP]](#index)
+### <a name="init"></a>Import the [init.sql](src/main/resources/init.sql) to your database, I suggest you to use [PostgreSQL](https://www.postgresql.org/) [[TOP]](#index)
 
 ### <a name="access_token"></a>Get access_token [[TOP]](#index)
 

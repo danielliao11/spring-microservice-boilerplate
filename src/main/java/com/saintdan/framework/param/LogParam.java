@@ -15,7 +15,7 @@ public class LogParam implements Serializable {
 
   private static final long serialVersionUID = 891050528216283300L;
 
-  private String loginIP;
+  private String ip;
 
   private OperationType type;
 
@@ -25,19 +25,19 @@ public class LogParam implements Serializable {
 
   public LogParam() {}
 
-  public LogParam(String loginIP, OperationType type, String clientId, String accessResource) {
-    this.loginIP = loginIP;
+  public LogParam(String ip, OperationType type, String clientId, String accessResource) {
+    this.ip = ip;
     this.type = type;
     this.clientId = clientId;
     this.accessResource = accessResource;
   }
 
-  public String getLoginIP() {
-    return loginIP;
+  public String getIp() {
+    return ip;
   }
 
-  public void setLoginIP(String loginIP) {
-    this.loginIP = loginIP;
+  public void setIp(String ip) {
+    this.ip = ip;
   }
 
   public OperationType getType() {
