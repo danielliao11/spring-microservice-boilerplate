@@ -8,7 +8,7 @@ import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.SpringSecurityUtils;
-import java.util.Date;
+import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ import org.springframework.stereotype.Service;
 
     // Save user login info.
     user.setIp(ip);
-    user.setLastLoginTime(new Date());
+    user.setLastLoginTime(LocalDateTime.now());
 
     if (!userDetails.isEnabled()) {
       throw new DisabledException("User has been disabled.");

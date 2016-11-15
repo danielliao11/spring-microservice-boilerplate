@@ -1,10 +1,10 @@
 description = 'spring-rest-oauth2-sample'
 group = 'com.saintdan.framework'
-version = '0.14.1.RELEASE'
+version = '0.15.0.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 apply plugin: 'maven' // If you want use maven.
 //apply plugin: 'war' // If you want use provide runtime dependencies.
 
@@ -17,7 +17,7 @@ buildscript {
     }
   }
   dependencies {
-    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE')
+    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE')
   }
 }
 
@@ -42,9 +42,9 @@ compileTestJava {
 }
 
 ext {
-  springBootVersion = '1.4.1.RELEASE'
-  springDataJpaVersion = '1.10.2.RELEASE'
-  springOAuth2Version = '2.0.11.RELEASE'
+  springBootVersion = '1.4.2.RELEASE'
+  springDataJpaVersion = '1.10.4.RELEASE'
+  springOAuth2Version = '2.0.12.RELEASE'
 
   fastJsonVersion = '1.2.12'
   commonsLang3Version = '3.4'

@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -178,7 +178,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     lastModifiedByField.set(po, currentUser.getId());
     Field lastModifiedDateField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
     lastModifiedDateField.setAccessible(true);
-    lastModifiedDateField.set(po, new Date());
+    lastModifiedDateField.set(po, LocalDateTime.now());
     return repository.save(po);
   }
 
@@ -198,7 +198,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     lastModifiedByField.set(po, currentUser.getId());
     Field lastModifiedDateField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
     lastModifiedDateField.setAccessible(true);
-    lastModifiedDateField.set(po, new Date());
+    lastModifiedDateField.set(po, LocalDateTime.now());
     logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
     repository.save(setInvalid(po));
   }
@@ -217,7 +217,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     lastModifiedByField.set(po, currentUser);
     Field lastModifiedDateField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
     lastModifiedDateField.setAccessible(true);
-    lastModifiedDateField.set(po, new Date());
+    lastModifiedDateField.set(po, LocalDateTime.now());
     repository.save(setInvalid(po));
   }
 

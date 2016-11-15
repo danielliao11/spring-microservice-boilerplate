@@ -1,18 +1,32 @@
 package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Version;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Authorized group, provide for spring security.
@@ -47,7 +61,7 @@ public class Group implements Serializable {
 
   @CreatedDate
   @Column(nullable = false)
-  private Date createdDate = new Date();
+  private LocalDateTime createdDate = LocalDateTime.now();
 
   @CreatedBy
   @Column(nullable = false, columnDefinition = "BIGINT")
@@ -55,7 +69,7 @@ public class Group implements Serializable {
 
   @LastModifiedDate
   @Column(nullable = false)
-  private Date lastModifiedDate = new Date();
+  private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
   @LastModifiedBy
   @Column(nullable = false, columnDefinition = "BIGINT")
@@ -114,11 +128,11 @@ public class Group implements Serializable {
     this.validFlag = validFlag;
   }
 
-  public Date getCreatedDate() {
+  public LocalDateTime getCreatedDate() {
     return createdDate;
   }
 
-  public void setCreatedDate(Date createdDate) {
+  public void setCreatedDate(LocalDateTime createdDate) {
     this.createdDate = createdDate;
   }
 
@@ -130,11 +144,11 @@ public class Group implements Serializable {
     this.createdBy = createdBy;
   }
 
-  public Date getLastModifiedDate() {
+  public LocalDateTime getLastModifiedDate() {
     return lastModifiedDate;
   }
 
-  public void setLastModifiedDate(Date lastModifiedDate) {
+  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
     this.lastModifiedDate = lastModifiedDate;
   }
 

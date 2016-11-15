@@ -195,3 +195,6 @@
   - [MOD] Regenerate pom.xml
   - [MOD] Replace deprecated APIs.
   - [DEL] Delete Seed.
+
+- 0.15.0.RELEASE
+  - [MOD] Change java.util.date to java.time
