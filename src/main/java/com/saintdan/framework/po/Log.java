@@ -1,12 +1,17 @@
 package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.OperationType;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedDate;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Log, record users' behavior.
@@ -44,7 +49,7 @@ import java.util.Date;
 
   @CreatedDate
   @Column(nullable = false)
-  private Date createDate = new Date();
+  private LocalDateTime createdDate = LocalDateTime.now();
 
   public Log() {
   }
@@ -105,11 +110,11 @@ import java.util.Date;
     this.type = type;
   }
 
-  public Date getCreateDate() {
-    return createDate;
+  public LocalDateTime getCreatedDate() {
+    return createdDate;
   }
 
-  public void setCreateDate(Date createDate) {
-    this.createDate = createDate;
+  public void setCreatedDate(LocalDateTime createdDate) {
+    this.createdDate = createdDate;
   }
 }

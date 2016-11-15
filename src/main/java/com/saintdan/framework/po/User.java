@@ -2,7 +2,7 @@ package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -81,14 +81,14 @@ public class User implements Serializable {
   private String description;
 
   // Last login time
-  private Date lastLoginTime;
+  private LocalDateTime lastLoginTime = LocalDateTime.now();
 
   // Last login IP address
   private String ip;
 
   @CreatedDate
   @Column(nullable = false)
-  private Date createdDate = new Date();
+  private LocalDateTime createdDate = LocalDateTime.now();
 
   @CreatedBy
   @Column(nullable = false)
@@ -96,7 +96,7 @@ public class User implements Serializable {
 
   @LastModifiedDate
   @Column(nullable = false)
-  private Date lastModifiedDate = new Date();
+  private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
   @LastModifiedBy
   @Column(nullable = false)
@@ -211,11 +211,11 @@ public class User implements Serializable {
     this.description = description;
   }
 
-  public Date getLastLoginTime() {
+  public LocalDateTime getLastLoginTime() {
     return lastLoginTime;
   }
 
-  public void setLastLoginTime(Date lastLoginTime) {
+  public void setLastLoginTime(LocalDateTime lastLoginTime) {
     this.lastLoginTime = lastLoginTime;
   }
 
@@ -227,11 +227,11 @@ public class User implements Serializable {
     this.ip = ip;
   }
 
-  public Date getCreatedDate() {
+  public LocalDateTime getCreatedDate() {
     return createdDate;
   }
 
-  public void setCreatedDate(Date createdDate) {
+  public void setCreatedDate(LocalDateTime createdDate) {
     this.createdDate = createdDate;
   }
 
@@ -243,11 +243,11 @@ public class User implements Serializable {
     this.createdBy = createdBy;
   }
 
-  public Date getLastModifiedDate() {
+  public LocalDateTime getLastModifiedDate() {
     return lastModifiedDate;
   }
 
-  public void setLastModifiedDate(Date lastModifiedDate) {
+  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
     this.lastModifiedDate = lastModifiedDate;
   }
 

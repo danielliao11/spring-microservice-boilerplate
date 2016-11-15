@@ -3,10 +3,12 @@ package com.saintdan.framework;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.PropertyPlaceholderAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.*;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 /**
  * Entrance of <p>spring-rest-oauth2</p>
@@ -18,6 +20,9 @@ import org.springframework.context.annotation.Import;
  * @date 6/25/15
  * @since JDK1.8
  */
+@EntityScan(
+    basePackageClasses = { Application.class, Jsr310JpaConverters.class }
+)
 @SpringBootApplication
 // I don't use Jmx and web socket, so I comment them.
 @Import({

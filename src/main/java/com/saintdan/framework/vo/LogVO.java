@@ -1,9 +1,8 @@
 package com.saintdan.framework.vo;
 
 import com.saintdan.framework.enums.OperationType;
-
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * VO for {@link com.saintdan.framework.po.Log}
@@ -22,7 +21,7 @@ public class LogVO implements Serializable {
 
   private OperationType type;
 
-  private Date createDate;
+  private LocalDateTime createDate;
 
   public String getUsername() {
     return username;
@@ -48,11 +47,11 @@ public class LogVO implements Serializable {
     this.type = type;
   }
 
-  public Date getCreateDate() {
+  public LocalDateTime getCreateDate() {
     return createDate;
   }
 
-  public void setCreateDate(Date createDate) {
+  public void setCreateDate(LocalDateTime createDate) {
     this.createDate = createDate;
   }
 
