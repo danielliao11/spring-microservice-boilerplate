@@ -1,6 +1,5 @@
 package com.saintdan.framework.vo;
 
-import com.saintdan.framework.enums.OperationStatus;
 import java.io.Serializable;
 
 /**
@@ -16,11 +15,7 @@ public class ResultVO implements Serializable {
 
   private String code;
 
-  private OperationStatus operationStatus;
-
   private String message;
-
-  private Object data;
 
   public ResultVO() {}
 
@@ -28,9 +23,8 @@ public class ResultVO implements Serializable {
     this.code = code;
   }
 
-  public ResultVO(String code, OperationStatus operationStatus, String message) {
+  public ResultVO(String code, String message) {
     this.code = code;
-    this.operationStatus = operationStatus;
     this.message = message;
   }
 
@@ -42,14 +36,6 @@ public class ResultVO implements Serializable {
     this.code = code;
   }
 
-  public OperationStatus getOperationStatus() {
-    return operationStatus;
-  }
-
-  public void setOperationStatus(OperationStatus operationStatus) {
-    this.operationStatus = operationStatus;
-  }
-
   public String getMessage() {
     return message;
   }
@@ -58,11 +44,4 @@ public class ResultVO implements Serializable {
     this.message = message;
   }
 
-  public Object getData() {
-    return data;
-  }
-
-  public void setData(Object data) {
-    this.data = data;
-  }
 }

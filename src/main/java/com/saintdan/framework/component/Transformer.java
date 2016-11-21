@@ -124,7 +124,7 @@ import org.springframework.stereotype.Component;
    * @return VO
    */
   @SuppressWarnings("unchecked")
-  public List pos2VOs(Class<?> type, List pos) throws Exception {
+  public List pos2VOs(Class<?> type, List pos) throws InstantiationException, IllegalAccessException {
     List voList = new ArrayList();
     for (Object po : pos) {
       Object vo = po2VO(type, po);

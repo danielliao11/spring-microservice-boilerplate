@@ -2,7 +2,6 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.Transformer;
-import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.ValidFlag;
@@ -77,10 +76,8 @@ import org.springframework.transaction.annotation.Transactional;
     return super.updateByPO(UserVO.class, userParam2PO(param, user, currentUser), currentUser);
   }
 
-  public User findById(Long id) throws Exception {
-    return userRepository.findById(id).orElseThrow(
-        // Throw cannot find any user by this id param.
-        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, CommonsConstant.ID)));
+  public User findById(Long id) {
+    return userRepository.findById(id).orElseThrow(null);
   }
 
   // --------------------------

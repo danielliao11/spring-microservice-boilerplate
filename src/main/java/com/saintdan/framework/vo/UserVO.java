@@ -1,7 +1,5 @@
 package com.saintdan.framework.vo;
 
-import java.io.Serializable;
-
 /**
  * VO for {@link com.saintdan.framework.po.User}
  *
@@ -9,7 +7,7 @@ import java.io.Serializable;
  * @date 6/30/15
  * @since JDK1.8
  */
-public class UserVO implements Serializable {
+public class UserVO extends ResultVO {
 
   private static final long serialVersionUID = 6597728015488383528L;
 

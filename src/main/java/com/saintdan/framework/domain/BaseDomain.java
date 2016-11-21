@@ -78,11 +78,10 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @throws Exception
    */
   @SuppressWarnings("unchecked")
-  public <VO> List<VO> getAll(Specification<T> specification, Sort sort, Class<VO> voType) throws Exception {
+  public <VO> List<VO> getAll(Specification<T> specification, Sort sort, Class<VO> voType) throws InstantiationException, IllegalAccessException {
     List pos = repository.findAll(specification, sort);
     if (pos.isEmpty()) {
-      // Throw po cannot find exception.
-      throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
+      return null;
     }
     return transformer.pos2VOs(voType, pos);
   }
@@ -97,11 +96,10 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @throws Exception
    */
   @SuppressWarnings("unchecked")
-  public Page getPage(Specification<T> specification, Pageable pageable, Class voType) throws Exception {
+  public Page getPage(Specification<T> specification, Pageable pageable, Class voType) throws InstantiationException, IllegalAccessException {
     Page<T> poPage = repository.findAll(specification, pageable);
     if (poPage.getSize() == 0) {
-      // Throw po cannot find exception.
-      throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, getClassT().getSimpleName(), getClassT().getSimpleName()));
+      return null;
     }
     return transformer.poPage2VO(transformer.pos2VOs(voType, poPage.getContent()),
         pageable, poPage.getTotalElements());
@@ -144,6 +142,9 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    */
   @Transactional public <VO> VO update(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
     T po = findByIdParam(inputParam);
+    if (po == null) {
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, voType.getName(), CommonsConstant.ID));
+    }
     BeanUtils.copyPropertiesIgnoreNull(inputParam, po);
     return updateByPO(voType, po, currentUser);
   }
@@ -227,12 +228,12 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @param currentUser
    * @throws Exception
    */
-  @Transactional public void deleteByIds(String ids, User currentUser) throws Exception  {
+  @Transactional public void deleteByIds(String ids, User currentUser) throws RuntimeException {
     transformer.idsStr2List(ids).forEach(id -> {
       try {
         this.deleteById(id.toString(), currentUser);
       } catch (Exception e) {
-        e.printStackTrace();
+        throw new RuntimeException(e);
       }
     });
   }
@@ -248,16 +249,12 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   public T findByIdParam(Object inputParam) throws Exception {
     Field idField = inputParam.getClass().getDeclaredField(CommonsConstant.ID);
     idField.setAccessible(true);
-    String className = getClassT().getSimpleName();
-    return repository.findById((ID) idField.get(inputParam)).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, className, CommonsConstant.ID)));
+    return repository.findById((ID) idField.get(inputParam)).orElse(null);
   }
 
   @SuppressWarnings("unchecked")
-  public T findById(Long id) throws Exception {
-    String className = getClassT().getSimpleName();
-    return repository.findById((ID) id).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, className, CommonsConstant.ID)));
+  public T findById(Long id) {
+    return repository.findById((ID) id).orElse(null);
   }
 
   // --------------------------
