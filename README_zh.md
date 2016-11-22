@@ -5,8 +5,8 @@
 ## <a name="index"></a>目录
 
 - [编译运行](#build)
+- [注意](#notice)
 - [使用](#usage)
-  - [数据格式](#data_format)
   - [导入init.sql](#init)
   - [获取 **access_token**](#access_token)
   - [使用 **refresh_token** 来获取新的 **access_token**](#refresh_token)
@@ -45,20 +45,12 @@ $ ./gradlew clean build bootRun
 
 Windows 下，直接双击 gradlew.bat 运行。
 
+## <a name="notice"></a>注意 [[TOP]](#index)
+
+- Validate failed -> Response http status is **422**(Unprocessable Entity)
+- Server error -> Response http status is **500**(Internal Server Error)
+
 ## <a name="usage"></a>使用 [[TOP]](#index)
-
-### <a name="data_format"></a>数据格式 [[TOP]](#index)
-
-返回数据格式为：
-
-```
-{
-  "error": "200",
-  "operationStatus": "SUCCESS",
-  "error_description": "Successfully",
-  "data": {}
-}
-```
 
 ### <a name="init">导入[init.sql](src/main/resources/init.sql)到您的数据库，建议使用 [PostgreSQL](https://www.postgresql.org/) [[TOP]](#index)
 
@@ -70,7 +62,7 @@ Windows 下，直接双击 gradlew.bat 运行。
 $ curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app"
 ```
 
-或者使用 Chrome 应用 [Advanced REST Client](https://github.com/jarrodek/advanced-rest-client)：
+或者使用 Chrome 应用 [Advanced REST Client](https://github.com/jarrodek/advanced-rest-client) 或者 [Postman](https://github.com/postmanlabs/) 或者其他REST client：
 
 ```
 url: http://localhost:8080/oauth/token
@@ -101,17 +93,12 @@ payload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
 ```
 $ curl http://localhost:8080/welcome -H "Authorization: Bearer <access_token_returned>"
 ```
-如果请求成功，将收到类似以下 JSON 响应：
+如果请求成功，你的response status为**201**(Created)，body为：：
 
 ```
 {
-  "error": "200",
-  "operationStatus": "SUCCESS",
-  "error_description": "Successfully",
-  "data": {
-    "id": 2,
-    "content": "Hello, admin!"
-  }
+  "id": 2,
+  "content": "Hello, admin!"
 }
 ```
 
@@ -131,19 +118,14 @@ headers: Authorization: bearer <access_token_returned>
 curl -X POST "http://localhost:8080/resources/v1/users" -H "Authorization: bearer <access_token_returned>" -d "usr=tommy&name=tom&pwd=tom12345"
 ```
 
-如果请求成功，将收到类似以下 JSON 响应：
+如果请求成功，你的response status为**201**(Created)，body为：
 
 ```
 {
-  "error": "200",
-  "operationStatus": "SUCCESS",
-  "error_description": "Successfully",
-  "data": {
-    "id": 4,
-    "name": "tom",
-    "usr": "tommy",
-    "description": null
-  }
+  "id": 4,
+  "name": "tom",
+  "usr": "tommy",
+  "description": "tom's account"
 }
 ```
 
@@ -162,41 +144,35 @@ payload: usr=tommy&name=tom&pwd=tom12345
 $ curl -X GET "http://localhost:8080/resources/v1/users" -H "Authorization: bearer <access_token_returned>"
 ```
 
-如果请求成功，将收到类似以下 JSON 响应：
+如果请求成功，你的response status为**201**(Created)，body为：：
 
 ```
-{
-  "error": "200",
-  "operationStatus": "SUCCESS",
-  "error_description": "Successfully",
-  "data": [
-      {
-        "id": 4,
-        "name": "tom",
-        "usr": "tommy",
-        "description": null
-      },
-      {
-        "id": 2,
-        "name": "admin",
-        "usr": "admin",
-        "description": "admin account"
-      },
-      {
-        "id": 1,
-        "name": "root",
-        "usr": "root",
-        "description": "root account"
-      },
-      {
-        "id": 3,
-        "name": "guest",
-        "usr": "guest",
-        "description": "guest account"
-      }
-    ]
+[
+  {
+    "id": 1,
+    "name": "root",
+    "usr": "root",
+    "description": "root account"
+  },
+  {
+    "id": 2,
+    "name": "admin",
+    "usr": "admin",
+    "description": "admin account"
+  },
+  {
+    "id": 3,
+    "name": "guest",
+    "usr": "guest",
+    "description": "guest account"
+  },
+  {
+    "id": 4,
+    "name": "tom",
+    "usr": "tommy",
+    "description": "tom's account"
   }
-}
+]
 ```
 
 或使用 Advanced REST Client:
@@ -213,28 +189,17 @@ headers: Authorization: bearer <access_token_returned>
 $ curl -X GET "http://localhost:8080/resources/v1/users?name=tom&createdDateAfter=2016-06-01&createdDateBefore=2016-07-30&sortBy=id:desc,name:desc" -H "Authorization: bearer <access_token_returned>"
 ```
 
-如果请求成功，将收到类似以下 JSON 响应：
+如果请求成功，你的response status为**201**(Created)，body为：：
 
 ```
-{
-  "error": "200",
-  "operationStatus": "SUCCESS",
-  "error_description": "Successfully",
-  "data": [
-    {
-      "id": 5,
-      "name": "tommy",
-      "usr": "tom",
-      "description": null
-    },
-    {
-      "id": 4,
-      "name": "tom",
-      "usr": "tommy",
-      "description": null
-    }
-  ]
-}
+[
+  {
+    "id": 4,
+    "name": "tom",
+    "usr": "tommy",
+    "description": "tom's account"
+  }
+]
 ```
 
 #### <a name="page"></a>3. 在分页中显示用户 [[TOP]](#page)
@@ -247,49 +212,39 @@ $ curl -X GET "http://localhost:8080/resources/v1/users?pageNo=1&pageSize=20&nam
 
 ```
 {
-  "error": "200",
-  "operationStatus": "SUCCESS",
-  "error_description": "Successfully",
-  "data": {
-    "content": [
-      {
-        "id": 4,
-        "name": "tom",
-        "usr": "tommy",
-        "description": null
-      },
-      {
-        "id": 5,
-        "name": "tommy",
-        "usr": "tom",
-        "description": null
-      }
-    ],
-    "totalElements": 2,
-    "last": true,
-    "totalPages": 1,
-    "size": 20,
-    "number": 0,
-    "sort": [
-      {
-        "direction": "ASC",
-        "property": "id",
-        "ignoreCase": false,
-        "nullHandling": "NATIVE",
-        "ascending": true
-      },
-      {
-        "direction": "DESC",
-        "property": "name",
-        "ignoreCase": false,
-        "nullHandling": "NATIVE",
-        "ascending": false
-      }
-    ],
-    "first": true,
-    "numberOfElements": 2
-  }
+  "content": [
+    {
+      "id": 9,
+      "name": "tom",
+      "usr": "tommy",
+      "description": "tom's account"
+    }
+  ],
+  "totalElements": 1,
+  "last": true,
+  "totalPages": 1,
+  "size": 20,
+  "number": 0,
+  "sort": [
+    {
+      "direction": "ASC",
+      "property": "id",
+      "ignoreCase": false,
+      "nullHandling": "NATIVE",
+      "ascending": true
+    },
+    {
+      "direction": "DESC",
+      "property": "name",
+      "ignoreCase": false,
+      "nullHandling": "NATIVE",
+      "ascending": false
+    }
+  ],
+  "first": true,
+  "numberOfElements": 1
 }
+
 ```
 
 或使用 Advanced REST Client:
@@ -318,15 +273,10 @@ $ curl -X GET "http://localhost:8080/resources/v1/users/4" -H "Authorization: Be
 
 ```
 {
-  "error": "200",
-  "operationStatus": "SUCCESS",
-  "error_description": "Successfully",
-  "data": {
-    "id": 4,
-    "name": "tom",
-    "usr": "tommy",
-    "description": null
-  }
+  "id": 4,
+  "name": "tom",
+  "usr": "tommy",
+  "description": "tom's account"
 }
 ```
 
@@ -341,22 +291,17 @@ headers: Authorization: bearer <access_token_returned>
 #### <a name="update"></a>6. 根据用户 ID 更新用户数据 [[TOP]](#index)
 
 ```
-curl -X PUT "http://localhost:8080/resources/v1/users/4" -H "Authorization: bearer <access_token_returned>" -d "usr=tommy&name=jerry&pwd=tom54321"
+curl -X PUT "http://localhost:8080/resources/v1/users/4" -H "Authorization: bearer <access_token_returned>" -d "name=jerry"
 ```
 
 如果请求成功，将收到以下 JSON 响应：
 
 ```
 {
-  "error": "200",
-  "operationStatus": "SUCCESS",
-  "error_description": "Successfully",
-  "data": {
-    "id": 4,
-    "name": "jerry",
-    "usr": "tommy",
-    "description": null
-  }
+  "id": 9,
+  "name": "jerry",
+  "usr": "tommy",
+  "description": "tommy's account"
 }
 ```
 
@@ -366,7 +311,7 @@ curl -X PUT "http://localhost:8080/resources/v1/users/4" -H "Authorization: bear
 url: http://localhost:8080/resources/v1/users/4
 PUT
 headers: Authorization: bearer <access_token_returned>
-payload: usr=tommy&name=jerry&pwd=tom54321
+payload: name=jerry
 ```
 
 #### <a name="delete"></a>7. 根据用户 ID 删除用户信息 [[TOP]](#index)
@@ -375,16 +320,7 @@ payload: usr=tommy&name=jerry&pwd=tom54321
 curl -X DELETE "http://localhost:8080/resources/v1/users/4" -H "Authorization: bearer <access_token_returned>"
 ```
 
-如果请求成功，将收到以下 JSON 响应：
-
-```
-{
-  "error": "200",
-  "operationStatus": "SUCCESS",
-  "error_description": "Delete user successfully.",
-  "data": null
-}
-```
+如果请求成功，你的response status为**204**(No Content)
 
 或使用 Advanced REST Client:
 

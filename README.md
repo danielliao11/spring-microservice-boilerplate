@@ -5,6 +5,7 @@
 ## <a name="index"></a>Index
 
 - [Build and Run](#build)
+- [NOTICE](#notice)
 - [Usage](#usage)
   - [Import init.sql](#init)
   - [Get **access_token**](#access_token)
@@ -40,6 +41,11 @@ $ cd <spring-rest-oauth2-sample root path>
 $ ./gradlew clean build bootRun
 ```
 
+## <a name="notice"></a>NOTICE [[TOP]](#index)
+
+- Validate failed -> Response http status is **422**(Unprocessable Entity)
+- Server error -> Response http status is **500**(Internal Server Error)
+
 ## <a name="usage"></a>Usage [[TOP]](#index)
 
 ### <a name="init"></a>Import the [init.sql](src/main/resources/init.sql) to your database, I suggest you to use [PostgreSQL](https://www.postgresql.org/) [[TOP]](#index)
@@ -52,7 +58,7 @@ Take your token from `oauth/token` in terminal, if you use ssl remember add `-k`
 $ curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app"
 ```
 
-or [Advanced REST Client / Postman or other http client](https://github.com/jarrodek/advanced-rest-client) in your Chrome with:
+or [Advanced REST client](https://github.com/jarrodek/advanced-rest-client) or [Postman](https://github.com/postmanlabs/) or other REST client in your Chrome with:
 
 ```
 url: http://localhost:8080/oauth/token
@@ -67,7 +73,7 @@ payload: password=admin&username=admin&grant_type=password&scope=read&client_sec
 curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "grant_type=refresh_token&refresh_token=<refresh_token_returned>&client_secret=123456&client_id=ios_app"
 ```
 
-or use Advanced REST Client / Postman or other http client:
+or use Advanced REST client / Postman or other REST client:
 
 ```
 url: http://localhost:8080/oauth/token
@@ -83,7 +89,7 @@ Use the **access_token** returned to make the authorized request to the protecte
 ```
 $ curl -X GET http://localhost:8080/welcome -H "Authorization: Bearer <access_token_returned>"
 ```
-If the request is successful, your response status is 201(), and your body is:
+If the request is successful, your response status is **200**(OK), and your body is:
 
 ```
 {
@@ -92,7 +98,7 @@ If the request is successful, your response status is 201(), and your body is:
 }
 ```
 
-or use Advanced REST Client / Postman or other http client:
+or use Advanced REST client / Postman or other REST client:
 
 ```
 url: http://localhost:8080/welcome
@@ -108,7 +114,7 @@ headers: Authorization: bearer <access_token_returned>
 curl -X POST "http://localhost:8080/resources/v1/users" -H "Authorization: bearer <access_token_returned>" -d "usr=tommy&name=tom&pwd=tom12345"
 ```
 
-If the request is successful, you will see the following JSON response like this:
+If the request is successful, your response status is **201**(Created), and your body is:
 
 ```
 {
@@ -119,7 +125,7 @@ If the request is successful, you will see the following JSON response like this
 }
 ```
 
-or use Advanced REST Client / Postman or other http client:
+or use Advanced REST client / Postman or other REST client:
 
 ```
 url: http://localhost:8080/resources/v1/users
@@ -134,7 +140,7 @@ payload: usr=tommy&name=tom&pwd=tom12345&description=tom's account
 $ curl -X GET "http://localhost:8080/resources/v1/users" -H "Authorization: bearer <access_token_returned>"
 ```
 
-If the request is successful, you will see the following JSON response like this:
+If the request is successful, your response status is **200**(OK), and your body is:
 
 ```
 [
@@ -165,7 +171,7 @@ If the request is successful, you will see the following JSON response like this
 ]
 ```
 
-or use Advanced REST Client / Postman or other http client:
+or use Advanced REST client / Postman or other REST client:
 
 ```
 url: http://localhost:8080/resources/v1/users
@@ -179,7 +185,7 @@ You can add filter params like:
 $ curl -X GET "http://localhost:8080/resources/v1/users?name=tom&createdDateAfter=2016-11-01&createdDateBefore=2016-11-30&sortBy=id:desc,name:desc" -H "Authorization: bearer <access_token_returned>"
 ```
 
-If the request is successful, you will see the following JSON response like this:
+If the request is successful, your response status is **200**(OK), and your body is:
 
 ```
 [
@@ -198,7 +204,7 @@ If the request is successful, you will see the following JSON response like this
 $ curl -X GET "http://localhost:8080/resources/v1/users?pageNo=1&pageSize=20&name=tom&sortBy=id:asc,name:desc" -H "Authorization: Bearer <access_token_returned>"
 ```
 
-If the request is successful, you will see the following JSON response like this:
+If the request is successful, your response status is **200**(OK), and your body is:
 
 ```
 {
@@ -236,7 +242,7 @@ If the request is successful, you will see the following JSON response like this
 }
 ```
 
-or use Advanced REST Client / Postman or other http client:
+or use Advanced REST client / Postman or other REST client:
 
 ```
 url: http://localhost:8080/resources/v1/users?pageNo=1&pageSize=20&name=tom&sortBy=id:asc,name:desc
@@ -258,7 +264,7 @@ sortBy | string | Like paramA:asc,paramB:desc,paramC:asc,...
 $ curl -X GET "http://localhost:8080/resources/v1/users/4" -H "Authorization: Bearer <access_token_returned>"
 ```
 
-If the request is successful, you will see the following JSON response like this:
+If the request is successful, your response status is **200**(OK), and your body is:
 
 ```
 {
@@ -269,7 +275,7 @@ If the request is successful, you will see the following JSON response like this
 }
 ```
 
-or use Advanced REST Client / Postman or other http client:
+or use Advanced REST client / Postman or other REST client:
 
 ```
 url: http://localhost:8080/resources/v1/users/4
@@ -284,7 +290,7 @@ headers: Authorization: bearer <access_token_returned>
 curl -X PUT "http://localhost:8080/resources/v1/users/4" -H "Authorization: bearer <access_token_returned>" -d "name=jerry"
 ```
 
-If the request is successful, you will see the following JSON response like this:
+If the request is successful, your response status is **200**(OK), and your body is:
 
 ```
 {
@@ -295,7 +301,7 @@ If the request is successful, you will see the following JSON response like this
 }
 ```
 
-or use Advanced REST Client / Postman or other http client:
+or use Advanced REST client / Postman or other REST client:
 
 ```
 url: http://localhost:8080/resources/v1/users/4
@@ -310,9 +316,9 @@ payload: name=jerry
 curl -X DELETE "http://localhost:8080/resources/v1/users/4" -H "Authorization: bearer <access_token_returned>"
 ```
 
-If the request is successful, your response status is 204(No Content)
+If the request is successful, your response status is **204**(No Content)
 
-or use Advanced REST Client / Postman or other http client:
+or use Advanced REST client / Postman or other REST client:
 
 ```
 url: http://localhost:8080/resources/v1/users/4
