@@ -2,9 +2,7 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
@@ -69,9 +67,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   public Resource findByName(String name) throws Exception {
-    return resourceRepository.findByNameAndValidFlag(name, ValidFlag.VALID).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, CommonsConstant.NAME)));
+    return resourceRepository.findByNameAndValidFlag(name, ValidFlag.VALID).orElse(null);
   }
 
   /**
@@ -90,10 +86,8 @@ import org.springframework.transaction.annotation.Transactional;
     return super.updateByPO(ResourceVO.class, resourceParam2PO(param, resource, currentUser), currentUser);
   }
 
-  public Resource findById(Long id) throws Exception {
-    return resourceRepository.findById(id).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, CommonsConstant.ID)));
+  public Resource findById(Long id) {
+    return resourceRepository.findById(id).orElse(null);
   }
 
   // --------------------------
@@ -126,9 +120,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   private Resource findByPath(String path) throws Exception {
-    return resourceRepository.findByNameAndValidFlag(path, ValidFlag.VALID).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.RESOURCES, PATH)));
+    return resourceRepository.findByNameAndValidFlag(path, ValidFlag.VALID).orElse(null);
   }
 
   private void nameExists(String name) throws Exception {

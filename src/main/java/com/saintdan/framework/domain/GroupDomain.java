@@ -2,7 +2,6 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
@@ -51,16 +50,14 @@ import org.springframework.transaction.annotation.Transactional;
    *
    * @param param {@link GroupParam}
    * @return {@link GroupVO}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any group by name param.
+   * @throws Exception
    */
   public GroupVO getGroupByName(GroupParam param) throws Exception {
     return transformer.po2VO(GroupVO.class, findByName(param.getName()));
   }
 
-  public Group findByName(String name) throws Exception {
-    return groupRepository.findByNameAndValidFlag(name, ValidFlag.VALID).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.GROUPS, CommonsConstant.NAME)));
+  public Group findByName(String name) {
+    return groupRepository.findByNameAndValidFlag(name, ValidFlag.VALID).orElse(null);
   }
 
   /**
@@ -79,10 +76,8 @@ import org.springframework.transaction.annotation.Transactional;
     return super.updateByPO(GroupVO.class, groupParam2PO(param, group, currentUser), currentUser);
   }
 
-  public Group findById(Long id) throws Exception {
-    return groupRepository.findById(id).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.GROUPS, CommonsConstant.ID)));
+  public Group findById(Long id) {
+    return groupRepository.findById(id).orElse(null);
   }
 
   // --------------------------

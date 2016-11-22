@@ -1,8 +1,6 @@
 package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
-import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
@@ -53,10 +51,8 @@ import org.springframework.transaction.annotation.Transactional;
     return transformer.po2VO(ClientVO.class, findClientByClientId(param.getClientIdAlias()));
   }
 
-  public Client findById(Long id) throws Exception {
-    return clientRepository.findById(id).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.CLIENTS, CommonsConstant.ID)));
+  public Client findById(Long id) {
+    return clientRepository.findById(id).orElse(null);
   }
 
   // --------------------------
@@ -69,10 +65,8 @@ import org.springframework.transaction.annotation.Transactional;
 
   private final static String CLIENT_ID = "clientId";
 
-  private Client findClientByClientId(String clientId) throws Exception {
-    return clientRepository.findByClientIdAliasAndValidFlag(clientId, ValidFlag.VALID).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.CLIENTS, CLIENT_ID)));
+  private Client findClientByClientId(String clientId) {
+    return clientRepository.findByClientIdAliasAndValidFlag(clientId, ValidFlag.VALID).orElse(null);
   }
 
   private void clientIdExists(String clientId) throws Exception {
