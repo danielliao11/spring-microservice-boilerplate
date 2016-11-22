@@ -198,3 +198,8 @@
 
 - 0.15.0.RELEASE
   - [MOD] Change java.util.date to java.time
+
+- 0.16.0.RELEASE
+  - [MOD] Change custom response to standard response entity.
+  - [MOD] Change ResultVO -> ErrorVO.
+  - [DEL] Remove some useless codes.
