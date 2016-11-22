@@ -1,6 +1,6 @@
 description = 'spring-rest-oauth2-sample'
 group = 'com.saintdan.framework'
-version = '0.15.0.RELEASE'
+version = '0.16.0.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -52,7 +52,7 @@ ext {
 
 //  hsqldbVersion = '1.8.0.10'
 //  mysqlVersion = '5.1.36'
-  postgresqlVersion = '9.4.1209.jre7'
+  postgresqlVersion = '9.4.1212.jre7'
 
   jsonPathVersion = '2.0.0'
   junitVersion = '4.12'

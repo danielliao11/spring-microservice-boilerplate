@@ -5,18 +5,15 @@ import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
-import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.RoleDomain;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.QueryHelper;
-import com.saintdan.framework.vo.ResultVO;
 import com.saintdan.framework.vo.RoleVO;
 import javax.validation.Valid;
 import net.kaczmarzyk.spring.data.jpa.domain.DateBetween;
@@ -29,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,21 +56,21 @@ public class RoleController {
    * @return {@link com.saintdan.framework.vo.RoleVO}
    */
   @RequestMapping(method = RequestMethod.POST)
-  public ResultVO create(@CurrentUser User currentUser, @Valid RoleParam param, BindingResult result) {
+  public ResponseEntity create(@CurrentUser User currentUser, @Valid RoleParam param, BindingResult result) {
     try {
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.CREATE);
-      if (resultVO != null) {
-        return resultVO;
+      ResponseEntity responseEntity = validateHelper.validate(param, result, currentUser, logger, OperationType.CREATE);
+      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+        return responseEntity;
       }
       // Return result and message.
-      return resultHelper.successResp(roleDomain.create(param, currentUser));
+      return resultHelper.successResp(roleDomain.create(param, currentUser), HttpStatus.CREATED);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -82,7 +81,7 @@ public class RoleController {
    * @return roles.
    */
   @RequestMapping(method = RequestMethod.GET)
-  public ResultVO all(
+  public ResponseEntity all(
       @And({
           @Spec(path = "name", spec = Like.class),
           @Spec(path = "validFlag", constVal = "VALID", spec = In.class),
@@ -90,15 +89,12 @@ public class RoleController {
       RoleParam param) {
     try {
       if (param.getPageNo() == null) {
-        return resultHelper.successResp(roleDomain.getAll(roleSpecification, QueryHelper.getSort(param.getSortBy()), RoleVO.class));
+        return resultHelper.successResp(roleDomain.getAll(roleSpecification, QueryHelper.getSort(param.getSortBy()), RoleVO.class), HttpStatus.OK);
       }
-      return resultHelper.successResp(roleDomain.getPage(roleSpecification, QueryHelper.getPageRequest(param), RoleVO.class));
-    } catch (CommonsException e) {
-      // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
+      return resultHelper.successResp(roleDomain.getPage(roleSpecification, QueryHelper.getPageRequest(param), RoleVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -109,18 +105,15 @@ public class RoleController {
    * @return {@link com.saintdan.framework.vo.RoleVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public ResultVO detail(@PathVariable String id) {
+  public ResponseEntity detail(@PathVariable String id) {
     try {
       if (StringUtils.isBlank(id)) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
+        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM), HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      return resultHelper.successResp(roleDomain.getById(Long.valueOf(id), RoleVO.class));
-    } catch (CommonsException e) {
-      // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
+      return resultHelper.successResp(roleDomain.getById(Long.valueOf(id), RoleVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -132,22 +125,22 @@ public class RoleController {
    * @return {@link com.saintdan.framework.vo.RoleVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-  public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid RoleParam param, BindingResult result) {
+  public ResponseEntity update(@CurrentUser User currentUser, @PathVariable String id, @Valid RoleParam param, BindingResult result) {
     try {
       param.setId(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.UPDATE);
-      if (resultVO != null) {
-        return resultVO;
+      ResponseEntity responseEntity = validateHelper.validate(param, result, currentUser, logger, OperationType.UPDATE);
+      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+        return responseEntity;
       }
       // Update role.
-      return resultHelper.successResp(roleDomain.update(param, currentUser));
+      return resultHelper.successResp(roleDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -158,24 +151,23 @@ public class RoleController {
    * @return {@link com.saintdan.framework.vo.RoleVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-  public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id) {
+  public ResponseEntity delete(@CurrentUser User currentUser, @PathVariable String id) {
     try {
       RoleParam param = new RoleParam(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user and param.
-      ResultVO resultVO = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
-      if (resultVO != null) {
-        return resultVO;
+      ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
+      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+        return responseEntity;
       }
       // Delete role.
       roleDomain.delete(param, currentUser);
-      final String ROLE = "role";
-      return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, ROLE));
+      return new ResponseEntity(HttpStatus.NO_CONTENT);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

@@ -49,11 +49,11 @@
   - [ADD] Add package of RESTFul parameters.
   - [MOD] Extract the elements with similar return results and integrate them into one --> [ResultHelper](/src/main/java/saintdan/framework/component/ResultHelper.java);
   - [MOD] Extract the elements with similar signature and integrate them into one --> [SignHelper](/src/main/java/saintdan/framework/component/SignHelper.java);
-  - [MOD] Optimize code of services, implements, controllers.
+  - [MOD] Optimize error of services, implements, controllers.
   
 - 0.5.1.RELEASE
   - [ADD] Add success result response to [ResultHelper](/src/main/java/saintdan/framework/component/ResultHelper.java);
-  - [MOD] Optimize code of user service and controller.
+  - [MOD] Optimize error of user service and controller.
   - [MOD] Update Spring Boot to 2.0.7.RELEASE
   - [FIX] Fix the signature bugs, and changes the test sign.
   
@@ -88,7 +88,7 @@
 
 - 0.8.5.RELEASE
   - [ADD] Add [@CurrentUser](src/main/java/com/saintdan/framework/annotation/CurrentUser.java), annotate param with it can get current login user.
-  - [ADD] Add some code comments.
+  - [ADD] Add some error comments.
   - [MOD] Separate the SignField to SignField and [ValidationField](src/main/java/com/saintdan/framework/annotation/ValidationField.java).
 
 - 0.9.0.RELEASE
@@ -141,7 +141,7 @@
   - [FIX] Fix some bugs.
 
 - 0.10.2.RELEASE
-  - [MOD] Change code style to google code style.
+  - [MOD] Change error style to google error style.
   - [MOD] Modify transaction.
   - [MOD] Optimize codes.
   - [FIX] Fix bugs.
@@ -149,7 +149,7 @@
 - 0.10.3.RELEASE
   - [ADD] Add Optional for PO.
   - [MOD] Optimize codes.
-  - [FIX] Fix bug of error message.
+  - [FIX] Fix bug of error error_description.
 
 - 0.11.1.RELEASE
   - [MOD] Use Stream and Optional.
@@ -164,10 +164,10 @@
   - [ADD] Add `validateWithOutSignCheck` of [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java)
   - [MOD] Modify `validate` to `validateWithSignCheck` of [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java)
   - [DEL] Delete ObjectsVO.java and PageVO.java.
-  - [DEL] Delete redundant code.
+  - [DEL] Delete redundant error.
 
 - 0.12.2.RELEASE
-  - [DEL] Delete redundant code.
+  - [DEL] Delete redundant error.
   - [FIX] Fix some bugs.
 
 - 0.13.0.RELEASE
@@ -198,3 +198,8 @@
 
 - 0.15.0.RELEASE
   - [MOD] Change java.util.date to java.time
+
+- 0.16.0.RELEASE
+  - [MOD] Change custom response to standard response entity.
+  - [MOD] Change ResultVO -> ErrorVO.
+  - [DEL] Remove some useless codes.

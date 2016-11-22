@@ -223,7 +223,7 @@ ALTER TABLE oauth_client_token OWNER TO core;
 --
 
 CREATE TABLE oauth_code (
-    code character varying(256),
+    error character varying(256),
     authentication bytea
 );
 
@@ -481,7 +481,7 @@ COPY oauth_client_token (token_id, token, authentication_id, user_name, client_i
 -- Data for Name: oauth_code; Type: TABLE DATA; Schema: public; Owner: core
 --
 
-COPY oauth_code (code, authentication) FROM stdin;
+COPY oauth_code (error, authentication) FROM stdin;
 \.
 
 
@@ -500,7 +500,7 @@ COPY oauth_refresh_token (token_id, token, authentication) FROM stdin;
 COPY resources (id, created_by, created_date, description, last_modified_by, last_modified_date, name, path, priority, valid_flag, version) FROM stdin;
 1	1	2016-06-27 14:24:50.618	all resources	1	2016-06-27 14:24:50.618	root	/.*	10000	1	0
 2	1	2016-06-27 14:24:50.618	client resource	1	2016-06-27 14:24:50.618	client	/client	10	1	0
-3	1	2016-06-27 14:24:50.618	message resource	1	2016-06-27 14:24:50.618	message	/messages	10	1	0
+3	1	2016-06-27 14:24:50.618	error_description resource	1	2016-06-27 14:24:50.618	error_description	/messages	10	1	0
 4	1	2016-06-27 14:24:50.618	welcome resource	1	2016-06-27 14:24:50.618	welcome	/welcome	1	1	0
 5	1	2016-06-27 14:24:50.618	user resource	1	2016-06-27 14:24:50.618	user	/users	10	1	0
 6	1	2016-06-27 14:24:50.618	role resource	1	2016-06-27 14:24:50.618	role	/roles	10	1	0

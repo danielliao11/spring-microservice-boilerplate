@@ -1,13 +1,10 @@
 package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
-import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.Log;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.LogRepository;
-import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.LogVO;
 import java.util.List;
 import org.springframework.beans.BeanUtils;
@@ -47,14 +44,13 @@ public class LogDomain {
    * Show all {@link LogVO}.
    *
    * @return {@link List<LogVO>}
-   * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
+   * @throws Exception
    */
   @SuppressWarnings("unchecked")
   public List<LogVO> getAllLogs() throws Exception {
     List<Log> logs = logRepository.findAll();
     if (logs.isEmpty()) {
-      // Throw no log exist exception.
-      throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
+      return null;
     }
     return transformer.pos2VOs(LogVO.class, logs);
   }
@@ -64,13 +60,12 @@ public class LogDomain {
    *
    * @param pageable {@link Pageable}
    * @return {@link Page}, {@link LogVO}
-   * @throws CommonsException {@link ErrorType#SYS0121} No group exists.
+   * @throws Exception
    */
   public Page getPage(Pageable pageable) throws Exception {
     Page<Log> logPage = logRepository.findAll(pageable);
     if (!logPage.hasContent()) {
-      // Throw no log exist exception.
-      throw new CommonsException(ErrorType.SYS0121, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0121, LOG, LOG));
+      return null;
     }
     return transformer.poPage2VO(transformer.pos2VOs(LogVO.class, logPage.getContent()), pageable, logPage.getTotalElements());
   }
