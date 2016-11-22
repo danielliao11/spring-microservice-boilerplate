@@ -6,6 +6,7 @@ import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.VersionConstant;
 import java.util.Collections;
 import java.util.List;
+import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,9 +23,14 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 /**
  * OAuth2 server configuration.
+ *
+ * 1. In memory token store
+ * 2. JDBC token store
+ * Choose one which you like.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/30/15
@@ -84,7 +90,8 @@ public class OAuth2ServerConfiguration {
     @Override public void configure(AuthorizationServerEndpointsConfigurer endpoints)
         throws Exception {
       endpoints
-          .tokenStore(this.tokenStore)
+          .tokenStore(this.tokenStore) // In memory token store
+//          .tokenStore(tokenStore()) // JDBC token store
           .authenticationManager(this.authenticationManager)
           .userDetailsService(userDetailsService);
     }
@@ -119,8 +126,19 @@ public class OAuth2ServerConfiguration {
             */
     }
 
+//    /* JDBC token store begin  */
+//    @Autowired private DataSource dataSource;
+//
+//    // Token store type.
+//    @Bean public JdbcTokenStore tokenStore() {
+//      return new JdbcTokenStore(dataSource);
+//    }
+//    /* JDBC token store end */
+
+    /* In memory token store begin */
     // Token store type.
     private TokenStore tokenStore = new InMemoryTokenStore();
+    /* In memory token store end */
 
     @Autowired private AuthenticationManager authenticationManager;
 

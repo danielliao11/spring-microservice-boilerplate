@@ -1,11 +1,11 @@
 package com.saintdan.framework.component;
 
-import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.tools.LogUtils;
-import com.saintdan.framework.vo.ResultVO;
+import com.saintdan.framework.vo.ErrorVO;
 import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,26 +21,21 @@ import org.springframework.stereotype.Component;
    * Return success result.
    *
    * @param object some vo.
-   * @return result vo.
+   * @return success response entity.
    */
-  public ResultVO successResp(Object object) {
-    ResultVO vo = new ResultVO(ResultConstant.OK);
-    vo.setOperationStatus(OperationStatus.SUCCESS);
-    if (vo.getMessage() == null) {
-      vo.setMessage(ResultConstant.SUCCESS);
-    }
-    vo.setData(object);
-    return vo;
+  @SuppressWarnings("unchecked")
+  public ResponseEntity successResp(Object object, HttpStatus httpStatus) {
+    return new ResponseEntity(object, httpStatus);
   }
 
   /**
    * Return error information.
    *
    * @param errorType error type
-   * @return result vo
+   * @return response entity with information.
    */
-  public ResultVO infoResp(ErrorType errorType) {
-    return infoResp(errorType, errorType.description());
+  public ResponseEntity infoResp(ErrorType errorType, HttpStatus httpStatus) {
+    return infoResp(errorType, errorType.description(), httpStatus);
   }
 
   /**
@@ -48,30 +43,24 @@ import org.springframework.stereotype.Component;
    *
    * @param errorType error type
    * @param msg       error message
-   * @return result vo
+   * @return response entity with information.
    */
-  public ResultVO infoResp(ErrorType errorType, String msg) {
-    return new ResultVO(
-        errorType.name(),
-        OperationStatus.FAILURE,
-        msg
-    );
+  @SuppressWarnings("unchecked")
+  public ResponseEntity infoResp(ErrorType errorType, String msg, HttpStatus httpStatus) {
+    return new ResponseEntity(new ErrorVO(errorType.name(), msg), httpStatus);
   }
 
   /**
    * Return error information.
    *
-   * @param logger    Log
-   * @param errorMsg  error message
-   * @return result vo
+   * @param logger Log
+   * @param msg    error message
+   * @return response entity with information.
    */
-  public ResultVO infoResp(Logger logger, ErrorType errorType, String errorMsg) {
-    LogUtils.trackInfo(logger, errorMsg);
-    return new ResultVO(
-        errorType.name(),
-        OperationStatus.FAILURE,
-        errorMsg
-    );
+  @SuppressWarnings("unchecked")
+  public ResponseEntity infoResp(Logger logger, ErrorType errorType, String msg, HttpStatus httpStatus) {
+    LogUtils.trackInfo(logger, msg);
+    return new ResponseEntity(new ErrorVO(errorType.name(), msg), httpStatus);
   }
 
   /**
@@ -81,10 +70,10 @@ import org.springframework.stereotype.Component;
    * @param logger    Log
    * @param errorType error type
    * @param e         e
-   * @return result vo
+   * @return response entity with error message.
    */
-  public ResultVO errorResp(Logger logger, Throwable e, ErrorType errorType) {
-    return errorResp(logger, e, errorType, errorType.description());
+  public ResponseEntity errorResp(Logger logger, Throwable e, ErrorType errorType, HttpStatus httpStatus) {
+    return errorResp(logger, e, errorType, errorType.description(), httpStatus);
   }
 
   /**
@@ -95,15 +84,12 @@ import org.springframework.stereotype.Component;
    * @param errorType error type
    * @param e         e
    * @param msg       error message
-   * @return result vo
+   * @return response entity with error message.
    */
-  public ResultVO errorResp(Logger logger, Throwable e, ErrorType errorType, String msg) {
+  @SuppressWarnings("unchecked")
+  public ResponseEntity errorResp(Logger logger, Throwable e, ErrorType errorType, String msg, HttpStatus httpStatus) {
     LogUtils.traceError(logger, e, errorType.description());
-    return new ResultVO(
-        errorType.name(),
-        OperationStatus.FAILURE,
-        msg
-    );
+    return new ResponseEntity(new ErrorVO(errorType.name(), msg), httpStatus);
   }
 
 }

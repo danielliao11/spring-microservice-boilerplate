@@ -2,7 +2,6 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ResourceConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
@@ -60,9 +59,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
   }
 
   public Role findByName(String name) throws Exception {
-    return roleRepository.findByNameAndValidFlag(name, ValidFlag.VALID).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.ROLES, CommonsConstant.NAME)));
+    return roleRepository.findByNameAndValidFlag(name, ValidFlag.VALID).orElse(null);
   }
 
   /**
@@ -80,10 +77,8 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     return super.updateByPO(RoleVO.class, roleParam2PO(param, role, currentUser), currentUser);
   }
 
-  public Role findById(Long id) throws Exception {
-    return roleRepository.findById(id).orElseThrow(
-        () -> new CommonsException(ErrorType.SYS0122,
-            ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.ROLES, CommonsConstant.ID)));
+  public Role findById(Long id) {
+    return roleRepository.findById(id).orElse(null);
   }
 
   // --------------------------
