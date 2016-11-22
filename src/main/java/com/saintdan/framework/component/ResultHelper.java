@@ -2,7 +2,7 @@ package com.saintdan.framework.component;
 
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.tools.LogUtils;
-import com.saintdan.framework.vo.ResultVO;
+import com.saintdan.framework.vo.ErrorVO;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +47,7 @@ import org.springframework.stereotype.Component;
    */
   @SuppressWarnings("unchecked")
   public ResponseEntity infoResp(ErrorType errorType, String msg, HttpStatus httpStatus) {
-    return new ResponseEntity(new ResultVO(errorType.name(), msg), httpStatus);
+    return new ResponseEntity(new ErrorVO(errorType.name(), msg), httpStatus);
   }
 
   /**
@@ -60,7 +60,7 @@ import org.springframework.stereotype.Component;
   @SuppressWarnings("unchecked")
   public ResponseEntity infoResp(Logger logger, ErrorType errorType, String msg, HttpStatus httpStatus) {
     LogUtils.trackInfo(logger, msg);
-    return new ResponseEntity(new ResultVO(errorType.name(), msg), httpStatus);
+    return new ResponseEntity(new ErrorVO(errorType.name(), msg), httpStatus);
   }
 
   /**
@@ -89,7 +89,7 @@ import org.springframework.stereotype.Component;
   @SuppressWarnings("unchecked")
   public ResponseEntity errorResp(Logger logger, Throwable e, ErrorType errorType, String msg, HttpStatus httpStatus) {
     LogUtils.traceError(logger, e, errorType.description());
-    return new ResponseEntity(new ResultVO(errorType.name(), msg), httpStatus);
+    return new ResponseEntity(new ErrorVO(errorType.name(), msg), httpStatus);
   }
 
 }

@@ -86,7 +86,7 @@ import org.springframework.validation.BindingResult;
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, field.getName()), HttpStatus.UNPROCESSABLE_ENTITY);
       }
     }
-    return null;
+    return new ResponseEntity(HttpStatus.OK);
   }
 
   /**

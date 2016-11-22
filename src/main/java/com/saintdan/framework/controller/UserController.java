@@ -162,7 +162,7 @@ public class UserController {
       }
       // Delete user.
       userDomain.delete(param, currentUser);
-      return new ResponseEntity(HttpStatus.OK);
+      return new ResponseEntity(HttpStatus.NO_CONTENT);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);

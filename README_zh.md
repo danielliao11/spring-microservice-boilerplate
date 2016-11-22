@@ -53,9 +53,9 @@ Windows 下，直接双击 gradlew.bat 运行。
 
 ```
 {
-  "code": "200",
+  "error": "200",
   "operationStatus": "SUCCESS",
-  "message": "Successfully",
+  "error_description": "Successfully",
   "data": {}
 }
 ```
@@ -105,9 +105,9 @@ $ curl http://localhost:8080/welcome -H "Authorization: Bearer <access_token_ret
 
 ```
 {
-  "code": "200",
+  "error": "200",
   "operationStatus": "SUCCESS",
-  "message": "Successfully",
+  "error_description": "Successfully",
   "data": {
     "id": 2,
     "content": "Hello, admin!"
@@ -135,9 +135,9 @@ curl -X POST "http://localhost:8080/resources/v1/users" -H "Authorization: beare
 
 ```
 {
-  "code": "200",
+  "error": "200",
   "operationStatus": "SUCCESS",
-  "message": "Successfully",
+  "error_description": "Successfully",
   "data": {
     "id": 4,
     "name": "tom",
@@ -166,9 +166,9 @@ $ curl -X GET "http://localhost:8080/resources/v1/users" -H "Authorization: bear
 
 ```
 {
-  "code": "200",
+  "error": "200",
   "operationStatus": "SUCCESS",
-  "message": "Successfully",
+  "error_description": "Successfully",
   "data": [
       {
         "id": 4,
@@ -217,9 +217,9 @@ $ curl -X GET "http://localhost:8080/resources/v1/users?name=tom&createdDateAfte
 
 ```
 {
-  "code": "200",
+  "error": "200",
   "operationStatus": "SUCCESS",
-  "message": "Successfully",
+  "error_description": "Successfully",
   "data": [
     {
       "id": 5,
@@ -247,9 +247,9 @@ $ curl -X GET "http://localhost:8080/resources/v1/users?pageNo=1&pageSize=20&nam
 
 ```
 {
-  "code": "200",
+  "error": "200",
   "operationStatus": "SUCCESS",
-  "message": "Successfully",
+  "error_description": "Successfully",
   "data": {
     "content": [
       {
@@ -318,9 +318,9 @@ $ curl -X GET "http://localhost:8080/resources/v1/users/4" -H "Authorization: Be
 
 ```
 {
-  "code": "200",
+  "error": "200",
   "operationStatus": "SUCCESS",
-  "message": "Successfully",
+  "error_description": "Successfully",
   "data": {
     "id": 4,
     "name": "tom",
@@ -348,9 +348,9 @@ curl -X PUT "http://localhost:8080/resources/v1/users/4" -H "Authorization: bear
 
 ```
 {
-  "code": "200",
+  "error": "200",
   "operationStatus": "SUCCESS",
-  "message": "Successfully",
+  "error_description": "Successfully",
   "data": {
     "id": 4,
     "name": "jerry",
@@ -379,9 +379,9 @@ curl -X DELETE "http://localhost:8080/resources/v1/users/4" -H "Authorization: b
 
 ```
 {
-  "code": "200",
+  "error": "200",
   "operationStatus": "SUCCESS",
-  "message": "Delete user successfully.",
+  "error_description": "Delete user successfully.",
   "data": null
 }
 ```

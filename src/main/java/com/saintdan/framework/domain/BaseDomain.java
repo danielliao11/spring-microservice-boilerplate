@@ -127,7 +127,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    */
   @SuppressWarnings("unchecked")
   public <VO> VO getById(Long id, Class<VO> voType) throws Exception {
-    return transformer.po2VO(voType, findById(id));
+    return findById(id) == null ? null : transformer.po2VO(voType, findById(id));
   }
 
   /**

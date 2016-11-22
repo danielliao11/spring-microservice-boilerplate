@@ -5,11 +5,9 @@ import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
 import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.constant.ResourceURL;
-import com.saintdan.framework.constant.ResultConstant;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationStatus;
 import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
@@ -17,7 +15,6 @@ import com.saintdan.framework.po.Client;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.QueryHelper;
 import com.saintdan.framework.vo.ClientVO;
-import com.saintdan.framework.vo.ResultVO;
 import javax.validation.Valid;
 import net.kaczmarzyk.spring.data.jpa.domain.DateBetween;
 import net.kaczmarzyk.spring.data.jpa.domain.In;
@@ -29,6 +26,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,21 +56,21 @@ public class ClientController {
    * @return {@link com.saintdan.framework.vo.ClientVO}
    */
   @RequestMapping(method = RequestMethod.POST)
-  public ResultVO create(@CurrentUser User currentUser, @Valid ClientParam param, BindingResult result) {
+  public ResponseEntity create(@CurrentUser User currentUser, @Valid ClientParam param, BindingResult result) {
     try {
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.CREATE);
-      if (resultVO != null) {
-        return resultVO;
+      ResponseEntity responseEntity = validateHelper.validate(param, result, currentUser, logger, OperationType.CREATE);
+      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+        return responseEntity;
       }
       // Return result and message.
-      return resultHelper.successResp(clientDomain.create(param, currentUser));
+      return resultHelper.successResp(clientDomain.create(param, currentUser), HttpStatus.CREATED);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -82,7 +81,7 @@ public class ClientController {
    * @return all clients.
    */
   @RequestMapping(method = RequestMethod.GET)
-  public ResultVO all(
+  public ResponseEntity all(
       @And({
           @Spec(path = "name", spec = Like.class),
           @Spec(path = "validFlag", constVal = "VALID", spec = In.class),
@@ -90,15 +89,12 @@ public class ClientController {
       ClientParam param) {
     try {
       if (param.getPageNo() == null) {
-        return resultHelper.successResp(clientDomain.getAll(clientSpecification, QueryHelper.getSort(param.getSortBy()), ClientVO.class));
+        return resultHelper.successResp(clientDomain.getAll(clientSpecification, QueryHelper.getSort(param.getSortBy()), ClientVO.class), HttpStatus.OK);
       }
-      return resultHelper.successResp(clientDomain.getPage(clientSpecification, QueryHelper.getPageRequest(param), ClientVO.class));
-    } catch (CommonsException e) {
-      // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
+      return resultHelper.successResp(clientDomain.getPage(clientSpecification, QueryHelper.getPageRequest(param), ClientVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -109,18 +105,15 @@ public class ClientController {
    * @return {@link com.saintdan.framework.vo.ClientVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public ResultVO detail(@PathVariable String id) {
+  public ResponseEntity detail(@PathVariable String id) {
     try {
       if (StringUtils.isBlank(id)) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM));
+        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM), HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      return resultHelper.successResp(clientDomain.getById(Long.valueOf(id), ResultVO.class));
-    } catch (CommonsException e) {
-      // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
+      return resultHelper.successResp(clientDomain.getById(Long.valueOf(id), ResponseEntity.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -132,22 +125,22 @@ public class ClientController {
    * @return {@link com.saintdan.framework.vo.ClientVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-  public ResultVO update(@CurrentUser User currentUser, @PathVariable String id, @Valid ClientParam param, BindingResult result) {
+  public ResponseEntity update(@CurrentUser User currentUser, @PathVariable String id, @Valid ClientParam param, BindingResult result) {
     try {
       param.setId(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user, param and sign.
-      ResultVO resultVO = validateHelper.validate(param, result, currentUser, logger, OperationType.UPDATE);
-      if (resultVO != null) {
-        return resultVO;
+      ResponseEntity responseEntity = validateHelper.validate(param, result, currentUser, logger, OperationType.UPDATE);
+      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+        return responseEntity;
       }
       // Update client.
-      return resultHelper.successResp(clientDomain.update(ClientVO.class, param, currentUser));
+      return resultHelper.successResp(clientDomain.update(ClientVO.class, param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -158,24 +151,23 @@ public class ClientController {
    * @return {@link com.saintdan.framework.vo.ClientVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-  public ResultVO delete(@CurrentUser User currentUser, @PathVariable String id) {
+  public ResponseEntity delete(@CurrentUser User currentUser, @PathVariable String id) {
     try {
       ClientParam param = new ClientParam(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user and param.
-      ResultVO resultVO = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
-      if (resultVO != null) {
-        return resultVO;
+      ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
+      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+        return responseEntity;
       }
       // Delete client.
       clientDomain.delete(param, currentUser);
-      final String USER = "user";
-      return new ResultVO(ResultConstant.OK, OperationStatus.SUCCESS, String.format(ControllerConstant.DELETE, USER));
+      return new ResponseEntity(HttpStatus.NO_CONTENT);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage());
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage());
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

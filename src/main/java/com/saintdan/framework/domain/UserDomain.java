@@ -56,9 +56,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   public User findByUsr(String usr) throws Exception {
-    return userRepository.findByUsrAndValidFlag(usr, ValidFlag.VALID).orElseThrow(
-        // Throw cannot find any user by this usr param.
-        () -> new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, ResourceConstant.USERS, USR)));
+    return userRepository.findByUsrAndValidFlag(usr, ValidFlag.VALID).orElse(null);
   }
 
   /**
@@ -70,14 +68,14 @@ import org.springframework.transaction.annotation.Transactional;
    */
   @Transactional public UserVO update(UserParam param, User currentUser) throws Exception {
     User user = findById(param.getId());
-    if (!param.getUsr().equals(user.getUsr())) {
+    if (StringUtils.isNotBlank(param.getUsr()) && !param.getUsr().equals(user.getUsr())) {
       usrExists(param.getUsr());
     }
     return super.updateByPO(UserVO.class, userParam2PO(param, user, currentUser), currentUser);
   }
 
   public User findById(Long id) {
-    return userRepository.findById(id).orElseThrow(null);
+    return userRepository.findById(id).orElse(null);
   }
 
   // --------------------------
