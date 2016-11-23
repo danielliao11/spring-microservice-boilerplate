@@ -64,7 +64,7 @@ public class ResourceController {
         return responseEntity;
       }
       // Return result and message.
-      return resultHelper.successResp(resourceDomain.create(param, currentUser), HttpStatus.CREATED);
+      return new ResponseEntity<>(resourceDomain.create(param, currentUser), HttpStatus.CREATED);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
@@ -90,9 +90,9 @@ public class ResourceController {
       ResourceParam param) {
     try {
       if (param.getPageNo() == null) {
-        return resultHelper.successResp(resourceDomain.getAll(resourceSpecification, QueryHelper.getSort(param.getSortBy()), ResourceVO.class), HttpStatus.OK);
+        return new ResponseEntity<>(resourceDomain.getAll(resourceSpecification, QueryHelper.getSort(param.getSortBy()), ResourceVO.class), HttpStatus.OK);
       }
-      return resultHelper.successResp(resourceDomain.getPage(resourceSpecification, QueryHelper.getPageRequest(param), ResourceVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(resourceDomain.getPage(resourceSpecification, QueryHelper.getPageRequest(param), ResourceVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -111,7 +111,7 @@ public class ResourceController {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM), HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      return resultHelper.successResp(resourceDomain.getById(Long.valueOf(id), ResourceVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(resourceDomain.getById(Long.valueOf(id), ResourceVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -135,7 +135,7 @@ public class ResourceController {
         return responseEntity;
       }
       // Update resource.
-      return resultHelper.successResp(resourceDomain.update(param, currentUser), HttpStatus.OK);
+      return new ResponseEntity<>(resourceDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);

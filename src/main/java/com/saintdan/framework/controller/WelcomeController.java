@@ -1,11 +1,9 @@
 package com.saintdan.framework.controller;
 
-import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.vo.WelcomeVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,7 +33,7 @@ public class WelcomeController {
    */
   @RequestMapping(ResourceURL.WELCOME)
   public ResponseEntity welcome(@AuthenticationPrincipal User user) {
-    return resultHelper.successResp(new WelcomeVO(user.getId(), String.format(template, user.getName())), HttpStatus.OK);
+    return new ResponseEntity<>(new WelcomeVO(user.getId(), String.format(template, user.getName())), HttpStatus.OK);
   }
 
   // ------------------------
@@ -43,7 +41,5 @@ public class WelcomeController {
   // ------------------------
 
   private static final String template = "Hello, %s!";
-
-  @Autowired private ResultHelper resultHelper;
 
 }

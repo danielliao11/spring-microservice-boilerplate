@@ -64,7 +64,7 @@ public class RoleController {
         return responseEntity;
       }
       // Return result and message.
-      return resultHelper.successResp(roleDomain.create(param, currentUser), HttpStatus.CREATED);
+      return new ResponseEntity<>(roleDomain.create(param, currentUser), HttpStatus.CREATED);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
@@ -89,9 +89,9 @@ public class RoleController {
       RoleParam param) {
     try {
       if (param.getPageNo() == null) {
-        return resultHelper.successResp(roleDomain.getAll(roleSpecification, QueryHelper.getSort(param.getSortBy()), RoleVO.class), HttpStatus.OK);
+        return new ResponseEntity<>(roleDomain.getAll(roleSpecification, QueryHelper.getSort(param.getSortBy()), RoleVO.class), HttpStatus.OK);
       }
-      return resultHelper.successResp(roleDomain.getPage(roleSpecification, QueryHelper.getPageRequest(param), RoleVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(roleDomain.getPage(roleSpecification, QueryHelper.getPageRequest(param), RoleVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,7 +110,7 @@ public class RoleController {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM), HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      return resultHelper.successResp(roleDomain.getById(Long.valueOf(id), RoleVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(roleDomain.getById(Long.valueOf(id), RoleVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -134,7 +134,7 @@ public class RoleController {
         return responseEntity;
       }
       // Update role.
-      return resultHelper.successResp(roleDomain.update(param, currentUser), HttpStatus.OK);
+      return new ResponseEntity<>(roleDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);

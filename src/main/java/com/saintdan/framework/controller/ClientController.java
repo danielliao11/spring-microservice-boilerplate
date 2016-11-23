@@ -64,7 +64,7 @@ public class ClientController {
         return responseEntity;
       }
       // Return result and message.
-      return resultHelper.successResp(clientDomain.create(param, currentUser), HttpStatus.CREATED);
+      return new ResponseEntity<>(clientDomain.create(param, currentUser), HttpStatus.CREATED);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
@@ -89,9 +89,9 @@ public class ClientController {
       ClientParam param) {
     try {
       if (param.getPageNo() == null) {
-        return resultHelper.successResp(clientDomain.getAll(clientSpecification, QueryHelper.getSort(param.getSortBy()), ClientVO.class), HttpStatus.OK);
+        return new ResponseEntity<>(clientDomain.getAll(clientSpecification, QueryHelper.getSort(param.getSortBy()), ClientVO.class), HttpStatus.OK);
       }
-      return resultHelper.successResp(clientDomain.getPage(clientSpecification, QueryHelper.getPageRequest(param), ClientVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(clientDomain.getPage(clientSpecification, QueryHelper.getPageRequest(param), ClientVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,7 +110,7 @@ public class ClientController {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM), HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      return resultHelper.successResp(clientDomain.getById(Long.valueOf(id), ResponseEntity.class), HttpStatus.OK);
+      return new ResponseEntity<>(clientDomain.getById(Long.valueOf(id), ResponseEntity.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -134,7 +134,7 @@ public class ClientController {
         return responseEntity;
       }
       // Update client.
-      return resultHelper.successResp(clientDomain.update(ClientVO.class, param, currentUser), HttpStatus.OK);
+      return new ResponseEntity<>(clientDomain.update(ClientVO.class, param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
