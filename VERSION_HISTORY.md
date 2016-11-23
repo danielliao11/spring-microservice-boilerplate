@@ -203,3 +203,6 @@
   - [MOD] Change custom response to standard response entity.
   - [MOD] Change ResultVO -> ErrorVO.
   - [DEL] Remove some useless codes.
+  
+- 0.16.1.RELEASE
+  - [DEL] Remove successResp().

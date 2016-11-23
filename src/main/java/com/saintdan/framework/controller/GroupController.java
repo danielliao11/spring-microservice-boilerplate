@@ -64,7 +64,7 @@ public class GroupController {
         return responseEntity;
       }
       // Return result and message.
-      return resultHelper.successResp(groupDomain.create(param, currentUser), HttpStatus.CREATED);
+      return new ResponseEntity<>(groupDomain.create(param, currentUser), HttpStatus.CREATED);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
@@ -89,9 +89,9 @@ public class GroupController {
       GroupParam param) {
     try {
       if (param.getPageNo() == null) {
-        return resultHelper.successResp(groupDomain.getAll(groupSpecification, QueryHelper.getSort(param.getSortBy()), GroupVO.class), HttpStatus.OK);
+        return new ResponseEntity<>(groupDomain.getAll(groupSpecification, QueryHelper.getSort(param.getSortBy()), GroupVO.class), HttpStatus.OK);
       }
-      return resultHelper.successResp(groupDomain.getPage(groupSpecification, QueryHelper.getPageRequest(param), GroupVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(groupDomain.getPage(groupSpecification, QueryHelper.getPageRequest(param), GroupVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,7 +110,7 @@ public class GroupController {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM), HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      return resultHelper.successResp(groupDomain.getById((Long.valueOf(id)), GroupVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(groupDomain.getById((Long.valueOf(id)), GroupVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -134,7 +134,7 @@ public class GroupController {
         return responseEntity;
       }
       // Update group.
-      return resultHelper.successResp(groupDomain.update(param, currentUser), HttpStatus.OK);
+      return new ResponseEntity<>(groupDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);

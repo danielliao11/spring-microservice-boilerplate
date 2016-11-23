@@ -63,7 +63,8 @@ public class UserController {
         return responseEntity;
       }
       // Return result and message.
-      return resultHelper.successResp(userDomain.create(param, currentUser), HttpStatus.CREATED);
+      return new ResponseEntity<>(userDomain.create(param, currentUser), HttpStatus.CREATED);
+//      return new ResponseEntity<>(userDomain.create(param, currentUser), HttpStatus.CREATED);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
@@ -90,9 +91,9 @@ public class UserController {
   ) {
     try {
       if (param.getPageNo() == null) {
-        return resultHelper.successResp(userDomain.getAll(userSpecification, QueryHelper.getSort(param.getSortBy()), UserVO.class), HttpStatus.OK);
+        return new ResponseEntity<>(userDomain.getAll(userSpecification, QueryHelper.getSort(param.getSortBy()), UserVO.class), HttpStatus.OK);
       }
-      return resultHelper.successResp(userDomain.getPage(userSpecification, QueryHelper.getPageRequest(param), UserVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(userDomain.getPage(userSpecification, QueryHelper.getPageRequest(param), UserVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -111,7 +112,7 @@ public class UserController {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM), HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      return resultHelper.successResp(userDomain.getById(Long.valueOf(id), UserVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(userDomain.getById(Long.valueOf(id), UserVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -135,7 +136,7 @@ public class UserController {
         return responseEntity;
       }
       // Update user.
-      return resultHelper.successResp(userDomain.update(param, currentUser), HttpStatus.OK);
+      return new ResponseEntity<>(userDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
