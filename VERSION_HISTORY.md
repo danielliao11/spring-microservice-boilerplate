@@ -206,3 +206,7 @@
   
 - 0.16.1.RELEASE
   - [DEL] Remove successResp().
+  
+- 0.16.2.RELEASE
+  - [CHANGE] Delete useless param of get access token request in read me.
+  - [FIX] Fix typo error in init.sql.

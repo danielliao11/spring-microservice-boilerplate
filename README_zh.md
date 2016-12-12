@@ -59,7 +59,7 @@ Windows 下，直接双击 gradlew.bat 运行。
 在终端中，通过访问 `oauth/token` 来获取你的 `access_token`，如果你使用了 `ssl` 方式，记得加入 `-k` 参数：
 
 ```
-$ curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app"
+$ curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=admin&username=admin&grant_type=password&scope=read"
 ```
 
 或者使用 Chrome 应用 [Advanced REST Client](https://github.com/jarrodek/advanced-rest-client) 或者 [Postman](https://github.com/postmanlabs/) 或者其他REST client：
@@ -68,13 +68,13 @@ $ curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: 
 url: http://localhost:8080/oauth/token
 POST
 headers: Authorization: Basic aW9zX2FwcDoxMjM0NTY= (Encrypt client_id:client_secret by HTTP Basic)
-payload: password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app
+payload: password=admin&username=admin&grant_type=password&scope=read
 ```
 
 ### <a name="refresh_token"></a>使用 **refresh_token** 来获取新的 **access_token** [[TOP]](#index)
 
 ```
-curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "grant_type=refresh_token&refresh_token=<refresh_token_returned>&client_secret=123456&client_id=ios_app"
+curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "grant_type=refresh_token&refresh_token=<refresh_token_returned>"
 ```
 
 或者使用 Advanced REST Client：
