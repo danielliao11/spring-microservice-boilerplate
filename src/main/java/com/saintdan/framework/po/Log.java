@@ -51,8 +51,7 @@ import org.springframework.data.annotation.CreatedDate;
   @Column(nullable = false)
   private LocalDateTime createdDate = LocalDateTime.now();
 
-  public Log() {
-  }
+  public Log() {}
 
   public Long getId() {
     return id;

@@ -55,7 +55,7 @@ $ ./gradlew clean build bootRun
 Take your token from `oauth/token` in terminal, if you use ssl remember add `-k`:
 
 ```
-$ curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app"
+$ curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "password=admin&username=admin&grant_type=password&scope=read"
 ```
 
 or [Advanced REST client](https://github.com/jarrodek/advanced-rest-client) or [Postman](https://github.com/postmanlabs/) or other REST client in your Chrome with:
@@ -64,13 +64,13 @@ or [Advanced REST client](https://github.com/jarrodek/advanced-rest-client) or [
 url: http://localhost:8080/oauth/token
 POST
 headers: Authorization: Basic aW9zX2FwcDoxMjM0NTY= (Encrypt client_id:client_secret by HTTP Basic)
-payload: password=admin&username=admin&grant_type=password&scope=read&client_secret=123456&client_id=ios_app
+payload: password=admin&username=admin&grant_type=password&scope=read
 ```
 
 ### <a name="refresh_token"></a>Get New **access_token** with **refresh_token** [[TOP]](#index)
 
 ```
-curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "grant_type=refresh_token&refresh_token=<refresh_token_returned>&client_secret=123456&client_id=ios_app"
+curl -X POST -vu ios_app:123456 http://localhost:8080/oauth/token -H "Accept: application/json" -d "grant_type=refresh_token&refresh_token=<refresh_token_returned>"
 ```
 
 or use Advanced REST client / Postman or other REST client:

@@ -125,7 +125,7 @@ CREATE TABLE logs (
     id bigint NOT NULL,
     access_resource character varying(255),
     client_id character varying(255),
-    create_date timestamp without time zone NOT NULL,
+    created_date timestamp without time zone NOT NULL,
     ip character varying(50) NOT NULL,
     type integer NOT NULL,
     user_id bigint NOT NULL,
@@ -434,7 +434,7 @@ SELECT pg_catalog.setval('groups_seq', 6, true);
 -- Data for Name: logs; Type: TABLE DATA; Schema: public; Owner: core
 --
 
-COPY logs (id, access_resource, client_id, create_date, ip, type, user_id, username) FROM stdin;
+COPY logs (id, access_resource, client_id, created_date, ip, type, user_id, username) FROM stdin;
 \.
 
 
