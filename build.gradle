@@ -46,7 +46,7 @@ ext {
   springDataJpaVersion = '1.10.4.RELEASE'
   springOAuth2Version = '2.0.12.RELEASE'
 
-  fastJsonVersion = '1.2.12'
+  jacksonVersion = '2.8.5'
   commonsLang3Version = '3.4'
   guavaVersion = '19.0'
 
@@ -70,7 +70,7 @@ dependencies {
 
   // Other dependencies.
   compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
-  compile "com.alibaba:fastjson:${fastJsonVersion}"
+  compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
   compile "com.google.guava:guava:${guavaVersion}"
   compile (group: 'net.kaczmarzyk', name: 'specification-arg-resolver', version: '0.9.0') {
     exclude group:'org.hibernate.javax.persistence'
@@ -101,20 +101,22 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.13'
+  gradleVersion = '3.2'
 }
 
-task generatePom << {
-  pom {
-    project {
-      inceptionYear '2015'
-      licenses {
-        license {
-          name 'The Apache Software License, Version 2.0'
-          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-          distribution 'repo'
+task writeNewPom {
+  doLast {
+    pom {
+      project {
+        inceptionYear '2008'
+        licenses {
+          license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
+          }
         }
       }
-    }
-  }.writeTo("pom.xml")
+    }.writeTo("pom.xml")
+  }
 }
