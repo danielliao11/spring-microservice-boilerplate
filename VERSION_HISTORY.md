@@ -214,3 +214,6 @@
 - 0.16.3.RELEASE
   - [MOD] Modify generate pom task in build.gradle.
   - [DEL] Delete fastjson.
+  
+- 0.17.0.RELEASE
+  - [MOD] Add login valid.

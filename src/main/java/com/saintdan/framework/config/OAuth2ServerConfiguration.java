@@ -21,8 +21,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 /**
@@ -36,9 +34,7 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
  * @date 6/30/15
  * @since JDK1.8
  */
-@Configuration
-@EnableResourceServer
-public class OAuth2ServerConfiguration {
+@Configuration @EnableResourceServer public class OAuth2ServerConfiguration {
 
   /**
    * Resource of api
@@ -87,11 +83,10 @@ public class OAuth2ServerConfiguration {
   protected static class AuthorizationServerConfiguration extends
       AuthorizationServerConfigurerAdapter {
 
-    @Override public void configure(AuthorizationServerEndpointsConfigurer endpoints)
-        throws Exception {
+    @Override public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
       endpoints
-          .tokenStore(this.tokenStore) // In memory token store
-//          .tokenStore(tokenStore()) // JDBC token store
+//          .tokenStore(this.tokenStore) // In memory token store
+          .tokenStore(tokenStore()) // JDBC token store
           .authenticationManager(this.authenticationManager)
           .userDetailsService(userDetailsService);
     }
@@ -126,18 +121,18 @@ public class OAuth2ServerConfiguration {
             */
     }
 
-//    /* JDBC token store begin  */
-//    @Autowired private DataSource dataSource;
-//
-//    // Token store type.
-//    @Bean public JdbcTokenStore tokenStore() {
-//      return new JdbcTokenStore(dataSource);
-//    }
-//    /* JDBC token store end */
+    /* JDBC token store begin  */
+    @Autowired private DataSource dataSource;
+
+    // Token store type.
+    @Bean public JdbcTokenStore tokenStore() {
+      return new JdbcTokenStore(dataSource);
+    }
+    /* JDBC token store end */
 
     /* In memory token store begin */
     // Token store type.
-    private TokenStore tokenStore = new InMemoryTokenStore();
+    // private TokenStore tokenStore = new InMemoryTokenStore();
     /* In memory token store end */
 
     @Autowired private AuthenticationManager authenticationManager;

@@ -1,6 +1,6 @@
 description = 'spring-rest-oauth2-sample'
 group = 'com.saintdan.framework'
-version = '0.16.2.RELEASE'
+version = '0.17.0.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -108,7 +108,7 @@ task writeNewPom {
   doLast {
     pom {
       project {
-        inceptionYear '2008'
+        inceptionYear '2016'
         licenses {
           license {
             name 'The Apache Software License, Version 2.0'
