@@ -208,5 +208,12 @@
   - [DEL] Remove successResp().
   
 - 0.16.2.RELEASE
-  - [CHANGE] Delete useless param of get access token request in read me.
+  - [DEL] Delete useless param of get access token request in read me.
   - [FIX] Fix typo error in init.sql.
+  
+- 0.16.3.RELEASE
+  - [MOD] Modify generate pom task in build.gradle.
+  - [DEL] Delete fastjson.
+  
+- 0.17.0.RELEASE
+  - [MOD] Add login valid.

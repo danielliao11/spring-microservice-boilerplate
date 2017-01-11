@@ -4,7 +4,9 @@ import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
+import com.saintdan.framework.po.OauthAccessToken;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.repo.OauthAccessTokenRepository;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.SpringSecurityUtils;
@@ -45,6 +47,9 @@ import org.springframework.stereotype.Service;
         // Throw cannot find any user by this usr param.
         () -> new UsernameNotFoundException(String.format("User %s does not exist!", username)));
 
+    // Get token object
+    OauthAccessToken oauthAccessToken = oauthAccessTokenRepository.findByUserName(username).orElse(null);
+
     // Compare password and credentials of authentication.
     if (!customPasswordEncoder.matches(token.getCredentials().toString(), user.getPwd())) {
       throw new BadCredentialsException("Invalid username/password");
@@ -53,6 +58,13 @@ import org.springframework.stereotype.Service;
 
     // Get client ip address.
     String ip = SpringSecurityUtils.getCurrentUserIp();
+
+    // Delete token if repeat login.
+    if (user.getIp() != null) {
+      if (!user.getIp().equals(ip) && oauthAccessToken != null) {
+        oauthAccessTokenRepository.delete(oauthAccessToken);
+      }
+    }
 
     // Save user login info.
     user.setIp(ip);
@@ -91,6 +103,8 @@ import org.springframework.stereotype.Service;
   @Autowired private LogHelper logHelper;
 
   @Autowired private UserRepository userRepository;
+
+  @Autowired private OauthAccessTokenRepository oauthAccessTokenRepository;
 
   @Autowired private CustomPasswordEncoder customPasswordEncoder;
 
