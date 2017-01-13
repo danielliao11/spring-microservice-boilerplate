@@ -217,3 +217,6 @@
   
 - 0.17.0.RELEASE
   - [MOD] Add login valid.
+  
+- 0.17.1.RELEASE
+  - [MOD] Modify sequence generator.
