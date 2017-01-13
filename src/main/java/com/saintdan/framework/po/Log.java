@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -24,9 +24,17 @@ import org.springframework.data.annotation.CreatedDate;
 
   private static final long serialVersionUID = 7088091769901805623L;
 
+  @GenericGenerator(
+      name = "logSequenceGenerator",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+      parameters = {
+          @Parameter(name = "sequence_name", value = "logs_seq"),
+          @Parameter(name = "initial_value", value = "1"),
+          @Parameter(name = "increment_size", value = "1")
+      }
+  )
   @Id
-  @SequenceGenerator(name = "logs_seq", sequenceName = "logs_seq", allocationSize = 1)
-  @GeneratedValue(generator = "logs_seq", strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(generator = "logSequenceGenerator")
   @Column(updatable = false)
   private Long id;
 
