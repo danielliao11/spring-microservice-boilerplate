@@ -7,11 +7,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,9 +33,17 @@ public class Client implements Serializable {
 
   private static final long serialVersionUID = 6500601540965188191L;
 
+  @GenericGenerator(
+      name = "clientSequenceGenerator",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+      parameters = {
+          @Parameter(name = "sequence_name", value = "clients_seq"),
+          @Parameter(name = "initial_value", value = "1"),
+          @Parameter(name = "increment_size", value = "1")
+      }
+  )
   @Id
-  @SequenceGenerator(name = "clients_seq", sequenceName = "clients_seq", allocationSize = 1)
-  @GeneratedValue(generator = "clients_seq", strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(generator = "clientSequenceGenerator")
   @Column(updatable = false)
   private Long id;
 

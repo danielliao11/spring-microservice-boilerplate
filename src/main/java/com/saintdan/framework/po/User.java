@@ -11,16 +11,16 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -44,9 +44,17 @@ public class User implements Serializable {
 
   private static final long serialVersionUID = 2680591198337929454L;
 
+  @GenericGenerator(
+      name = "userSequenceGenerator",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+      parameters = {
+          @Parameter(name = "sequence_name", value = "users_seq"),
+          @Parameter(name = "initial_value", value = "1"),
+          @Parameter(name = "increment_size", value = "1")
+      }
+  )
   @Id
-  @SequenceGenerator(name = "users_seq", sequenceName = "users_seq", allocationSize = 1)
-  @GeneratedValue(generator = "users_seq", strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(generator = "userSequenceGenerator")
   @Column(updatable = false)
   private Long id;
 

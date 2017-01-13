@@ -3,7 +3,6 @@ package com.saintdan.framework.po;
 import com.saintdan.framework.enums.ValidFlag;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -12,13 +11,13 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -41,9 +40,17 @@ public class Resource implements GrantedAuthority, Serializable {
 
   private static final long serialVersionUID = 6298843159549723556L;
 
+  @GenericGenerator(
+      name = "resourceSequenceGenerator",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+      parameters = {
+          @Parameter(name = "sequence_name", value = "resources_seq"),
+          @Parameter(name = "initial_value", value = "1"),
+          @Parameter(name = "increment_size", value = "1")
+      }
+  )
   @Id
-  @SequenceGenerator(name = "resources_seq", sequenceName = "resources_seq", allocationSize = 1)
-  @GeneratedValue(generator = "resources_seq", strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(generator = "resourceSequenceGenerator")
   @Column(updatable = false)
   private Long id;
 
