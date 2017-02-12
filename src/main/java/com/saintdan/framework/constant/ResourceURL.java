@@ -11,6 +11,12 @@ public interface ResourceURL {
 
   String FIX = "/**";
 
+  String APP = "/app";
+
+  String MANAGEMENT = "/management";
+
+  String OPEN = "/open";
+
   String WELCOME = "/welcome";
 
   String RESOURCES = "/resources";

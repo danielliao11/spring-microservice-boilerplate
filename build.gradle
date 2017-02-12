@@ -10,24 +10,32 @@ apply plugin: 'maven' // If you want use maven.
 
 buildscript {
   repositories {
-    mavenCentral()
-    jcenter()
+    // If you are in China. You can use ali's repository.
+    maven {
+      url 'http://maven.aliyun.com/nexus/content/groups/public/'
+    }
     maven {
       url 'https://repo.spring.io/plugins-release'
     }
+    mavenCentral()
+    jcenter()
   }
   dependencies {
-    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.4.2.RELEASE')
+    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.1.RELEASE')
   }
 }
 
 allprojects {
   repositories {
+    // If you are in China. You can use ali's repository.
+    maven {
+      url 'http://maven.aliyun.com/nexus/content/groups/public/'
+    }
+    maven {
+      url 'https://repo.spring.io/plugins-release'
+    }
     mavenCentral()
     jcenter()
-    maven {
-      url 'https://repo.spring.io/libs-release'
-    }
   }
 }
 
@@ -42,13 +50,13 @@ compileTestJava {
 }
 
 ext {
-  springBootVersion = '1.4.2.RELEASE'
-  springDataJpaVersion = '1.10.4.RELEASE'
+  springBootVersion = '1.5.1.RELEASE'
   springOAuth2Version = '2.0.12.RELEASE'
 
   jacksonVersion = '2.8.5'
   commonsLang3Version = '3.4'
   guavaVersion = '19.0'
+  swaggerVersion = '2.6.1'
 
 //  hsqldbVersion = '1.8.0.10'
 //  mysqlVersion = '5.1.36'
@@ -75,6 +83,10 @@ dependencies {
   compile (group: 'net.kaczmarzyk', name: 'specification-arg-resolver', version: '0.9.0') {
     exclude group:'org.hibernate.javax.persistence'
   }
+
+  //swagger
+  compile "io.springfox:springfox-swagger2:${swaggerVersion}"
+  compile "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 
   // DB dependencies.
   // You can choose one of them.

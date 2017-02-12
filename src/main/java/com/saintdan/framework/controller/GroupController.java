@@ -3,7 +3,7 @@ package com.saintdan.framework.controller;
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.ControllerConstant;
+import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.GroupDomain;
@@ -108,7 +108,7 @@ public class GroupController {
   public ResponseEntity detail(@PathVariable String id) {
     try {
       if (StringUtils.isBlank(id)) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, ControllerConstant.ID_PARAM), HttpStatus.UNPROCESSABLE_ENTITY);
+        return resultHelper.infoResp(ErrorType.SYS0002, CommonsConstant.ID_BLANK, HttpStatus.UNPROCESSABLE_ENTITY);
       }
       return new ResponseEntity<>(groupDomain.getById((Long.valueOf(id)), GroupVO.class), HttpStatus.OK);
     } catch (Exception e) {
