@@ -9,8 +9,9 @@ import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.OauthAccessTokenRepository;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.LogUtils;
-import com.saintdan.framework.tools.SpringSecurityUtils;
+import com.saintdan.framework.tools.RemoteAddressUtils;
 import java.time.LocalDateTime;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ import org.springframework.stereotype.Service;
     CustomUserRepositoryUserDetails userDetails = new CustomUserRepositoryUserDetails(user);
 
     // Get client ip address.
-    String ip = SpringSecurityUtils.getCurrentUserIp();
+    String ip = RemoteAddressUtils.getRealIp(request);
 
     // Delete token if repeat login.
     if (user.getIp() != null) {
@@ -100,11 +101,13 @@ import org.springframework.stereotype.Service;
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired private LogHelper logHelper;
-
   @Autowired private UserRepository userRepository;
 
   @Autowired private OauthAccessTokenRepository oauthAccessTokenRepository;
+
+  @Autowired private HttpServletRequest request;
+
+  @Autowired private LogHelper logHelper;
 
   @Autowired private CustomPasswordEncoder customPasswordEncoder;
 
