@@ -95,7 +95,7 @@ import springfox.documentation.annotations.ApiIgnore;
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  @ApiOperation(value = "Detail", httpMethod = "GET", response = ResourceVO.class)
+  @ApiOperation(value = "Detail", httpMethod = "GET", response = RoleVO.class)
   @ApiImplicitParam(name = "id", value = "role's id", paramType = "path", dataType = "string", required = true)
   public ResponseEntity detail(@ApiIgnore @PathVariable String id) {
     try {
