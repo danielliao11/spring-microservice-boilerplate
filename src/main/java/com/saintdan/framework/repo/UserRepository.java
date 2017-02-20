@@ -12,7 +12,7 @@ import java.util.Optional;
  * @date 6/25/15
  * @since JDK1.8
  */
-public interface UserRepository extends RepositoryWithoutDelete<User, Long> {
+public interface UserRepository extends CustomRepository<User, Long> {
 
   Optional<User> findByUsrAndValidFlag(String usr, ValidFlag validFlag);
 

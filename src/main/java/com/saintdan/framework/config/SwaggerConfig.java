@@ -89,15 +89,15 @@ import static springfox.documentation.builders.PathSelectors.regex;
   // PRIVATE FIELDS
   // ------------------------
 
-  private static final String VERSION = "2.0.1";
+  private static final String VERSION = "0.18.0.RELEASE";
 
-  private static final String TITLE = "Ivy English API";
+  private static final String TITLE = "Spring rest oauth2 sample API";
 
   private static final String TERMS = "NO terms of service";
 
-  private static final String LICENSE = "Ivy English";
+  private static final String LICENSE = "MIT";
 
-  private static final String LICENSE_URL = "www.theivyenglish.com";
+  private static final String LICENSE_URL = "www.saintdan.com";
 
   private static final String NAME = "saintdan";
 
@@ -111,9 +111,9 @@ import static springfox.documentation.builders.PathSelectors.regex;
 
   private static final String MANAGEMENT = "management";
 
-  private static final String DESCRIPTION_APP = "Ivy English API-app";
+  private static final String DESCRIPTION_APP = "App API";
 
-  private static final String DESCRIPTION_OPEN = "Ivy English API-open";
+  private static final String DESCRIPTION_OPEN = "Open API";
 
-  private static final String DESCRIPTION_MANAGEMENT = "Ivy English API-management";
+  private static final String DESCRIPTION_MANAGEMENT = "Management API";
 }

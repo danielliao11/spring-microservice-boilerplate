@@ -1,4 +1,4 @@
-package com.saintdan.framework.controller;
+package com.saintdan.framework.controller.management;
 
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
@@ -6,17 +6,18 @@ import com.saintdan.framework.component.ValidateHelper;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.VersionConstant;
-import com.saintdan.framework.domain.GroupDomain;
+import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
-import com.saintdan.framework.param.GroupParam;
-import com.saintdan.framework.po.Group;
+import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.QueryHelper;
-import com.saintdan.framework.vo.GroupVO;
-import javax.validation.Valid;
-import net.kaczmarzyk.spring.data.jpa.domain.DateBetween;
+import com.saintdan.framework.vo.UserVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import net.kaczmarzyk.spring.data.jpa.domain.In;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
@@ -28,43 +29,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
- * Controller of group.
+ * Controller of user.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 10/17/15
+ * @date 6/25/15
  * @since JDK1.8
  */
-@RestController
-@RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.GROUPS)
-public class GroupController {
+@Api("User") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.USERS) public class UserController {
 
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
 
-  /**
-   * Create new {@link com.saintdan.framework.po.Group}.
-   *
-   * @param param {@link GroupParam}
-   * @return {@link com.saintdan.framework.vo.GroupVO}
-   */
   @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity create(@CurrentUser User currentUser, @Valid GroupParam param, BindingResult result) {
+  @ApiOperation(value = "Create", httpMethod = "POST", response = UserVO.class)
+  @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
+  public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser, @ApiIgnore @RequestBody UserParam param) {
     try {
       // Validate current user, param and sign.
-      ResponseEntity responseEntity = validateHelper.validate(param, result, currentUser, logger, OperationType.CREATE);
+      ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.CREATE);
       if (!responseEntity.getStatusCode().is2xxSuccessful()) {
         return responseEntity;
       }
       // Return result and message.
-      return new ResponseEntity<>(groupDomain.create(param, currentUser), HttpStatus.CREATED);
+      return new ResponseEntity<>(userDomain.create(param, currentUser), HttpStatus.CREATED);
+//      return new ResponseEntity<>(userDomain.create(param, currentUser), HttpStatus.CREATED);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
@@ -74,67 +71,55 @@ public class GroupController {
     }
   }
 
-  /**
-   * Show all.
-   *
-   * @param param {@link GroupParam}
-   * @return all group.
-   */
   @RequestMapping(method = RequestMethod.GET)
+  @ApiOperation(value = "List", httpMethod = "GET", response = UserVO.class)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "name", value = "user's name", paramType = "query", dataType = "string"),
+      @ApiImplicitParam(name = "usr", value = "user's username", paramType = "query", dataType = "string"),
+  })
   public ResponseEntity all(
       @And({
+          @Spec(path = "usr", spec = Like.class),
           @Spec(path = "name", spec = Like.class),
-          @Spec(path = "validFlag", constVal = "VALID", spec = In.class),
-          @Spec(path = "createdDate", params = {"createdDateAfter, createdDateBefore"}, spec = DateBetween.class)}) Specification<Group> groupSpecification,
-      GroupParam param) {
+          @Spec(path = "validFlag", constVal = "VALID", spec = In.class)
+      }) Specification<User> userSpecification, UserParam param) {
     try {
       if (param.getPageNo() == null) {
-        return new ResponseEntity<>(groupDomain.getAll(groupSpecification, QueryHelper.getSort(param.getSortBy()), GroupVO.class), HttpStatus.OK);
+        return new ResponseEntity<>(userDomain.getAll(userSpecification, QueryHelper.getSort(param.getSortBy()), UserVO.class), HttpStatus.OK);
       }
-      return new ResponseEntity<>(groupDomain.getPage(groupSpecification, QueryHelper.getPageRequest(param), GroupVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(userDomain.getPage(userSpecification, QueryHelper.getPageRequest(param), UserVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  /**
-   * Show {@link com.saintdan.framework.vo.GroupVO} by ID.
-   *
-   * @param id id of group
-   * @return {@link com.saintdan.framework.vo.GroupVO}
-   */
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public ResponseEntity detail(@PathVariable String id) {
+  @ApiOperation(value = "Detail", httpMethod = "GET", response = UserVO.class)
+  @ApiImplicitParam(name = "id", value = "user's id", paramType = "path", dataType = "string", required = true)
+  public ResponseEntity detail(@ApiIgnore @PathVariable String id) {
     try {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, CommonsConstant.ID_BLANK, HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      return new ResponseEntity<>(groupDomain.getById((Long.valueOf(id)), GroupVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(userDomain.getById(Long.valueOf(id), UserVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  /**
-   * Update {@link com.saintdan.framework.po.Group}.
-   *
-   * @param id    id of group
-   * @param param {@link GroupParam}
-   * @return {@link com.saintdan.framework.vo.GroupVO}
-   */
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-  public ResponseEntity update(@CurrentUser User currentUser, @PathVariable String id, @Valid GroupParam param, BindingResult result) {
+  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser, @RequestBody UserParam param) {
     try {
-      param.setId(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user, param and sign.
-      ResponseEntity responseEntity = validateHelper.validate(param, result, currentUser, logger, OperationType.UPDATE);
+      ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.UPDATE);
       if (!responseEntity.getStatusCode().is2xxSuccessful()) {
         return responseEntity;
       }
-      // Update group.
-      return new ResponseEntity<>(groupDomain.update(param, currentUser), HttpStatus.OK);
+      // Update user.
+      return new ResponseEntity<>(userDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
@@ -144,23 +129,16 @@ public class GroupController {
     }
   }
 
-  /**
-   * Delete group.
-   *
-   * @param id group's id
-   * @return {@link com.saintdan.framework.vo.GroupVO}
-   */
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-  public ResponseEntity delete(@CurrentUser User currentUser, @PathVariable String id) {
+  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser, @RequestBody UserParam param) {
     try {
-      GroupParam param = new GroupParam(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user and param.
       ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
       if (!responseEntity.getStatusCode().is2xxSuccessful()) {
         return responseEntity;
       }
-      // Delete group.
-      groupDomain.delete(param, currentUser);
+      // Delete user.
+      userDomain.delete(param, currentUser);
       return new ResponseEntity(HttpStatus.NO_CONTENT);
     } catch (CommonsException e) {
       // Return error information and log the exception.
@@ -175,11 +153,12 @@ public class GroupController {
   // PRIVATE FIELDS
   // ------------------------
 
-  private static final Logger logger = LoggerFactory.getLogger(GroupController.class);
+  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
   @Autowired private ResultHelper resultHelper;
 
   @Autowired private ValidateHelper validateHelper;
 
-  @Autowired private GroupDomain groupDomain;
+  @Autowired private UserDomain userDomain;
+
 }

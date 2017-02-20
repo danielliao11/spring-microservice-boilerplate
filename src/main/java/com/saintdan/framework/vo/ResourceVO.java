@@ -17,10 +17,6 @@ public class ResourceVO implements Serializable {
 
   private String name;
 
-  private String path;
-
-  private Integer priority;
-
   private String description;
 
   public Long getId() {
@@ -37,22 +33,6 @@ public class ResourceVO implements Serializable {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public String getPath() {
-    return path;
-  }
-
-  public void setPath(String path) {
-    this.path = path;
-  }
-
-  public Integer getPriority() {
-    return priority;
-  }
-
-  public void setPriority(Integer priority) {
-    this.priority = priority;
   }
 
   public String getDescription() {

@@ -23,7 +23,7 @@ public class ClientParam extends BaseParam {
 
   @SignField
   @NotNullField(value = OperationType.CREATE, message = "clientIdAlias cannot be null.")
-  @Size(min = 6, max = 50)
+  @Size(min = 6, max = 16, message = "clientIdAlias must greater than or equal to 6 and less than or equal to 16.")
   private String clientIdAlias;
 
   @SignField
@@ -32,7 +32,7 @@ public class ClientParam extends BaseParam {
 
   @SignField
   @NotNullField(value = OperationType.CREATE, message = "clientSecretAlias cannot be null.")
-  @Size(min = 8, max = 50)
+  @Size(min = 8, max = 32, message = "clientSecretAlias must greater than or equal to 6 and less than or equal to 32.")
   private String clientSecretAlias;
 
   @SignField

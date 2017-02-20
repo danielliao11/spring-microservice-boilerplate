@@ -9,7 +9,6 @@ import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.UserVO;
-import io.swagger.annotations.Api;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 7/21/15
  * @since JDK1.8
  */
-@Api("User") @Service @Transactional(readOnly = true) public class UserDomain extends BaseDomain<User, Long> {
+@Service @Transactional(readOnly = true) public class UserDomain extends BaseDomain<User, Long> {
 
   // ------------------------
   // PUBLIC METHODS

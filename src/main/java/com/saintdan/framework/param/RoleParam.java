@@ -13,12 +13,9 @@ import com.saintdan.framework.enums.OperationType;
  */
 public class RoleParam extends BaseParam {
 
-  private static final long serialVersionUID = 8542867394907970893L;
-
   @NotNullField(value = {OperationType.UPDATE, OperationType.DELETE}, message = "id cannot be null.")
   @SignField private Long id; // role's ID.
 
-  @SignField
   @NotNullField(value = OperationType.CREATE, message = "name cannot be null.")
   private String name; // role's name
 
@@ -26,7 +23,7 @@ public class RoleParam extends BaseParam {
 
   @SignField private String userIds; // user ids string
 
-  @SignField private String groupIds; // group ids string
+  @SignField private String resourceIds; // group ids string
 
   public RoleParam() {}
 
@@ -66,11 +63,11 @@ public class RoleParam extends BaseParam {
     this.userIds = userIds;
   }
 
-  public String getGroupIds() {
-    return groupIds;
+  public String getResourceIds() {
+    return resourceIds;
   }
 
-  public void setGroupIds(String groupIds) {
-    this.groupIds = groupIds;
+  public void setResourceIds(String resourceIds) {
+    this.resourceIds = resourceIds;
   }
 }

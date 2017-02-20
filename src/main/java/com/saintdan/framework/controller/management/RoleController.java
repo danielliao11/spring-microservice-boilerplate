@@ -1,4 +1,4 @@
-package com.saintdan.framework.controller;
+package com.saintdan.framework.controller.management;
 
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
@@ -14,9 +14,12 @@ import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.QueryHelper;
+import com.saintdan.framework.vo.ResourceVO;
 import com.saintdan.framework.vo.RoleVO;
-import javax.validation.Valid;
-import net.kaczmarzyk.spring.data.jpa.domain.DateBetween;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import net.kaczmarzyk.spring.data.jpa.domain.In;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
@@ -28,11 +31,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Controller of role.
@@ -41,25 +45,19 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 10/17/15
  * @since JDK1.8
  */
-@RestController
-@RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.ROLES)
-public class RoleController {
+@Api("Role") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.ROLES) public class RoleController {
 
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
 
-  /**
-   * Create new {@link com.saintdan.framework.po.Role}.
-   *
-   * @param param {@link RoleParam}
-   * @return {@link com.saintdan.framework.vo.RoleVO}
-   */
   @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity create(@CurrentUser User currentUser, @Valid RoleParam param, BindingResult result) {
+  @ApiOperation(value = "Create", httpMethod = "POST", response = RoleVO.class)
+  @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
+  public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser, @RequestBody RoleParam param) {
     try {
       // Validate current user, param and sign.
-      ResponseEntity responseEntity = validateHelper.validate(param, result, currentUser, logger, OperationType.CREATE);
+      ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.CREATE);
       if (!responseEntity.getStatusCode().is2xxSuccessful()) {
         return responseEntity;
       }
@@ -74,19 +72,17 @@ public class RoleController {
     }
   }
 
-  /**
-   * Show all.
-   *
-   * @param param {@link RoleParam}
-   * @return roles.
-   */
   @RequestMapping(method = RequestMethod.GET)
+  @ApiOperation(value = "List", httpMethod = "GET", response = RoleVO.class)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "name", value = "role's name", paramType = "query", dataType = "string")
+  })
   public ResponseEntity all(
       @And({
           @Spec(path = "name", spec = Like.class),
-          @Spec(path = "validFlag", constVal = "VALID", spec = In.class),
-          @Spec(path = "createdDate", params = {"createdDateAfter, createdDateBefore"}, spec = DateBetween.class)}) Specification<Role> roleSpecification,
-      RoleParam param) {
+          @Spec(path = "validFlag", constVal = "VALID", spec = In.class)
+      }) @ApiIgnore Specification<Role> roleSpecification, @ApiIgnore RoleParam param) {
     try {
       if (param.getPageNo() == null) {
         return new ResponseEntity<>(roleDomain.getAll(roleSpecification, QueryHelper.getSort(param.getSortBy()), RoleVO.class), HttpStatus.OK);
@@ -98,14 +94,10 @@ public class RoleController {
     }
   }
 
-  /**
-   * Show {@link com.saintdan.framework.vo.RoleVO} by ID.
-   *
-   * @param id {@link Role#id}
-   * @return {@link com.saintdan.framework.vo.RoleVO}
-   */
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public ResponseEntity detail(@PathVariable String id) {
+  @ApiOperation(value = "Detail", httpMethod = "GET", response = ResourceVO.class)
+  @ApiImplicitParam(name = "id", value = "role's id", paramType = "path", dataType = "string", required = true)
+  public ResponseEntity detail(@ApiIgnore @PathVariable String id) {
     try {
       if (StringUtils.isBlank(id)) {
         return resultHelper.infoResp(ErrorType.SYS0002, CommonsConstant.ID_BLANK, HttpStatus.UNPROCESSABLE_ENTITY);
@@ -117,19 +109,12 @@ public class RoleController {
     }
   }
 
-  /**
-   * Update {@link com.saintdan.framework.po.Role}.
-   *
-   * @param id    {@link Role#id}
-   * @param param {@link RoleParam}
-   * @return {@link com.saintdan.framework.vo.RoleVO}
-   */
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-  public ResponseEntity update(@CurrentUser User currentUser, @PathVariable String id, @Valid RoleParam param, BindingResult result) {
+  @ApiOperation(value = "Update", httpMethod = "PUT", response = RoleVO.class)
+  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser, @RequestBody RoleParam param) {
     try {
-      param.setId(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user, param and sign.
-      ResponseEntity responseEntity = validateHelper.validate(param, result, currentUser, logger, OperationType.UPDATE);
+      ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.UPDATE);
       if (!responseEntity.getStatusCode().is2xxSuccessful()) {
         return responseEntity;
       }
@@ -144,16 +129,11 @@ public class RoleController {
     }
   }
 
-  /**
-   * Delete {@link com.saintdan.framework.po.Role}.
-   *
-   * @param id {@link Role#id}
-   * @return {@link com.saintdan.framework.vo.RoleVO}
-   */
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-  public ResponseEntity delete(@CurrentUser User currentUser, @PathVariable String id) {
+  @ApiOperation(value = "Delete", httpMethod = "DELETE", response = ResponseEntity.class)
+  @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
+  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser, @RequestBody RoleParam param) {
     try {
-      RoleParam param = new RoleParam(StringUtils.isBlank(id) ? null : Long.valueOf(id));
       // Validate current user and param.
       ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
       if (!responseEntity.getStatusCode().is2xxSuccessful()) {

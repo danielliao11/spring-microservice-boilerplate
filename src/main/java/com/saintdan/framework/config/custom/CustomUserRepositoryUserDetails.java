@@ -1,16 +1,11 @@
 package com.saintdan.framework.config.custom;
 
-import com.saintdan.framework.po.Group;
-import com.saintdan.framework.po.Resource;
-import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
+import java.util.ArrayList;
+import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
 
 /**
  * Custom user repository user details.
@@ -34,17 +29,9 @@ public class CustomUserRepositoryUserDetails extends User implements UserDetails
    */
   @Override public Collection<? extends GrantedAuthority> getAuthorities() {
     Collection<GrantedAuthority> authorities = new ArrayList<>();
-    Set<Role> roles = getRoles();
-    for (Role role : roles) {
-      Set<Group> groups = role.getGroups();
-      for (Group group : groups) {
-        Set<Resource> resources = group.getResources();
-        for (Resource resource : resources) {
-          GrantedAuthority authority = new SimpleGrantedAuthority(resource.getName());
-          authorities.add(authority);
-        }
-      }
-    }
+    getRoles()
+        .forEach(role -> role.getResources()
+            .forEach(resource -> authorities.add(new SimpleGrantedAuthority(resource.getName()))));
     return authorities;
   }
 
