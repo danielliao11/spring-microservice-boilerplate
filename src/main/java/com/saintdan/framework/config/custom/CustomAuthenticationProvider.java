@@ -2,11 +2,14 @@ package com.saintdan.framework.config.custom;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.LogHelper;
+import com.saintdan.framework.domain.UserDomain;
+import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationType;
-import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.OauthAccessToken;
+import com.saintdan.framework.po.OauthRefreshToken;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.OauthAccessTokenRepository;
+import com.saintdan.framework.repo.OauthRefreshTokenRepository;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.RemoteAddressUtils;
@@ -15,15 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -41,54 +40,52 @@ import org.springframework.stereotype.Service;
 
   @Override public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
-
     // Find user.
     String username = token.getName();
-    User user = userRepository.findByUsrAndValidFlag(username, ValidFlag.VALID).orElseThrow(
-        // Throw cannot find any user by this usr param.
-        () -> new UsernameNotFoundException(String.format("User %s does not exist!", username)));
-
+    User user = userDomain.findByAccount(username);
+    if (user == null) {
+      throw new BadCredentialsException(ErrorType.LOG0001.name());
+    }
     // Get token object
-    OauthAccessToken oauthAccessToken = oauthAccessTokenRepository.findByUserName(username).orElse(null);
-
+    OauthAccessToken oauthAccessToken = accessTokenRepository.findByUserName(username).orElse(null);
     // Compare password and credentials of authentication.
     if (!customPasswordEncoder.matches(token.getCredentials().toString(), user.getPwd())) {
-      throw new BadCredentialsException("Invalid username/password");
+      throw new BadCredentialsException(ErrorType.LOG0002.name());
     }
     CustomUserRepositoryUserDetails userDetails = new CustomUserRepositoryUserDetails(user);
-
+    // Valid account.
+    if (!userDetails.isEnabled()) {
+      throw new BadCredentialsException(ErrorType.LOG0003.name());
+    } else if (!userDetails.isAccountNonExpired()) {
+      throw new BadCredentialsException(ErrorType.LOG0004.name());
+    } else if (!userDetails.isAccountNonLocked()) {
+      throw new BadCredentialsException(ErrorType.LOG0005.name());
+    } else if (!userDetails.isCredentialsNonExpired()) {
+      throw new BadCredentialsException(ErrorType.LOG0006.name());
+    }
     // Get client ip address.
     String ip = RemoteAddressUtils.getRealIp(request);
-
     // Delete token if repeat login.
     if (user.getIp() != null) {
       if (!user.getIp().equals(ip) && oauthAccessToken != null) {
-        oauthAccessTokenRepository.delete(oauthAccessToken);
+        accessTokenRepository.delete(oauthAccessToken);
+        OauthRefreshToken refreshToken = refreshTokenRepository.findByTokenId(oauthAccessToken.getTokenId()).orElse(null);
+        if (refreshToken != null) {
+          refreshTokenRepository.delete(refreshToken);
+        }
       }
     }
-
     // Save user login info.
     user.setIp(ip);
     user.setLastLoginTime(LocalDateTime.now());
-
-    if (!userDetails.isEnabled()) {
-      throw new DisabledException("User has been disabled.");
-    } else if (!userDetails.isAccountNonExpired()) {
-      throw new AccountExpiredException("Account has been expired.");
-    } else if (!userDetails.isAccountNonLocked()) {
-      throw new LockedException("Account has been locked.");
-    } else if (!userDetails.isCredentialsNonExpired()) {
-      throw new LockedException("Credentials has been expired.");
-    }
     userRepository.save(user);
-
     // Save to log.
     try {
       logHelper.logUsersOperations(OperationType.LOGIN, "login", user);
     } catch (Exception e) {
-      LogUtils.traceError(logger, e, "Log user login failed.");
+      final String errMsg = "Log user login failed.";
+      LogUtils.traceError(logger, e, errMsg);
     }
-
     //Authorize.
     return new UsernamePasswordAuthenticationToken(userDetails, user.getPwd(), userDetails.getAuthorities());
   }
@@ -103,9 +100,13 @@ import org.springframework.stereotype.Service;
 
   @Autowired private UserRepository userRepository;
 
-  @Autowired private OauthAccessTokenRepository oauthAccessTokenRepository;
+  @Autowired private OauthAccessTokenRepository accessTokenRepository;
+
+  @Autowired private OauthRefreshTokenRepository refreshTokenRepository;
 
   @Autowired private HttpServletRequest request;
+
+  @Autowired private UserDomain userDomain;
 
   @Autowired private LogHelper logHelper;
 

@@ -43,7 +43,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @date 6/25/15
  * @since JDK1.8
  */
-@Api("User") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.USERS) public class UserController {
+@Api("User") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.USERS) public class UserController {
 
   // ------------------------
   // PUBLIC METHODS
@@ -77,6 +77,9 @@ import springfox.documentation.annotations.ApiIgnore;
       @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "name", value = "user's name", paramType = "query", dataType = "string"),
       @ApiImplicitParam(name = "usr", value = "user's username", paramType = "query", dataType = "string"),
+      @ApiImplicitParam(name = "pageNo", dataType = "date", paramType = "query"),
+      @ApiImplicitParam(name = "pageSize", dataType = "date", paramType = "query"),
+      @ApiImplicitParam(name = "sortBy", dataType = "date", paramType = "query", example = "sortBy=id:desc,username:desc")
   })
   public ResponseEntity all(
       @And({

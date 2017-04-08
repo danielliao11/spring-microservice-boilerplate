@@ -89,7 +89,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
   // PRIVATE FIELDS
   // ------------------------
 
-  private static final String VERSION = "0.18.0.RELEASE";
+  private static final String VERSION = "v1";
 
   private static final String TITLE = "Spring rest oauth2 sample API";
 

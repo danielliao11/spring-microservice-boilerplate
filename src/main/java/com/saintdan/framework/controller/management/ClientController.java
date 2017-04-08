@@ -44,7 +44,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @date 10/28/15
  * @since JDK1.8
  */
-@Api("Client") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.CLIENTS)
+@Api("Client") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.CLIENTS)
 public class ClientController {
 
   // ------------------------
@@ -88,7 +88,10 @@ public class ClientController {
   @ApiOperation(value = "List", httpMethod = "GET", response = ClientVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "name", value = "client's name", paramType = "query", dataType = "string")
+      @ApiImplicitParam(name = "name", value = "client's name", paramType = "query", dataType = "string"),
+      @ApiImplicitParam(name = "pageNo", dataType = "date", paramType = "query"),
+      @ApiImplicitParam(name = "pageSize", dataType = "date", paramType = "query"),
+      @ApiImplicitParam(name = "sortBy", dataType = "date", paramType = "query", example = "sortBy=id:desc,username:desc")
   })
   public ResponseEntity all(
       @And({

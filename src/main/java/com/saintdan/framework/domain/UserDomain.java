@@ -3,9 +3,12 @@ package com.saintdan.framework.domain;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
+import com.saintdan.framework.po.Account;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.repo.AccountRepository;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.UserVO;
@@ -41,7 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   public List<UserVO> getAll(Specification<User> specification, Sort sort) {
-    return repository.findAll(specification, sort).stream().map(
+    return userRepository.findAll(specification, sort).stream().map(
         po -> {
           try {
             return po2Vo(po);
@@ -56,7 +59,12 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   public User findById(Long id) {
-    return repository.findById(id).orElse(null);
+    return userRepository.findById(id).orElse(null);
+  }
+
+  public User findByAccount(String usr) {
+    Account account = accountRepository.findByAccount(usr).orElse(null);
+    return account == null ? null : userRepository.findByIdAndValidFlag(account.getUser().getId(), ValidFlag.VALID).orElse(null);
   }
 
   @Transactional public UserVO update(UserParam param, User currentUser) throws Exception {
@@ -79,9 +87,11 @@ import org.springframework.transaction.annotation.Transactional;
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired private Transformer transformer;
+  @Autowired private AccountRepository accountRepository;
 
-  @Autowired private UserRepository repository;
+  @Autowired private UserRepository userRepository;
+
+  @Autowired private Transformer transformer;
 
   private User param2Po(UserParam param, User consult, User currentUser) throws Exception {
     return transformer.param2PO(User.class, param, consult, currentUser);

@@ -17,6 +17,8 @@ public interface ResourceURL {
 
   String OPEN = "/open";
 
+  String LOGIN = "/login";
+
   String HEARTBEAT = "/heartbeat";
 
   String WELCOME = "/welcome";

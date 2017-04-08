@@ -10,20 +10,24 @@
   - [导入init.sql](#init)
   - [获取 **access_token**](#access_token)
   - [使用 **refresh_token** 来获取新的 **access_token**](#refresh_token)
-  - [访问welcome资源](#welcome)
-  - [访问用户资源](#user)
-    - [1. 创建用户](#create)
-    - [2. 显示所有用户](#all)
-    - [3. 分页显示用户](#page)
-    - [4. 按照用户ID查看用户信息](#show_by_id)
-    - [5. 按照用户ID更新用户信息](#update)
-    - [6. 按照用户ID删除用户信息](#delete)
-  - [其他资源](#other)
+  - [使用 **Swagger** 文档访问资源](#swagger)
 - [部署](#deploy)
 - [许可证](#license)
 - [版本信息](#version)
 
-spring-rest-oauth2-sample，基于以下组件构建：
+spring-rest-oauth2-sample，是一个方便java后端人员开发的脚手架。对前端友好，适于前后分离。
+
+**优点：**
+
+ - 采用领域驱动模型结构定义package结构；
+ - 微服务架构，更加灵活，降低开发及维护的复杂度；
+ - 使用 OAuth2 作为授权验证；
+ - 使用 json 方式请求数据；
+ - 返回标准的 ResponseEntity，并按 HttpStatus 标准返回状态码；
+ - 使用 [Gradle](https://gradle.org/) 作为项目构建工具；
+ - 使用 [Swagger](http://swagger.io/) 作为文档工具，方便维护文档，同时可使用Swagger做简易的API测试；
+
+本脚手架基于以下组件构建：
 
 - [Spring Boot](http://projects.spring.io/spring-boot/)
 - [Spring OAuth 2](http://projects.spring.io/spring-security-oauth/)
@@ -32,7 +36,7 @@ spring-rest-oauth2-sample，基于以下组件构建：
 
 并且使用 [specification-arg-resolver](https://github.com/tkaczmarzyk/specification-arg-resolver) 作为过滤器.
 
-> NOTE 如果要使用RSA验签,请使用[ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java)的`validateWithSignCheck`方法
+> NOTE 如果要使用RSA验签,请使用 [ValidateHelper](src/main/java/com/saintdan/framework/component/ValidateHelper.java) 的`validateWithSignCheck`方法，并在需要签名的字段上加上注解 [SignField](src/main/java/com/saintdan/framework/annotation/SignField.java) 。
 
 ## <a name="build"></a>编译运行 [[TOP]](#index)
 
@@ -86,254 +90,13 @@ headers: Authorization: Basic <Encrypt client_id:client_secret by HTTP Basic>
 payload: grant_type=refresh_token&refresh_token=<refresh_token_returned>
 ```
 
-### <a name="welcome"></a>访问 welcome 资源 [[TOP]](#index)
+### <a name="swagger"></a>使用 Swagger 文档访问资源 [[TOP]](#index)
 
-将返回的 **access_token** 放入请求 **Header** 来访问资源：
+启动项目，在浏览器（程序员当然用Chrome咯 ;) ）中访问 [http://localhost:8080/swagger-ui.html#/](http://localhost:8080/swagger-ui.html#/)（默认端口8080，您可以修改 [application.properties](src/main/resources/application.properties) 中的 `server.port` 来修改端口。）
 
-```
-$ curl http://localhost:8080/welcome -H "Authorization: Bearer <access_token_returned>"
-```
-如果请求成功，你的response status为**201**(Created)，body为：：
+出现如下页面
 
-```
-{
-  "id": 2,
-  "content": "Hello, admin!"
-}
-```
-
-或使用 Advanced REST Client：
-
-```
-url: http://localhost:8080/welcome
-GET
-headers: Authorization: bearer <access_token_returned>
-```
-
-### <a name="user"></a>访问用户资源 [[TOP]](#index)
-
-#### <a name="create"></a>1. 创建用户 [[TOP]](#index)
-
-```
-curl -X POST "http://localhost:8080/resources/v1/users" -H "Authorization: bearer <access_token_returned>" -d "usr=tommy&name=tom&pwd=tom12345"
-```
-
-如果请求成功，你的response status为**201**(Created)，body为：
-
-```
-{
-  "id": 4,
-  "name": "tom",
-  "usr": "tommy",
-  "description": "tom's account"
-}
-```
-
-或使用 Advanced REST Client:
-
-```
-url: http://localhost:8080/resources/v1/users
-POST
-headers: Authorization: bearer <access_token_returned>
-payload: usr=tommy&name=tom&pwd=tom12345
-```
-
-#### <a name="all"></a>2. 显示所有用户 [[TOP]](#index)
-
-```
-$ curl -X GET "http://localhost:8080/resources/v1/users" -H "Authorization: bearer <access_token_returned>"
-```
-
-如果请求成功，你的response status为**201**(Created)，body为：：
-
-```
-[
-  {
-    "id": 1,
-    "name": "root",
-    "usr": "root",
-    "description": "root account"
-  },
-  {
-    "id": 2,
-    "name": "admin",
-    "usr": "admin",
-    "description": "admin account"
-  },
-  {
-    "id": 3,
-    "name": "guest",
-    "usr": "guest",
-    "description": "guest account"
-  },
-  {
-    "id": 4,
-    "name": "tom",
-    "usr": "tommy",
-    "description": "tom's account"
-  }
-]
-```
-
-或使用 Advanced REST Client:
-
-```
-url: http://localhost:8080/resources/v1/users
-GET
-headers: Authorization: bearer <access_token_returned>
-```
-
-你也可以像这样加一些参数过滤:
-
-```
-$ curl -X GET "http://localhost:8080/resources/v1/users?name=tom&createdDateAfter=2016-06-01&createdDateBefore=2016-07-30&sortBy=id:desc,name:desc" -H "Authorization: bearer <access_token_returned>"
-```
-
-如果请求成功，你的response status为**201**(Created)，body为：：
-
-```
-[
-  {
-    "id": 4,
-    "name": "tom",
-    "usr": "tommy",
-    "description": "tom's account"
-  }
-]
-```
-
-#### <a name="page"></a>3. 在分页中显示用户 [[TOP]](#page)
-
-```
-$ curl -X GET "http://localhost:8080/resources/v1/users?pageNo=1&pageSize=20&name=tom&sortBy=id:asc,name:desc" -H "Authorization: Bearer <access_token_returned>"
-```
-
-如果请求成功，将收到以下类似 JSON 响应：
-
-```
-{
-  "content": [
-    {
-      "id": 9,
-      "name": "tom",
-      "usr": "tommy",
-      "description": "tom's account"
-    }
-  ],
-  "totalElements": 1,
-  "last": true,
-  "totalPages": 1,
-  "size": 20,
-  "number": 0,
-  "sort": [
-    {
-      "direction": "ASC",
-      "property": "id",
-      "ignoreCase": false,
-      "nullHandling": "NATIVE",
-      "ascending": true
-    },
-    {
-      "direction": "DESC",
-      "property": "name",
-      "ignoreCase": false,
-      "nullHandling": "NATIVE",
-      "ascending": false
-    }
-  ],
-  "first": true,
-  "numberOfElements": 1
-}
-
-```
-
-或使用 Advanced REST Client:
-
-```
-url: http://localhost:8080/resources/v1/users?pageNo=1&pageSize=20&name=tom&sortBy=id:asc,name:desc
-GET
-headers: Authorization: bearer <access_token_returned>
-```
-
-**NOTE:**
-
-参数名 | 类型 | 描述
----|---|---
-pageNo | int | 必须大于等于1
-pageSize | int | 必须大于等于1
-sortBy | string | 格式类似 paramA:asc,paramB:desc,paramC:asc,...
-
-#### <a name="show_by_id"></a>4. 根据用户 ID 显示用户信息 [[TOP]](#index)
-
-```
-$ curl -X GET "http://localhost:8080/resources/v1/users/4" -H "Authorization: Bearer <access_token_returned>"
-```
-
-如果请求成功，将收到以下 JSON 响应：
-
-```
-{
-  "id": 4,
-  "name": "tom",
-  "usr": "tommy",
-  "description": "tom's account"
-}
-```
-
-或使用 Advanced REST Client:
-
-```
-url: http://localhost:8080/resources/v1/users/4
-GET
-headers: Authorization: bearer <access_token_returned>
-```
-
-#### <a name="update"></a>6. 根据用户 ID 更新用户数据 [[TOP]](#index)
-
-```
-curl -X PUT "http://localhost:8080/resources/v1/users/4" -H "Authorization: bearer <access_token_returned>" -d "name=jerry"
-```
-
-如果请求成功，将收到以下 JSON 响应：
-
-```
-{
-  "id": 9,
-  "name": "jerry",
-  "usr": "tommy",
-  "description": "tommy's account"
-}
-```
-
-或使用 Advanced REST Client:
-
-```
-url: http://localhost:8080/resources/v1/users/4
-PUT
-headers: Authorization: bearer <access_token_returned>
-payload: name=jerry
-```
-
-#### <a name="delete"></a>7. 根据用户 ID 删除用户信息 [[TOP]](#index)
-
-```
-curl -X DELETE "http://localhost:8080/resources/v1/users/4" -H "Authorization: bearer <access_token_returned>"
-```
-
-如果请求成功，你的response status为**204**(No Content)
-
-或使用 Advanced REST Client:
-
-```
-url: http://localhost:8080/resources/v1/users/4
-DELETE
-headers: Authorization: bearer <access_token_returned>
-```
-
-### <a name="other"></a>其他资源 [[TOP]](#index)
-
-参照上面的用户资源进行操作.
-你可以通过 [SignTest](src/test/java/com/saintdan/framework/tool/SignTest.java) 来生成测试签名串。
+然后根据文档提示即可测试。
 
 ### <a name="deploy"></a>部署 [[TOP]](#index)
 

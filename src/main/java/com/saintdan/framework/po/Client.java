@@ -27,7 +27,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @since JDK1.8
  */
 @Entity
-@EntityListeners({AuditingEntityListener.class})
+@EntityListeners({ AuditingEntityListener.class })
 @Table(name = "clients")
 public class Client implements Serializable {
 

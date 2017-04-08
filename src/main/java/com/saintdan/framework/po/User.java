@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import org.hibernate.annotations.GenericGenerator;
@@ -120,8 +121,10 @@ public class User implements Serializable {
       inverseJoinColumns = {@JoinColumn(name = "role_id")})
   private Set<Role> roles = new HashSet<>();
 
-  public User() {
-  }
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REFRESH)
+  private Set<Account> accounts = new HashSet<>();
+
+  public User() {}
 
   public User(Long id, String name, String usr, String pwd) {
     this.id = id;
