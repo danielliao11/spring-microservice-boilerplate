@@ -52,7 +52,7 @@ import springfox.documentation.annotations.ApiIgnore;
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = UserVO.class)
   @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
-  public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser, @ApiIgnore @RequestBody UserParam param) {
+  public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser, @RequestBody UserParam param) {
     try {
       // Validate current user, param and sign.
       ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.CREATE);
@@ -86,7 +86,7 @@ import springfox.documentation.annotations.ApiIgnore;
           @Spec(path = "usr", spec = Like.class),
           @Spec(path = "name", spec = Like.class),
           @Spec(path = "validFlag", constVal = "VALID", spec = In.class)
-      }) Specification<User> userSpecification, UserParam param) {
+      }) @ApiIgnore Specification<User> userSpecification, UserParam param) {
     try {
       if (param.getPageNo() == null) {
         return new ResponseEntity<>(userDomain.getAll(userSpecification, QueryHelper.getSort(param.getSortBy()), UserVO.class), HttpStatus.OK);
