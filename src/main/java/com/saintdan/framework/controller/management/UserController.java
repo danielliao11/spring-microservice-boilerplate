@@ -12,6 +12,8 @@ import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.spec.LocalDateTimeAfter;
+import com.saintdan.framework.spec.LocalDateTimeBefore;
 import com.saintdan.framework.tools.QueryHelper;
 import com.saintdan.framework.vo.UserVO;
 import io.swagger.annotations.Api;
@@ -77,6 +79,8 @@ import springfox.documentation.annotations.ApiIgnore;
       @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "name", value = "user's name", paramType = "query", dataType = "string"),
       @ApiImplicitParam(name = "usr", value = "user's username", paramType = "query", dataType = "string"),
+      @ApiImplicitParam(name = "createdDateAfter", value = "unix milli timestamp", dataType = "string", paramType = "query"),
+      @ApiImplicitParam(name = "createdDateBefore", value = "unix milli timestamp", dataType = "string", paramType = "query"),
       @ApiImplicitParam(name = "pageNo", dataType = "date", paramType = "query"),
       @ApiImplicitParam(name = "pageSize", dataType = "date", paramType = "query"),
       @ApiImplicitParam(name = "sortBy", dataType = "date", paramType = "query", example = "sortBy=id:desc,username:desc")
@@ -85,7 +89,9 @@ import springfox.documentation.annotations.ApiIgnore;
       @And({
           @Spec(path = "usr", spec = Like.class),
           @Spec(path = "name", spec = Like.class),
-          @Spec(path = "validFlag", constVal = "VALID", spec = In.class)
+          @Spec(path = "validFlag", constVal = "VALID", spec = In.class),
+          @Spec(path = "createdDate", params = "createdDateAfter", spec = LocalDateTimeAfter.class),
+          @Spec(path = "createdDate", params = "createdDateBefore", spec = LocalDateTimeBefore.class)
       }) @ApiIgnore Specification<User> userSpecification, UserParam param) {
     try {
       if (param.getPageNo() == null) {
