@@ -1,5 +1,6 @@
 package com.saintdan.framework.annotation;
 
+import com.saintdan.framework.enums.GrantType;
 import com.saintdan.framework.enums.OperationType;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -57,4 +58,6 @@ public @interface SizeField {
   }
 
   OperationType[] value() default OperationType.READ;
+
+  GrantType[] grant() default GrantType.PASSWORD;
 }

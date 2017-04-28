@@ -12,7 +12,6 @@ import com.saintdan.framework.po.Client;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import java.lang.reflect.Field;
-import javax.validation.constraints.Size;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +71,8 @@ import org.springframework.stereotype.Component;
       }
       if (field.isAnnotationPresent(SizeField.class)) {
         SizeField size = field.getAnnotation(SizeField.class);
-        if (ArrayUtils.contains(size.value(), operationType) && (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min())) {
+        if (ArrayUtils.contains(size.value(), operationType)
+            && (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min())) {
           return resultHelper.infoResp(ErrorType.SYS0002, size.message(), HttpStatus.UNPROCESSABLE_ENTITY);
         }
       }
@@ -99,9 +99,10 @@ import org.springframework.stereotype.Component;
       if (ArrayUtils.contains(notNullField.grant(), grantType) && field.get(param) == null) {
         return resultHelper.infoResp(ErrorType.SYS0002, notNullField.message(), HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      if (field.isAnnotationPresent(Size.class)) {
-        Size size = field.getAnnotation(Size.class);
-        if (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min()) {
+      if (field.isAnnotationPresent(SizeField.class)) {
+        SizeField size = field.getAnnotation(SizeField.class);
+        if (ArrayUtils.contains(size.grant(), grantType)
+            && (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min())) {
           return resultHelper.infoResp(ErrorType.SYS0002, size.message(), HttpStatus.UNPROCESSABLE_ENTITY);
         }
       }
