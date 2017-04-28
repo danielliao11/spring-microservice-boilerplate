@@ -11,7 +11,7 @@ import java.util.Optional;
  * @date 10/16/15
  * @since JDK1.8
  */
-public interface ResourceRepository extends RepositoryWithoutDelete<Resource, Long> {
+public interface ResourceRepository extends CustomRepository<Resource, Long> {
 
   Optional<Resource> findByNameAndValidFlag(String name, ValidFlag validFlag);
 

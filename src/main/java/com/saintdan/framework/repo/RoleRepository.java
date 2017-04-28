@@ -11,7 +11,7 @@ import java.util.Optional;
  * @date 10/16/15
  * @since JDK1.8
  */
-public interface RoleRepository extends RepositoryWithoutDelete<Role, Long> {
+public interface RoleRepository extends CustomRepository<Role, Long> {
 
   Optional<Role> findByNameAndValidFlag(String name, ValidFlag validFlag);
 

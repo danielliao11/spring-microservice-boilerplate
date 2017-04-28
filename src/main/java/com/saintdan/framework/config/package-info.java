@@ -2,8 +2,8 @@
  * Package of Java config.
  *
  * <pre>
- *   {@link com.saintdan.framework.config.OAuth2ServerConfiguration}
- *   Oauth2 server config.
+ *   {@link com.saintdan.framework.config.SwaggerConfig}
+ *   Configuration for swagger.
  *
  *   {@link com.saintdan.framework.config.WebInitializer}
  *   Spring boot servlet initializer.

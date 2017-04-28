@@ -1,22 +1,22 @@
 package com.saintdan.framework.component;
 
 import com.saintdan.framework.annotation.NotNullField;
-import com.saintdan.framework.constant.ControllerConstant;
 import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.GrantType;
 import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.param.BaseParam;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import java.lang.reflect.Field;
+import javax.validation.constraints.Size;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindingResult;
 
 /**
  * Validate helper.
@@ -30,24 +30,6 @@ import org.springframework.validation.BindingResult;
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
-
-  /**
-   * Validate current user, param and sign.
-   *
-   * @param param         param bean
-   * @param result        bind result
-   * @param currentUser   current user
-   * @param logger        log
-   * @param operationType {@link OperationType}
-   * @return 422
-   * @throws Exception
-   */
-  public ResponseEntity validate(BaseParam param, BindingResult result, User currentUser, Logger logger, OperationType operationType) throws Exception {
-    if (result.hasErrors()) {
-      return resultHelper.infoResp(ErrorType.SYS0002, result.toString(), HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-    return validate(param, currentUser, logger, operationType);
-  }
 
   /**
    * Validate current user and sign.
@@ -82,8 +64,44 @@ import org.springframework.validation.BindingResult;
         continue; // Ignore field without ParamField annotation.
       }
       field.setAccessible(true);
-      if (ArrayUtils.contains(field.getAnnotation(NotNullField.class).value(), operationType) && field.get(param) == null) {
-        return resultHelper.infoResp(ErrorType.SYS0002, String.format(ControllerConstant.PARAM_BLANK, field.getName()), HttpStatus.UNPROCESSABLE_ENTITY);
+      NotNullField notNullField = field.getAnnotation(NotNullField.class);
+      if (ArrayUtils.contains(notNullField.value(), operationType) && field.get(param) == null) {
+        return resultHelper.infoResp(ErrorType.SYS0002, notNullField.message(), HttpStatus.UNPROCESSABLE_ENTITY);
+      }
+      if (field.isAnnotationPresent(Size.class)) {
+        Size size = field.getAnnotation(Size.class);
+        if (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min()) {
+          return resultHelper.infoResp(ErrorType.SYS0002, size.message(), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+      }
+    }
+    return new ResponseEntity(HttpStatus.OK);
+  }
+
+  /**
+   * Bean properties null validation for auth.
+   *
+   * @param param         Param bean
+   * @param grantType {@link GrantType}
+   * @return 422
+   * @throws Exception
+   */
+  public ResponseEntity validate(BaseParam param, GrantType grantType) throws Exception {
+    Field[] fields = param.getClass().getDeclaredFields();
+    for (Field field : fields) {
+      if (field == null || !field.isAnnotationPresent(NotNullField.class)) {
+        continue; // Ignore field without ParamField annotation.
+      }
+      field.setAccessible(true);
+      NotNullField notNullField = field.getAnnotation(NotNullField.class);
+      if (ArrayUtils.contains(notNullField.grant(), grantType) && field.get(param) == null) {
+        return resultHelper.infoResp(ErrorType.SYS0002, notNullField.message(), HttpStatus.UNPROCESSABLE_ENTITY);
+      }
+      if (field.isAnnotationPresent(Size.class)) {
+        Size size = field.getAnnotation(Size.class);
+        if (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min()) {
+          return resultHelper.infoResp(ErrorType.SYS0002, size.message(), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
       }
     }
     return new ResponseEntity(HttpStatus.OK);

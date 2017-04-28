@@ -23,7 +23,7 @@ import org.springframework.data.repository.Repository;
  * @date 10/29/15
  * @since JDK1.8
  */
-@NoRepositoryBean public interface RepositoryWithoutDelete<T, ID extends Serializable>
+@NoRepositoryBean public interface CustomRepository<T, ID extends Serializable>
     extends PagingAndSortingRepository<T, ID>, JpaSpecificationExecutor<T> {
 
   /**

@@ -27,26 +27,11 @@ import org.springframework.transaction.annotation.Transactional;
   // PUBLIC METHODS
   // ------------------------
 
-  /**
-   * Create new {@link Client}.
-   *
-   * @param currentUser current user
-   * @param param       {@link ClientParam}
-   * @return {@link ClientVO}
-   * @throws CommonsException {@link ErrorType#SYS0111} client already existing, name taken.
-   */
   @Transactional public ClientVO create(ClientParam param, User currentUser) throws Exception {
     clientIdExists(param.getClientIdAlias());
     return super.createByPO(ClientVO.class, transformer.param2PO(getClassT(), param, new Client(), currentUser), currentUser);
   }
 
-  /**
-   * Show client by client id.
-   *
-   * @param param {@link ClientParam}
-   * @return {@link ClientVO}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any client by name param.
-   */
   public ClientVO getClientByClientId(ClientParam param) throws Exception {
     return transformer.po2VO(ClientVO.class, findClientByClientId(param.getClientIdAlias()));
   }

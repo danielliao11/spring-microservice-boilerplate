@@ -9,6 +9,10 @@ package com.saintdan.framework.constant;
  */
 public interface CommonsConstant {
 
+  String PARAM_BLANK = "Param %s cannot be null.";
+
+  String ID_BLANK = "Param id cannot be null.";
+
   String ID = "id";
 
   String NAME = "name";

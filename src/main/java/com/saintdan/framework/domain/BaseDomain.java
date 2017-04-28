@@ -8,7 +8,7 @@ import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.repo.RepositoryWithoutDelete;
+import com.saintdan.framework.repo.CustomRepository;
 import com.saintdan.framework.tools.BeanUtils;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import java.io.Serializable;
@@ -261,7 +261,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired private RepositoryWithoutDelete<T, ID> repository;
+  @Autowired private CustomRepository<T, ID> repository;
 
   @Autowired protected LogHelper logHelper;
 

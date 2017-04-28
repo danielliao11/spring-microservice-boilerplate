@@ -5,6 +5,7 @@ import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.tools.SignatureUtils;
+import io.swagger.annotations.ApiModelProperty;
 import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
@@ -34,14 +35,19 @@ public class BaseParam implements Serializable {
 
   private static final long serialVersionUID = -103658650614029839L;
 
+  @ApiModelProperty(hidden = true)
   private Integer pageNo;
 
+  @ApiModelProperty(hidden = true)
   private Integer pageSize = 20;
 
+  @ApiModelProperty(hidden = true)
   private String sortBy;
 
+  @ApiModelProperty(hidden = true)
   private String sign;
 
+  @ApiModelProperty(hidden = true)
   private UserDetails currentUser;
 
   public Integer getPageNo() {
