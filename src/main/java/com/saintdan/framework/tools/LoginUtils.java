@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class LoginUtils {
 
-  public static String getClentId(HttpServletRequest request) {
+  public static String getClientId(HttpServletRequest request) {
     String decodedStr = new String(Base64.decodeBase64(request.getHeader(AUTHORIZATION).substring(5)));
     return decodedStr.substring(0, decodedStr.indexOf(COLON));
   }
@@ -29,7 +29,7 @@ public class LoginUtils {
     }
     if (StringUtils.isNotBlank(param.getPwd())) {
       map.put(PASSWORD, param.getPwd());
-      map.put(GRANT_TYPE, param.getGrantType() == null ? GrantType.PASSWORD.description() : param.getGrantType().description());
+      map.put(GRANT_TYPE, GrantType.PASSWORD.description());
     }
     if (StringUtils.isNotBlank(param.getRefreshToken())) {
       map.put(REFRESH_TOKEN, param.getRefreshToken());

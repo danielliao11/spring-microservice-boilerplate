@@ -77,7 +77,7 @@ spring:
       dialect: org.hibernate.dialect.PostgreSQLDialect
 
 # ===============================
-# = JPA / HIBERNATE
+# = SECURITY
 # ===============================
 security:
   oauth2:
