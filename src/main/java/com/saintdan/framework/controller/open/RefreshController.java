@@ -17,7 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,8 +34,8 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("refresh token") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.OPEN + ResourceURL.REFRESH)
 public class RefreshController {
 
-  @RequestMapping(method = RequestMethod.PUT)
-  @ApiOperation(value = "refresh token", httpMethod = "PUT", response = OAuth2AccessToken.class)
+  @RequestMapping(method = RequestMethod.POST)
+  @ApiOperation(value = "refresh token", httpMethod = "POST", response = OAuth2AccessToken.class)
   @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   public ResponseEntity refresh(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
     try {
@@ -43,6 +45,9 @@ public class RefreshController {
         return responseEntity;
       }
       return service.refresh(param, request);
+    } catch (BadCredentialsException | InvalidGrantException e) {
+      // Return unknown error and log the exception.
+      return resultHelper.infoResp(logger, ErrorType.parse(e.getMessage()), ErrorType.parse(e.getMessage()).description(), HttpStatus.UNAUTHORIZED);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -115,13 +115,13 @@ public class User implements Serializable {
   @Column(nullable = false)
   private int version;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
   @JoinTable(name = "users_has_roles",
-      joinColumns = {@JoinColumn(name = "user_id")},
-      inverseJoinColumns = {@JoinColumn(name = "role_id")})
+      joinColumns = { @JoinColumn(name = "user_id") },
+      inverseJoinColumns = { @JoinColumn(name = "role_id") })
   private Set<Role> roles = new HashSet<>();
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REFRESH)
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
   private Set<Account> accounts = new HashSet<>();
 
   public User() {}
@@ -284,5 +284,13 @@ public class User implements Serializable {
 
   public void setRoles(Set<Role> roles) {
     this.roles = roles;
+  }
+
+  public Set<Account> getAccounts() {
+    return accounts;
+  }
+
+  public void setAccounts(Set<Account> accounts) {
+    this.accounts = accounts;
   }
 }

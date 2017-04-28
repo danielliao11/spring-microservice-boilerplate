@@ -14,7 +14,6 @@ import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.QueryHelper;
-import com.saintdan.framework.vo.ResourceVO;
 import com.saintdan.framework.vo.RoleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -99,7 +98,10 @@ import springfox.documentation.annotations.ApiIgnore;
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   @ApiOperation(value = "Detail", httpMethod = "GET", response = RoleVO.class)
-  @ApiImplicitParam(name = "id", value = "role's id", paramType = "path", dataType = "string", required = true)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "id", value = "user's id", paramType = "path", dataType = "string", required = true)
+  })
   public ResponseEntity detail(@ApiIgnore @PathVariable String id) {
     try {
       if (StringUtils.isBlank(id)) {
@@ -114,6 +116,10 @@ import springfox.documentation.annotations.ApiIgnore;
 
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   @ApiOperation(value = "Update", httpMethod = "PUT", response = RoleVO.class)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "id", value = "user's id", paramType = "path", dataType = "string", required = true)
+  })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser, @RequestBody RoleParam param) {
     try {
       // Validate current user, param and sign.
@@ -134,9 +140,13 @@ import springfox.documentation.annotations.ApiIgnore;
 
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   @ApiOperation(value = "Delete", httpMethod = "DELETE", response = ResponseEntity.class)
-  @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
-  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser, @RequestBody RoleParam param) {
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "id", value = "user's id", paramType = "path", dataType = "long", required = true)
+  })
+  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser, @ApiIgnore @PathVariable Long id) {
     try {
+      RoleParam param = new RoleParam(id);
       // Validate current user and param.
       ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
       if (!responseEntity.getStatusCode().is2xxSuccessful()) {

@@ -24,7 +24,6 @@ import net.kaczmarzyk.spring.data.jpa.domain.In;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,9 +94,9 @@ import springfox.documentation.annotations.ApiIgnore;
       }) @ApiIgnore Specification<User> userSpecification, UserParam param) {
     try {
       if (param.getPageNo() == null) {
-        return new ResponseEntity<>(userDomain.getAll(userSpecification, QueryHelper.getSort(param.getSortBy()), UserVO.class), HttpStatus.OK);
+        return new ResponseEntity<>(userDomain.getAll(userSpecification, QueryHelper.getSort(param.getSortBy())), HttpStatus.OK);
       }
-      return new ResponseEntity<>(userDomain.getPage(userSpecification, QueryHelper.getPageRequest(param), UserVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(userDomain.getPage(userSpecification, QueryHelper.getPageRequest(param)), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -106,13 +105,16 @@ import springfox.documentation.annotations.ApiIgnore;
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
   @ApiOperation(value = "Detail", httpMethod = "GET", response = UserVO.class)
-  @ApiImplicitParam(name = "id", value = "user's id", paramType = "path", dataType = "string", required = true)
-  public ResponseEntity detail(@ApiIgnore @PathVariable String id) {
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "id", value = "user's id", paramType = "path", dataType = "long", required = true)
+  })
+  public ResponseEntity detail(@ApiIgnore @PathVariable Long id) {
     try {
-      if (StringUtils.isBlank(id)) {
+      if (id == null) {
         return resultHelper.infoResp(ErrorType.SYS0002, CommonsConstant.ID_BLANK, HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      return new ResponseEntity<>(userDomain.getById(Long.valueOf(id), UserVO.class), HttpStatus.OK);
+      return new ResponseEntity<>(userDomain.getById(id, UserVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -120,6 +122,10 @@ import springfox.documentation.annotations.ApiIgnore;
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "id", value = "user's id", paramType = "path", dataType = "long", required = true)
+  })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser, @RequestBody UserParam param) {
     try {
       // Validate current user, param and sign.
@@ -139,15 +145,20 @@ import springfox.documentation.annotations.ApiIgnore;
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser, @RequestBody UserParam param) {
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "id", value = "user's id", paramType = "path", dataType = "long", required = true)
+  })
+  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser, @ApiIgnore @PathVariable Long id) {
     try {
+      UserParam param = new UserParam(id);
       // Validate current user and param.
       ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
       if (!responseEntity.getStatusCode().is2xxSuccessful()) {
         return responseEntity;
       }
       // Delete user.
-      userDomain.delete(param, currentUser);
+      userDomain.deepDelete(param, currentUser);
       return new ResponseEntity(HttpStatus.NO_CONTENT);
     } catch (CommonsException e) {
       // Return error information and log the exception.

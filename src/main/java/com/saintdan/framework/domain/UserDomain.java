@@ -1,19 +1,24 @@
 package com.saintdan.framework.domain;
 
+import com.google.common.collect.Sets;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.Account;
+import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.AccountRepository;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.UserVO;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +45,15 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   @Transactional public User createReturnPo(UserParam param, User currentUser) throws Exception {
-    return super.createByPO(param2Po(param, new User(), currentUser), currentUser);
+    if (usrUsed(param.getUsr())) {
+      // Throw user already exists error, usr taken.
+      final String ACCOUNT = "account";
+      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ACCOUNT, ACCOUNT));
+    }
+    User user = param2Po(param, new User(), currentUser);
+    Account account = param2Account(param, new Account(), user, currentUser);
+    accountRepository.save(account);
+    return super.createByPO(user, currentUser);
   }
 
   public List<UserVO> getAll(Specification<User> specification, Sort sort) {
@@ -67,6 +80,10 @@ import org.springframework.transaction.annotation.Transactional;
     return account == null ? null : userRepository.findByIdAndValidFlag(account.getUser().getId(), ValidFlag.VALID).orElse(null);
   }
 
+  public boolean usrUsed(String usr) {
+    return accountRepository.findByAccount(usr).isPresent();
+  }
+
   @Transactional public UserVO update(UserParam param, User currentUser) throws Exception {
     return po2Vo(updateReturnPo(param, currentUser));
   }
@@ -76,11 +93,19 @@ import org.springframework.transaction.annotation.Transactional;
     if (user == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
     }
-    return super.updateByPO(transformer.param2PO(getClassT(), param, user, currentUser), currentUser);
+    return super.updateByPO(param2Po(param, user, currentUser), currentUser);
   }
 
-  @Transactional public void delete(UserParam param, User currentUser) throws Exception {
-    super.delete(param.getId(), currentUser);
+  @Transactional public void deepDelete(UserParam param, User currentUser) throws Exception {
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+    userRepository.delete(param.getId());
+  }
+
+  public Account param2Account(UserParam param, Account account, User user, User currentUser) throws Exception {
+    account = transformer.param2PO(Account.class, param, account, currentUser);
+    account.setAccount(param.getUsr());
+    account.setUser(user);
+    return account;
   }
 
   // --------------------------
@@ -91,14 +116,24 @@ import org.springframework.transaction.annotation.Transactional;
 
   @Autowired private UserRepository userRepository;
 
+  @Autowired private RoleDomain roleDomain;
+
   @Autowired private Transformer transformer;
 
-  private User param2Po(UserParam param, User consult, User currentUser) throws Exception {
-    return transformer.param2PO(User.class, param, consult, currentUser);
+  private User param2Po(UserParam param, User user, User currentUser) throws Exception {
+    user = transformer.param2PO(User.class, param, user, currentUser);
+    if (StringUtils.isNotBlank(param.getRoleIds())) {
+      Set<Role> roles = Sets.newHashSet(roleDomain.getAllByIds(transformer.idsStr2List(param.getRoleIds())));
+      if (user.getRoles() != null) {
+        roles.addAll(user.getRoles());
+      }
+      user.setRoles(roles);
+    }
+    return user;
   }
 
-  public UserVO po2Vo(User consult) throws Exception {
-    return transformer.po2VO(UserVO.class, consult);
+  public UserVO po2Vo(User user) throws Exception {
+    return transformer.po2VO(UserVO.class, user);
   }
 
 }

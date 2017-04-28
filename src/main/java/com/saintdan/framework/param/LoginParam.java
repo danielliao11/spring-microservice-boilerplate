@@ -18,7 +18,7 @@ public class LoginParam extends BaseParam {
   private String usr;
 
   @NotNullField(grant = GrantType.PASSWORD, message = "pwd cannot be null.")
-  @Size(min = 6, max = 16, message = "pwd must greater than or equal to 6 and less than or equal to 16.")
+  @Size(min = 4, max = 16, message = "pwd must greater than or equal to 4 and less than or equal to 16.")
   private String pwd;
 
   @NotNullField(grant = GrantType.REFRESH_TOKEN, message = "refresh token cannot be null.")
