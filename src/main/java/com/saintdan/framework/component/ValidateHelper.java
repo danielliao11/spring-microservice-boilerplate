@@ -6,8 +6,9 @@ import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.GrantType;
 import com.saintdan.framework.enums.OperationType;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.BaseParam;
-import com.saintdan.framework.param.ClientParam;
+import com.saintdan.framework.po.Client;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import java.lang.reflect.Field;
@@ -146,7 +147,11 @@ import org.springframework.stereotype.Component;
    * @throws Exception
    */
   private String getPublicKeyByClientId(String clientId) throws Exception {
-    return clientDomain.getClientByClientId(new ClientParam(clientId)).getPublicKey();
+    Client client = clientDomain.findClientByClientId(clientId);
+    if (client == null) {
+      throw new CommonsException(ErrorType.SYS0002);
+    }
+    return client.getPublicKey();
   }
 
 }

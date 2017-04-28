@@ -93,6 +93,9 @@ import org.springframework.transaction.annotation.Transactional;
     if (user == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
     }
+    if (StringUtils.isNotBlank(param.getUsr())) {
+      param.setUsr(null);
+    }
     return super.updateByPO(param2Po(param, user, currentUser), currentUser);
   }
 
