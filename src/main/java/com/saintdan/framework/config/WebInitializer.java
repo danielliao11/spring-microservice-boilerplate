@@ -2,7 +2,7 @@ package com.saintdan.framework.config;
 
 import com.saintdan.framework.Application;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 /**
  * Spring boot servlet initializer.

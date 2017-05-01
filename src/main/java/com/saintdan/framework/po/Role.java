@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import org.hibernate.annotations.GenericGenerator;
@@ -27,7 +28,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
 
 /**
  * Authorized roles, provide for spring security.
@@ -36,11 +36,9 @@ import org.springframework.security.core.GrantedAuthority;
  * @date 6/23/15
  * @since JDK1.8
  */
-@Entity
-@EntityListeners({AuditingEntityListener.class})
-@Table(name = "roles")
-@NamedEntityGraph(name = "Role.groups", attributeNodes = @NamedAttributeNode("groups"))
-public class Role implements GrantedAuthority, Serializable {
+@Entity @EntityListeners({AuditingEntityListener.class}) @Table(name = "roles")
+@NamedEntityGraph(name = "Role.resources", attributeNodes = @NamedAttributeNode("resources"))
+public class Role implements Serializable {
 
   private static final long serialVersionUID = -5193344128221526323L;
 
@@ -59,21 +57,21 @@ public class Role implements GrantedAuthority, Serializable {
   private Long id;
 
   @NotEmpty
-  @Column(nullable = false, length = 20)
+  @Column(unique = true, nullable = false, length = 20)
   private String name;
 
-  @Column(columnDefinition = "TEXT")
+  @Column(length = 500)
   private String description;
 
   @Column(nullable = false)
   private ValidFlag validFlag = ValidFlag.VALID;
 
   @CreatedDate
-  @Column(nullable = false)
+  @Column(nullable = false, updatable = false)
   private LocalDateTime createdDate = LocalDateTime.now();
 
   @CreatedBy
-  @Column(nullable = false)
+  @Column(nullable = false, updatable = false)
   private Long createdBy;
 
   @LastModifiedDate
@@ -86,20 +84,20 @@ public class Role implements GrantedAuthority, Serializable {
 
   @Version
   @Column(nullable = false)
-  private int version;
+  private Integer version;
 
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = {CascadeType.REFRESH})
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = CascadeType.REFRESH)
   private Set<User> users = new HashSet<>();
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
-  @JoinTable(name = "roles_has_groups",
-      joinColumns = {@JoinColumn(name = "role_id")},
-      inverseJoinColumns = {@JoinColumn(name = "group_id")})
-  private Set<Group> groups = new HashSet<>();
+  @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REFRESH })
+  @JoinTable(name = "roles_has_resources",
+      joinColumns = { @JoinColumn(name = "role_id") },
+      inverseJoinColumns = { @JoinColumn(name = "resource_id") })
+  private Set<Resource> resources = new HashSet<>();
 
-  @Override
-  public String getAuthority() {
-    return name;
+  @PreRemove
+  private void removeRolesFromUsers() {
+    users.forEach(user -> user.getRoles().remove(this));
   }
 
   public Role() {}
@@ -173,11 +171,11 @@ public class Role implements GrantedAuthority, Serializable {
     this.lastModifiedBy = lastModifiedBy;
   }
 
-  public int getVersion() {
+  public Integer getVersion() {
     return version;
   }
 
-  public void setVersion(int version) {
+  public void setVersion(Integer version) {
     this.version = version;
   }
 
@@ -189,11 +187,11 @@ public class Role implements GrantedAuthority, Serializable {
     this.users = users;
   }
 
-  public Set<Group> getGroups() {
-    return groups;
+  public Set<Resource> getResources() {
+    return resources;
   }
 
-  public void setGroups(Set<Group> groups) {
-    this.groups = groups;
+  public void setResources(Set<Resource> resources) {
+    this.resources = resources;
   }
 }

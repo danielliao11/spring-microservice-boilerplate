@@ -1,20 +1,28 @@
 package com.saintdan.framework.domain;
 
-import com.saintdan.framework.component.CustomPasswordEncoder;
+import com.google.common.collect.Sets;
 import com.saintdan.framework.component.Transformer;
-import com.saintdan.framework.constant.ResourceConstant;
+import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
+import com.saintdan.framework.po.Account;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.repo.AccountRepository;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.UserVO;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,96 +39,98 @@ import org.springframework.transaction.annotation.Transactional;
   // PUBLIC METHODS
   // ------------------------
 
-  /**
-   * Create new {@link User}.
-   *
-   * @param currentUser current user
-   * @param param       {@link UserParam}
-   * @return {@link UserVO}
-   * @throws CommonsException {@link ErrorType#SYS0111} user already existing, usr taken.
-   */
   @Transactional public UserVO create(UserParam param, User currentUser) throws Exception {
-    usrExists(param.getUsr());
-    return super.createByPO(UserVO.class, userParam2PO(param, new User(), currentUser), currentUser);
+    return po2Vo(createReturnPo(param, currentUser));
   }
 
-  /**
-   * Get {@link UserVO} by user's usr.
-   *
-   * @param param {@link UserParam}
-   * @return {@link UserVO}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any user by usr param.
-   */
-  public UserVO getUserByUsr(UserParam param) throws Exception {
-    return transformer.po2VO(UserVO.class, findByUsr(param.getUsr()));
-  }
-
-  public User findByUsr(String usr) throws Exception {
-    return userRepository.findByUsrAndValidFlag(usr, ValidFlag.VALID).orElse(null);
-  }
-
-  /**
-   * Update {@link User}.
-   *
-   * @param param {@link UserParam}
-   * @return {@link UserVO}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any user by id param.
-   */
-  @Transactional public UserVO update(UserParam param, User currentUser) throws Exception {
-    User user = findById(param.getId());
-    if (StringUtils.isNotBlank(param.getUsr()) && !param.getUsr().equals(user.getUsr())) {
-      usrExists(param.getUsr());
+  @Transactional public User createReturnPo(UserParam param, User currentUser) throws Exception {
+    if (usrUsed(param.getUsr())) {
+      // Throw user already exists error, usr taken.
+      final String ACCOUNT = "account";
+      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ACCOUNT, ACCOUNT));
     }
-    return super.updateByPO(UserVO.class, userParam2PO(param, user, currentUser), currentUser);
+    User user = param2Po(param, new User(), currentUser);
+    Account account = param2Account(param, new Account(), user, currentUser);
+    accountRepository.save(account);
+    return super.createByPO(user, currentUser);
+  }
+
+  public List<UserVO> getAll(Specification<User> specification, Sort sort) {
+    return userRepository.findAll(specification, sort).stream().map(
+        po -> {
+          try {
+            return po2Vo(po);
+          } catch (Exception e) {
+            throw new RuntimeException(e);
+          }
+        }).collect(Collectors.toList());
+  }
+
+  public Page getPage(Specification<User> specification, Pageable pageable) throws Exception {
+    return getPage(specification, pageable, UserVO.class);
   }
 
   public User findById(Long id) {
     return userRepository.findById(id).orElse(null);
   }
 
+  public User findByAccount(String usr) {
+    Account account = accountRepository.findByAccount(usr).orElse(null);
+    return account == null ? null : userRepository.findByIdAndValidFlag(account.getUser().getId(), ValidFlag.VALID).orElse(null);
+  }
+
+  public boolean usrUsed(String usr) {
+    return accountRepository.findByAccount(usr).isPresent();
+  }
+
+  @Transactional public UserVO update(UserParam param, User currentUser) throws Exception {
+    return po2Vo(updateReturnPo(param, currentUser));
+  }
+
+  @Transactional public User updateReturnPo(UserParam param, User currentUser) throws Exception {
+    User user = findById(param.getId());
+    if (user == null) {
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+    }
+    if (StringUtils.isNotBlank(param.getUsr())) {
+      param.setUsr(null);
+    }
+    return super.updateByPO(param2Po(param, user, currentUser), currentUser);
+  }
+
+  public Account param2Account(UserParam param, Account account, User user, User currentUser) throws Exception {
+    account = transformer.param2PO(Account.class, param, account, currentUser);
+    account.setAccount(param.getUsr());
+    account.setUser(user);
+    return account;
+  }
+
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired private RoleDomain roleDomain;
+  @Autowired private AccountRepository accountRepository;
 
   @Autowired private UserRepository userRepository;
 
-  @Autowired private CustomPasswordEncoder passwordEncoder;
+  @Autowired private RoleDomain roleDomain;
 
   @Autowired private Transformer transformer;
 
-  @Autowired public UserDomain(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
-
-  private static final String USR = "usr";
-
-  /**
-   * Transform {@link UserParam} to {@link User}.
-   *
-   * @param param       {@link UserParam}
-   * @param user        {@link User}
-   * @param currentUser currentUser
-   * @return {@link User}
-   */
-  private User userParam2PO(UserParam param, User user, User currentUser) throws Exception {
-    transformer.param2PO(getClassT(), param, user, currentUser);
-    if (!StringUtils.isBlank(param.getRoleIds())) {
-      List<Role> roles = roleDomain.getAllByIds(transformer.idsStr2List(param.getRoleIds()));
-      user.setRoles(transformer.list2Set(roles));
-    }
-    if (!StringUtils.isBlank(param.getPwd())) {
-      user.setPwd(passwordEncoder.encode(param.getPwd()));
+  private User param2Po(UserParam param, User user, User currentUser) throws Exception {
+    user = transformer.param2PO(User.class, param, user, currentUser);
+    if (StringUtils.isNotBlank(param.getRoleIds())) {
+      Set<Role> roles = Sets.newHashSet(roleDomain.getAllByIds(transformer.idsStr2List(param.getRoleIds())));
+      if (user.getRoles() != null) {
+        roles.addAll(user.getRoles());
+      }
+      user.setRoles(roles);
     }
     return user;
   }
 
-  private void usrExists(String usr) throws Exception {
-    if (userRepository.findByUsrAndValidFlag(usr, ValidFlag.VALID).isPresent()) {
-      // Throw user already exists error, usr taken.
-      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ResourceConstant.USERS, USR));
-    }
+  public UserVO po2Vo(User user) throws Exception {
+    return transformer.po2VO(UserVO.class, user);
   }
 
 }

@@ -4,7 +4,9 @@ import com.saintdan.framework.domain.LogDomain;
 import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.tools.RemoteAddressUtils;
 import com.saintdan.framework.tools.SpringSecurityUtils;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,13 +22,15 @@ import org.springframework.stereotype.Component;
 
   public void logUsersOperations(OperationType operationType, String resource, User currentUser) throws Exception {
     // Get ip and clientId
-    String ip = SpringSecurityUtils.getCurrentUserIp();
+    String ip = RemoteAddressUtils.getRealIp(request);
     ip = StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip;
     String clientId = SpringSecurityUtils.getCurrentUsername();
 
     // Log users' operations.
     logDomain.create(new LogParam(ip, operationType, clientId, resource), currentUser);
   }
+
+  @Autowired private HttpServletRequest request;
 
   @Autowired private LogDomain logDomain;
 }

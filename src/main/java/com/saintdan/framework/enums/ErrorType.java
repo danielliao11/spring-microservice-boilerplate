@@ -27,6 +27,14 @@ public enum ErrorType implements IntentStateWithDescription {
   SYS0131("%s's %s update failed."),
   SYS0140("%s delete failed."),
 
+  // LOGIN
+  LOG0001("User not exists."),
+  LOG0002("Wrong password."),
+  LOG0003("Disabled account."),
+  LOG0004("Expired account."),
+  LOG0005("Locked account."),
+  LOG0006("Expired credentials."),
+
   // Unknown error.
   UNKNOWN("unknown error."),;
 
@@ -46,5 +54,15 @@ public enum ErrorType implements IntentStateWithDescription {
 
   @Override public String description() {
     return this.description;
+  }
+
+  public static ErrorType parse(String name) {
+    ErrorType[] errorTypes = ErrorType.values();
+    for (ErrorType errorType : errorTypes) {
+      if (errorType.name().equals(name)) {
+        return errorType;
+      }
+    }
+    return UNKNOWN;
   }
 }

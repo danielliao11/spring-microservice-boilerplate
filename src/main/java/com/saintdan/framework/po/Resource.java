@@ -13,9 +13,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Version;
-import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -55,36 +55,21 @@ public class Resource implements GrantedAuthority, Serializable {
   private Long id;
 
   @NotEmpty
-  @Column(nullable = false, length = 20)
+  @Column(unique = true, nullable = false, length = 20)
   private String name;
 
-  /**
-   * The resource path
-   * <p><b>NOTE: Using ANT path mode</b></p>
-   */
-  @NotEmpty
-  @Column(unique = true, length = 1024, nullable = false)
-  private String path;
-
-  /**
-   * The priority. the smaller the description the higher the priority.
-   */
-  @NotNull
-  @Column(nullable = false)
-  private Integer priority;
-
-  @Column(columnDefinition = "TEXT")
+  @Column(length = 500)
   private String description;
 
   @Column(nullable = false)
   private ValidFlag validFlag = ValidFlag.VALID;
 
   @CreatedDate
-  @Column(nullable = false)
+  @Column(nullable = false, updatable = false)
   private LocalDateTime createdDate = LocalDateTime.now();
 
   @CreatedBy
-  @Column(nullable = false)
+  @Column(nullable = false, updatable = false)
   private Long createdBy;
 
   @LastModifiedDate
@@ -97,18 +82,24 @@ public class Resource implements GrantedAuthority, Serializable {
 
   @Version
   @Column(nullable = false)
-  private int version;
+  private Integer version;
 
-  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources", cascade = {CascadeType.REFRESH})
-  private Set<Group> groups = new HashSet<>();
+  @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources", cascade = CascadeType.REFRESH)
+  private Set<Role> roles = new HashSet<>();
 
-  public Resource() {
+  @PreRemove
+  private void removeResourcesFromRoles() {
+    roles.forEach(role -> role.getResources().remove(this));
   }
 
-  public Resource(String name, String path, Integer priority, String description) {
+  public Resource() {}
+
+  public Resource(Long id) {
+    this.id = id;
+  }
+
+  public Resource(String name, String description) {
     this.name = name;
-    this.path = path;
-    this.priority = priority;
     this.description = description;
   }
 
@@ -131,22 +122,6 @@ public class Resource implements GrantedAuthority, Serializable {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public String getPath() {
-    return path;
-  }
-
-  public void setPath(String path) {
-    this.path = path;
-  }
-
-  public Integer getPriority() {
-    return priority;
-  }
-
-  public void setPriority(Integer priority) {
-    this.priority = priority;
   }
 
   public String getDescription() {
@@ -197,19 +172,19 @@ public class Resource implements GrantedAuthority, Serializable {
     this.lastModifiedBy = lastModifiedBy;
   }
 
-  public int getVersion() {
+  public Integer getVersion() {
     return version;
   }
 
-  public void setVersion(int version) {
+  public void setVersion(Integer version) {
     this.version = version;
   }
 
-  public Set<Group> getGroups() {
-    return groups;
+  public Set<Role> getRoles() {
+    return roles;
   }
 
-  public void setGroups(Set<Group> groups) {
-    this.groups = groups;
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
   }
 }

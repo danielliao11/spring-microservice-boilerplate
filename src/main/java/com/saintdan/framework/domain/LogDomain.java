@@ -21,31 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/28/15
  * @since JDK1.8
  */
-@Service
-@Transactional(readOnly = true)
-public class LogDomain {
+@Service @Transactional(readOnly = true) public class LogDomain {
 
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
 
-  /**
-   * Create new {@link Log}.
-   *
-   * @param currentUser current user
-   * @param param       {@link LogParam}
-   * @return {@link LogVO}
-   */
   @Transactional public LogVO create(LogParam param, User currentUser) throws Exception {
     return transformer.po2VO(LogVO.class, logRepository.save(logParam2PO(param, currentUser)));
   }
 
-  /**
-   * Show all {@link LogVO}.
-   *
-   * @return {@link List<LogVO>}
-   * @throws Exception
-   */
   @SuppressWarnings("unchecked")
   public List<LogVO> getAllLogs() throws Exception {
     List<Log> logs = logRepository.findAll();
@@ -55,13 +40,6 @@ public class LogDomain {
     return transformer.pos2VOs(LogVO.class, logs);
   }
 
-  /**
-   * Show {@link LogVO} of {@link Page}.
-   *
-   * @param pageable {@link Pageable}
-   * @return {@link Page}, {@link LogVO}
-   * @throws Exception
-   */
   public Page getPage(Pageable pageable) throws Exception {
     Page<Log> logPage = logRepository.findAll(pageable);
     if (!logPage.hasContent()) {
@@ -80,12 +58,6 @@ public class LogDomain {
 
   private final static String LOG = "log";
 
-  /**
-   * Transform {@link LogParam} to {@link Log}.
-   *
-   * @param param {@link LogParam}
-   * @return {@link Log}
-   */
   private Log logParam2PO(LogParam param, User currentUser) {
     Log log = new Log();
     BeanUtils.copyProperties(param, log);

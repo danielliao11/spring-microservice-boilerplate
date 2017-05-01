@@ -1,14 +1,17 @@
 package com.saintdan.framework.config.custom;
 
+import com.google.common.collect.Sets;
+import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Client;
 import com.saintdan.framework.repo.ClientRepository;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -27,8 +30,6 @@ import org.springframework.stereotype.Service;
 @Service public class CustomClientDetailsService implements ClientDetailsService {
 
   private final ClientRepository clientRepository;
-
-  private final static String COMMA = ",";
 
   @Autowired public CustomClientDetailsService(ClientRepository clientRepository) {
     this.clientRepository = clientRepository;
@@ -53,10 +54,7 @@ import org.springframework.stereotype.Service;
     }
 
     @Override public Set<String> getResourceIds() {
-      String[] idArray = getResourceIdStr().split(COMMA);
-      Set<String> resourceIds = new HashSet<>();
-      Collections.addAll(resourceIds, idArray);
-      return resourceIds;
+      return str2Set(getResourceIdStr());
     }
 
     @Override public boolean isSecretRequired() {
@@ -72,31 +70,20 @@ import org.springframework.stereotype.Service;
     }
 
     @Override public Set<String> getScope() {
-      String[] scopeArray = getScopeStr().split(COMMA);
-      Set<String> scopes = new HashSet<>();
-      Collections.addAll(scopes, scopeArray);
-      return scopes;
+      return str2Set(getScopeStr());
     }
 
     @Override public Set<String> getAuthorizedGrantTypes() {
-      String[] authorizedGrantTypeArray = getAuthorizedGrantTypeStr().split(COMMA);
-      Set<String> grantTypes = new HashSet<>();
-      Collections.addAll(grantTypes, authorizedGrantTypeArray);
-      return grantTypes;
+      return str2Set(getAuthorizedGrantTypeStr());
     }
 
     @Override public Set<String> getRegisteredRedirectUri() {
-      String[] redirectUriArray = getRegisteredRedirectUriStr().split(COMMA);
-      Set<String> uris = new HashSet<>();
-      Collections.addAll(uris, redirectUriArray);
-      return uris;
+      return str2Set(getRegisteredRedirectUriStr());
     }
 
     @Override public Collection<GrantedAuthority> getAuthorities() {
-      GrantedAuthority authority = new SimpleGrantedAuthority("USER");
-      Collection<GrantedAuthority> authorities = new ArrayList<>();
-      authorities.add(authority);
-      return authorities;
+      return Arrays.stream(getAuthorizedGrantTypeStr().split(CommonsConstant.COMMA))
+          .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     @Override public Integer getAccessTokenValiditySeconds() {
@@ -113,6 +100,13 @@ import org.springframework.stereotype.Service;
 
     @Override public Map<String, Object> getAdditionalInformation() {
       return null;
+    }
+
+    private Set<String> str2Set(String str) {
+      if (StringUtils.isBlank(str)) {
+        return new HashSet<>();
+      }
+      return Sets.newHashSet(Arrays.stream(str.split(CommonsConstant.COMMA)).collect(Collectors.toList()));
     }
   }
 

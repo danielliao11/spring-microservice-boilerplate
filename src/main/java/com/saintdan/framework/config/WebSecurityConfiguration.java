@@ -18,22 +18,18 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @date 6/25/15
  * @since JDK1.8
  */
-@Configuration
-@EnableWebSecurity
-@EnableSpringDataWebSupport
+@Configuration @EnableWebSecurity @EnableSpringDataWebSupport
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.authenticationProvider(authenticationProvider());
   }
 
-  @Override @Bean
-  public AuthenticationManager authenticationManagerBean() throws Exception {
+  @Override @Bean public AuthenticationManager authenticationManagerBean() throws Exception {
     return super.authenticationManagerBean();
   }
 
-  @Bean
-  public AuthenticationProvider authenticationProvider() {
+  @Bean public AuthenticationProvider authenticationProvider() {
     return new CustomAuthenticationProvider();
   }
 

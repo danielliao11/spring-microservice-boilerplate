@@ -1,10 +1,10 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
-import com.saintdan.framework.annotation.SignField;
+import com.saintdan.framework.annotation.SizeField;
 import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.OperationType;
-import javax.validation.constraints.Size;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Param bean for {@link ClientDomain}
@@ -17,53 +17,60 @@ public class ClientParam extends BaseParam {
 
   private static final long serialVersionUID = 6065608866944007796L;
 
-  @SignField
-  @NotNullField(value = {OperationType.UPDATE, OperationType.DELETE}, message = "id cannot be null.")
+  @NotNullField(value = { OperationType.UPDATE, OperationType.DELETE }, message = "id cannot be null.")
   private Long id;
 
-  @SignField
+  @ApiModelProperty(value = "clientId", required = true,
+      notes = "clientIdAlias cannot be null and must greater than or equal to 6 and less than or equal to 16.")
   @NotNullField(value = OperationType.CREATE, message = "clientIdAlias cannot be null.")
-  @Size(min = 6, max = 50)
+  @SizeField(min = 6, max = 16, value = OperationType.CREATE, message = "clientIdAlias must greater than or equal to 6 and less than or equal to 16.")
   private String clientIdAlias;
 
-  @SignField
+  @ApiModelProperty(value = "resourceId", required = true, notes = "resourceIdStr cannot be null.")
   @NotNullField(value = OperationType.CREATE, message = "resourceIdStr cannot be null.")
   private String resourceIdStr;
 
-  @SignField
-  @NotNullField(value = OperationType.CREATE, message = "clientSecretAlias cannot be null.")
-  @Size(min = 8, max = 50)
+  @ApiModelProperty(value = "clientSecret", required = true, notes = "clientSecretAlias cannot be null.")
+  @NotNullField(value = OperationType.CREATE,
+      message = "clientSecretAlias cannot be null and must greater than or equal to 8 and less than or equal to 32.")
+  @SizeField(min = 8, max = 32, value = OperationType.CREATE, message = "clientSecretAlias must greater than or equal to 8 and less than or equal to 32.")
   private String clientSecretAlias;
 
-  @SignField
+  @ApiModelProperty(value = "scope", required = true, notes = "scopeStr cannot be null.", example = "read")
   @NotNullField(value = OperationType.CREATE, message = "scopeStr cannot be null.")
   private String scopeStr;
 
-  @SignField
+  @ApiModelProperty(value = "authorizedGrantType", required = true, notes = "authorizedGrantType cannot be null.",
+      example = "password,refresh_token,authorization_code")
   @NotNullField(value = OperationType.CREATE, message = "authorizedGrantTypeStr cannot be null.")
   private String authorizedGrantTypeStr;
 
-  @SignField
+  @ApiModelProperty(value = "registeredRedirectUri")
   private String registeredRedirectUriStr;
 
-  @SignField
+  @ApiModelProperty(value = "authorities", required = true, notes = "authoritiesStr cannot be null.", example = "USER")
   @NotNullField(value = OperationType.CREATE, message = "authoritiesStr cannot be null.")
   private String authoritiesStr;
 
-  @SignField private Integer accessTokenValiditySecondsAlias;
+  @ApiModelProperty(value = "accessTokenValiditySeconds")
+  private Integer accessTokenValiditySecondsAlias = 1800;
 
-  @SignField private Integer refreshTokenValiditySecondsAlias;
+  @ApiModelProperty(value = "refreshTokenValiditySeconds")
+  private Integer refreshTokenValiditySecondsAlias = 1800;
 
-  @SignField private String additionalInformationStr;
+  @ApiModelProperty(value = "additionalInformation")
+  private String additionalInformationStr;
+
+  private String publicKey;
 
   public ClientParam() {}
 
-  public ClientParam(String clientIdAlias) {
-    this.clientIdAlias = clientIdAlias;
-  }
-
   public ClientParam(Long id) {
     this.id = id;
+  }
+
+  public ClientParam(String clientIdAlias) {
+    this.clientIdAlias = clientIdAlias;
   }
 
   public Long getId() {
@@ -152,5 +159,13 @@ public class ClientParam extends BaseParam {
 
   public void setAdditionalInformationStr(String additionalInformationStr) {
     this.additionalInformationStr = additionalInformationStr;
+  }
+
+  public String getPublicKey() {
+    return publicKey;
+  }
+
+  public void setPublicKey(String publicKey) {
+    this.publicKey = publicKey;
   }
 }

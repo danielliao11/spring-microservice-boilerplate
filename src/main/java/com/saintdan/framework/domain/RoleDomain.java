@@ -1,19 +1,23 @@
 package com.saintdan.framework.domain;
 
+import com.google.common.collect.Sets;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
-import com.saintdan.framework.po.Group;
+import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.RoleRepository;
 import com.saintdan.framework.tools.ErrorMsgHelper;
+import com.saintdan.framework.vo.ResourceVO;
 import com.saintdan.framework.vo.RoleVO;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,90 +30,91 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/17/15
  * @since JDK1.8
  */
-@Service
-@Transactional(readOnly = true)
-public class RoleDomain extends BaseDomain<Role, Long> {
+@Service @Transactional(readOnly = true) public class RoleDomain extends BaseDomain<Role, Long> {
 
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
 
-  /**
-   * Create new {@link Role}.
-   *
-   * @param currentUser current user
-   * @param param       {@link RoleParam}
-   * @return {@link RoleVO}
-   * @throws CommonsException {@link ErrorType#SYS0111} user already existing, usr taken.
-   */
   @Transactional public RoleVO create(RoleParam param, User currentUser) throws Exception {
     nameExists(param.getName());
-    return super.createByPO(RoleVO.class, roleParam2PO(param, new Role(), currentUser), currentUser);
+    return po2Vo(super.createByPO(param2Po(param, new Role(), currentUser), currentUser));
   }
 
-  /**
-   * Get {@link RoleVO} by name of role.
-   *
-   * @param param {@link RoleParam}
-   * @return {@link RoleVO}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by name param.
-   */
-  public RoleVO getRoleByName(RoleParam param) throws Exception {
-    return transformer.po2VO(RoleVO.class, findByName(param.getName()));
+  public List<RoleVO> all() {
+    return roleRepository.findAll().stream()
+        .map(role -> {
+          try {
+            return po2Vo(role);
+          } catch (Exception e) {
+            throw new RuntimeException(e);
+          }
+        }).collect(Collectors.toList());
   }
 
-  public Role findByName(String name) throws Exception {
-    return roleRepository.findByNameAndValidFlag(name, ValidFlag.VALID).orElse(null);
-  }
-
-  /**
-   * Update {@link Role}.
-   *
-   * @param param {@link RoleParam}
-   * @return {@link RoleVO}
-   * @throws CommonsException {@link ErrorType#SYS0122} Cannot find any role by id param.
-   */
   @Transactional public RoleVO update(RoleParam param, User currentUser) throws Exception {
     Role role = findById(param.getId());
-    if (param.getName().equals(role.getName())) {
+    if (role == null) {
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+    }
+    if (StringUtils.isNotBlank(param.getName()) && !param.getName().equals(role.getName())) {
       nameExists(param.getName());
     }
-    return super.updateByPO(RoleVO.class, roleParam2PO(param, role, currentUser), currentUser);
+    return po2Vo(super.updateByPO(param2Po(param, role, currentUser), currentUser));
+  }
+
+  public RoleVO getById(Long id) throws Exception {
+    return po2Vo(roleRepository.findById(id).orElse(null));
   }
 
   public Role findById(Long id) {
     return roleRepository.findById(id).orElse(null);
   }
 
+  @Transactional public void deepDelete(Long id, User currentUser) throws Exception {
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+    Role role = findById(id);
+    if (role != null) {
+      roleRepository.delete(role);
+    }
+  }
+
+  public RoleVO po2Vo(Role role) throws Exception {
+    if (role == null) {
+      return null;
+    }
+    RoleVO vo = transformer.po2VO(RoleVO.class, role);
+    vo.setResources(role.getResources().stream()
+        .map(resource -> {
+          try {
+            return transformer.po2VO(ResourceVO.class, resource);
+          } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+          }
+        }).collect(Collectors.toSet()));
+    return vo;
+  }
+
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
+  @Autowired private RoleRepository roleRepository;
+
   @Autowired private UserDomain userDomain;
 
-  @Autowired private GroupDomain groupService;
-
-  @Autowired private RoleRepository roleRepository;
+  @Autowired private ResourceDomain resourceDomain;
 
   @Autowired private Transformer transformer;
 
-  /**
-   * Transform {@link RoleParam} to {@link Role}.
-   *
-   * @param param       {@link RoleParam}
-   * @param role        {@link Role}
-   * @param currentUser currentUser
-   * @return {@link Role}
-   */
-  private Role roleParam2PO(RoleParam param, Role role, User currentUser) throws Exception {
+  private Role param2Po(RoleParam param, Role role, User currentUser) throws Exception {
     transformer.param2PO(getClassT(), param, role, currentUser);
-    if (!StringUtils.isBlank(param.getUserIds())) {
-      List<User> users = userDomain.getAllByIds(transformer.idsStr2List(param.getUserIds()));
-      role.setUsers(transformer.list2Set(users));
-    }
-    if (!StringUtils.isBlank(param.getGroupIds())) {
-      Iterable<Group> groups = groupService.getAllByIds(transformer.idsStr2List(param.getGroupIds()));
-      role.setGroups((Set<Group>) groups);
+    if (StringUtils.isNotBlank(param.getResourceIds())) {
+      Set<Resource> resources = Sets.newHashSet(resourceDomain.getAllByIds(transformer.idsStr2List(param.getResourceIds())));
+      if (role.getResources() != null) {
+        resources.addAll(role.getResources());
+      }
+      role.setResources(resources);
     }
     return role;
   }

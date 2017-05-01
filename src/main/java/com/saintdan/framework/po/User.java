@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import org.hibernate.annotations.GenericGenerator;
@@ -114,14 +115,16 @@ public class User implements Serializable {
   @Column(nullable = false)
   private int version;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
   @JoinTable(name = "users_has_roles",
-      joinColumns = {@JoinColumn(name = "user_id")},
-      inverseJoinColumns = {@JoinColumn(name = "role_id")})
+      joinColumns = { @JoinColumn(name = "user_id") },
+      inverseJoinColumns = { @JoinColumn(name = "role_id") })
   private Set<Role> roles = new HashSet<>();
 
-  public User() {
-  }
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+  private Set<Account> accounts = new HashSet<>();
+
+  public User() {}
 
   public User(Long id, String name, String usr, String pwd) {
     this.id = id;
@@ -281,5 +284,13 @@ public class User implements Serializable {
 
   public void setRoles(Set<Role> roles) {
     this.roles = roles;
+  }
+
+  public Set<Account> getAccounts() {
+    return accounts;
+  }
+
+  public void setAccounts(Set<Account> accounts) {
+    this.accounts = accounts;
   }
 }
