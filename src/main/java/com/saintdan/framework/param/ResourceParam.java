@@ -22,8 +22,6 @@ public class ResourceParam extends BaseParam {
 
   private String description;
 
-  private String roleIds; // role ids string
-
   public ResourceParam() {}
 
   public ResourceParam(Long id) {
@@ -54,11 +52,4 @@ public class ResourceParam extends BaseParam {
     this.description = description;
   }
 
-  public String getRoleIds() {
-    return roleIds;
-  }
-
-  public void setRoleIds(String roleIds) {
-    this.roleIds = roleIds;
-  }
 }

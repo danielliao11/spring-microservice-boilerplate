@@ -12,7 +12,7 @@ import org.apache.commons.lang3.RandomStringUtils;
  */
 public class GenerateEncodedPassword {
 
-  private static final String RAW_PASSWORD = "123456";
+  private static final String RAW_PASSWORD = "alice123";
 
   public static void main(String[] args) {
     String encodedPassword = new CustomPasswordEncoder().encode(RAW_PASSWORD);
