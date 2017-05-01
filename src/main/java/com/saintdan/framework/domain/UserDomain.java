@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
@@ -97,11 +96,6 @@ import org.springframework.transaction.annotation.Transactional;
       param.setUsr(null);
     }
     return super.updateByPO(param2Po(param, user, currentUser), currentUser);
-  }
-
-  @Transactional public void deepDelete(UserParam param, User currentUser) throws Exception {
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
-    userRepository.delete(param.getId());
   }
 
   public Account param2Account(UserParam param, Account account, User user, User currentUser) throws Exception {

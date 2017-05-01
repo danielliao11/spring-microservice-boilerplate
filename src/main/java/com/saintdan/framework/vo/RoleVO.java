@@ -1,6 +1,7 @@
 package com.saintdan.framework.vo;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * VO for {@link com.saintdan.framework.po.Resource}
@@ -18,6 +19,8 @@ public class RoleVO implements Serializable {
   private String name;
 
   private String description;
+
+  private Set<ResourceVO> resources;
 
   public Long getId() {
     return id;
@@ -41,5 +44,13 @@ public class RoleVO implements Serializable {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public Set<ResourceVO> getResources() {
+    return resources;
+  }
+
+  public void setResources(Set<ResourceVO> resources) {
+    this.resources = resources;
   }
 }

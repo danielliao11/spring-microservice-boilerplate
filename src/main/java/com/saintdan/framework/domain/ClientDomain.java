@@ -3,7 +3,6 @@ package com.saintdan.framework.domain;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
@@ -39,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
     return po2Vo(super.createByPO(transformer.param2PO(getClassT(), param, new Client(), currentUser), currentUser));
   }
 
-  public List<ClientVO> getAll() {
+  public List<ClientVO> all() {
     return clientRepository.findAll().stream().map(this::po2Vo).collect(Collectors.toList());
   }
 
@@ -60,11 +59,6 @@ import org.springframework.transaction.annotation.Transactional;
       param.setClientIdAlias(null);
     }
     return po2Vo(super.updateByPO(transformer.param2PO(getClassT(), param, client, currentUser), currentUser));
-  }
-
-  @Transactional public void deepDelete(ClientParam param, User currentUser) throws Exception {
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
-    clientRepository.delete(param.getId());
   }
 
   // --------------------------

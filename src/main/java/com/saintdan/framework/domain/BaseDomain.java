@@ -223,6 +223,12 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     repository.save(setInvalid(po));
   }
 
+  @SuppressWarnings("unchecked")
+  @Transactional public void deepDelete(Long id, User currentUser) throws Exception {
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+    repository.delete((ID) id);
+  }
+
   /**
    * update valid flag to invalid.by ids
    * @param ids

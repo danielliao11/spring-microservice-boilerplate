@@ -91,7 +91,7 @@ import springfox.documentation.annotations.ApiIgnore;
           @Spec(path = "validFlag", constVal = "VALID", spec = In.class),
           @Spec(path = "createdDate", params = "createdDateAfter", spec = LocalDateTimeAfter.class),
           @Spec(path = "createdDate", params = "createdDateBefore", spec = LocalDateTimeBefore.class)
-      }) @ApiIgnore Specification<User> userSpecification, UserParam param) {
+      }) @ApiIgnore Specification<User> userSpecification, @ApiIgnore UserParam param) {
     try {
       if (param.getPageNo() == null) {
         return new ResponseEntity<>(userDomain.getAll(userSpecification, QueryHelper.getSort(param.getSortBy())), HttpStatus.OK);
@@ -107,7 +107,7 @@ import springfox.documentation.annotations.ApiIgnore;
   @ApiOperation(value = "Detail", httpMethod = "GET", response = UserVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "id", value = "user's id", paramType = "path", dataType = "long", required = true)
+      @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity detail(@ApiIgnore @PathVariable Long id) {
     try {
@@ -124,7 +124,7 @@ import springfox.documentation.annotations.ApiIgnore;
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "id", value = "user's id", paramType = "path", dataType = "long", required = true)
+      @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser, @RequestBody UserParam param) {
     try {
@@ -147,7 +147,7 @@ import springfox.documentation.annotations.ApiIgnore;
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "id", value = "user's id", paramType = "path", dataType = "long", required = true)
+      @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser, @ApiIgnore @PathVariable Long id) {
     try {
@@ -158,7 +158,7 @@ import springfox.documentation.annotations.ApiIgnore;
         return responseEntity;
       }
       // Delete user.
-      userDomain.deepDelete(param, currentUser);
+      userDomain.deepDelete(param.getId(), currentUser);
       return new ResponseEntity(HttpStatus.NO_CONTENT);
     } catch (CommonsException e) {
       // Return error information and log the exception.

@@ -20,8 +20,6 @@ public class RoleParam extends BaseParam {
 
   private String description;
 
-  private String userIds; // user ids string
-
   private String resourceIds; // group ids string
 
   public RoleParam() {}
@@ -52,14 +50,6 @@ public class RoleParam extends BaseParam {
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public String getUserIds() {
-    return userIds;
-  }
-
-  public void setUserIds(String userIds) {
-    this.userIds = userIds;
   }
 
   public String getResourceIds() {

@@ -7,13 +7,12 @@ import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.Resource;
-import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.ResourceRepository;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ResourceVO;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +35,17 @@ import org.springframework.transaction.annotation.Transactional;
     return super.createByPO(ResourceVO.class, resourceParam2PO(param, new Resource(), currentUser), currentUser);
   }
 
+  public List<ResourceVO> all() {
+    return resourceRepository.findAll().stream()
+        .map(role -> {
+          try {
+            return transformer.po2VO(ResourceVO.class, role);
+          } catch (InstantiationException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+          }
+        }).collect(Collectors.toList());
+  }
+
   @Transactional public ResourceVO update(ResourceParam param, User currentUser) throws Exception {
     Resource resource = findById(param.getId());
     if (!param.getName().equals(resource.getName())) {
@@ -52,19 +62,12 @@ import org.springframework.transaction.annotation.Transactional;
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired private RoleDomain roleDomain;
-
   @Autowired private ResourceRepository resourceRepository;
 
   @Autowired private Transformer transformer;
 
   private Resource resourceParam2PO(ResourceParam param, Resource resource, User currentUser) throws Exception {
-    transformer.param2PO(getClassT(), param, resource, currentUser);
-    if (!StringUtils.isBlank(param.getRoleIds())) {
-      List<Role> roles = roleDomain.getAllByIds(transformer.idsStr2List(param.getRoleIds()));
-      resource.setRoles(transformer.list2Set(roles));
-    }
-    return resource;
+    return transformer.param2PO(getClassT(), param, resource, currentUser);
   }
 
   private void nameExists(String name) throws Exception {

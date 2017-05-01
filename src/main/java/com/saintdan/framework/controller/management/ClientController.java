@@ -76,12 +76,10 @@ public class ClientController {
    */
   @RequestMapping(method = RequestMethod.GET)
   @ApiOperation(value = "List", httpMethod = "GET", response = ClientVO.class)
-  @ApiImplicitParams({
-      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
-  })
+  @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   public ResponseEntity all() {
     try {
-      return new ResponseEntity<>(clientDomain.getAll(), HttpStatus.OK);
+      return new ResponseEntity<>(clientDomain.all(), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -139,7 +137,7 @@ public class ClientController {
         return responseEntity;
       }
       // Delete client.
-      clientDomain.deepDelete(param, currentUser);
+      clientDomain.deepDelete(param.getId(), currentUser);
       return new ResponseEntity(HttpStatus.NO_CONTENT);
     } catch (CommonsException e) {
       // Return error information and log the exception.
