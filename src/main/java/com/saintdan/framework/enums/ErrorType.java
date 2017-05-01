@@ -55,4 +55,14 @@ public enum ErrorType implements IntentStateWithDescription {
   @Override public String description() {
     return this.description;
   }
+
+  public static ErrorType parse(String name) {
+    ErrorType[] errorTypes = ErrorType.values();
+    for (ErrorType errorType : errorTypes) {
+      if (errorType.name().equals(name)) {
+        return errorType;
+      }
+    }
+    return UNKNOWN;
+  }
 }

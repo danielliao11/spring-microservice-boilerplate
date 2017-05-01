@@ -206,13 +206,14 @@ public abstract class BaseDomain<T, ID extends Serializable> {
 
   /**
    * update valid flag to invalid.by id
+   *
    * @param id
    * @param currentUser
    * @throws Exception
    */
-  @Transactional public void deleteById(String id,User currentUser) throws Exception {
+  @Transactional public void deleteById(Long id, User currentUser) throws Exception {
     logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
-    T po = findById(Long.valueOf(id));
+    T po = findById(id);
     Field lastModifiedByField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_BY);
     lastModifiedByField.setAccessible(true);
     lastModifiedByField.set(po, currentUser);
@@ -220,6 +221,12 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     lastModifiedDateField.setAccessible(true);
     lastModifiedDateField.set(po, LocalDateTime.now());
     repository.save(setInvalid(po));
+  }
+
+  @SuppressWarnings("unchecked")
+  @Transactional public void deepDelete(Long id, User currentUser) throws Exception {
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+    repository.delete((ID) id);
   }
 
   /**
@@ -231,7 +238,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   @Transactional public void deleteByIds(String ids, User currentUser) throws RuntimeException {
     transformer.idsStr2List(ids).forEach(id -> {
       try {
-        this.deleteById(id.toString(), currentUser);
+        this.deleteById(id, currentUser);
       } catch (Exception e) {
         throw new RuntimeException(e);
       }

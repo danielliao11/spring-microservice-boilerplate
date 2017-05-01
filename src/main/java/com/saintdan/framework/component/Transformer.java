@@ -1,5 +1,6 @@
 package com.saintdan.framework.component;
 
+import com.google.common.collect.Sets;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.BeanUtils;
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -36,11 +38,18 @@ import org.springframework.stereotype.Component;
    * @return ids iterable
    */
   public List<Long> idsStr2List(String idsStr) {
-    return Arrays.stream(idsStr.split(",")).map(Long::valueOf).collect(Collectors.toList());
+    return Arrays.stream(idsStr.split(CommonsConstant.COMMA)).map(Long::valueOf).collect(Collectors.toList());
+  }
+
+  public Set<String> str2Set(String str) {
+    if (StringUtils.isBlank(str)) {
+      return new HashSet<>();
+    }
+    return Sets.newHashSet(Arrays.stream(str.split(CommonsConstant.COMMA)).collect(Collectors.toList()));
   }
 
   public String IdList2IdsStr(List<Long> list){
-    return list.stream().map(String::valueOf).collect(Collectors.joining(","));
+    return list.stream().map(String::valueOf).collect(Collectors.joining(CommonsConstant.COMMA));
   }
 
   /**

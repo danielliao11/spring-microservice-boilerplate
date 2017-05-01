@@ -19,11 +19,11 @@ public class ClientVO implements Serializable {
 
   private Long id;
 
-  private String clientIdAlias;
+  private String clientId;
 
   private Set<String> resourceIds;
 
-  private String clientSecretAlias;
+  private String clientSecret;
 
   private Set<String> scope;
 
@@ -31,9 +31,9 @@ public class ClientVO implements Serializable {
 
   private Set<String> registeredRedirectUri;
 
-  private Integer accessTokenValiditySecondsAlias;
+  private Integer accessTokenValiditySeconds;
 
-  private Integer refreshTokenValiditySecondsAlias;
+  private Integer refreshTokenValiditySeconds;
 
   private Collection<GrantedAuthority> grantedAuthorities;
 
@@ -47,12 +47,12 @@ public class ClientVO implements Serializable {
     this.id = id;
   }
 
-  public String getClientIdAlias() {
-    return clientIdAlias;
+  public String getClientId() {
+    return clientId;
   }
 
-  public void setClientIdAlias(String clientIdAlias) {
-    this.clientIdAlias = clientIdAlias;
+  public void setClientId(String clientId) {
+    this.clientId = clientId;
   }
 
   public Set<String> getResourceIds() {
@@ -63,12 +63,12 @@ public class ClientVO implements Serializable {
     this.resourceIds = resourceIds;
   }
 
-  public String getClientSecretAlias() {
-    return clientSecretAlias;
+  public String getClientSecret() {
+    return clientSecret;
   }
 
-  public void setClientSecretAlias(String clientSecretAlias) {
-    this.clientSecretAlias = clientSecretAlias;
+  public void setClientSecret(String clientSecret) {
+    this.clientSecret = clientSecret;
   }
 
   public Set<String> getScope() {
@@ -95,20 +95,20 @@ public class ClientVO implements Serializable {
     this.registeredRedirectUri = registeredRedirectUri;
   }
 
-  public Integer getAccessTokenValiditySecondsAlias() {
-    return accessTokenValiditySecondsAlias;
+  public Integer getAccessTokenValiditySeconds() {
+    return accessTokenValiditySeconds;
   }
 
-  public void setAccessTokenValiditySecondsAlias(Integer accessTokenValiditySecondsAlias) {
-    this.accessTokenValiditySecondsAlias = accessTokenValiditySecondsAlias;
+  public void setAccessTokenValiditySeconds(Integer accessTokenValiditySeconds) {
+    this.accessTokenValiditySeconds = accessTokenValiditySeconds;
   }
 
-  public Integer getRefreshTokenValiditySecondsAlias() {
-    return refreshTokenValiditySecondsAlias;
+  public Integer getRefreshTokenValiditySeconds() {
+    return refreshTokenValiditySeconds;
   }
 
-  public void setRefreshTokenValiditySecondsAlias(Integer refreshTokenValiditySecondsAlias) {
-    this.refreshTokenValiditySecondsAlias = refreshTokenValiditySecondsAlias;
+  public void setRefreshTokenValiditySeconds(Integer refreshTokenValiditySeconds) {
+    this.refreshTokenValiditySeconds = refreshTokenValiditySeconds;
   }
 
   public Collection<GrantedAuthority> getGrantedAuthorities() {

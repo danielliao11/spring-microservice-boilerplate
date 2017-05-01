@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import org.hibernate.annotations.GenericGenerator;
@@ -86,7 +87,16 @@ public class Resource implements GrantedAuthority, Serializable {
   @ManyToMany(fetch = FetchType.LAZY, mappedBy = "resources", cascade = CascadeType.REFRESH)
   private Set<Role> roles = new HashSet<>();
 
+  @PreRemove
+  private void removeResourcesFromRoles() {
+    roles.forEach(role -> role.getResources().remove(this));
+  }
+
   public Resource() {}
+
+  public Resource(Long id) {
+    this.id = id;
+  }
 
   public Resource(String name, String description) {
     this.name = name;

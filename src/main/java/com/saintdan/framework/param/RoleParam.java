@@ -1,7 +1,6 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
-import com.saintdan.framework.annotation.SignField;
 import com.saintdan.framework.enums.OperationType;
 
 /**
@@ -14,16 +13,14 @@ import com.saintdan.framework.enums.OperationType;
 public class RoleParam extends BaseParam {
 
   @NotNullField(value = {OperationType.UPDATE, OperationType.DELETE}, message = "id cannot be null.")
-  @SignField private Long id; // role's ID.
+  private Long id; // role's ID.
 
   @NotNullField(value = OperationType.CREATE, message = "name cannot be null.")
   private String name; // role's name
 
-  @SignField private String description;
+  private String description;
 
-  @SignField private String userIds; // user ids string
-
-  @SignField private String resourceIds; // group ids string
+  private String resourceIds; // group ids string
 
   public RoleParam() {}
 
@@ -53,14 +50,6 @@ public class RoleParam extends BaseParam {
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public String getUserIds() {
-    return userIds;
-  }
-
-  public void setUserIds(String userIds) {
-    this.userIds = userIds;
   }
 
   public String getResourceIds() {

@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import org.hibernate.annotations.GenericGenerator;
@@ -88,11 +89,16 @@ public class Role implements Serializable {
   @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = CascadeType.REFRESH)
   private Set<User> users = new HashSet<>();
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
+  @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REFRESH })
   @JoinTable(name = "roles_has_resources",
-      joinColumns = {@JoinColumn(name = "role_id")},
-      inverseJoinColumns = {@JoinColumn(name = "resource_id")})
+      joinColumns = { @JoinColumn(name = "role_id") },
+      inverseJoinColumns = { @JoinColumn(name = "resource_id") })
   private Set<Resource> resources = new HashSet<>();
+
+  @PreRemove
+  private void removeRolesFromUsers() {
+    users.forEach(user -> user.getRoles().remove(this));
+  }
 
   public Role() {}
 

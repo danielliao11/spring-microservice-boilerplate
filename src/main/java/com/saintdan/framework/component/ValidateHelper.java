@@ -1,16 +1,17 @@
 package com.saintdan.framework.component;
 
 import com.saintdan.framework.annotation.NotNullField;
+import com.saintdan.framework.annotation.SizeField;
 import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.GrantType;
 import com.saintdan.framework.enums.OperationType;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.BaseParam;
-import com.saintdan.framework.param.ClientParam;
+import com.saintdan.framework.po.Client;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import java.lang.reflect.Field;
-import javax.validation.constraints.Size;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ import org.springframework.stereotype.Component;
   public ResponseEntity validate(BaseParam param, OperationType operationType) throws Exception {
     Field[] fields = param.getClass().getDeclaredFields();
     for (Field field : fields) {
-      if (field == null || !field.isAnnotationPresent(NotNullField.class)) {
+      if (field == null || !field.isAnnotationPresent(NotNullField.class) || !field.isAnnotationPresent(SizeField.class)) {
         continue; // Ignore field without ParamField annotation.
       }
       field.setAccessible(true);
@@ -68,9 +69,10 @@ import org.springframework.stereotype.Component;
       if (ArrayUtils.contains(notNullField.value(), operationType) && field.get(param) == null) {
         return resultHelper.infoResp(ErrorType.SYS0002, notNullField.message(), HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      if (field.isAnnotationPresent(Size.class)) {
-        Size size = field.getAnnotation(Size.class);
-        if (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min()) {
+      if (field.isAnnotationPresent(SizeField.class)) {
+        SizeField size = field.getAnnotation(SizeField.class);
+        if (ArrayUtils.contains(size.value(), operationType)
+            && (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min())) {
           return resultHelper.infoResp(ErrorType.SYS0002, size.message(), HttpStatus.UNPROCESSABLE_ENTITY);
         }
       }
@@ -97,9 +99,10 @@ import org.springframework.stereotype.Component;
       if (ArrayUtils.contains(notNullField.grant(), grantType) && field.get(param) == null) {
         return resultHelper.infoResp(ErrorType.SYS0002, notNullField.message(), HttpStatus.UNPROCESSABLE_ENTITY);
       }
-      if (field.isAnnotationPresent(Size.class)) {
-        Size size = field.getAnnotation(Size.class);
-        if (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min()) {
+      if (field.isAnnotationPresent(SizeField.class)) {
+        SizeField size = field.getAnnotation(SizeField.class);
+        if (ArrayUtils.contains(size.grant(), grantType)
+            && (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min())) {
           return resultHelper.infoResp(ErrorType.SYS0002, size.message(), HttpStatus.UNPROCESSABLE_ENTITY);
         }
       }
@@ -145,7 +148,11 @@ import org.springframework.stereotype.Component;
    * @throws Exception
    */
   private String getPublicKeyByClientId(String clientId) throws Exception {
-    return clientDomain.getClientByClientId(new ClientParam(clientId)).getPublicKey();
+    Client client = clientDomain.findClientByClientId(clientId);
+    if (client == null) {
+      throw new CommonsException(ErrorType.SYS0002);
+    }
+    return client.getPublicKey();
   }
 
 }

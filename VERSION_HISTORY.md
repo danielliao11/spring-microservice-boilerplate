@@ -225,3 +225,4 @@
   - [ADD] Add swagger.
   - [ADD] Add login and refresh token api.
   - [MOD] Change params of API to json.
+  - [FIX] Fix client, user, role, resource bugs.
