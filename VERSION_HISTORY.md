@@ -230,3 +230,4 @@
 - 0.18.1.RELEASE
   - [MOD] Modify field injection to constructor injection.
   - [MOD] Override POJO toString().
+  - [MOD] Use guava split.
