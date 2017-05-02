@@ -71,12 +71,13 @@ import org.springframework.transaction.annotation.Transactional;
     return roleRepository.findById(id).orElse(null);
   }
 
-  @Transactional public void deepDelete(Long id, User currentUser) throws Exception {
+  @Transactional @Override public void deepDelete(Long id, User currentUser) throws Exception {
     logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
     Role role = findById(id);
-    if (role != null) {
-      roleRepository.delete(role);
+    if (role == null) {
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
     }
+    roleRepository.delete(role);
   }
 
   public RoleVO po2Vo(Role role) throws Exception {
