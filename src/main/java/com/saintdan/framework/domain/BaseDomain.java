@@ -200,7 +200,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     Field lastModifiedDateField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
     lastModifiedDateField.setAccessible(true);
     lastModifiedDateField.set(po, LocalDateTime.now());
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
     repository.save(setInvalid(po));
   }
 
@@ -212,7 +212,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @throws Exception
    */
   @Transactional public void deleteById(Long id, User currentUser) throws Exception {
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
     T po = findById(id);
     Field lastModifiedByField = po.getClass().getDeclaredField(CommonsConstant.LAST_MODIFIED_BY);
     lastModifiedByField.setAccessible(true);
@@ -225,7 +225,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
 
   @SuppressWarnings("unchecked")
   @Transactional public void deepDelete(Long id, User currentUser) throws Exception {
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getSimpleName(), currentUser);
     repository.delete((ID) id);
   }
 
