@@ -103,6 +103,21 @@ public class Resource implements GrantedAuthority, Serializable {
     this.description = description;
   }
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("Resource{");
+    sb.append("id=").append(id);
+    sb.append(", name='").append(name).append('\'');
+    sb.append(", description='").append(description).append('\'');
+    sb.append(", validFlag=").append(validFlag);
+    sb.append(", createdDate=").append(createdDate);
+    sb.append(", createdBy=").append(createdBy);
+    sb.append(", lastModifiedDate=").append(lastModifiedDate);
+    sb.append(", lastModifiedBy=").append(lastModifiedBy);
+    sb.append(", version=").append(version);
+    sb.append('}');
+    return sb.toString();
+  }
+
   @Override
   public String getAuthority() {
     return name;

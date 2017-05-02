@@ -17,6 +17,14 @@ public class WelcomeVO implements Serializable {
 
   private final String content;
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("WelcomeVO{");
+    sb.append("id=").append(id);
+    sb.append(", content='").append(content).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public long getId() {
     return id;
   }

@@ -14,6 +14,7 @@ import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.spec.LocalDateTimeAfter;
 import com.saintdan.framework.spec.LocalDateTimeBefore;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.QueryHelper;
 import com.saintdan.framework.vo.UserVO;
 import io.swagger.annotations.Api;
@@ -46,9 +47,27 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api("User") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.USERS) public class UserController {
 
+  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+  private final ResultHelper resultHelper;
+
+  private final ValidateHelper validateHelper;
+
+  private final UserDomain userDomain;
+
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
+
+
+  @Autowired public UserController(ResultHelper resultHelper, ValidateHelper validateHelper, UserDomain userDomain) {
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    Assert.defaultNotNull(userDomain);
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
+    this.userDomain = userDomain;
+  }
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = UserVO.class)
@@ -168,17 +187,5 @@ import springfox.documentation.annotations.ApiIgnore;
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
-  // ------------------------
-  // PRIVATE FIELDS
-  // ------------------------
-
-  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
-  @Autowired private ResultHelper resultHelper;
-
-  @Autowired private ValidateHelper validateHelper;
-
-  @Autowired private UserDomain userDomain;
 
 }

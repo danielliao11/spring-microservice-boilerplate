@@ -20,6 +20,15 @@ import javax.persistence.Table;
 
   private String clientId;
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("OauthAccessToken{");
+    sb.append("tokenId='").append(tokenId).append('\'');
+    sb.append(", userName='").append(userName).append('\'');
+    sb.append(", clientId='").append(clientId).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public String getId() {
     return tokenId;
   }

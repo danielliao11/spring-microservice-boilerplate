@@ -11,6 +11,7 @@ import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.OauthAccessTokenRepository;
 import com.saintdan.framework.repo.OauthRefreshTokenRepository;
 import com.saintdan.framework.repo.UserRepository;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.RemoteAddressUtils;
 import java.time.LocalDateTime;
@@ -34,9 +35,38 @@ import org.springframework.stereotype.Service;
  */
 @Service public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-  // ------------------------
-  // PUBLIC METHODS
-  // ------------------------
+  private final UserRepository userRepository;
+
+  private final OauthAccessTokenRepository accessTokenRepository;
+
+  private final OauthRefreshTokenRepository refreshTokenRepository;
+
+  private final HttpServletRequest request;
+
+  private final UserDomain userDomain;
+
+  private final LogHelper logHelper;
+
+  private final CustomPasswordEncoder customPasswordEncoder;
+
+  private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
+
+  @Autowired public CustomAuthenticationProvider(UserRepository userRepository, OauthAccessTokenRepository accessTokenRepository, OauthRefreshTokenRepository refreshTokenRepository, HttpServletRequest request, UserDomain userDomain, LogHelper logHelper, CustomPasswordEncoder customPasswordEncoder) {
+    Assert.defaultNotNull(userRepository);
+    Assert.defaultNotNull(accessTokenRepository);
+    Assert.defaultNotNull(refreshTokenRepository);
+    Assert.defaultNotNull(request);
+    Assert.defaultNotNull(userDomain);
+    Assert.defaultNotNull(logHelper);
+    Assert.defaultNotNull(customPasswordEncoder);
+    this.userRepository = userRepository;
+    this.accessTokenRepository = accessTokenRepository;
+    this.refreshTokenRepository = refreshTokenRepository;
+    this.request = request;
+    this.userDomain = userDomain;
+    this.logHelper = logHelper;
+    this.customPasswordEncoder = customPasswordEncoder;
+  }
 
   @Override public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
@@ -93,25 +123,5 @@ import org.springframework.stereotype.Service;
   @Override public boolean supports(Class<?> authentication) {
     return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
   }
-
-  // --------------------------
-  // PRIVATE FIELDS AND METHODS
-  // --------------------------
-
-  @Autowired private UserRepository userRepository;
-
-  @Autowired private OauthAccessTokenRepository accessTokenRepository;
-
-  @Autowired private OauthRefreshTokenRepository refreshTokenRepository;
-
-  @Autowired private HttpServletRequest request;
-
-  @Autowired private UserDomain userDomain;
-
-  @Autowired private LogHelper logHelper;
-
-  @Autowired private CustomPasswordEncoder customPasswordEncoder;
-
-  private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
 
 }

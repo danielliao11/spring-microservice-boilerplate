@@ -1,6 +1,7 @@
 package com.saintdan.framework.domain;
 
 import com.google.common.collect.Sets;
+import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
@@ -11,7 +12,9 @@ import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.repo.CustomRepository;
 import com.saintdan.framework.repo.RoleRepository;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ResourceVO;
 import com.saintdan.framework.vo.RoleVO;
@@ -32,9 +35,22 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service @Transactional(readOnly = true) public class RoleDomain extends BaseDomain<Role, Long> {
 
+  private final RoleRepository roleRepository;
+
+  private final ResourceDomain resourceDomain;
+
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
+
+
+  @Autowired public RoleDomain(CustomRepository<Role, Long> repository, LogHelper logHelper, Transformer transformer, RoleRepository roleRepository, ResourceDomain resourceDomain) {
+    super(repository, logHelper, transformer);
+    Assert.defaultNotNull(roleRepository);
+    Assert.defaultNotNull(resourceDomain);
+    this.roleRepository = roleRepository;
+    this.resourceDomain = resourceDomain;
+  }
 
   @Transactional public RoleVO create(RoleParam param, User currentUser) throws Exception {
     nameExists(param.getName());
@@ -99,14 +115,6 @@ import org.springframework.transaction.annotation.Transactional;
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
-
-  @Autowired private RoleRepository roleRepository;
-
-  @Autowired private UserDomain userDomain;
-
-  @Autowired private ResourceDomain resourceDomain;
-
-  @Autowired private Transformer transformer;
 
   private Role param2Po(RoleParam param, Role role, User currentUser) throws Exception {
     transformer.param2PO(getClassT(), param, role, currentUser);

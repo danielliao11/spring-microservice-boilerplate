@@ -1,10 +1,9 @@
 package com.saintdan.framework.vo;
 
-import org.springframework.security.core.GrantedAuthority;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * VO for {@link com.saintdan.framework.po.Client}
@@ -38,6 +37,22 @@ public class ClientVO implements Serializable {
   private Collection<GrantedAuthority> grantedAuthorities;
 
   private String publicKey;
+
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("ClientVO{");
+    sb.append("id=").append(id);
+    sb.append(", clientId='").append(clientId).append('\'');
+    sb.append(", resourceIds=").append(resourceIds);
+    sb.append(", clientSecret='").append(clientSecret).append('\'');
+    sb.append(", scope=").append(scope);
+    sb.append(", authorizedGrantTypes=").append(authorizedGrantTypes);
+    sb.append(", registeredRedirectUri=").append(registeredRedirectUri);
+    sb.append(", accessTokenValiditySeconds=").append(accessTokenValiditySeconds);
+    sb.append(", refreshTokenValiditySeconds=").append(refreshTokenValiditySeconds);
+    sb.append(", publicKey='").append(publicKey).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
 
   public Long getId() {
     return id;

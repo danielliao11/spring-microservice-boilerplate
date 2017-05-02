@@ -1,6 +1,7 @@
 package com.saintdan.framework.domain;
 
 import com.google.common.collect.Sets;
+import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
@@ -11,14 +12,15 @@ import com.saintdan.framework.po.Account;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.AccountRepository;
+import com.saintdan.framework.repo.CustomRepository;
 import com.saintdan.framework.repo.UserRepository;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.UserVO;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -35,9 +37,26 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service @Transactional(readOnly = true) public class UserDomain extends BaseDomain<User, Long> {
 
+  private final AccountRepository accountRepository;
+
+  private final UserRepository userRepository;
+
+  private final RoleDomain roleDomain;
+
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
+
+
+  public UserDomain(CustomRepository<User, Long> repository, LogHelper logHelper, Transformer transformer, AccountRepository accountRepository, UserRepository userRepository, RoleDomain roleDomain) {
+    super(repository, logHelper, transformer);
+    Assert.defaultNotNull(accountRepository);
+    Assert.defaultNotNull(userRepository);
+    Assert.defaultNotNull(roleDomain);
+    this.accountRepository = accountRepository;
+    this.userRepository = userRepository;
+    this.roleDomain = roleDomain;
+  }
 
   @Transactional public UserVO create(UserParam param, User currentUser) throws Exception {
     return po2Vo(createReturnPo(param, currentUser));
@@ -108,14 +127,6 @@ import org.springframework.transaction.annotation.Transactional;
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
-
-  @Autowired private AccountRepository accountRepository;
-
-  @Autowired private UserRepository userRepository;
-
-  @Autowired private RoleDomain roleDomain;
-
-  @Autowired private Transformer transformer;
 
   private User param2Po(UserParam param, User user, User currentUser) throws Exception {
     user = transformer.param2PO(User.class, param, user, currentUser);

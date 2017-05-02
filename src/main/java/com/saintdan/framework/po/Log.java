@@ -61,6 +61,20 @@ import org.springframework.data.annotation.CreatedDate;
 
   public Log() {}
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("Log{");
+    sb.append("id=").append(id);
+    sb.append(", ip='").append(ip).append('\'');
+    sb.append(", userId=").append(userId);
+    sb.append(", username='").append(username).append('\'');
+    sb.append(", clientId='").append(clientId).append('\'');
+    sb.append(", accessResource='").append(accessResource).append('\'');
+    sb.append(", type=").append(type);
+    sb.append(", createdDate=").append(createdDate);
+    sb.append('}');
+    return sb.toString();
+  }
+
   public Long getId() {
     return id;
   }

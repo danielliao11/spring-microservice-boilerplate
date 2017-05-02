@@ -8,6 +8,7 @@ import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.GrantType;
 import com.saintdan.framework.param.LoginParam;
 import com.saintdan.framework.service.LoginService;
+import com.saintdan.framework.tools.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +30,23 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("Login") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.OPEN + ResourceURL.LOGIN)
 public class LoginController {
 
+  private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+
+  private final LoginService loginService;
+
+  private final ResultHelper resultHelper;
+
+  private final ValidateHelper validateHelper;
+
+  @Autowired public LoginController(LoginService loginService, ResultHelper resultHelper, ValidateHelper validateHelper) {
+    Assert.defaultNotNull(loginService);
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    this.loginService = loginService;
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
+  }
+
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Login", httpMethod = "POST", response = OAuth2AccessToken.class)
   @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
@@ -48,14 +66,6 @@ public class LoginController {
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
-  private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
-  @Autowired private LoginService loginService;
-
-  @Autowired private ResultHelper resultHelper;
-
-  @Autowired private ValidateHelper validateHelper;
 
 }
 

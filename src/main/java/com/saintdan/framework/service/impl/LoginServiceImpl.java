@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * Implements the {@link LoginService}
@@ -24,6 +25,17 @@ import org.springframework.stereotype.Service;
  */
 @Service public class LoginServiceImpl implements LoginService {
 
+  private final TokenEndpoint tokenEndpoint;
+
+  private final Environment environment;
+
+  @Autowired public LoginServiceImpl(TokenEndpoint tokenEndpoint, Environment environment) {
+    Assert.notNull(tokenEndpoint, "tokenEndpoint is null");
+    Assert.notNull(environment, "environment is null");
+    this.tokenEndpoint = tokenEndpoint;
+    this.environment = environment;
+  }
+
   @Override public ResponseEntity login(LoginParam param, HttpServletRequest request) throws Exception {
     return execute(param, request);
   }
@@ -31,10 +43,6 @@ import org.springframework.stereotype.Service;
   @Override public ResponseEntity refresh(LoginParam param, HttpServletRequest request) throws Exception {
     return execute(param, request);
   }
-
-  @Autowired private TokenEndpoint tokenEndpoint;
-
-  @Autowired private Environment environment;
 
   private static final String AUTHORITY_PROP = "client.authorities";
 

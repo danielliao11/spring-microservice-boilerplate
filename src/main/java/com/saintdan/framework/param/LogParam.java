@@ -32,6 +32,17 @@ public class LogParam implements Serializable {
     this.accessResource = accessResource;
   }
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer(super.toString());
+    sb.append("LogParam{");
+    sb.append("ip='").append(ip).append('\'');
+    sb.append(", type=").append(type);
+    sb.append(", clientId='").append(clientId).append('\'');
+    sb.append(", accessResource='").append(accessResource).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public String getIp() {
     return ip;
   }

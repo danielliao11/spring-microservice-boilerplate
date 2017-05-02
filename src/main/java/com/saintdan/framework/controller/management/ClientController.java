@@ -11,6 +11,7 @@ import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.vo.ClientVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -38,9 +39,22 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("Client") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.CLIENTS)
 public class ClientController {
 
-  // ------------------------
-  // PUBLIC METHODS
-  // ------------------------
+  private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
+
+  private final ResultHelper resultHelper;
+
+  private final ValidateHelper validateHelper;
+
+  private final ClientDomain clientDomain;
+
+  @Autowired public ClientController(ResultHelper resultHelper, ValidateHelper validateHelper, ClientDomain clientDomain) {
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    Assert.defaultNotNull(clientDomain);
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
+    this.clientDomain = clientDomain;
+  }
 
   /**
    * Create new {@link com.saintdan.framework.po.Client}.
@@ -148,15 +162,4 @@ public class ClientController {
     }
   }
 
-  // ------------------------
-  // PRIVATE FIELDS
-  // ------------------------
-
-  private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
-
-  @Autowired private ResultHelper resultHelper;
-
-  @Autowired private ValidateHelper validateHelper;
-
-  @Autowired private ClientDomain clientDomain;
 }

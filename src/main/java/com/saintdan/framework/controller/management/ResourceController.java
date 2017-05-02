@@ -12,6 +12,7 @@ import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.vo.ResourceVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -39,9 +40,22 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api("Resource") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.RESOURCES) public class ResourceController {
 
-  // ------------------------
-  // PUBLIC METHODS
-  // ------------------------
+  private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
+
+  private final ResultHelper resultHelper;
+
+  private final ValidateHelper validateHelper;
+
+  private final ResourceDomain resourceDomain;
+
+  @Autowired public ResourceController(ResultHelper resultHelper, ValidateHelper validateHelper, ResourceDomain resourceDomain) {
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    Assert.defaultNotNull(resourceDomain);
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
+    this.resourceDomain = resourceDomain;
+  }
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = ResourceVO.class)
@@ -144,15 +158,4 @@ import springfox.documentation.annotations.ApiIgnore;
     }
   }
 
-  // ------------------------
-  // PRIVATE FIELDS
-  // ------------------------
-
-  private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
-
-  @Autowired private ResultHelper resultHelper;
-
-  @Autowired private ValidateHelper validateHelper;
-
-  @Autowired private ResourceDomain resourceDomain;
 }

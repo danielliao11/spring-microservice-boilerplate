@@ -63,6 +63,25 @@ public class ClientParam extends BaseParam {
 
   private String publicKey;
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer(super.toString());
+    sb.append("ClientParam{");
+    sb.append("id=").append(id);
+    sb.append(", clientIdAlias='").append(clientIdAlias).append('\'');
+    sb.append(", resourceIdStr='").append(resourceIdStr).append('\'');
+    sb.append(", clientSecretAlias='").append(clientSecretAlias).append('\'');
+    sb.append(", scopeStr='").append(scopeStr).append('\'');
+    sb.append(", authorizedGrantTypeStr='").append(authorizedGrantTypeStr).append('\'');
+    sb.append(", registeredRedirectUriStr='").append(registeredRedirectUriStr).append('\'');
+    sb.append(", authoritiesStr='").append(authoritiesStr).append('\'');
+    sb.append(", accessTokenValiditySecondsAlias=").append(accessTokenValiditySecondsAlias);
+    sb.append(", refreshTokenValiditySecondsAlias=").append(refreshTokenValiditySecondsAlias);
+    sb.append(", additionalInformationStr='").append(additionalInformationStr).append('\'');
+    sb.append(", publicKey='").append(publicKey).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public ClientParam() {}
 
   public ClientParam(Long id) {
