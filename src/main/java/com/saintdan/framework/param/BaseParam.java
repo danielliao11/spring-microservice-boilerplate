@@ -50,6 +50,16 @@ public class BaseParam implements Serializable {
   @ApiModelProperty(hidden = true)
   private UserDetails currentUser;
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("BaseParam{");
+    sb.append("pageNo=").append(pageNo);
+    sb.append(", pageSize=").append(pageSize);
+    sb.append(", sortBy='").append(sortBy).append('\'');
+    sb.append(", sign='").append(sign).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public Integer getPageNo() {
     return pageNo;
   }

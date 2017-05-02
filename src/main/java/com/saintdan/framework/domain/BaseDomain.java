@@ -9,6 +9,7 @@ import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.CustomRepository;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.BeanUtils;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import java.io.Serializable;
@@ -33,9 +34,24 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public abstract class BaseDomain<T, ID extends Serializable> {
 
+  private final CustomRepository<T, ID> repository;
+
+  protected final LogHelper logHelper;
+
+  protected final Transformer transformer;
+
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
+
+  @Autowired public BaseDomain(CustomRepository<T, ID> repository, LogHelper logHelper, Transformer transformer) {
+    Assert.defaultNotNull(repository);
+    Assert.defaultNotNull(logHelper);
+    Assert.defaultNotNull(transformer);
+    this.repository = repository;
+    this.logHelper = logHelper;
+    this.transformer = transformer;
+  }
 
   /**
    * Create <T> by param.
@@ -263,17 +279,6 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   public T findById(Long id) {
     return repository.findById((ID) id).orElse(null);
   }
-
-  // --------------------------
-  // PRIVATE FIELDS AND METHODS
-  // --------------------------
-
-  @Autowired private CustomRepository<T, ID> repository;
-
-  @Autowired protected LogHelper logHelper;
-
-  @Autowired private Transformer transformer;
-
 
   /**
    * Get class of <T>

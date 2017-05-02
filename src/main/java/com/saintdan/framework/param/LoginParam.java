@@ -24,10 +24,14 @@ public class LoginParam extends BaseParam {
   @NotNullField(grant = GrantType.REFRESH_TOKEN, message = "refresh token cannot be null.")
   private String refreshToken;
 
-  public LoginParam() {}
-
-  public LoginParam(String refreshToken) {
-    this.refreshToken = refreshToken;
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer(super.toString());
+    sb.append("LoginParam{");
+    sb.append("usr='").append(usr).append('\'');
+    sb.append(", pwd='").append(pwd).append('\'');
+    sb.append(", refreshToken='").append(refreshToken).append('\'');
+    sb.append('}');
+    return sb.toString();
   }
 
   public String getUsr() {

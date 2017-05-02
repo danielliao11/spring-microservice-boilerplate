@@ -135,8 +135,7 @@ public class Client implements Serializable {
   @Column(nullable = false, length = 5000)
   private String publicKey;
 
-  public Client() {
-  }
+  public Client() {}
 
   public Client(Client client) {
     super();
@@ -150,6 +149,30 @@ public class Client implements Serializable {
     this.accessTokenValiditySecondsAlias = client.getAccessTokenValiditySecondsAlias();
     this.refreshTokenValiditySecondsAlias = client.getRefreshTokenValiditySecondsAlias();
     this.additionalInformationStr = client.getAdditionalInformationStr();
+  }
+
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("Client{");
+    sb.append("id=").append(id);
+    sb.append(", clientIdAlias='").append(clientIdAlias).append('\'');
+    sb.append(", resourceIdStr='").append(resourceIdStr).append('\'');
+    sb.append(", clientSecretAlias='").append(clientSecretAlias).append('\'');
+    sb.append(", scopeStr='").append(scopeStr).append('\'');
+    sb.append(", authorizedGrantTypeStr='").append(authorizedGrantTypeStr).append('\'');
+    sb.append(", registeredRedirectUriStr='").append(registeredRedirectUriStr).append('\'');
+    sb.append(", authoritiesStr='").append(authoritiesStr).append('\'');
+    sb.append(", accessTokenValiditySecondsAlias=").append(accessTokenValiditySecondsAlias);
+    sb.append(", refreshTokenValiditySecondsAlias=").append(refreshTokenValiditySecondsAlias);
+    sb.append(", additionalInformationStr='").append(additionalInformationStr).append('\'');
+    sb.append(", validFlag=").append(validFlag);
+    sb.append(", createdDate=").append(createdDate);
+    sb.append(", createdBy=").append(createdBy);
+    sb.append(", lastModifiedDate=").append(lastModifiedDate);
+    sb.append(", lastModifiedBy=").append(lastModifiedBy);
+    sb.append(", version=").append(version);
+    sb.append(", publicKey='").append(publicKey).append('\'');
+    sb.append('}');
+    return sb.toString();
   }
 
   public Long getId() {

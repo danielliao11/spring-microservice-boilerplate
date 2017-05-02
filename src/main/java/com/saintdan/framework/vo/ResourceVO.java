@@ -19,6 +19,15 @@ public class ResourceVO implements Serializable {
 
   private String description;
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("ResourceVO{");
+    sb.append("id=").append(id);
+    sb.append(", name='").append(name).append('\'');
+    sb.append(", description='").append(description).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public Long getId() {
     return id;
   }

@@ -3,6 +3,7 @@ package com.saintdan.framework.config.custom;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.UserRepository;
+import com.saintdan.framework.tools.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +19,12 @@ import org.springframework.stereotype.Service;
  */
 @Service public class CustomUserDetailsService implements UserDetailsService {
 
-  @Autowired private UserRepository userRepository;
+  private final UserRepository userRepository;
+
+  @Autowired public CustomUserDetailsService(UserRepository userRepository) {
+    Assert.defaultNotNull(userRepository);
+    this.userRepository = userRepository;
+  }
 
   @Override public UserDetails loadUserByUsername(String usr) throws UsernameNotFoundException {
     User user = userRepository.findByUsrAndValidFlag(usr, ValidFlag.VALID).orElseThrow(

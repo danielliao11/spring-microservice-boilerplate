@@ -5,6 +5,7 @@ import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Client;
 import com.saintdan.framework.repo.ClientRepository;
+import com.saintdan.framework.tools.Assert;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Service;
   private final ClientRepository clientRepository;
 
   @Autowired public CustomClientDetailsService(ClientRepository clientRepository) {
+    Assert.defaultNotNull(clientRepository);
     this.clientRepository = clientRepository;
   }
 

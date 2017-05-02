@@ -49,6 +49,19 @@ public class UserParam extends BaseParam {
     this.usr = usr;
   }
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer(super.toString());
+    sb.append("UserParam{");
+    sb.append("id=").append(id);
+    sb.append(", usr='").append(usr).append('\'');
+    sb.append(", pwd='").append(pwd).append('\'');
+    sb.append(", name='").append(name).append('\'');
+    sb.append(", description='").append(description).append('\'');
+    sb.append(", roleIds='").append(roleIds).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public Long getId() {
     return id;
   }

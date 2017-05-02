@@ -1,5 +1,6 @@
 package com.saintdan.framework.domain;
 
+import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
@@ -9,12 +10,13 @@ import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.repo.CustomRepository;
 import com.saintdan.framework.repo.ResourceRepository;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ResourceVO;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +29,18 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service @Transactional(readOnly = true) public class ResourceDomain extends BaseDomain<Resource, Long> {
 
+  private final ResourceRepository resourceRepository;
+
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
+
+
+  public ResourceDomain(CustomRepository<Resource, Long> repository, LogHelper logHelper, Transformer transformer, ResourceRepository resourceRepository) {
+    super(repository, logHelper, transformer);
+    Assert.defaultNotNull(resourceRepository);
+    this.resourceRepository = resourceRepository;
+  }
 
   @Transactional public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
     nameExists(param.getName());
@@ -71,10 +82,6 @@ import org.springframework.transaction.annotation.Transactional;
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
-
-  @Autowired private ResourceRepository resourceRepository;
-
-  @Autowired private Transformer transformer;
 
   private Resource resourceParam2PO(ResourceParam param, Resource resource, User currentUser) throws Exception {
     return transformer.param2PO(getClassT(), param, resource, currentUser);

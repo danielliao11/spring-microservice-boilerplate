@@ -226,3 +226,7 @@
   - [ADD] Add login and refresh token api.
   - [MOD] Change params of API to json.
   - [FIX] Fix client, user, role, resource bugs.
+  
+- 0.18.1.RELEASE
+  - [MOD] Modify field injection to constructor injection.
+  - [MOD] Override POJO toString().

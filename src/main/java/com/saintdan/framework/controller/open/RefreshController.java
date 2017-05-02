@@ -8,13 +8,13 @@ import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.GrantType;
 import com.saintdan.framework.param.LoginParam;
 import com.saintdan.framework.service.LoginService;
+import com.saintdan.framework.tools.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,6 +33,23 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api("refresh token") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.OPEN + ResourceURL.REFRESH)
 public class RefreshController {
+
+  private static final Logger logger = LoggerFactory.getLogger(RefreshController.class);
+
+  private final LoginService service;
+
+  private final ResultHelper resultHelper;
+
+  private final ValidateHelper validateHelper;
+
+  public RefreshController(LoginService service, ResultHelper resultHelper, ValidateHelper validateHelper) {
+    Assert.defaultNotNull(service);
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    this.service = service;
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
+  }
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "refresh token", httpMethod = "POST", response = OAuth2AccessToken.class)
@@ -53,17 +70,5 @@ public class RefreshController {
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
-  // ------------------------
-  // PRIVATE FIELDS
-  // ------------------------
-
-  private static final Logger logger = LoggerFactory.getLogger(RefreshController.class);
-
-  @Autowired private LoginService service;
-
-  @Autowired private ResultHelper resultHelper;
-
-  @Autowired private ValidateHelper validateHelper;
 
 }

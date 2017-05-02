@@ -22,6 +22,15 @@ public class RoleVO implements Serializable {
 
   private Set<ResourceVO> resources;
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("RoleVO{");
+    sb.append("id=").append(id);
+    sb.append(", name='").append(name).append('\'');
+    sb.append(", description='").append(description).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public Long getId() {
     return id;
   }

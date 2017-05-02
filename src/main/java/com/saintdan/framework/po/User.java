@@ -142,6 +142,29 @@ public class User implements Serializable {
     this.roles = user.getRoles();
   }
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("User{");
+    sb.append("id=").append(id);
+    sb.append(", name='").append(name).append('\'');
+    sb.append(", usr='").append(usr).append('\'');
+    sb.append(", pwd='").append(pwd).append('\'');
+    sb.append(", isAccountNonExpiredAlias=").append(isAccountNonExpiredAlias);
+    sb.append(", isAccountNonLockedAlias=").append(isAccountNonLockedAlias);
+    sb.append(", isCredentialsNonExpiredAlias=").append(isCredentialsNonExpiredAlias);
+    sb.append(", isEnabledAlias=").append(isEnabledAlias);
+    sb.append(", validFlag=").append(validFlag);
+    sb.append(", description='").append(description).append('\'');
+    sb.append(", lastLoginTime=").append(lastLoginTime);
+    sb.append(", ip='").append(ip).append('\'');
+    sb.append(", createdDate=").append(createdDate);
+    sb.append(", createdBy=").append(createdBy);
+    sb.append(", lastModifiedDate=").append(lastModifiedDate);
+    sb.append(", lastModifiedBy=").append(lastModifiedBy);
+    sb.append(", version=").append(version);
+    sb.append('}');
+    return sb.toString();
+  }
+
   public Long getId() {
     return id;
   }
