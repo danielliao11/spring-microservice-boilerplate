@@ -2,6 +2,7 @@ package com.saintdan.framework.service.impl;
 
 import com.saintdan.framework.param.LoginParam;
 import com.saintdan.framework.service.LoginService;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.LoginUtils;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 /**
  * Implements the {@link LoginService}
@@ -30,8 +30,8 @@ import org.springframework.util.Assert;
   private final Environment environment;
 
   @Autowired public LoginServiceImpl(TokenEndpoint tokenEndpoint, Environment environment) {
-    Assert.notNull(tokenEndpoint, "tokenEndpoint is null");
-    Assert.notNull(environment, "environment is null");
+    Assert.defaultNotNull(tokenEndpoint);
+    Assert.defaultNotNull(environment);
     this.tokenEndpoint = tokenEndpoint;
     this.environment = environment;
   }

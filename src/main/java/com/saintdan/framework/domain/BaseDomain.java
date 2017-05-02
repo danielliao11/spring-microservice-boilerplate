@@ -44,7 +44,6 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   // PUBLIC METHODS
   // ------------------------
 
-
   @Autowired public BaseDomain(CustomRepository<T, ID> repository, LogHelper logHelper, Transformer transformer) {
     Assert.defaultNotNull(repository);
     Assert.defaultNotNull(logHelper);
