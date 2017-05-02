@@ -3,6 +3,7 @@ package com.saintdan.framework.domain;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
@@ -56,6 +57,15 @@ import org.springframework.transaction.annotation.Transactional;
 
   public Resource findById(Long id) {
     return resourceRepository.findById(id).orElse(null);
+  }
+
+  @Transactional @Override public void deepDelete(Long id, User currentUser) throws Exception {
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+    Resource resource = findById(id);
+    if (resource == null) {
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+    }
+    resourceRepository.delete(resource);
   }
 
   // --------------------------
