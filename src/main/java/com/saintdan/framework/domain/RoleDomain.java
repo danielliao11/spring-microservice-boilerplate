@@ -35,10 +35,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service @Transactional(readOnly = true) public class RoleDomain extends BaseDomain<Role, Long> {
 
-  private final RoleRepository roleRepository;
-
-  private final ResourceDomain resourceDomain;
-
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
@@ -115,6 +111,10 @@ import org.springframework.transaction.annotation.Transactional;
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
+
+  private final RoleRepository roleRepository;
+
+  private final ResourceDomain resourceDomain;
 
   private Role param2Po(RoleParam param, Role role, User currentUser) throws Exception {
     transformer.param2PO(getClassT(), param, role, currentUser);

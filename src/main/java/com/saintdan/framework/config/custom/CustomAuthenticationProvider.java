@@ -35,39 +35,6 @@ import org.springframework.stereotype.Service;
  */
 @Service public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-  private final UserRepository userRepository;
-
-  private final OauthAccessTokenRepository accessTokenRepository;
-
-  private final OauthRefreshTokenRepository refreshTokenRepository;
-
-  private final HttpServletRequest request;
-
-  private final UserDomain userDomain;
-
-  private final LogHelper logHelper;
-
-  private final CustomPasswordEncoder customPasswordEncoder;
-
-  private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
-
-  @Autowired public CustomAuthenticationProvider(UserRepository userRepository, OauthAccessTokenRepository accessTokenRepository, OauthRefreshTokenRepository refreshTokenRepository, HttpServletRequest request, UserDomain userDomain, LogHelper logHelper, CustomPasswordEncoder customPasswordEncoder) {
-    Assert.defaultNotNull(userRepository);
-    Assert.defaultNotNull(accessTokenRepository);
-    Assert.defaultNotNull(refreshTokenRepository);
-    Assert.defaultNotNull(request);
-    Assert.defaultNotNull(userDomain);
-    Assert.defaultNotNull(logHelper);
-    Assert.defaultNotNull(customPasswordEncoder);
-    this.userRepository = userRepository;
-    this.accessTokenRepository = accessTokenRepository;
-    this.refreshTokenRepository = refreshTokenRepository;
-    this.request = request;
-    this.userDomain = userDomain;
-    this.logHelper = logHelper;
-    this.customPasswordEncoder = customPasswordEncoder;
-  }
-
   @Override public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
     // Find user.
@@ -124,4 +91,36 @@ import org.springframework.stereotype.Service;
     return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
   }
 
+  private final UserRepository userRepository;
+
+  private final OauthAccessTokenRepository accessTokenRepository;
+
+  private final OauthRefreshTokenRepository refreshTokenRepository;
+
+  private final HttpServletRequest request;
+
+  private final UserDomain userDomain;
+
+  private final LogHelper logHelper;
+
+  private final CustomPasswordEncoder customPasswordEncoder;
+
+  private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
+
+  @Autowired public CustomAuthenticationProvider(UserRepository userRepository, OauthAccessTokenRepository accessTokenRepository, OauthRefreshTokenRepository refreshTokenRepository, HttpServletRequest request, UserDomain userDomain, LogHelper logHelper, CustomPasswordEncoder customPasswordEncoder) {
+    Assert.defaultNotNull(userRepository);
+    Assert.defaultNotNull(accessTokenRepository);
+    Assert.defaultNotNull(refreshTokenRepository);
+    Assert.defaultNotNull(request);
+    Assert.defaultNotNull(userDomain);
+    Assert.defaultNotNull(logHelper);
+    Assert.defaultNotNull(customPasswordEncoder);
+    this.userRepository = userRepository;
+    this.accessTokenRepository = accessTokenRepository;
+    this.refreshTokenRepository = refreshTokenRepository;
+    this.request = request;
+    this.userDomain = userDomain;
+    this.logHelper = logHelper;
+    this.customPasswordEncoder = customPasswordEncoder;
+  }
 }

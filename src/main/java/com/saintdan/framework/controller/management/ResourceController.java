@@ -40,23 +40,6 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api("Resource") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.RESOURCES) public class ResourceController {
 
-  private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
-
-  private final ResultHelper resultHelper;
-
-  private final ValidateHelper validateHelper;
-
-  private final ResourceDomain resourceDomain;
-
-  @Autowired public ResourceController(ResultHelper resultHelper, ValidateHelper validateHelper, ResourceDomain resourceDomain) {
-    Assert.defaultNotNull(resultHelper);
-    Assert.defaultNotNull(validateHelper);
-    Assert.defaultNotNull(resourceDomain);
-    this.resultHelper = resultHelper;
-    this.validateHelper = validateHelper;
-    this.resourceDomain = resourceDomain;
-  }
-
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = ResourceVO.class)
   @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
@@ -156,6 +139,23 @@ import springfox.documentation.annotations.ApiIgnore;
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
+
+  private final ResultHelper resultHelper;
+
+  private final ValidateHelper validateHelper;
+
+  private final ResourceDomain resourceDomain;
+
+  @Autowired public ResourceController(ResultHelper resultHelper, ValidateHelper validateHelper, ResourceDomain resourceDomain) {
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    Assert.defaultNotNull(resourceDomain);
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
+    this.resourceDomain = resourceDomain;
   }
 
 }

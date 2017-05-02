@@ -29,8 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service @Transactional(readOnly = true) public class ResourceDomain extends BaseDomain<Resource, Long> {
 
-  private final ResourceRepository resourceRepository;
-
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
@@ -82,6 +80,8 @@ import org.springframework.transaction.annotation.Transactional;
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
+
+  private final ResourceRepository resourceRepository;
 
   private Resource resourceParam2PO(ResourceParam param, Resource resource, User currentUser) throws Exception {
     return transformer.param2PO(getClassT(), param, resource, currentUser);

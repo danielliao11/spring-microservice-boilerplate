@@ -24,10 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service @Transactional(readOnly = true) public class LogDomain {
 
-  private final Transformer transformer;
-
-  private final LogRepository logRepository;
-
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
@@ -64,6 +60,10 @@ import org.springframework.transaction.annotation.Transactional;
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
+
+  private final Transformer transformer;
+
+  private final LogRepository logRepository;
 
   private Log logParam2PO(LogParam param, User currentUser) {
     Log log = new Log();

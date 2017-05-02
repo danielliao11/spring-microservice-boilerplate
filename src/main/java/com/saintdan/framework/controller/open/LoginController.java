@@ -30,23 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("Login") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.OPEN + ResourceURL.LOGIN)
 public class LoginController {
 
-  private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
-  private final LoginService loginService;
-
-  private final ResultHelper resultHelper;
-
-  private final ValidateHelper validateHelper;
-
-  @Autowired public LoginController(LoginService loginService, ResultHelper resultHelper, ValidateHelper validateHelper) {
-    Assert.defaultNotNull(loginService);
-    Assert.defaultNotNull(resultHelper);
-    Assert.defaultNotNull(validateHelper);
-    this.loginService = loginService;
-    this.resultHelper = resultHelper;
-    this.validateHelper = validateHelper;
-  }
-
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Login", httpMethod = "POST", response = OAuth2AccessToken.class)
   @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
@@ -65,6 +48,23 @@ public class LoginController {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+
+  private final LoginService loginService;
+
+  private final ResultHelper resultHelper;
+
+  private final ValidateHelper validateHelper;
+
+  @Autowired public LoginController(LoginService loginService, ResultHelper resultHelper, ValidateHelper validateHelper) {
+    Assert.defaultNotNull(loginService);
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    this.loginService = loginService;
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
   }
 
 }

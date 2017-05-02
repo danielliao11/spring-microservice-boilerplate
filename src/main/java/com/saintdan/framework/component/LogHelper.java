@@ -20,10 +20,6 @@ import org.springframework.stereotype.Component;
  */
 @Component public class LogHelper {
 
-  private final HttpServletRequest request;
-
-  private final LogDomain logDomain;
-
   public LogHelper(HttpServletRequest request, LogDomain logDomain) {
     Assert.defaultNotNull(request);
     Assert.defaultNotNull(logDomain);
@@ -40,5 +36,9 @@ import org.springframework.stereotype.Component;
     // Log users' operations.
     logDomain.create(new LogParam(ip, operationType, clientId, resource), currentUser);
   }
+
+  private final HttpServletRequest request;
+
+  private final LogDomain logDomain;
 
 }

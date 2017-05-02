@@ -37,16 +37,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service @Transactional(readOnly = true) public class UserDomain extends BaseDomain<User, Long> {
 
-  private final AccountRepository accountRepository;
-
-  private final UserRepository userRepository;
-
-  private final RoleDomain roleDomain;
-
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
-
 
   public UserDomain(CustomRepository<User, Long> repository, LogHelper logHelper, Transformer transformer, AccountRepository accountRepository, UserRepository userRepository, RoleDomain roleDomain) {
     super(repository, logHelper, transformer);
@@ -127,6 +120,12 @@ import org.springframework.transaction.annotation.Transactional;
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
+
+  private final AccountRepository accountRepository;
+
+  private final UserRepository userRepository;
+
+  private final RoleDomain roleDomain;
 
   private User param2Po(UserParam param, User user, User currentUser) throws Exception {
     user = transformer.param2PO(User.class, param, user, currentUser);

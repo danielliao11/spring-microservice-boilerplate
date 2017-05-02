@@ -39,23 +39,6 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("Client") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.CLIENTS)
 public class ClientController {
 
-  private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
-
-  private final ResultHelper resultHelper;
-
-  private final ValidateHelper validateHelper;
-
-  private final ClientDomain clientDomain;
-
-  @Autowired public ClientController(ResultHelper resultHelper, ValidateHelper validateHelper, ClientDomain clientDomain) {
-    Assert.defaultNotNull(resultHelper);
-    Assert.defaultNotNull(validateHelper);
-    Assert.defaultNotNull(clientDomain);
-    this.resultHelper = resultHelper;
-    this.validateHelper = validateHelper;
-    this.clientDomain = clientDomain;
-  }
-
   /**
    * Create new {@link com.saintdan.framework.po.Client}.
    *
@@ -160,6 +143,23 @@ public class ClientController {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
+
+  private final ResultHelper resultHelper;
+
+  private final ValidateHelper validateHelper;
+
+  private final ClientDomain clientDomain;
+
+  @Autowired public ClientController(ResultHelper resultHelper, ValidateHelper validateHelper, ClientDomain clientDomain) {
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    Assert.defaultNotNull(clientDomain);
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
+    this.clientDomain = clientDomain;
   }
 
 }

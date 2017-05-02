@@ -19,6 +19,23 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
  */
 @Configuration @EnableAuthorizationServer public class CustomAuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
+  @Override public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    endpoints
+        .tokenStore(tokenStore())
+        .authenticationManager(authenticationManager)
+        .userDetailsService(userDetailsService);
+  }
+
+  @Override public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+    // Use JDBC client.
+    clients.withClientDetails(clientDetailsService);
+  }
+
+  // Token store type.
+  @Bean public JdbcTokenStore tokenStore() {
+    return new JdbcTokenStore(dataSource);
+  }
+
   private final DataSource dataSource;
 
   private final AuthenticationManager authenticationManager;
@@ -38,22 +55,4 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
     this.clientDetailsService = clientDetailsService;
     this.userDetailsService = userDetailsService;
   }
-
-  @Override public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-    endpoints
-        .tokenStore(tokenStore())
-        .authenticationManager(authenticationManager)
-        .userDetailsService(userDetailsService);
-  }
-
-  @Override public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-    // Use JDBC client.
-    clients.withClientDetails(clientDetailsService);
-  }
-
-  // Token store type.
-  @Bean public JdbcTokenStore tokenStore() {
-    return new JdbcTokenStore(dataSource);
-  }
-
 }

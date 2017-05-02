@@ -34,23 +34,6 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("refresh token") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.OPEN + ResourceURL.REFRESH)
 public class RefreshController {
 
-  private static final Logger logger = LoggerFactory.getLogger(RefreshController.class);
-
-  private final LoginService service;
-
-  private final ResultHelper resultHelper;
-
-  private final ValidateHelper validateHelper;
-
-  public RefreshController(LoginService service, ResultHelper resultHelper, ValidateHelper validateHelper) {
-    Assert.defaultNotNull(service);
-    Assert.defaultNotNull(resultHelper);
-    Assert.defaultNotNull(validateHelper);
-    this.service = service;
-    this.resultHelper = resultHelper;
-    this.validateHelper = validateHelper;
-  }
-
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "refresh token", httpMethod = "POST", response = OAuth2AccessToken.class)
   @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
@@ -69,6 +52,23 @@ public class RefreshController {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  private static final Logger logger = LoggerFactory.getLogger(RefreshController.class);
+
+  private final LoginService service;
+
+  private final ResultHelper resultHelper;
+
+  private final ValidateHelper validateHelper;
+
+  public RefreshController(LoginService service, ResultHelper resultHelper, ValidateHelper validateHelper) {
+    Assert.defaultNotNull(service);
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    this.service = service;
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
   }
 
 }

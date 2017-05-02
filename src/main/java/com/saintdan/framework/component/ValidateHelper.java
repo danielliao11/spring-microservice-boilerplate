@@ -25,8 +25,6 @@ import org.springframework.stereotype.Component;
  */
 @Component public class ValidateHelper {
 
-  private final ResultHelper resultHelper;
-
   @Autowired public ValidateHelper(ResultHelper resultHelper) {
     Assert.defaultNotNull(resultHelper);
     this.resultHelper = resultHelper;
@@ -109,5 +107,7 @@ import org.springframework.stereotype.Component;
     }
     return new ResponseEntity(HttpStatus.OK);
   }
+
+  private final ResultHelper resultHelper;
 
 }

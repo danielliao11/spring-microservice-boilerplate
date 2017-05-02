@@ -32,8 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service @Transactional(readOnly = true) public class ClientDomain extends BaseDomain<Client, Long> {
 
-  private final ClientRepository clientRepository;
-
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
@@ -76,6 +74,8 @@ import org.springframework.transaction.annotation.Transactional;
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
+
+  private final ClientRepository clientRepository;
 
   private final static String CLIENT_ID = "clientId";
 

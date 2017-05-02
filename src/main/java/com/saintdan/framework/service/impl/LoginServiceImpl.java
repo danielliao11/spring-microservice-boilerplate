@@ -25,17 +25,6 @@ import org.springframework.stereotype.Service;
  */
 @Service public class LoginServiceImpl implements LoginService {
 
-  private final TokenEndpoint tokenEndpoint;
-
-  private final Environment environment;
-
-  @Autowired public LoginServiceImpl(TokenEndpoint tokenEndpoint, Environment environment) {
-    Assert.defaultNotNull(tokenEndpoint);
-    Assert.defaultNotNull(environment);
-    this.tokenEndpoint = tokenEndpoint;
-    this.environment = environment;
-  }
-
   @Override public ResponseEntity login(LoginParam param, HttpServletRequest request) throws Exception {
     return execute(param, request);
   }
@@ -51,5 +40,16 @@ import org.springframework.stereotype.Service;
     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(LoginUtils.getClientId(request), "", CLIENT_AUTHORITIES);
     Map<String, String> params = LoginUtils.getParams(param);
     return tokenEndpoint.postAccessToken(token, params);
+  }
+
+  private final TokenEndpoint tokenEndpoint;
+
+  private final Environment environment;
+
+  @Autowired public LoginServiceImpl(TokenEndpoint tokenEndpoint, Environment environment) {
+    Assert.defaultNotNull(tokenEndpoint);
+    Assert.defaultNotNull(environment);
+    this.tokenEndpoint = tokenEndpoint;
+    this.environment = environment;
   }
 }

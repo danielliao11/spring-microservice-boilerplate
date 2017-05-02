@@ -34,12 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public abstract class BaseDomain<T, ID extends Serializable> {
 
-  private final CustomRepository<T, ID> repository;
-
-  protected final LogHelper logHelper;
-
-  protected final Transformer transformer;
-
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
@@ -291,6 +285,12 @@ public abstract class BaseDomain<T, ID extends Serializable> {
     Type type = getClass().getGenericSuperclass();
     return (Class) ((ParameterizedType) type).getActualTypeArguments()[0];
   }
+
+  private final CustomRepository<T, ID> repository;
+
+  protected final LogHelper logHelper;
+
+  protected final Transformer transformer;
 
   /**
    * Set invalid flag
