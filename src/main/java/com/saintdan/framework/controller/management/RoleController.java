@@ -12,6 +12,7 @@ import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.vo.RoleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -38,10 +39,6 @@ import springfox.documentation.annotations.ApiIgnore;
  * @since JDK1.8
  */
 @Api("Role") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.ROLES) public class RoleController {
-
-  // ------------------------
-  // PUBLIC METHODS
-  // ------------------------
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = RoleVO.class)
@@ -144,15 +141,21 @@ import springfox.documentation.annotations.ApiIgnore;
     }
   }
 
-  // ------------------------
-  // PRIVATE FIELDS
-  // ------------------------
-
   private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
 
-  @Autowired private ResultHelper resultHelper;
+  private final ResultHelper resultHelper;
 
-  @Autowired private ValidateHelper validateHelper;
+  private final ValidateHelper validateHelper;
 
-  @Autowired private RoleDomain roleDomain;
+  private final RoleDomain roleDomain;
+
+  @Autowired public RoleController(ResultHelper resultHelper, ValidateHelper validateHelper, RoleDomain roleDomain) {
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    Assert.defaultNotNull(roleDomain);
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
+    this.roleDomain = roleDomain;
+  }
+
 }

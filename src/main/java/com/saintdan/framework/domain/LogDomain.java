@@ -5,6 +5,7 @@ import com.saintdan.framework.param.LogParam;
 import com.saintdan.framework.po.Log;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.LogRepository;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.vo.LogVO;
 import java.util.List;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +27,14 @@ import org.springframework.transaction.annotation.Transactional;
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
+
+
+  @Autowired public LogDomain(Transformer transformer, LogRepository logRepository) {
+    Assert.defaultNotNull(transformer);
+    Assert.defaultNotNull(logRepository);
+    this.transformer = transformer;
+    this.logRepository = logRepository;
+  }
 
   @Transactional public LogVO create(LogParam param, User currentUser) throws Exception {
     return transformer.po2VO(LogVO.class, logRepository.save(logParam2PO(param, currentUser)));
@@ -52,11 +61,9 @@ import org.springframework.transaction.annotation.Transactional;
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired private Transformer transformer;
+  private final Transformer transformer;
 
-  @Autowired private LogRepository logRepository;
-
-  private final static String LOG = "log";
+  private final LogRepository logRepository;
 
   private Log logParam2PO(LogParam param, User currentUser) {
     Log log = new Log();

@@ -1,19 +1,22 @@
 package com.saintdan.framework.domain;
 
+import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.repo.CustomRepository;
 import com.saintdan.framework.repo.ResourceRepository;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ResourceVO;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +32,13 @@ import org.springframework.transaction.annotation.Transactional;
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
+
+
+  public ResourceDomain(CustomRepository<Resource, Long> repository, LogHelper logHelper, Transformer transformer, ResourceRepository resourceRepository) {
+    super(repository, logHelper, transformer);
+    Assert.defaultNotNull(resourceRepository);
+    this.resourceRepository = resourceRepository;
+  }
 
   @Transactional public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
     nameExists(param.getName());
@@ -58,13 +68,20 @@ import org.springframework.transaction.annotation.Transactional;
     return resourceRepository.findById(id).orElse(null);
   }
 
+  @Transactional @Override public void deepDelete(Long id, User currentUser) throws Exception {
+    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+    Resource resource = findById(id);
+    if (resource == null) {
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+    }
+    resourceRepository.delete(resource);
+  }
+
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired private ResourceRepository resourceRepository;
-
-  @Autowired private Transformer transformer;
+  private final ResourceRepository resourceRepository;
 
   private Resource resourceParam2PO(ResourceParam param, Resource resource, User currentUser) throws Exception {
     return transformer.param2PO(getClassT(), param, resource, currentUser);

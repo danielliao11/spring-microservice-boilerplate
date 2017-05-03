@@ -8,13 +8,13 @@ import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.GrantType;
 import com.saintdan.framework.param.LoginParam;
 import com.saintdan.framework.service.LoginService;
+import com.saintdan.framework.tools.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -54,16 +54,21 @@ public class RefreshController {
     }
   }
 
-  // ------------------------
-  // PRIVATE FIELDS
-  // ------------------------
-
   private static final Logger logger = LoggerFactory.getLogger(RefreshController.class);
 
-  @Autowired private LoginService service;
+  private final LoginService service;
 
-  @Autowired private ResultHelper resultHelper;
+  private final ResultHelper resultHelper;
 
-  @Autowired private ValidateHelper validateHelper;
+  private final ValidateHelper validateHelper;
+
+  public RefreshController(LoginService service, ResultHelper resultHelper, ValidateHelper validateHelper) {
+    Assert.defaultNotNull(service);
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    this.service = service;
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
+  }
 
 }

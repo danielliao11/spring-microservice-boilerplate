@@ -2,15 +2,12 @@ package com.saintdan.framework.component;
 
 import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.annotation.SizeField;
-import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.GrantType;
 import com.saintdan.framework.enums.OperationType;
-import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.BaseParam;
-import com.saintdan.framework.po.Client;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.tools.SpringSecurityUtils;
+import com.saintdan.framework.tools.Assert;
 import java.lang.reflect.Field;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -28,9 +25,10 @@ import org.springframework.stereotype.Component;
  */
 @Component public class ValidateHelper {
 
-  // ------------------------
-  // PUBLIC METHODS
-  // ------------------------
+  @Autowired public ValidateHelper(ResultHelper resultHelper) {
+    Assert.defaultNotNull(resultHelper);
+    this.resultHelper = resultHelper;
+  }
 
   /**
    * Validate current user and sign.
@@ -110,49 +108,6 @@ import org.springframework.stereotype.Component;
     return new ResponseEntity(HttpStatus.OK);
   }
 
-  /**
-   * Validate sign.
-   *
-   * @param param  param
-   * @param logger log
-   * @return 422
-   * @throws Exception
-   */
-
-  public ResponseEntity validateWithRSASignCheck(BaseParam param, Logger logger) throws Exception {
-    // Get current clientId
-    String clientId = SpringSecurityUtils.getCurrentClientId();
-    // Sign verification.
-    if (!signHelper.signCheck(getPublicKeyByClientId(clientId), param)) {
-      // Return rsa signature failed information and log the exception.
-      return resultHelper.infoResp(logger, ErrorType.SYS0004, ErrorType.SYS0004.description(), HttpStatus.UNPROCESSABLE_ENTITY);
-    } else
-      return null;
-  }
-
-  // --------------------------
-  // PRIVATE FIELDS AND METHODS
-  // --------------------------
-
-  @Autowired private ResultHelper resultHelper;
-
-  @Autowired private SignHelper signHelper;
-
-  @Autowired private ClientDomain clientDomain;
-
-  /**
-   * Get public key by client id.
-   *
-   * @param clientId client id
-   * @return public key
-   * @throws Exception
-   */
-  private String getPublicKeyByClientId(String clientId) throws Exception {
-    Client client = clientDomain.findClientByClientId(clientId);
-    if (client == null) {
-      throw new CommonsException(ErrorType.SYS0002);
-    }
-    return client.getPublicKey();
-  }
+  private final ResultHelper resultHelper;
 
 }

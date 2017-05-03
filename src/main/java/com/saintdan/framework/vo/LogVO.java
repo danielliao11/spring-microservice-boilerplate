@@ -23,6 +23,16 @@ public class LogVO implements Serializable {
 
   private LocalDateTime createDate;
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("LogVO{");
+    sb.append("username='").append(username).append('\'');
+    sb.append(", ip='").append(ip).append('\'');
+    sb.append(", type=").append(type);
+    sb.append(", createDate=").append(createDate);
+    sb.append('}');
+    return sb.toString();
+  }
+
   public String getUsername() {
     return username;
   }

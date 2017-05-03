@@ -28,6 +28,16 @@ public class ResourceParam extends BaseParam {
     this.id = id;
   }
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer(super.toString());
+    sb.append("ResourceParam{");
+    sb.append("id=").append(id);
+    sb.append(", name='").append(name).append('\'');
+    sb.append(", description='").append(description).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public Long getId() {
     return id;
   }

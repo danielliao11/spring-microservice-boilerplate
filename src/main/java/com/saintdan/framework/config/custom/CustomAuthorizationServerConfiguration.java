@@ -1,5 +1,6 @@
 package com.saintdan.framework.config.custom;
 
+import com.saintdan.framework.tools.Assert;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,17 +31,28 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
     clients.withClientDetails(clientDetailsService);
   }
 
-  @Autowired private DataSource dataSource;
-
   // Token store type.
   @Bean public JdbcTokenStore tokenStore() {
     return new JdbcTokenStore(dataSource);
   }
 
-  @Autowired private AuthenticationManager authenticationManager;
+  private final DataSource dataSource;
+
+  private final AuthenticationManager authenticationManager;
 
   // When you use memory client, you can comment the custom client details service.
-  @Autowired private CustomClientDetailsService clientDetailsService;
+  private final CustomClientDetailsService clientDetailsService;
 
-  @Autowired private CustomUserDetailsService userDetailsService;
+  private final CustomUserDetailsService userDetailsService;
+
+  @Autowired public CustomAuthorizationServerConfiguration(DataSource dataSource, AuthenticationManager authenticationManager, CustomClientDetailsService clientDetailsService, CustomUserDetailsService userDetailsService) {
+    Assert.defaultNotNull(dataSource);
+    Assert.defaultNotNull(authenticationManager);
+    Assert.defaultNotNull(clientDetailsService);
+    Assert.defaultNotNull(userDetailsService);
+    this.dataSource = dataSource;
+    this.authenticationManager = authenticationManager;
+    this.clientDetailsService = clientDetailsService;
+    this.userDetailsService = userDetailsService;
+  }
 }

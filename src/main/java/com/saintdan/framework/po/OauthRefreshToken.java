@@ -14,6 +14,13 @@ import javax.persistence.Table;
   @Id
   private String tokenId;
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("OauthRefreshToken{");
+    sb.append("tokenId='").append(tokenId).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public String getId() {
     return tokenId;
   }

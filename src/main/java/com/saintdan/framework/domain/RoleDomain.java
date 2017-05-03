@@ -1,6 +1,7 @@
 package com.saintdan.framework.domain;
 
 import com.google.common.collect.Sets;
+import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
@@ -11,7 +12,9 @@ import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.Resource;
 import com.saintdan.framework.po.Role;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.repo.CustomRepository;
 import com.saintdan.framework.repo.RoleRepository;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ResourceVO;
 import com.saintdan.framework.vo.RoleVO;
@@ -35,6 +38,15 @@ import org.springframework.transaction.annotation.Transactional;
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
+
+
+  @Autowired public RoleDomain(CustomRepository<Role, Long> repository, LogHelper logHelper, Transformer transformer, RoleRepository roleRepository, ResourceDomain resourceDomain) {
+    super(repository, logHelper, transformer);
+    Assert.defaultNotNull(roleRepository);
+    Assert.defaultNotNull(resourceDomain);
+    this.roleRepository = roleRepository;
+    this.resourceDomain = resourceDomain;
+  }
 
   @Transactional public RoleVO create(RoleParam param, User currentUser) throws Exception {
     nameExists(param.getName());
@@ -71,12 +83,13 @@ import org.springframework.transaction.annotation.Transactional;
     return roleRepository.findById(id).orElse(null);
   }
 
-  @Transactional public void deepDelete(Long id, User currentUser) throws Exception {
+  @Transactional @Override public void deepDelete(Long id, User currentUser) throws Exception {
     logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
     Role role = findById(id);
-    if (role != null) {
-      roleRepository.delete(role);
+    if (role == null) {
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
     }
+    roleRepository.delete(role);
   }
 
   public RoleVO po2Vo(Role role) throws Exception {
@@ -99,13 +112,9 @@ import org.springframework.transaction.annotation.Transactional;
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired private RoleRepository roleRepository;
+  private final RoleRepository roleRepository;
 
-  @Autowired private UserDomain userDomain;
-
-  @Autowired private ResourceDomain resourceDomain;
-
-  @Autowired private Transformer transformer;
+  private final ResourceDomain resourceDomain;
 
   private Role param2Po(RoleParam param, Role role, User currentUser) throws Exception {
     transformer.param2PO(getClassT(), param, role, currentUser);

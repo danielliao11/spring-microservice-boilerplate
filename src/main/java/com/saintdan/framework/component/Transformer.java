@@ -1,5 +1,7 @@
 package com.saintdan.framework.component;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.po.User;
@@ -7,7 +9,6 @@ import com.saintdan.framework.tools.BeanUtils;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,39 +39,18 @@ import org.springframework.stereotype.Component;
    * @return ids iterable
    */
   public List<Long> idsStr2List(String idsStr) {
-    return Arrays.stream(idsStr.split(CommonsConstant.COMMA)).map(Long::valueOf).collect(Collectors.toList());
+    return Lists.newArrayList(niceCommaSplitter.split(idsStr)).stream().map(Long::valueOf).collect(Collectors.toList());
   }
 
   public Set<String> str2Set(String str) {
     if (StringUtils.isBlank(str)) {
       return new HashSet<>();
     }
-    return Sets.newHashSet(Arrays.stream(str.split(CommonsConstant.COMMA)).collect(Collectors.toList()));
+    return Sets.newHashSet(niceCommaSplitter.split(str));
   }
 
   public String IdList2IdsStr(List<Long> list){
     return list.stream().map(String::valueOf).collect(Collectors.joining(CommonsConstant.COMMA));
-  }
-
-  /**
-   * Transform object list to hash set.
-   *
-   * @param objects object iterable
-   * @return object hash set
-   */
-  public <T> Set<T> list2Set(List<T> objects) {
-    return new HashSet<>(objects);
-  }
-
-
-  /**
-   * Transform object list to hash set.
-   *
-   * @param objects object iterable
-   * @return object hash set
-   */
-  public <T> List<T> set2List(Set<T> objects) {
-    return new ArrayList<>(objects);
   }
 
   /**
@@ -153,5 +133,7 @@ import org.springframework.stereotype.Component;
     BeanUtils.copyPropertiesIgnoreNull(po, vo);
     return vo;
   }
+
+  private final Splitter niceCommaSplitter = Splitter.on(CommonsConstant.COMMA).omitEmptyStrings().trimResults();
 
 }

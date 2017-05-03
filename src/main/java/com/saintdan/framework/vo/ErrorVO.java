@@ -28,6 +28,14 @@ public class ErrorVO implements Serializable {
     this.error_description = error_description;
   }
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer("ErrorVO{");
+    sb.append("error='").append(error).append('\'');
+    sb.append(", error_description='").append(error_description).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public String getError() {
     return error;
   }

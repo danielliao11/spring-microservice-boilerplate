@@ -28,6 +28,17 @@ public class RoleParam extends BaseParam {
     this.id = id;
   }
 
+  @Override public String toString() {
+    final StringBuffer sb = new StringBuffer(super.toString());
+    sb.append("RoleParam{");
+    sb.append("id=").append(id);
+    sb.append(", name='").append(name).append('\'');
+    sb.append(", description='").append(description).append('\'');
+    sb.append(", resourceIds='").append(resourceIds).append('\'');
+    sb.append('}');
+    return sb.toString();
+  }
+
   public Long getId() {
     return id;
   }

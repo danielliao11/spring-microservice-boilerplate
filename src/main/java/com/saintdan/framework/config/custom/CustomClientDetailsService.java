@@ -5,6 +5,7 @@ import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Client;
 import com.saintdan.framework.repo.ClientRepository;
+import com.saintdan.framework.tools.Assert;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,12 +29,6 @@ import org.springframework.stereotype.Service;
  * @since JDK1.8
  */
 @Service public class CustomClientDetailsService implements ClientDetailsService {
-
-  private final ClientRepository clientRepository;
-
-  @Autowired public CustomClientDetailsService(ClientRepository clientRepository) {
-    this.clientRepository = clientRepository;
-  }
 
   @Override public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
     Client client = clientRepository.findByClientIdAliasAndValidFlag(clientId, ValidFlag.VALID).orElseThrow(
@@ -108,6 +103,13 @@ import org.springframework.stereotype.Service;
       }
       return Sets.newHashSet(Arrays.stream(str.split(CommonsConstant.COMMA)).collect(Collectors.toList()));
     }
+  }
+
+  private final ClientRepository clientRepository;
+
+  @Autowired public CustomClientDetailsService(ClientRepository clientRepository) {
+    Assert.defaultNotNull(clientRepository);
+    this.clientRepository = clientRepository;
   }
 
 }

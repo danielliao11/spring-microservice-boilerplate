@@ -1,5 +1,6 @@
 package com.saintdan.framework.domain;
 
+import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
@@ -9,6 +10,8 @@ import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.Client;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.ClientRepository;
+import com.saintdan.framework.repo.CustomRepository;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ClientVO;
 import java.util.Arrays;
@@ -32,6 +35,13 @@ import org.springframework.transaction.annotation.Transactional;
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
+
+
+  @Autowired public ClientDomain(CustomRepository<Client, Long> repository, LogHelper logHelper, Transformer transformer, ClientRepository clientRepository) {
+    super(repository, logHelper, transformer);
+    Assert.defaultNotNull(clientRepository);
+    this.clientRepository = clientRepository;
+  }
 
   @Transactional public ClientVO create(ClientParam param, User currentUser) throws Exception {
     clientIdExists(param.getClientIdAlias());
@@ -65,9 +75,7 @@ import org.springframework.transaction.annotation.Transactional;
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  @Autowired private ClientRepository clientRepository;
-
-  @Autowired private Transformer transformer;
+  private final ClientRepository clientRepository;
 
   private final static String CLIENT_ID = "clientId";
 

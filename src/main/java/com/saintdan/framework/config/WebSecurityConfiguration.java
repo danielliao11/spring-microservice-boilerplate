@@ -1,6 +1,7 @@
 package com.saintdan.framework.config;
 
 import com.saintdan.framework.config.custom.CustomAuthenticationProvider;
+import com.saintdan.framework.tools.Assert;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
@@ -30,7 +31,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   }
 
   @Bean public AuthenticationProvider authenticationProvider() {
-    return new CustomAuthenticationProvider();
+    return customAuthenticationProvider;
+  }
+
+  private final CustomAuthenticationProvider customAuthenticationProvider;
+
+  public WebSecurityConfiguration(CustomAuthenticationProvider customAuthenticationProvider) {
+    Assert.defaultNotNull(customAuthenticationProvider);
+    this.customAuthenticationProvider = customAuthenticationProvider;
   }
 
 }

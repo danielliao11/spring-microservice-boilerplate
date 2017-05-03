@@ -8,6 +8,7 @@ import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.GrantType;
 import com.saintdan.framework.param.LoginParam;
 import com.saintdan.framework.service.LoginService;
+import com.saintdan.framework.tools.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -51,11 +52,20 @@ public class LoginController {
 
   private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-  @Autowired private LoginService loginService;
+  private final LoginService loginService;
 
-  @Autowired private ResultHelper resultHelper;
+  private final ResultHelper resultHelper;
 
-  @Autowired private ValidateHelper validateHelper;
+  private final ValidateHelper validateHelper;
+
+  @Autowired public LoginController(LoginService loginService, ResultHelper resultHelper, ValidateHelper validateHelper) {
+    Assert.defaultNotNull(loginService);
+    Assert.defaultNotNull(resultHelper);
+    Assert.defaultNotNull(validateHelper);
+    this.loginService = loginService;
+    this.resultHelper = resultHelper;
+    this.validateHelper = validateHelper;
+  }
 
 }
 
