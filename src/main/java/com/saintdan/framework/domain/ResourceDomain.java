@@ -33,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
   // PUBLIC METHODS
   // ------------------------
 
-
   public ResourceDomain(CustomRepository<Resource, Long> repository, LogHelper logHelper, Transformer transformer, ResourceRepository resourceRepository) {
     super(repository, logHelper, transformer);
     Assert.defaultNotNull(resourceRepository);
@@ -47,9 +46,9 @@ import org.springframework.transaction.annotation.Transactional;
 
   public List<ResourceVO> all() {
     return resourceRepository.findAll().stream()
-        .map(role -> {
+        .map(resource -> {
           try {
-            return transformer.po2VO(ResourceVO.class, role);
+            return transformer.po2VO(ResourceVO.class, resource);
           } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
           }

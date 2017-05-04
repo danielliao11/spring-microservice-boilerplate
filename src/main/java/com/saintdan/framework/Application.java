@@ -1,5 +1,6 @@
 package com.saintdan.framework;
 
+import de.codecentric.boot.admin.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.web.HttpMessageConvertersAutoConfi
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ServerPropertiesAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
@@ -31,6 +33,8 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
     basePackageClasses = { Application.class, Jsr310JpaConverters.class }
 )
 @SpringBootApplication
+@EnableAdminServer
+@EnableDiscoveryClient
 // I don't use Jmx and web socket, so I comment them.
 @Import({
     DispatcherServletAutoConfiguration.class,
