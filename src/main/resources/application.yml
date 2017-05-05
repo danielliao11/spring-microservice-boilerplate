@@ -95,8 +95,7 @@ spring:
 # ===============================
 # = SECURITY
 # ===============================
-security:
-  oauth2.resource.filter-order: 3
+security.oauth2.resource.filter-order: 3
 
 # ===============================
 # = SPRING BOOT ADMIN
