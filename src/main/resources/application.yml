@@ -33,9 +33,6 @@ logging.file: data/logs/core.log
 # = SPRING CONFIG
 # ===============================
 spring:
-  application:
-    name: spring-rest-oauth2-sample
-  boot.admin.url: http://localhost:${server.port}
   profiles:
     active: dev
 # Configure the server to run with SSL/TLS and using HTTPS
@@ -94,8 +91,3 @@ spring:
 # = SECURITY
 # ===============================
 security.oauth2.resource.filter-order: 3
-
-# ===============================
-# = SPRING BOOT ADMIN
-# ===============================
-management.security.enabled: false
