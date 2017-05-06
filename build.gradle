@@ -1,6 +1,6 @@
-description = 'spring-rest-oauth2-sample'
-group = 'com.saintdan.framework'
-version = '0.18.1.RELEASE'
+description 'spring-rest-oauth2-sample'
+group 'com.saintdan.framework'
+version '0.18.1.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -82,8 +82,6 @@ dependencies {
 
   // Spring Boot Admin
   compile "de.codecentric:spring-boot-admin-server:${springBootAdminVersion}"
-  compile "de.codecentric:spring-boot-admin-server-ui:${springBootAdminVersion}"
-  compile "de.codecentric:spring-boot-admin-starter-client:${springBootAdminVersion}"
 
   // Other dependencies.
   compile "org.apache.commons:commons-lang3:${commonsLang3Version}"

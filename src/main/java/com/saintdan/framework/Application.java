@@ -1,6 +1,5 @@
 package com.saintdan.framework;
 
-import de.codecentric.boot.admin.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -33,7 +32,6 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
     basePackageClasses = { Application.class, Jsr310JpaConverters.class }
 )
 @SpringBootApplication
-@EnableAdminServer
 @EnableDiscoveryClient
 // I don't use Jmx and web socket, so I comment them.
 @Import({
