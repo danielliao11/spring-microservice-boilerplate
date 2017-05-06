@@ -1,6 +1,6 @@
-description 'spring-rest-oauth2-sample'
+description 'spring-micro-services-boilerplate'
 group 'com.saintdan.framework'
-version '0.18.1.RELEASE'
+version '0.18.2.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'

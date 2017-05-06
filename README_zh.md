@@ -1,4 +1,4 @@
-# spring-rest-oauth2-sample
+# spring-micro-services-boilerplate
 
 [English Version](README.md)
 
@@ -13,7 +13,7 @@
 - [许可证](#license)
 - [版本信息](#version)
 
-spring-rest-oauth2-sample，是一个方便JAVA后端人员快速开发的微服务脚手架。对前端友好，适于前后端分离，敏捷开发模式。
+spring-micro-services-boilerplate，是一个方便JAVA后端人员快速开发的微服务脚手架。对前端友好，适于前后端分离，敏捷开发模式。
 
 **优点：**
 
@@ -42,7 +42,7 @@ spring-rest-oauth2-sample，是一个方便JAVA后端人员快速开发的微服
 Linux 及 Unix 使用以下命令。
 
 ```
-$ cd <spring-rest-oauth2-sample root path>
+$ cd <spring-micro-services-boilerplate root path>
 $ ./gradlew clean build bootRun
 ```
 
