@@ -1,4 +1,4 @@
-# spring-rest-oauth2-sample
+# spring-micro-services-boilerplate
 
 [中文版](README_zh.md)
 
@@ -13,7 +13,7 @@
 - [License](#license)
 - [Version History](#version)
 
-**spring-rest-oauth2-sample** is a boilerplate which is very helpful for java programmer and friendly to front end.
+**spring-micro-services-boilerplate** is a boilerplate which is very helpful for java programmer and friendly to front end.
 
 And build with:
 
@@ -29,7 +29,7 @@ And use [specification-arg-resolver](https://github.com/tkaczmarzyk/specificatio
 ## <a name="build"></a>Build and Run [[TOP]](#index)
 
 ```
-$ cd <spring-rest-oauth2-sample root path>
+$ cd <spring-micro-services-boilerplate root path>
 $ ./gradlew clean build bootRun
 ```
 

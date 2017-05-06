@@ -231,3 +231,6 @@
   - [MOD] Modify field injection to constructor injection.
   - [MOD] Override POJO toString().
   - [MOD] Use guava split.
+
+- 0.18.2.RELEASE
+  - [ADD] Add spring boot admin support.
