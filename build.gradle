@@ -1,6 +1,6 @@
-description = 'spring-rest-oauth2-sample'
-group = 'com.saintdan.framework'
-version = '0.18.1.RELEASE'
+description 'spring-micro-services-boilerplate'
+group 'com.saintdan.framework'
+version '0.18.2.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -53,10 +53,13 @@ ext {
   springBootVersion = '1.5.3.RELEASE'
   springOAuth2Version = '2.1.0.RELEASE'
 
+  springBootAdminVersion = '1.5.0'
+
   jacksonVersion = '2.8.5'
   commonsLang3Version = '3.5'
   guavaVersion = '21.0'
   swaggerVersion = '2.6.1'
+  specVersion = '0.9.0'
 
 //  hsqldbVersion = '1.8.0.10'
 //  mysqlVersion = '5.1.36'
@@ -69,6 +72,7 @@ ext {
 dependencies {
   // Spring boot dependencies.
   compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+  compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
   compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
   compile "org.springframework.boot:spring-boot-devtools"
@@ -76,11 +80,14 @@ dependencies {
   // Spring oauth2 dependency.
   compile "org.springframework.security.oauth:spring-security-oauth2:${springOAuth2Version}"
 
+  // Spring Boot Admin
+  compile "de.codecentric:spring-boot-admin-server:${springBootAdminVersion}"
+
   // Other dependencies.
   compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
   compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
   compile "com.google.guava:guava:${guavaVersion}"
-  compile (group: 'net.kaczmarzyk', name: 'specification-arg-resolver', version: '0.9.0') {
+  compile ("net.kaczmarzyk:specification-arg-resolver:${specVersion}") {
     exclude group:'org.hibernate.javax.persistence'
   }
 
@@ -113,7 +120,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '3.2'
+  gradleVersion = '3.5'
 }
 
 task writeNewPom {
