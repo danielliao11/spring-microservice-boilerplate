@@ -1,11 +1,11 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
-import com.saintdan.framework.annotation.SignField;
 import com.saintdan.framework.annotation.SizeField;
 import com.saintdan.framework.enums.OperationType;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.Size;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Param bean for {@link com.saintdan.framework.domain.UserDomain}
@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
  * @date 9/22/15
  * @since JDK1.8
  */
-public class UserParam extends BaseParam {
+@Data @EqualsAndHashCode(callSuper = true) public class UserParam extends BaseParam {
 
   private static final long serialVersionUID = -9153801716112918626L;
 
@@ -47,66 +47,5 @@ public class UserParam extends BaseParam {
 
   public UserParam(String usr) {
     this.usr = usr;
-  }
-
-  @Override public String toString() {
-    final StringBuffer sb = new StringBuffer(super.toString());
-    sb.append("UserParam{");
-    sb.append("id=").append(id);
-    sb.append(", usr='").append(usr).append('\'');
-    sb.append(", pwd='").append(pwd).append('\'');
-    sb.append(", name='").append(name).append('\'');
-    sb.append(", description='").append(description).append('\'');
-    sb.append(", roleIds='").append(roleIds).append('\'');
-    sb.append('}');
-    return sb.toString();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getUsr() {
-    return usr;
-  }
-
-  public void setUsr(String usr) {
-    this.usr = usr;
-  }
-
-  public String getPwd() {
-    return pwd;
-  }
-
-  public void setPwd(String pwd) {
-    this.pwd = pwd;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public String getRoleIds() {
-    return roleIds;
-  }
-
-  public void setRoleIds(String roleIds) {
-    this.roleIds = roleIds;
   }
 }

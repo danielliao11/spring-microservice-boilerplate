@@ -49,12 +49,13 @@ public class ClientController {
   @ApiOperation(value = "Create", httpMethod = "POST", response = ClientVO.class)
   @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
   public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser, @RequestBody ClientParam param) {
+    // Validate current user, param and sign.
+    ResponseEntity responseEntity;
+    responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.CREATE);
+    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+      return responseEntity;
+    }
     try {
-      // Validate current user, param and sign.
-      ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.CREATE);
-      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-        return responseEntity;
-      }
       // Return result and message.
       return new ResponseEntity<>(clientDomain.create(param, currentUser), HttpStatus.CREATED);
     } catch (CommonsException e) {
@@ -96,12 +97,12 @@ public class ClientController {
       @ApiImplicitParam(name = "id", value = "client's id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser, @RequestBody ClientParam param) {
+    // Validate current user, param and sign.
+    ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.UPDATE);
+    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+      return responseEntity;
+    }
     try {
-      // Validate current user, param and sign.
-      ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.UPDATE);
-      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-        return responseEntity;
-      }
       // Update client.
       return new ResponseEntity<>(clientDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
@@ -126,16 +127,15 @@ public class ClientController {
       @ApiImplicitParam(name = "id", value = "client's id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser, @ApiIgnore @PathVariable Long id) {
+    ClientParam param = new ClientParam(id);
+    // Validate current user and param.
+    ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
+    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+      return responseEntity;
+    }
     try {
-      ClientParam param = new ClientParam(id);
-      // Validate current user and param.
-      ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
-      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-        return responseEntity;
-      }
       // Delete client.
-      clientDomain.deepDelete(param.getId(), currentUser);
-      return new ResponseEntity(HttpStatus.NO_CONTENT);
+      clientDomain.deepDelete(param.getId());
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
@@ -143,6 +143,7 @@ public class ClientController {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    return ResponseEntity.noContent().build();
   }
 
   private static final Logger logger = LoggerFactory.getLogger(ClientController.class);

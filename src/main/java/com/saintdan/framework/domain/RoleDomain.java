@@ -50,7 +50,7 @@ import org.springframework.transaction.annotation.Transactional;
 
   @Transactional public RoleVO create(RoleParam param, User currentUser) throws Exception {
     nameExists(param.getName());
-    return po2Vo(super.createByPO(param2Po(param, new Role(), currentUser), currentUser));
+    return po2Vo(super.createByPO(param2Po(param, new Role(), currentUser)));
   }
 
   public List<RoleVO> all() {
@@ -72,7 +72,7 @@ import org.springframework.transaction.annotation.Transactional;
     if (StringUtils.isNotBlank(param.getName()) && !param.getName().equals(role.getName())) {
       nameExists(param.getName());
     }
-    return po2Vo(super.updateByPO(param2Po(param, role, currentUser), currentUser));
+    return po2Vo(super.updateByPO(param2Po(param, role, currentUser)));
   }
 
   public RoleVO getById(Long id) throws Exception {
@@ -83,8 +83,8 @@ import org.springframework.transaction.annotation.Transactional;
     return roleRepository.findById(id).orElse(null);
   }
 
-  @Transactional @Override public void deepDelete(Long id, User currentUser) throws Exception {
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+  @Transactional @Override public void deepDelete(Long id) throws Exception {
+    logHelper.log(OperationType.DELETE, getClassT().getName());
     Role role = findById(id);
     if (role == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));

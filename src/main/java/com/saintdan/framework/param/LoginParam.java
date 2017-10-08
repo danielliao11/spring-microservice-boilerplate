@@ -2,14 +2,16 @@ package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.enums.GrantType;
+import java.io.Serializable;
 import javax.validation.constraints.Size;
+import lombok.Data;
 
 /**
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 15/02/2017
  * @since JDK1.8
  */
-public class LoginParam extends BaseParam {
+@Data public class LoginParam implements Serializable {
 
   private static final long serialVersionUID = 1148462952236125805L;
 
@@ -23,39 +25,4 @@ public class LoginParam extends BaseParam {
 
   @NotNullField(grant = GrantType.REFRESH_TOKEN, message = "refresh token cannot be null.")
   private String refreshToken;
-
-  @Override public String toString() {
-    final StringBuffer sb = new StringBuffer(super.toString());
-    sb.append("LoginParam{");
-    sb.append("usr='").append(usr).append('\'');
-    sb.append(", pwd='").append(pwd).append('\'');
-    sb.append(", refreshToken='").append(refreshToken).append('\'');
-    sb.append('}');
-    return sb.toString();
-  }
-
-  public String getUsr() {
-    return usr;
-  }
-
-  public void setUsr(String usr) {
-    this.usr = usr;
-  }
-
-  public String getPwd() {
-    return pwd;
-  }
-
-  public void setPwd(String pwd) {
-    this.pwd = pwd;
-  }
-
-  public String getRefreshToken() {
-    return refreshToken;
-  }
-
-  public void setRefreshToken(String refreshToken) {
-    this.refreshToken = refreshToken;
-  }
-
 }

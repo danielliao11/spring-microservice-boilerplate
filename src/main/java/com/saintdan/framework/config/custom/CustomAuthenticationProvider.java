@@ -5,6 +5,7 @@ import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.OperationType;
+import com.saintdan.framework.exception.IllegalTokenTypeException;
 import com.saintdan.framework.po.OauthAccessToken;
 import com.saintdan.framework.po.OauthRefreshToken;
 import com.saintdan.framework.po.User;
@@ -13,8 +14,8 @@ import com.saintdan.framework.repo.OauthRefreshTokenRepository;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.LogUtils;
+import com.saintdan.framework.tools.LoginUtils;
 import com.saintdan.framework.tools.RemoteAddressUtils;
-import java.time.LocalDateTime;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,12 @@ import org.springframework.stereotype.Service;
 
   @Override public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
+    String clientId;
+    try {
+      clientId = LoginUtils.getClientId(request);
+    } catch (IllegalTokenTypeException e) {
+      throw new BadCredentialsException(ErrorType.LOG0007.name());
+    }
     // Find user.
     String username = token.getName();
     User user = userDomain.findByAccount(username);
@@ -74,11 +81,12 @@ import org.springframework.stereotype.Service;
     }
     // Save user login info.
     user.setIp(ip);
-    user.setLastLoginTime(LocalDateTime.now());
+    user.setLastLoginAt(System.currentTimeMillis());
     userRepository.save(user);
     // Save to log.
     try {
-      logHelper.logUsersOperations(OperationType.LOGIN, "login", user);
+      final String LOGIN = "login";
+      logHelper.log(OperationType.LOGIN, username, ip, clientId, LOGIN);
     } catch (Exception e) {
       final String errMsg = "Log user login failed.";
       LogUtils.traceError(logger, e, errMsg);

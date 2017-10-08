@@ -53,7 +53,7 @@
   
 - 0.5.1.RELEASE
   - [ADD] Add success result response to [ResultHelper](/src/main/java/saintdan/framework/component/ResultHelper.java);
-  - [MOD] Optimize error of user service and controller.
+  - [MOD] Optimize error of user loginService and controller.
   - [MOD] Update Spring Boot to 2.0.7.RELEASE
   - [FIX] Fix the signature bugs, and changes the test sign.
   
@@ -73,7 +73,7 @@
   
 - 0.8.2.RELEASE
   - [ADD] Add [CustomClientDetailsService](src/main/java/com/saintdan/framework/config/custom/CustomClientDetailsService.java), add jdbc client choice.
-  - [ADD] Add createdBy, createdDate, lastModifiedBy, lastModifiedDate to POs.
+  - [ADD] Add createdBy, createdDate, lastModifiedBy, lastModifiedAt to POs.
   - [ADD] Add [SpringSecurityUtils](src/main/java/com/saintdan/framework/tools/SpringSecurityUtils.java), trace user's ip address.
   - [MOD] Modify [Seed](src/test/java/com/saintdan/framework/repo/Seed.java).
   

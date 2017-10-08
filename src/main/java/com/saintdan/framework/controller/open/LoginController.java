@@ -6,6 +6,7 @@ import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.GrantType;
+import com.saintdan.framework.exception.IllegalTokenTypeException;
 import com.saintdan.framework.param.LoginParam;
 import com.saintdan.framework.service.LoginService;
 import com.saintdan.framework.tools.Assert;
@@ -18,9 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,16 +33,18 @@ public class LoginController {
   @ApiOperation(value = "Login", httpMethod = "POST", response = OAuth2AccessToken.class)
   @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   public ResponseEntity postAccessToken(HttpServletRequest request, @RequestBody LoginParam param) throws HttpRequestMethodNotSupportedException {
+    // Validate current user, param and sign.
+    ResponseEntity responseEntity;
     try {
-      // Validate current user, param and sign.
-      ResponseEntity responseEntity = validateHelper.validate(param, GrantType.PASSWORD);
-      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-        return responseEntity;
-      }
+      responseEntity = validateHelper.validate(request, param, GrantType.PASSWORD);
+    } catch (IllegalTokenTypeException e) {
+      return resultHelper.infoResp(e.getErrorType(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+      return responseEntity;
+    }
+    try {
       return loginService.login(param, request);
-    } catch (BadCredentialsException | InvalidGrantException e) {
-      // Return unknown error and log the exception.
-      return resultHelper.infoResp(logger, ErrorType.parse(e.getMessage()), ErrorType.parse(e.getMessage()).description(), HttpStatus.UNAUTHORIZED);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

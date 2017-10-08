@@ -18,6 +18,17 @@ import org.springframework.stereotype.Component;
 @Component public class ResultHelper {
 
   /**
+   * Return success result.
+   *
+   * @param object some vo.
+   * @return success response entity.
+   */
+  @SuppressWarnings("unchecked")
+  public ResponseEntity successResp(Object object, HttpStatus httpStatus) {
+    return new ResponseEntity(object, httpStatus);
+  }
+
+  /**
    * Return error information.
    *
    * @param errorType error type

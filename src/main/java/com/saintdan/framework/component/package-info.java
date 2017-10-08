@@ -14,6 +14,12 @@
  *   {@link com.saintdan.framework.component.ResultHelper}
  *   Log debug message and return result.
  *
+ *   {@link com.saintdan.framework.component.SignHelper}
+ *   Helper for RSA sign.
+ *
+ *   {@link com.saintdan.framework.component.SimpleCORSFilter}
+ *   Cross domain filter.
+ *
  *   {@link com.saintdan.framework.component.Transformer}
  *   Ids string transform to iterable helper.
  *

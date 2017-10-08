@@ -7,7 +7,6 @@ import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.BeanUtils;
 import java.lang.reflect.Field;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -90,7 +89,7 @@ import org.springframework.stereotype.Component;
     lastModifiedByField.setAccessible(true);
     Field lastModifiedDateField = type.getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
     lastModifiedDateField.setAccessible(true);
-    LocalDateTime now = LocalDateTime.now();
+    long now = System.currentTimeMillis();
     if (idField.get(po) == null) {
       createdBy = currentUser.getId();
       lastModifiedBy = createdBy;

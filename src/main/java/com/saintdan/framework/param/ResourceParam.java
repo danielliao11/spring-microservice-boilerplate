@@ -2,6 +2,8 @@ package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.enums.OperationType;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Param bean for {@link com.saintdan.framework.domain.ResourceDomain}
@@ -10,7 +12,7 @@ import com.saintdan.framework.enums.OperationType;
  * @date 10/16/15
  * @since JDK1.8
  */
-public class ResourceParam extends BaseParam {
+@Data @EqualsAndHashCode(callSuper = true) public class ResourceParam extends BaseParam {
 
   private static final long serialVersionUID = 8542867394907970893L;
 
@@ -27,39 +29,4 @@ public class ResourceParam extends BaseParam {
   public ResourceParam(Long id) {
     this.id = id;
   }
-
-  @Override public String toString() {
-    final StringBuffer sb = new StringBuffer(super.toString());
-    sb.append("ResourceParam{");
-    sb.append("id=").append(id);
-    sb.append(", name='").append(name).append('\'');
-    sb.append(", description='").append(description).append('\'');
-    sb.append('}');
-    return sb.toString();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
 }

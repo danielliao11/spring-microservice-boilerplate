@@ -15,6 +15,9 @@ public enum ErrorType implements IntentStateWithDescription {
   SYS0003("You need use 'bearer' token."),
   SYS0004("Signature error."),
   SYS0005("Format error."),
+  SYS0006("Invalid client"),
+  SYS0007("Invalid token"),
+  SYS0008("Request too frequently"),
 
   // COMMONS
   SYS0100("%s error."),
@@ -34,6 +37,7 @@ public enum ErrorType implements IntentStateWithDescription {
   LOG0004("Expired account."),
   LOG0005("Locked account."),
   LOG0006("Expired credentials."),
+  LOG0007("Illegal token type."),
 
   // Unknown error.
   UNKNOWN("unknown error."),;

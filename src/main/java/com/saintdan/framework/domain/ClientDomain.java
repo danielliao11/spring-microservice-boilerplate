@@ -2,6 +2,7 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
+import com.saintdan.framework.constant.AuthorityConstant;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.ValidFlag;
@@ -17,7 +18,8 @@ import com.saintdan.framework.vo.ClientVO;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.CharacterPredicates;
+import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -35,8 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
-
-
   @Autowired public ClientDomain(CustomRepository<Client, Long> repository, LogHelper logHelper, Transformer transformer, ClientRepository clientRepository) {
     super(repository, logHelper, transformer);
     Assert.defaultNotNull(clientRepository);
@@ -44,8 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   @Transactional public ClientVO create(ClientParam param, User currentUser) throws Exception {
-    clientIdExists(param.getClientIdAlias());
-    return po2Vo(super.createByPO(transformer.param2PO(getClassT(), param, new Client(), currentUser), currentUser));
+    return po2Vo(super.createByPO(param2Po(param, currentUser)));
   }
 
   public List<ClientVO> all() {
@@ -65,10 +64,7 @@ import org.springframework.transaction.annotation.Transactional;
     if (client == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
     }
-    if (StringUtils.isNotBlank(param.getClientIdAlias())) {
-      param.setClientIdAlias(null);
-    }
-    return po2Vo(super.updateByPO(transformer.param2PO(getClassT(), param, client, currentUser), currentUser));
+    return po2Vo(super.updateByPO(param2Po(param, currentUser)));
   }
 
   // --------------------------
@@ -77,13 +73,19 @@ import org.springframework.transaction.annotation.Transactional;
 
   private final ClientRepository clientRepository;
 
-  private final static String CLIENT_ID = "clientId";
-
-  private void clientIdExists(String clientId) throws Exception {
-    if (clientRepository.findByClientIdAliasAndValidFlag(clientId, ValidFlag.VALID).isPresent()) {
-      // Throw client already existing exception, clientId taken.
-      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CLIENT_ID));
+  private Client param2Po(ClientParam param, User currentUser) throws Exception {
+    Client client = transformer.param2PO(getClassT(), param, new Client(), currentUser);
+    if (client.getId() == null) {
+      RandomStringGenerator clientGenerator = new RandomStringGenerator.Builder()
+          .withinRange('0', 'z').filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS).build();
+      client.setClientIdAlias(clientGenerator.generate(16));
+      client.setClientSecretAlias(clientGenerator.generate(32));
+      client.setResourceIdStr(AuthorityConstant.RESOURCE_ID);
+      client.setScopeStr(AuthorityConstant.SCOPE);
+      client.setAuthorizedGrantTypeStr(AuthorityConstant.GRANT_TYPE);
+      client.setAuthoritiesStr(AuthorityConstant.AUTHORITY);
     }
+    return client;
   }
 
   private ClientVO po2Vo(Client client) {

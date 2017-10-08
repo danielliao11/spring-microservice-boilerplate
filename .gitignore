@@ -27,6 +27,7 @@ Thumbs.db
 build/
 target/
 bin/
+out/
 
 # Others
 hs_err_pid*
@@ -37,4 +38,4 @@ hs_err_pid*
 *.sublime-*
 .svn/
 *.jks
-/data
+data/

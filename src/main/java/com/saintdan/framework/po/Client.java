@@ -2,7 +2,6 @@ package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -10,13 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -26,9 +22,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @date 10/23/15
  * @since JDK1.8
  */
-@Entity
-@EntityListeners({ AuditingEntityListener.class })
-@Table(name = "clients")
+@Entity @EntityListeners({ AuditingEntityListener.class }) @Table(name = "clients")
 public class Client implements Serializable {
 
   private static final long serialVersionUID = 6500601540965188191L;
@@ -95,13 +89,13 @@ public class Client implements Serializable {
    * The access token validity period in seconds (optional).
    * If unspecified a global default will be applied by the token services.
    */
-  private Integer accessTokenValiditySecondsAlias;
+  private int accessTokenValiditySecondsAlias = 1800;
 
   /**
    * The refresh token validity period in seconds (optional).
    * If unspecified a global default will  be applied by the token services.
    */
-  private Integer refreshTokenValiditySecondsAlias;
+  private int refreshTokenValiditySecondsAlias = 3600;
 
   /**
    * Additional information for this client, not needed by the vanilla OAuth protocol but might be useful, for example,
@@ -112,21 +106,16 @@ public class Client implements Serializable {
   @Column(nullable = false)
   private ValidFlag validFlag = ValidFlag.VALID;
 
-  @CreatedDate
-  @Column(nullable = false)
-  private LocalDateTime createdDate = LocalDateTime.now();
+  @Column(updatable = false)
+  private long createdAt = System.currentTimeMillis();
 
-  @CreatedBy
-  @Column(nullable = false)
-  private Long createdBy;
+  @Column(nullable = false, updatable = false)
+  private long createdBy;
 
-  @LastModifiedDate
-  @Column(nullable = false)
-  private LocalDateTime lastModifiedDate = LocalDateTime.now();
+  private long lastModifiedAt = System.currentTimeMillis();
 
-  @LastModifiedBy
   @Column(nullable = false)
-  private Long lastModifiedBy;
+  private long lastModifiedBy;
 
   @Version
   @Column(nullable = false)
@@ -152,27 +141,26 @@ public class Client implements Serializable {
   }
 
   @Override public String toString() {
-    final StringBuffer sb = new StringBuffer("Client{");
-    sb.append("id=").append(id);
-    sb.append(", clientIdAlias='").append(clientIdAlias).append('\'');
-    sb.append(", resourceIdStr='").append(resourceIdStr).append('\'');
-    sb.append(", clientSecretAlias='").append(clientSecretAlias).append('\'');
-    sb.append(", scopeStr='").append(scopeStr).append('\'');
-    sb.append(", authorizedGrantTypeStr='").append(authorizedGrantTypeStr).append('\'');
-    sb.append(", registeredRedirectUriStr='").append(registeredRedirectUriStr).append('\'');
-    sb.append(", authoritiesStr='").append(authoritiesStr).append('\'');
-    sb.append(", accessTokenValiditySecondsAlias=").append(accessTokenValiditySecondsAlias);
-    sb.append(", refreshTokenValiditySecondsAlias=").append(refreshTokenValiditySecondsAlias);
-    sb.append(", additionalInformationStr='").append(additionalInformationStr).append('\'');
-    sb.append(", validFlag=").append(validFlag);
-    sb.append(", createdDate=").append(createdDate);
-    sb.append(", createdBy=").append(createdBy);
-    sb.append(", lastModifiedDate=").append(lastModifiedDate);
-    sb.append(", lastModifiedBy=").append(lastModifiedBy);
-    sb.append(", version=").append(version);
-    sb.append(", publicKey='").append(publicKey).append('\'');
-    sb.append('}');
-    return sb.toString();
+    return new ToStringBuilder(this)
+        .append("id", id)
+        .append("clientIdAlias", clientIdAlias)
+        .append("resourceIdStr", resourceIdStr)
+        .append("clientSecretAlias", clientSecretAlias)
+        .append("scopeStr", scopeStr)
+        .append("authorizedGrantTypeStr", authorizedGrantTypeStr)
+        .append("registeredRedirectUriStr", registeredRedirectUriStr)
+        .append("authoritiesStr", authoritiesStr)
+        .append("accessTokenValiditySecondsAlias", accessTokenValiditySecondsAlias)
+        .append("refreshTokenValiditySecondsAlias", refreshTokenValiditySecondsAlias)
+        .append("additionalInformationStr", additionalInformationStr)
+        .append("validFlag", validFlag.code())
+        .append("createdAt", createdAt)
+        .append("createdBy", createdBy)
+        .append("lastModifiedAt", lastModifiedAt)
+        .append("lastModifiedBy", lastModifiedBy)
+        .append("version", version)
+        .append("publicKey", publicKey)
+        .toString();
   }
 
   public Long getId() {
@@ -239,19 +227,19 @@ public class Client implements Serializable {
     this.authoritiesStr = authoritiesStr;
   }
 
-  public Integer getAccessTokenValiditySecondsAlias() {
+  public int getAccessTokenValiditySecondsAlias() {
     return accessTokenValiditySecondsAlias;
   }
 
-  public void setAccessTokenValiditySecondsAlias(Integer accessTokenValiditySecondsAlias) {
+  public void setAccessTokenValiditySecondsAlias(int accessTokenValiditySecondsAlias) {
     this.accessTokenValiditySecondsAlias = accessTokenValiditySecondsAlias;
   }
 
-  public Integer getRefreshTokenValiditySecondsAlias() {
+  public int getRefreshTokenValiditySecondsAlias() {
     return refreshTokenValiditySecondsAlias;
   }
 
-  public void setRefreshTokenValiditySecondsAlias(Integer refreshTokenValiditySecondsAlias) {
+  public void setRefreshTokenValiditySecondsAlias(int refreshTokenValiditySecondsAlias) {
     this.refreshTokenValiditySecondsAlias = refreshTokenValiditySecondsAlias;
   }
 
@@ -271,35 +259,35 @@ public class Client implements Serializable {
     this.validFlag = validFlag;
   }
 
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
+  public long getCreatedAt() {
+    return createdAt;
   }
 
-  public void setCreatedDate(LocalDateTime createdDate) {
-    this.createdDate = createdDate;
+  public void setCreatedAt(long createdAt) {
+    this.createdAt = createdAt;
   }
 
-  public Long getCreatedBy() {
+  public long getCreatedBy() {
     return createdBy;
   }
 
-  public void setCreatedBy(Long createdBy) {
+  public void setCreatedBy(long createdBy) {
     this.createdBy = createdBy;
   }
 
-  public LocalDateTime getLastModifiedDate() {
-    return lastModifiedDate;
+  public long getLastModifiedAt() {
+    return lastModifiedAt;
   }
 
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
+  public void setLastModifiedAt(long lastModifiedAt) {
+    this.lastModifiedAt = lastModifiedAt;
   }
 
-  public Long getLastModifiedBy() {
+  public long getLastModifiedBy() {
     return lastModifiedBy;
   }
 
-  public void setLastModifiedBy(Long lastModifiedBy) {
+  public void setLastModifiedBy(long lastModifiedBy) {
     this.lastModifiedBy = lastModifiedBy;
   }
 

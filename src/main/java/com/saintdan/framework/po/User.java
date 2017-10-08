@@ -2,7 +2,6 @@ package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -20,15 +19,10 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -39,10 +33,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @see {@link org.springframework.security.core.userdetails.UserDetails}
  * @since JDK1.8
  */
-@Entity
-@EntityListeners({AuditingEntityListener.class})
-@Table(name = "users")
-@NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
+@Entity @EntityListeners({AuditingEntityListener.class}) @Table(name = "users") @NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
 public class User implements Serializable {
 
   private static final long serialVersionUID = 2680591198337929454L;
@@ -59,7 +50,7 @@ public class User implements Serializable {
   @Id
   @GeneratedValue(generator = "userSequenceGenerator")
   @Column(updatable = false)
-  private Long id;
+  private long id;
 
   @NotEmpty
   @Column(length = 50)
@@ -74,16 +65,16 @@ public class User implements Serializable {
   private String pwd;
 
   @Column(nullable = false)
-  private boolean isAccountNonExpiredAlias = Boolean.TRUE;
+  private boolean isAccountNonExpiredAlias = true;
 
   @Column(nullable = false)
-  private boolean isAccountNonLockedAlias = Boolean.TRUE;
+  private boolean isAccountNonLockedAlias = true;
 
   @Column(nullable = false)
-  private boolean isCredentialsNonExpiredAlias = Boolean.TRUE;
+  private boolean isCredentialsNonExpiredAlias = true;
 
   @Column(nullable = false)
-  private boolean isEnabledAlias = Boolean.TRUE;
+  private boolean isEnabledAlias = true;
 
   @Column(nullable = false)
   private ValidFlag validFlag = ValidFlag.VALID;
@@ -92,26 +83,21 @@ public class User implements Serializable {
   private String description;
 
   // Last login time
-  private LocalDateTime lastLoginTime = LocalDateTime.now();
+  private long lastLoginAt = System.currentTimeMillis();
 
   // Last login IP address
   private String ip;
 
-  @CreatedDate
-  @Column(nullable = false)
-  private LocalDateTime createdDate = LocalDateTime.now();
+  @Column(updatable = false)
+  private long createdAt = System.currentTimeMillis();
 
-  @CreatedBy
   @Column(nullable = false)
-  private Long createdBy;
+  private long createdBy;
 
-  @LastModifiedDate
-  @Column(nullable = false)
-  private LocalDateTime lastModifiedDate = LocalDateTime.now();
+  private long lastModifiedAt = System.currentTimeMillis();
 
-  @LastModifiedBy
   @Column(nullable = false)
-  private Long lastModifiedBy;
+  private long lastModifiedBy;
 
   @Version
   @Column(nullable = false)
@@ -128,7 +114,7 @@ public class User implements Serializable {
 
   public User() {}
 
-  public User(Long id, String name, String usr, String pwd) {
+  public User(long id, String name, String usr, String pwd) {
     this.id = id;
     this.name = name;
     this.usr = usr;
@@ -145,33 +131,32 @@ public class User implements Serializable {
   }
 
   @Override public String toString() {
-    final StringBuffer sb = new StringBuffer("User{");
-    sb.append("id=").append(id);
-    sb.append(", name='").append(name).append('\'');
-    sb.append(", usr='").append(usr).append('\'');
-    sb.append(", pwd='").append(pwd).append('\'');
-    sb.append(", isAccountNonExpiredAlias=").append(isAccountNonExpiredAlias);
-    sb.append(", isAccountNonLockedAlias=").append(isAccountNonLockedAlias);
-    sb.append(", isCredentialsNonExpiredAlias=").append(isCredentialsNonExpiredAlias);
-    sb.append(", isEnabledAlias=").append(isEnabledAlias);
-    sb.append(", validFlag=").append(validFlag);
-    sb.append(", description='").append(description).append('\'');
-    sb.append(", lastLoginTime=").append(lastLoginTime);
-    sb.append(", ip='").append(ip).append('\'');
-    sb.append(", createdDate=").append(createdDate);
-    sb.append(", createdBy=").append(createdBy);
-    sb.append(", lastModifiedDate=").append(lastModifiedDate);
-    sb.append(", lastModifiedBy=").append(lastModifiedBy);
-    sb.append(", version=").append(version);
-    sb.append('}');
-    return sb.toString();
+    return new ToStringBuilder(this)
+        .append("id", id)
+        .append("name", name)
+        .append("usr", usr)
+        .append("pwd", pwd)
+        .append("isAccountNonExpiredAlias", isAccountNonExpiredAlias)
+        .append("isAccountNonLockedAlias", isAccountNonLockedAlias)
+        .append("isCredentialsNonExpiredAlias", isCredentialsNonExpiredAlias)
+        .append("isEnabledAlias", isEnabledAlias)
+        .append("validFlag", validFlag)
+        .append("description", description)
+        .append("lastLoginAt", lastLoginAt)
+        .append("ip", ip)
+        .append("createdAt", createdAt)
+        .append("createdBy", createdBy)
+        .append("lastModifiedAt", lastModifiedAt)
+        .append("lastModifiedBy", lastModifiedBy)
+        .append("version", version)
+        .toString();
   }
 
-  public Long getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(long id) {
     this.id = id;
   }
 
@@ -247,12 +232,12 @@ public class User implements Serializable {
     this.description = description;
   }
 
-  public LocalDateTime getLastLoginTime() {
-    return lastLoginTime;
+  public long getLastLoginAt() {
+    return lastLoginAt;
   }
 
-  public void setLastLoginTime(LocalDateTime lastLoginTime) {
-    this.lastLoginTime = lastLoginTime;
+  public void setLastLoginAt(long lastLoginAt) {
+    this.lastLoginAt = lastLoginAt;
   }
 
   public String getIp() {
@@ -263,35 +248,35 @@ public class User implements Serializable {
     this.ip = ip;
   }
 
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
+  public long getCreatedAt() {
+    return createdAt;
   }
 
-  public void setCreatedDate(LocalDateTime createdDate) {
-    this.createdDate = createdDate;
+  public void setCreatedAt(long createdAt) {
+    this.createdAt = createdAt;
   }
 
-  public Long getCreatedBy() {
+  public long getCreatedBy() {
     return createdBy;
   }
 
-  public void setCreatedBy(Long createdBy) {
+  public void setCreatedBy(long createdBy) {
     this.createdBy = createdBy;
   }
 
-  public LocalDateTime getLastModifiedDate() {
-    return lastModifiedDate;
+  public long getLastModifiedAt() {
+    return lastModifiedAt;
   }
 
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
+  public void setLastModifiedAt(long lastModifiedAt) {
+    this.lastModifiedAt = lastModifiedAt;
   }
 
-  public Long getLastModifiedBy() {
+  public long getLastModifiedBy() {
     return lastModifiedBy;
   }
 
-  public void setLastModifiedBy(Long lastModifiedBy) {
+  public void setLastModifiedBy(long lastModifiedBy) {
     this.lastModifiedBy = lastModifiedBy;
   }
 

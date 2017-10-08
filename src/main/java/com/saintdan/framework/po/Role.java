@@ -2,7 +2,6 @@ package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -20,13 +19,10 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -54,7 +50,7 @@ public class Role implements Serializable {
   @Id
   @GeneratedValue(generator = "roleSequenceGenerator")
   @Column(updatable = false)
-  private Long id;
+  private long id;
 
   @NotEmpty
   @Column(unique = true, nullable = false, length = 20)
@@ -66,25 +62,20 @@ public class Role implements Serializable {
   @Column(nullable = false)
   private ValidFlag validFlag = ValidFlag.VALID;
 
-  @CreatedDate
+  @Column(updatable = false)
+  private long createdAt = System.currentTimeMillis();
+
   @Column(nullable = false, updatable = false)
-  private LocalDateTime createdDate = LocalDateTime.now();
+  private long createdBy;
 
-  @CreatedBy
-  @Column(nullable = false, updatable = false)
-  private Long createdBy;
+  private long lastModifiedAt = System.currentTimeMillis();
 
-  @LastModifiedDate
   @Column(nullable = false)
-  private LocalDateTime lastModifiedDate = LocalDateTime.now();
-
-  @LastModifiedBy
-  @Column(nullable = false)
-  private Long lastModifiedBy;
+  private long lastModifiedBy;
 
   @Version
   @Column(nullable = false)
-  private Integer version;
+  private int version;
 
   @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = CascadeType.REFRESH)
   private Set<User> users = new HashSet<>();
@@ -100,6 +91,7 @@ public class Role implements Serializable {
     users.forEach(user -> user.getRoles().remove(this));
   }
 
+
   public Role() {}
 
   public Role(String name, String description) {
@@ -108,25 +100,24 @@ public class Role implements Serializable {
   }
 
   @Override public String toString() {
-    final StringBuffer sb = new StringBuffer("Role{");
-    sb.append("id=").append(id);
-    sb.append(", name='").append(name).append('\'');
-    sb.append(", description='").append(description).append('\'');
-    sb.append(", validFlag=").append(validFlag);
-    sb.append(", createdDate=").append(createdDate);
-    sb.append(", createdBy=").append(createdBy);
-    sb.append(", lastModifiedDate=").append(lastModifiedDate);
-    sb.append(", lastModifiedBy=").append(lastModifiedBy);
-    sb.append(", version=").append(version);
-    sb.append('}');
-    return sb.toString();
+    return new ToStringBuilder(this)
+        .append("id", id)
+        .append("name", name)
+        .append("description", description)
+        .append("validFlag", validFlag.code())
+        .append("createdAt", createdAt)
+        .append("createdBy", createdBy)
+        .append("lastModifiedAt", lastModifiedAt)
+        .append("lastModifiedBy", lastModifiedBy)
+        .append("version", version)
+        .toString();
   }
 
-  public Long getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(long id) {
     this.id = id;
   }
 
@@ -154,43 +145,43 @@ public class Role implements Serializable {
     this.validFlag = validFlag;
   }
 
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
+  public long getCreatedAt() {
+    return createdAt;
   }
 
-  public void setCreatedDate(LocalDateTime createdDate) {
-    this.createdDate = createdDate;
+  public void setCreatedAt(long createdAt) {
+    this.createdAt = createdAt;
   }
 
-  public Long getCreatedBy() {
+  public long getCreatedBy() {
     return createdBy;
   }
 
-  public void setCreatedBy(Long createdBy) {
+  public void setCreatedBy(long createdBy) {
     this.createdBy = createdBy;
   }
 
-  public LocalDateTime getLastModifiedDate() {
-    return lastModifiedDate;
+  public long getLastModifiedAt() {
+    return lastModifiedAt;
   }
 
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
+  public void setLastModifiedAt(long lastModifiedAt) {
+    this.lastModifiedAt = lastModifiedAt;
   }
 
-  public Long getLastModifiedBy() {
+  public long getLastModifiedBy() {
     return lastModifiedBy;
   }
 
-  public void setLastModifiedBy(Long lastModifiedBy) {
+  public void setLastModifiedBy(long lastModifiedBy) {
     this.lastModifiedBy = lastModifiedBy;
   }
 
-  public Integer getVersion() {
+  public int getVersion() {
     return version;
   }
 
-  public void setVersion(Integer version) {
+  public void setVersion(int version) {
     this.version = version;
   }
 
