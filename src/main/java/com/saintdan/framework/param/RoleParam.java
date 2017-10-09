@@ -2,8 +2,11 @@ package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.enums.OperationType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * Param bean for {@link com.saintdan.framework.domain.RoleDomain}
@@ -12,7 +15,8 @@ import lombok.EqualsAndHashCode;
  * @date 10/16/15
  * @since JDK1.8
  */
-@Data @EqualsAndHashCode(callSuper = true)public class RoleParam extends BaseParam {
+@Data @EqualsAndHashCode(callSuper = true)  @Builder @NoArgsConstructor @AllArgsConstructor
+public class RoleParam extends BaseParam {
 
   @NotNullField(value = {OperationType.UPDATE, OperationType.DELETE}, message = "id cannot be null.")
   private Long id; // role's ID.
@@ -23,8 +27,6 @@ import lombok.EqualsAndHashCode;
   private String description;
 
   private String resourceIds; // group ids string
-
-  public RoleParam() {}
 
   public RoleParam(Long id) {
     this.id = id;

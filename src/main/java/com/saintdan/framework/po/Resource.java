@@ -15,6 +15,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -30,6 +33,7 @@ import org.springframework.security.core.GrantedAuthority;
  * @since JDK1.8
  */
 @Entity @EntityListeners({AuditingEntityListener.class}) @Table(name = "resources")
+@Builder @NoArgsConstructor @AllArgsConstructor
 public class Resource implements GrantedAuthority, Serializable {
 
   private static final long serialVersionUID = 6298843159549723556L;
@@ -80,8 +84,6 @@ public class Resource implements GrantedAuthority, Serializable {
   private void removeResourcesFromRoles() {
     roles.forEach(role -> role.getResources().remove(this));
   }
-
-  public Resource() {}
 
   public Resource(Long id) {
     this.id = id;

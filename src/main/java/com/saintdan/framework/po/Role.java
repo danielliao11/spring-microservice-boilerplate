@@ -19,6 +19,9 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -34,6 +37,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  */
 @Entity @EntityListeners({AuditingEntityListener.class}) @Table(name = "roles")
 @NamedEntityGraph(name = "Role.resources", attributeNodes = @NamedAttributeNode("resources"))
+@Builder @NoArgsConstructor @AllArgsConstructor
 public class Role implements Serializable {
 
   private static final long serialVersionUID = -5193344128221526323L;
@@ -90,9 +94,6 @@ public class Role implements Serializable {
   private void removeRolesFromUsers() {
     users.forEach(user -> user.getRoles().remove(this));
   }
-
-
-  public Role() {}
 
   public Role(String name, String description) {
     this.name = name;

@@ -4,8 +4,11 @@ import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.annotation.SizeField;
 import com.saintdan.framework.enums.OperationType;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * Param bean for {@link com.saintdan.framework.domain.UserDomain}
@@ -14,7 +17,8 @@ import lombok.EqualsAndHashCode;
  * @date 9/22/15
  * @since JDK1.8
  */
-@Data @EqualsAndHashCode(callSuper = true) public class UserParam extends BaseParam {
+@Data @EqualsAndHashCode(callSuper = true) @Builder @NoArgsConstructor @AllArgsConstructor
+public class UserParam extends BaseParam {
 
   private static final long serialVersionUID = -9153801716112918626L;
 
@@ -38,8 +42,6 @@ import lombok.EqualsAndHashCode;
 
   @ApiModelProperty(value = "ids of roles", example = "1,2,3", notes = "separated by comma and no space.")
   private String roleIds; // role ids string
-
-  public UserParam() {}
 
   public UserParam(Long id) {
     this.id = id;

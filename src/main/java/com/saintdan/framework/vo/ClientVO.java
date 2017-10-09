@@ -3,7 +3,10 @@ package com.saintdan.framework.vo;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
@@ -13,7 +16,8 @@ import org.springframework.security.core.GrantedAuthority;
  * @date 10/25/15
  * @since JDK1.8
  */
-@Data public class ClientVO implements Serializable {
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
+public class ClientVO implements Serializable {
 
   private static final long serialVersionUID = -6088897333280284093L;
 

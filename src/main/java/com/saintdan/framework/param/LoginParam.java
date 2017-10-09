@@ -4,14 +4,18 @@ import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.enums.GrantType;
 import java.io.Serializable;
 import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 15/02/2017
  * @since JDK1.8
  */
-@Data public class LoginParam implements Serializable {
+@Data  @Builder @NoArgsConstructor @AllArgsConstructor
+public class LoginParam implements Serializable {
 
   private static final long serialVersionUID = 1148462952236125805L;
 

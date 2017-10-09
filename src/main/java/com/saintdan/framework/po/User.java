@@ -19,6 +19,9 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -33,7 +36,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @see {@link org.springframework.security.core.userdetails.UserDetails}
  * @since JDK1.8
  */
-@Entity @EntityListeners({AuditingEntityListener.class}) @Table(name = "users") @NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
+@Entity @EntityListeners({AuditingEntityListener.class}) @Table(name = "users")
+@NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
+@Builder @NoArgsConstructor @AllArgsConstructor
 public class User implements Serializable {
 
   private static final long serialVersionUID = 2680591198337929454L;
@@ -111,8 +116,6 @@ public class User implements Serializable {
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
   private Set<Account> accounts = new HashSet<>();
-
-  public User() {}
 
   public User(long id, String name, String usr, String pwd) {
     this.id = id;

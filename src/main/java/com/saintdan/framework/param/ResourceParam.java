@@ -2,8 +2,11 @@ package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.enums.OperationType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * Param bean for {@link com.saintdan.framework.domain.ResourceDomain}
@@ -12,7 +15,8 @@ import lombok.EqualsAndHashCode;
  * @date 10/16/15
  * @since JDK1.8
  */
-@Data @EqualsAndHashCode(callSuper = true) public class ResourceParam extends BaseParam {
+@Data @EqualsAndHashCode(callSuper = true)  @Builder @NoArgsConstructor @AllArgsConstructor
+public class ResourceParam extends BaseParam {
 
   private static final long serialVersionUID = 8542867394907970893L;
 
@@ -23,8 +27,6 @@ import lombok.EqualsAndHashCode;
   private String name; // role's name
 
   private String description;
-
-  public ResourceParam() {}
 
   public ResourceParam(Long id) {
     this.id = id;

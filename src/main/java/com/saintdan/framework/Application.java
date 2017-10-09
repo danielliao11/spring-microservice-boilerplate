@@ -19,7 +19,7 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
- * Entrance of <p>spring-rest-oauth2</p>
+ * Entrance of <p>spring-micro-services-boilerplate</p>
  * <p>
  * "Engine start"
  * </p>

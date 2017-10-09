@@ -4,8 +4,11 @@ import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.OperationType;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * Param bean for {@link ClientDomain}
@@ -14,7 +17,8 @@ import lombok.EqualsAndHashCode;
  * @date 10/25/15
  * @since JDK1.8
  */
-@Data @EqualsAndHashCode(callSuper = true) public class ClientParam extends BaseParam {
+@Data @EqualsAndHashCode(callSuper = true) @Builder @NoArgsConstructor @AllArgsConstructor
+public class ClientParam extends BaseParam {
 
   private static final long serialVersionUID = 6065608866944007796L;
 
@@ -30,9 +34,6 @@ import lombok.EqualsAndHashCode;
   private Integer accessTokenValiditySecondsAlias;
 
   private Integer refreshTokenValiditySecondsAlias;
-
-  public ClientParam() {
-  }
 
   public ClientParam(Long id) {
     this.id = id;

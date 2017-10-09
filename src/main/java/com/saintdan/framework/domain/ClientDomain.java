@@ -92,20 +92,20 @@ import org.springframework.transaction.annotation.Transactional;
     if (client == null) {
       return null;
     }
-    ClientVO vo = new ClientVO();
-    vo.setId(client.getId());
-    vo.setClientId(client.getClientIdAlias());
-    vo.setClientSecret(client.getClientSecretAlias());
-    vo.setResourceIds(transformer.str2Set(client.getResourceIdStr()));
-    vo.setScope(transformer.str2Set(client.getScopeStr()));
-    vo.setAuthorizedGrantTypes(transformer.str2Set(client.getAuthorizedGrantTypeStr()));
-    vo.setRegisteredRedirectUri(transformer.str2Set(client.getRegisteredRedirectUriStr()));
-    vo.setGrantedAuthorities(Arrays.stream(client.getAuthoritiesStr().split(CommonsConstant.COMMA))
-        .map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
-    vo.setAccessTokenValiditySeconds(client.getAccessTokenValiditySecondsAlias());
-    vo.setRefreshTokenValiditySeconds(client.getRefreshTokenValiditySecondsAlias());
-    vo.setPublicKey(client.getPublicKey());
-    return vo;
+    return ClientVO.builder()
+        .id(client.getId())
+        .clientId(client.getClientIdAlias())
+        .clientSecret(client.getClientSecretAlias())
+        .resourceIds(transformer.str2Set(client.getResourceIdStr()))
+        .scope(transformer.str2Set(client.getScopeStr()))
+        .authorizedGrantTypes(transformer.str2Set(client.getAuthorizedGrantTypeStr()))
+        .registeredRedirectUri(transformer.str2Set(client.getRegisteredRedirectUriStr()))
+        .grantedAuthorities(Arrays.stream(client.getAuthoritiesStr().split(CommonsConstant.COMMA))
+            .map(SimpleGrantedAuthority::new).collect(Collectors.toList()))
+        .accessTokenValiditySeconds(client.getAccessTokenValiditySecondsAlias())
+        .refreshTokenValiditySeconds(client.getRefreshTokenValiditySecondsAlias())
+        .publicKey(client.getPublicKey())
+        .build();
   }
 
 }

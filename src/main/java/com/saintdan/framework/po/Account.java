@@ -13,6 +13,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -26,6 +29,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @since JDK1.8
  */
 @Entity @EntityListeners({ AuditingEntityListener.class }) @Table(name = "accounts")
+@Builder @NoArgsConstructor @AllArgsConstructor
 public class Account implements Serializable {
 
   private static final long serialVersionUID = -6004454109313475045L;

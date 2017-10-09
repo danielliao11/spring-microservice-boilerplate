@@ -9,6 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -23,6 +26,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @since JDK1.8
  */
 @Entity @EntityListeners({ AuditingEntityListener.class }) @Table(name = "clients")
+@Builder @NoArgsConstructor @AllArgsConstructor
 public class Client implements Serializable {
 
   private static final long serialVersionUID = 6500601540965188191L;
@@ -123,8 +127,6 @@ public class Client implements Serializable {
 
   @Column(nullable = false, length = 5000)
   private String publicKey;
-
-  public Client() {}
 
   public Client(Client client) {
     super();

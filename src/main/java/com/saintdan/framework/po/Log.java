@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -20,7 +23,8 @@ import org.springframework.data.annotation.CreatedDate;
  * @date 10/27/15
  * @since JDK1.8
  */
-@Entity @Table(name = "logs") @Data public class Log implements Serializable {
+@Entity @Table(name = "logs") @Data  @Builder @NoArgsConstructor @AllArgsConstructor
+public class Log implements Serializable {
 
   private static final long serialVersionUID = 7088091769901805623L;
 
@@ -54,6 +58,4 @@ import org.springframework.data.annotation.CreatedDate;
   @CreatedDate
   @Column(nullable = false)
   private long createdAt = System.currentTimeMillis();
-
-  public Log() {}
 }

@@ -20,49 +20,48 @@ import org.springframework.stereotype.Component;
 @Component public class LogHelper {
 
   public void log(HttpServletRequest request) {
-    // Get ip and clientId
     String ip = RemoteAddressUtils.getRealIp(request);
-    Log log = new Log();
-    log.setUsr(SpringSecurityUtils.getCurrentUsername());
-    log.setIp(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip);
-    log.setClientId(SpringSecurityUtils.getCurrentClientId());
-    log.setPath(request.getRequestURI().substring(request.getContextPath().length()));
-    log.setCreatedAt(System.currentTimeMillis());
-    log.setOperationType(OperationType.READ);
+    Log log = Log.builder()
+        .usr(SpringSecurityUtils.getCurrentUsername())
+        .ip(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip)
+        .clientId(SpringSecurityUtils.getCurrentClientId())
+        .path(request.getRequestURI().substring(request.getContextPath().length()))
+        .operationType(OperationType.READ)
+        .build();
     logDomain.create(log);
   }
 
   public void log(OperationType operationType, String usr, String ip, String clientId, String path) {
-    Log log = new Log();
-    log.setUsr(usr);
-    log.setIp(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip);
-    log.setClientId(clientId);
-    log.setCreatedAt(System.currentTimeMillis());
-    log.setOperationType(operationType);
-    log.setPath(path);
+    Log log = Log.builder()
+        .usr(usr)
+        .ip(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip)
+        .clientId(clientId)
+        .path(path)
+        .operationType(operationType)
+        .build();
     logDomain.create(log);
   }
 
   public void log(OperationType operationType) {
-    Log log = new Log();
     String ip = SpringSecurityUtils.getCurrentUserIp();
-    log.setUsr(SpringSecurityUtils.getCurrentUsername());
-    log.setIp(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip);
-    log.setClientId(SpringSecurityUtils.getCurrentClientId());
-    log.setCreatedAt(System.currentTimeMillis());
-    log.setOperationType(operationType);
+    Log log = Log.builder()
+        .usr(SpringSecurityUtils.getCurrentUsername())
+        .ip(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip)
+        .clientId(SpringSecurityUtils.getCurrentClientId())
+        .operationType(operationType)
+        .build();
     logDomain.create(log);
   }
 
   public void log(OperationType operationType, String path) {
-    Log log = new Log();
     String ip = SpringSecurityUtils.getCurrentUserIp();
-    log.setUsr(SpringSecurityUtils.getCurrentUsername());
-    log.setIp(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip);
-    log.setClientId(SpringSecurityUtils.getCurrentClientId());
-    log.setCreatedAt(System.currentTimeMillis());
-    log.setOperationType(operationType);
-    log.setPath(path);
+    Log log = Log.builder()
+        .usr(SpringSecurityUtils.getCurrentUsername())
+        .ip(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip)
+        .clientId(SpringSecurityUtils.getCurrentClientId())
+        .path(path)
+        .operationType(operationType)
+        .build();
     logDomain.create(log);
   }
 
