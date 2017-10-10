@@ -1,4 +1,4 @@
-FROM java:8
+FROM anapsix/alpine-java:8
 MAINTAINER saintdan saintdan1011@gmail.com
 ADD build/libs/spring-rest-oauth2-sample-*.RELEASE.jar core.jar
 RUN sh -c 'touch /core.jar'

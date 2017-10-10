@@ -20,7 +20,7 @@ public @interface NotNullField {
 
   String message() default "{javax.validation.constraints.NotNull.message}";
 
-  OperationType[] value() default OperationType.READ;
+  OperationType[] value() default OperationType.READ; // For resource access.
 
-  GrantType[] grant() default GrantType.PASSWORD;
+  GrantType[] grant() default GrantType.PASSWORD; // For login.
 }

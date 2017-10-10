@@ -1,6 +1,5 @@
 package com.saintdan.framework.repo;
 
-import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.po.Client;
 import java.util.Optional;
 
@@ -13,6 +12,6 @@ import java.util.Optional;
  */
 public interface ClientRepository extends CustomRepository<Client, Long> {
 
-  Optional<Client> findByClientIdAliasAndValidFlag(String clientIdAlias, ValidFlag validFlag);
+  Optional<Client> findByClientIdAlias(String clientIdAlias);
 
 }

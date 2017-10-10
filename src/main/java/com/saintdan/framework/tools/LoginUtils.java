@@ -1,6 +1,8 @@
 package com.saintdan.framework.tools;
 
+import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.GrantType;
+import com.saintdan.framework.exception.IllegalTokenTypeException;
 import com.saintdan.framework.param.LoginParam;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +19,15 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class LoginUtils {
 
-  public static String getClientId(HttpServletRequest request) {
-    String decodedStr = new String(Base64.decodeBase64(request.getHeader(AUTHORIZATION).substring(5)));
-    return decodedStr.substring(0, decodedStr.indexOf(COLON));
+  public static String getClientId(HttpServletRequest request) throws IllegalTokenTypeException {
+    final String BEARER = "bearer";
+    if (request.getHeader(AUTHORIZATION) == null || request.getHeader(AUTHORIZATION).contains(BEARER)) {
+      throw new IllegalTokenTypeException();
+    }
+    final String AUTHORIZATION = "Authorization";
+    final String BASIC = "basic";
+    String clientId64 = new String(Base64.decodeBase64(request.getHeader(AUTHORIZATION).replace(BASIC, CommonsConstant.BLANK)));
+    return clientId64.trim().substring(0, clientId64.indexOf(CommonsConstant.COLON));
   }
 
   public static Map<String, String> getParams(LoginParam param) {
@@ -40,7 +48,6 @@ public class LoginUtils {
   }
 
   private static final String AUTHORIZATION = "Authorization";
-  private static final String COLON = ":";
   private static final String USERNAME = "username";
   private static final String PASSWORD = "password";
   private final static String REFRESH_TOKEN = "refresh_token";

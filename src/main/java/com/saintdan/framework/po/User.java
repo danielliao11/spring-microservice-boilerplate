@@ -1,9 +1,10 @@
 package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.HashSet;
+import com.saintdan.framework.listener.PersistentListener;
+import com.saintdan.framework.listener.ValidFlagListener;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,16 +21,18 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Authorized users, provide for spring security oauth2.
@@ -39,11 +42,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @see {@link org.springframework.security.core.userdetails.UserDetails}
  * @since JDK1.8
  */
-@Entity
-@EntityListeners({AuditingEntityListener.class})
-@Table(name = "users")
+@Entity @Table(name = "users") @EntityListeners({PersistentListener.class, ValidFlagListener.class})
 @NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
-public class User implements Serializable {
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"roles", "accounts"}) @ToString(exclude = {"roles", "accounts"})
+public class User implements UserDetails {
 
   private static final long serialVersionUID = 2680591198337929454L;
 
@@ -59,7 +62,7 @@ public class User implements Serializable {
   @Id
   @GeneratedValue(generator = "userSequenceGenerator")
   @Column(updatable = false)
-  private Long id;
+  private long id;
 
   @NotEmpty
   @Column(length = 50)
@@ -74,44 +77,46 @@ public class User implements Serializable {
   private String pwd;
 
   @Column(nullable = false)
-  private boolean isAccountNonExpiredAlias = Boolean.TRUE;
+  @Builder.Default
+  private boolean isAccountNonExpiredAlias = true;
 
   @Column(nullable = false)
-  private boolean isAccountNonLockedAlias = Boolean.TRUE;
+  @Builder.Default
+  private boolean isAccountNonLockedAlias = true;
 
   @Column(nullable = false)
-  private boolean isCredentialsNonExpiredAlias = Boolean.TRUE;
+  @Builder.Default
+  private boolean isCredentialsNonExpiredAlias = true;
 
   @Column(nullable = false)
-  private boolean isEnabledAlias = Boolean.TRUE;
+  @Builder.Default
+  private boolean isEnabledAlias = true;
 
   @Column(nullable = false)
+  @Builder.Default
   private ValidFlag validFlag = ValidFlag.VALID;
 
   @Column(columnDefinition = "TEXT")
   private String description;
 
   // Last login time
-  private LocalDateTime lastLoginTime = LocalDateTime.now();
+  @Builder.Default
+  private long lastLoginAt = System.currentTimeMillis();
 
   // Last login IP address
   private String ip;
 
-  @CreatedDate
-  @Column(nullable = false)
-  private LocalDateTime createdDate = LocalDateTime.now();
+  @Column(nullable = false, updatable = false)
+  private long createdAt;
 
-  @CreatedBy
   @Column(nullable = false)
-  private Long createdBy;
+  private long createdBy;
 
-  @LastModifiedDate
   @Column(nullable = false)
-  private LocalDateTime lastModifiedDate = LocalDateTime.now();
+  private long lastModifiedAt;
 
-  @LastModifiedBy
   @Column(nullable = false)
-  private Long lastModifiedBy;
+  private long lastModifiedBy;
 
   @Version
   @Column(nullable = false)
@@ -121,22 +126,12 @@ public class User implements Serializable {
   @JoinTable(name = "users_has_roles",
       joinColumns = { @JoinColumn(name = "user_id") },
       inverseJoinColumns = { @JoinColumn(name = "role_id") })
-  private Set<Role> roles = new HashSet<>();
+  private Set<Role> roles;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
-  private Set<Account> accounts = new HashSet<>();
-
-  public User() {}
-
-  public User(Long id, String name, String usr, String pwd) {
-    this.id = id;
-    this.name = name;
-    this.usr = usr;
-    this.pwd = pwd;
-  }
+  private Set<Account> accounts;
 
   public User(User user) {
-    super();
     this.id = user.getId();
     this.name = user.getName();
     this.usr = user.getUsr();
@@ -144,178 +139,40 @@ public class User implements Serializable {
     this.roles = user.getRoles();
   }
 
-  @Override public String toString() {
-    final StringBuffer sb = new StringBuffer("User{");
-    sb.append("id=").append(id);
-    sb.append(", name='").append(name).append('\'');
-    sb.append(", usr='").append(usr).append('\'');
-    sb.append(", pwd='").append(pwd).append('\'');
-    sb.append(", isAccountNonExpiredAlias=").append(isAccountNonExpiredAlias);
-    sb.append(", isAccountNonLockedAlias=").append(isAccountNonLockedAlias);
-    sb.append(", isCredentialsNonExpiredAlias=").append(isCredentialsNonExpiredAlias);
-    sb.append(", isEnabledAlias=").append(isEnabledAlias);
-    sb.append(", validFlag=").append(validFlag);
-    sb.append(", description='").append(description).append('\'');
-    sb.append(", lastLoginTime=").append(lastLoginTime);
-    sb.append(", ip='").append(ip).append('\'');
-    sb.append(", createdDate=").append(createdDate);
-    sb.append(", createdBy=").append(createdBy);
-    sb.append(", lastModifiedDate=").append(lastModifiedDate);
-    sb.append(", lastModifiedBy=").append(lastModifiedBy);
-    sb.append(", version=").append(version);
-    sb.append('}');
-    return sb.toString();
+  /**
+   * Get the authorities.
+   *
+   * @return GrantedAuthorities
+   */
+  @Override public Collection<? extends GrantedAuthority> getAuthorities() {
+    Collection<GrantedAuthority> authorities = new ArrayList<>();
+    getRoles()
+        .forEach(role -> role.getResources()
+            .forEach(resource -> authorities.add(new SimpleGrantedAuthority(resource.getName()))));
+    return authorities;
   }
 
-  public Long getId() {
-    return id;
+  @Override public String getUsername() {
+    return getUsr();
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  @Override public String getPassword() {
+    return getPwd();
   }
 
-  public String getName() {
-    return name;
+  @Override public boolean isAccountNonExpired() {
+    return isAccountNonExpiredAlias();
   }
 
-  public void setName(String name) {
-    this.name = name;
+  @Override public boolean isAccountNonLocked() {
+    return isAccountNonLockedAlias();
   }
 
-  public String getUsr() {
-    return usr;
+  @Override public boolean isCredentialsNonExpired() {
+    return isCredentialsNonExpiredAlias();
   }
 
-  public void setUsr(String usr) {
-    this.usr = usr;
-  }
-
-  public String getPwd() {
-    return pwd;
-  }
-
-  public void setPwd(String pwd) {
-    this.pwd = pwd;
-  }
-
-  public boolean isAccountNonExpiredAlias() {
-    return isAccountNonExpiredAlias;
-  }
-
-  public void setAccountNonExpiredAlias(boolean accountNonExpiredAlias) {
-    isAccountNonExpiredAlias = accountNonExpiredAlias;
-  }
-
-  public boolean isAccountNonLockedAlias() {
-    return isAccountNonLockedAlias;
-  }
-
-  public void setAccountNonLockedAlias(boolean accountNonLockedAlias) {
-    isAccountNonLockedAlias = accountNonLockedAlias;
-  }
-
-  public boolean isCredentialsNonExpiredAlias() {
-    return isCredentialsNonExpiredAlias;
-  }
-
-  public void setCredentialsNonExpiredAlias(boolean credentialsNonExpiredAlias) {
-    isCredentialsNonExpiredAlias = credentialsNonExpiredAlias;
-  }
-
-  public boolean isEnabledAlias() {
-    return isEnabledAlias;
-  }
-
-  public void setEnabledAlias(boolean enabledAlias) {
-    isEnabledAlias = enabledAlias;
-  }
-
-  public ValidFlag getValidFlag() {
-    return validFlag;
-  }
-
-  public void setValidFlag(ValidFlag validFlag) {
-    this.validFlag = validFlag;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public LocalDateTime getLastLoginTime() {
-    return lastLoginTime;
-  }
-
-  public void setLastLoginTime(LocalDateTime lastLoginTime) {
-    this.lastLoginTime = lastLoginTime;
-  }
-
-  public String getIp() {
-    return ip;
-  }
-
-  public void setIp(String ip) {
-    this.ip = ip;
-  }
-
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
-
-  public void setCreatedDate(LocalDateTime createdDate) {
-    this.createdDate = createdDate;
-  }
-
-  public Long getCreatedBy() {
-    return createdBy;
-  }
-
-  public void setCreatedBy(Long createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public LocalDateTime getLastModifiedDate() {
-    return lastModifiedDate;
-  }
-
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
-  }
-
-  public Long getLastModifiedBy() {
-    return lastModifiedBy;
-  }
-
-  public void setLastModifiedBy(Long lastModifiedBy) {
-    this.lastModifiedBy = lastModifiedBy;
-  }
-
-  public int getVersion() {
-    return version;
-  }
-
-  public void setVersion(int version) {
-    this.version = version;
-  }
-
-  public Set<Role> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
-  }
-
-  public Set<Account> getAccounts() {
-    return accounts;
-  }
-
-  public void setAccounts(Set<Account> accounts) {
-    this.accounts = accounts;
+  @Override public boolean isEnabled() {
+    return isEnabledAlias();
   }
 }

@@ -2,9 +2,9 @@ package com.saintdan.framework.domain;
 
 import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
+import com.saintdan.framework.constant.AuthorityConstant;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.Client;
@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.CharacterPredicates;
+import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -35,8 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
-
-
   @Autowired public ClientDomain(CustomRepository<Client, Long> repository, LogHelper logHelper, Transformer transformer, ClientRepository clientRepository) {
     super(repository, logHelper, transformer);
     Assert.defaultNotNull(clientRepository);
@@ -44,8 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   @Transactional public ClientVO create(ClientParam param, User currentUser) throws Exception {
-    clientIdExists(param.getClientIdAlias());
-    return po2Vo(super.createByPO(transformer.param2PO(getClassT(), param, new Client(), currentUser), currentUser));
+    return po2Vo(super.createByPO(param2Po(param, currentUser)));
   }
 
   public List<ClientVO> all() {
@@ -53,7 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   public Client findClientByClientId(String clientId) {
-    return clientRepository.findByClientIdAliasAndValidFlag(clientId, ValidFlag.VALID).orElse(null);
+    return clientRepository.findByClientIdAlias(clientId).orElse(null);
   }
 
   public Client findById(Long id) {
@@ -65,10 +64,7 @@ import org.springframework.transaction.annotation.Transactional;
     if (client == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
     }
-    if (StringUtils.isNotBlank(param.getClientIdAlias())) {
-      param.setClientIdAlias(null);
-    }
-    return po2Vo(super.updateByPO(transformer.param2PO(getClassT(), param, client, currentUser), currentUser));
+    return po2Vo(super.updateByPO(param2Po(param, currentUser)));
   }
 
   // --------------------------
@@ -77,33 +73,39 @@ import org.springframework.transaction.annotation.Transactional;
 
   private final ClientRepository clientRepository;
 
-  private final static String CLIENT_ID = "clientId";
-
-  private void clientIdExists(String clientId) throws Exception {
-    if (clientRepository.findByClientIdAliasAndValidFlag(clientId, ValidFlag.VALID).isPresent()) {
-      // Throw client already existing exception, clientId taken.
-      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CLIENT_ID));
+  private Client param2Po(ClientParam param, User currentUser) throws Exception {
+    Client client = transformer.param2PO(getClassT(), param, new Client(), currentUser);
+    if (client.getId() == 0) {
+      RandomStringGenerator clientGenerator = new RandomStringGenerator.Builder()
+          .withinRange('0', 'z').filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS).build();
+      client.setClientIdAlias(clientGenerator.generate(16));
+      client.setClientSecretAlias(clientGenerator.generate(32));
+      client.setResourceIdStr(AuthorityConstant.RESOURCE_ID);
+      client.setScopeStr(StringUtils.isBlank(param.getScope()) ? AuthorityConstant.SCOPE : param.getScope());
+      client.setAuthorizedGrantTypeStr(StringUtils.isBlank(param.getGrantType()) ? AuthorityConstant.GRANT_TYPE : param.getGrantType());
+      client.setAuthoritiesStr(AuthorityConstant.AUTHORITY);
     }
+    return client;
   }
 
   private ClientVO po2Vo(Client client) {
     if (client == null) {
       return null;
     }
-    ClientVO vo = new ClientVO();
-    vo.setId(client.getId());
-    vo.setClientId(client.getClientIdAlias());
-    vo.setClientSecret(client.getClientSecretAlias());
-    vo.setResourceIds(transformer.str2Set(client.getResourceIdStr()));
-    vo.setScope(transformer.str2Set(client.getScopeStr()));
-    vo.setAuthorizedGrantTypes(transformer.str2Set(client.getAuthorizedGrantTypeStr()));
-    vo.setRegisteredRedirectUri(transformer.str2Set(client.getRegisteredRedirectUriStr()));
-    vo.setGrantedAuthorities(Arrays.stream(client.getAuthoritiesStr().split(CommonsConstant.COMMA))
-        .map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
-    vo.setAccessTokenValiditySeconds(client.getAccessTokenValiditySecondsAlias());
-    vo.setRefreshTokenValiditySeconds(client.getRefreshTokenValiditySecondsAlias());
-    vo.setPublicKey(client.getPublicKey());
-    return vo;
+    return ClientVO.builder()
+        .id(client.getId())
+        .clientId(client.getClientIdAlias())
+        .clientSecret(client.getClientSecretAlias())
+        .resourceIds(transformer.str2Set(client.getResourceIdStr()))
+        .scope(transformer.str2Set(client.getScopeStr()))
+        .authorizedGrantTypes(transformer.str2Set(client.getAuthorizedGrantTypeStr()))
+        .registeredRedirectUri(transformer.str2Set(client.getRegisteredRedirectUriStr()))
+        .grantedAuthorities(Arrays.stream(client.getAuthoritiesStr().split(CommonsConstant.COMMA))
+            .map(SimpleGrantedAuthority::new).collect(Collectors.toList()))
+        .accessTokenValiditySeconds(client.getAccessTokenValiditySecondsAlias())
+        .refreshTokenValiditySeconds(client.getRefreshTokenValiditySecondsAlias())
+        .publicKey(client.getPublicKey())
+        .build();
   }
 
 }

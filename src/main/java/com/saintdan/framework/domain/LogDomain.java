@@ -1,17 +1,16 @@
 package com.saintdan.framework.domain;
 
-import com.saintdan.framework.component.Transformer;
-import com.saintdan.framework.param.LogParam;
+import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.po.Log;
-import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.LogRepository;
 import com.saintdan.framework.tools.Assert;
-import com.saintdan.framework.vo.LogVO;
-import java.util.List;
-import org.springframework.beans.BeanUtils;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,48 +27,33 @@ import org.springframework.transaction.annotation.Transactional;
   // PUBLIC METHODS
   // ------------------------
 
-
-  @Autowired public LogDomain(Transformer transformer, LogRepository logRepository) {
-    Assert.defaultNotNull(transformer);
-    Assert.defaultNotNull(logRepository);
-    this.transformer = transformer;
-    this.logRepository = logRepository;
+  @Async @Transactional public void create(Log log) {
+    logRepository.save(log);
   }
 
-  @Transactional public LogVO create(LogParam param, User currentUser) throws Exception {
-    return transformer.po2VO(LogVO.class, logRepository.save(logParam2PO(param, currentUser)));
-  }
-
+  /**
+   * Show logs.
+   *
+   * @return {@link Page}
+   * @throws CommonsException {@link com.saintdan.framework.enums.ErrorType#SYS0121} No group exists.
+   */
   @SuppressWarnings("unchecked")
-  public List<LogVO> getAllLogs() throws Exception {
-    List<Log> logs = logRepository.findAll();
-    if (logs.isEmpty()) {
-      return null;
+  public Page page(Specification<Log> specification, Pageable pageable) throws Exception {
+    Page<Log> logs = logRepository.findAll(specification, pageable);
+    if (!logs.hasContent()) {
+      return new PageImpl<>(new ArrayList<>(), pageable, logs.getTotalElements());
     }
-    return transformer.pos2VOs(LogVO.class, logs);
-  }
-
-  public Page getPage(Pageable pageable) throws Exception {
-    Page<Log> logPage = logRepository.findAll(pageable);
-    if (!logPage.hasContent()) {
-      return null;
-    }
-    return transformer.poPage2VO(transformer.pos2VOs(LogVO.class, logPage.getContent()), pageable, logPage.getTotalElements());
+    return logs;
   }
 
   // --------------------------
   // PRIVATE FIELDS AND METHODS
   // --------------------------
 
-  private final Transformer transformer;
-
   private final LogRepository logRepository;
 
-  private Log logParam2PO(LogParam param, User currentUser) {
-    Log log = new Log();
-    BeanUtils.copyProperties(param, log);
-    log.setUserId(currentUser.getId());
-    log.setUsername(currentUser.getUsr());
-    return log;
+  @Autowired public LogDomain(LogRepository logRepository) {
+    Assert.defaultNotNull(logRepository);
+    this.logRepository = logRepository;
   }
 }

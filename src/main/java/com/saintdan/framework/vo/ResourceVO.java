@@ -1,6 +1,10 @@
 package com.saintdan.framework.vo;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * VO for {@link com.saintdan.framework.po.Resource}
@@ -9,6 +13,7 @@ import java.io.Serializable;
  * @date 10/16/15
  * @since JDK1.8
  */
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class ResourceVO implements Serializable {
 
   private static final long serialVersionUID = 8917291426920312742L;
@@ -18,37 +23,4 @@ public class ResourceVO implements Serializable {
   private String name;
 
   private String description;
-
-  @Override public String toString() {
-    final StringBuffer sb = new StringBuffer("ResourceVO{");
-    sb.append("id=").append(id);
-    sb.append(", name='").append(name).append('\'');
-    sb.append(", description='").append(description).append('\'');
-    sb.append('}');
-    return sb.toString();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
 }

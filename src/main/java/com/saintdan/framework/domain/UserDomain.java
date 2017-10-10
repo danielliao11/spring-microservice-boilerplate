@@ -64,7 +64,7 @@ import org.springframework.transaction.annotation.Transactional;
     User user = param2Po(param, new User(), currentUser);
     Account account = param2Account(param, new Account(), user, currentUser);
     accountRepository.save(account);
-    return super.createByPO(user, currentUser);
+    return super.createByPO(user);
   }
 
   public List<UserVO> getAll(Specification<User> specification, Sort sort) {
@@ -107,7 +107,7 @@ import org.springframework.transaction.annotation.Transactional;
     if (StringUtils.isNotBlank(param.getUsr())) {
       param.setUsr(null);
     }
-    return super.updateByPO(param2Po(param, user, currentUser), currentUser);
+    return super.updateByPO(param2Po(param, user, currentUser));
   }
 
   public Account param2Account(UserParam param, Account account, User user, User currentUser) throws Exception {

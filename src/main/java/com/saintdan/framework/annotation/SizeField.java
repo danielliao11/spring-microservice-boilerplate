@@ -57,7 +57,7 @@ public @interface SizeField {
     javax.validation.constraints.Size[] value();
   }
 
-  OperationType[] value() default OperationType.READ;
+  OperationType[] value() default OperationType.READ; // For resource access.
 
-  GrantType[] grant() default GrantType.PASSWORD;
+  GrantType[] grant() default GrantType.PASSWORD; // For login.
 }

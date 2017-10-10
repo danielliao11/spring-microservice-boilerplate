@@ -1,6 +1,6 @@
 description 'spring-micro-services-boilerplate'
 group 'com.saintdan.framework'
-version '0.18.2.RELEASE'
+version '1.0.0.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -21,7 +21,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.3.RELEASE')
+    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.6.RELEASE')
   }
 }
 
@@ -50,20 +50,20 @@ compileTestJava {
 }
 
 ext {
-  springBootVersion = '1.5.3.RELEASE'
-  springOAuth2Version = '2.1.0.RELEASE'
+  springBootVersion = '1.5.7.RELEASE'
+  springOAuth2Version = '2.2.0.RELEASE'
 
-  springBootAdminVersion = '1.5.0'
-
-  jacksonVersion = '2.8.5'
-  commonsLang3Version = '3.5'
+  lombokVersion = '1.16.18'
+  commonsTextVersion = '1.1'
+  commonsLang3Version = '3.6'
+  commonsBeanutilsVersion = '1.9.3'
   guavaVersion = '21.0'
   swaggerVersion = '2.6.1'
-  specVersion = '0.9.0'
+  specVersion = '0.9.2'
 
 //  hsqldbVersion = '1.8.0.10'
 //  mysqlVersion = '5.1.36'
-  postgresqlVersion = '42.0.0'
+  postgresqlVersion = '42.1.4'
 
   jsonPathVersion = '2.0.0'
   junitVersion = '4.12'
@@ -72,20 +72,18 @@ ext {
 dependencies {
   // Spring boot dependencies.
   compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-  compile "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
   compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
-  compile "org.springframework.boot:spring-boot-devtools"
+  compile "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
 
   // Spring oauth2 dependency.
   compile "org.springframework.security.oauth:spring-security-oauth2:${springOAuth2Version}"
 
-  // Spring Boot Admin
-  compile "de.codecentric:spring-boot-admin-server:${springBootAdminVersion}"
-
   // Other dependencies.
+  compile "org.projectlombok:lombok:${lombokVersion}"
   compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
-  compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+  compile "org.apache.commons:commons-text:${commonsTextVersion}"
+  compile "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
   compile "com.google.guava:guava:${guavaVersion}"
   compile ("net.kaczmarzyk:specification-arg-resolver:${specVersion}") {
     exclude group:'org.hibernate.javax.persistence'

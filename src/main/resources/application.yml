@@ -81,7 +81,7 @@ spring:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
         generate_statistics: true
 # Mysql
 #      dialect: org.hibernate.dialect.MySQL5Dialect

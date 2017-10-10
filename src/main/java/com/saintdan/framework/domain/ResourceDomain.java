@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
   @Transactional public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
     nameExists(param.getName());
-    return super.createByPO(ResourceVO.class, resourceParam2PO(param, new Resource(), currentUser), currentUser);
+    return super.createByPO(ResourceVO.class, resourceParam2PO(param, new Resource(), currentUser));
   }
 
   public List<ResourceVO> all() {
@@ -60,15 +60,15 @@ import org.springframework.transaction.annotation.Transactional;
     if (!param.getName().equals(resource.getName())) {
       nameExists(param.getName());
     }
-    return super.updateByPO(ResourceVO.class, resourceParam2PO(param, resource, currentUser), currentUser);
+    return super.updateByPO(ResourceVO.class, resourceParam2PO(param, resource, currentUser));
   }
 
   public Resource findById(Long id) {
     return resourceRepository.findById(id).orElse(null);
   }
 
-  @Transactional @Override public void deepDelete(Long id, User currentUser) throws Exception {
-    logHelper.logUsersOperations(OperationType.DELETE, getClassT().getName(), currentUser);
+  @Transactional @Override public void deepDelete(Long id) throws Exception {
+    logHelper.log(OperationType.DELETE, getClassT().getName());
     Resource resource = findById(id);
     if (resource == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));

@@ -1,7 +1,7 @@
 package com.saintdan.framework.tool;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.text.RandomStringGenerator;
 
 /**
  * Generate encode password.
@@ -12,10 +12,12 @@ import org.apache.commons.lang3.RandomStringUtils;
  */
 public class GenerateEncodedPassword {
 
-  private static final String RAW_PASSWORD = "alice123";
-
   public static void main(String[] args) {
-    String encodedPassword = new CustomPasswordEncoder().encode(RAW_PASSWORD);
+    RandomStringGenerator generator = new RandomStringGenerator.Builder()
+        .withinRange('!', '}').build();
+    String pwd = generator.generate(32);
+    System.out.println(pwd);
+    String encodedPassword = new CustomPasswordEncoder().encode(pwd);
     System.out.println(encodedPassword);
   }
 }
