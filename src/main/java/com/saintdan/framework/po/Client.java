@@ -1,8 +1,14 @@
 package com.saintdan.framework.po;
 
-import com.saintdan.framework.enums.ValidFlag;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import com.google.common.collect.Sets;
+import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.listener.PersistentListener;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -10,14 +16,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.provider.ClientDetails;
 
 /**
  * Authorized client, provide for spring security.
@@ -26,10 +35,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @date 10/23/15
  * @since JDK1.8
  */
-@Entity
-@EntityListeners({ AuditingEntityListener.class })
-@Table(name = "clients")
-public class Client implements Serializable {
+@Entity @EntityListeners(PersistentListener.class) @Table(name = "clients")
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
+public class Client implements ClientDetails {
 
   private static final long serialVersionUID = 6500601540965188191L;
 
@@ -45,7 +53,7 @@ public class Client implements Serializable {
   @Id
   @GeneratedValue(generator = "clientSequenceGenerator")
   @Column(updatable = false)
-  private Long id;
+  private long id;
 
   @NotEmpty
   @Column(length = 50)
@@ -95,13 +103,15 @@ public class Client implements Serializable {
    * The access token validity period in seconds (optional).
    * If unspecified a global default will be applied by the token services.
    */
-  private Integer accessTokenValiditySecondsAlias;
+  @Builder.Default
+  private int accessTokenValiditySecondsAlias = 1800;
 
   /**
    * The refresh token validity period in seconds (optional).
    * If unspecified a global default will  be applied by the token services.
    */
-  private Integer refreshTokenValiditySecondsAlias;
+  @Builder.Default
+  private int refreshTokenValiditySecondsAlias = 3600;
 
   /**
    * Additional information for this client, not needed by the vanilla OAuth protocol but might be useful, for example,
@@ -109,24 +119,17 @@ public class Client implements Serializable {
    */
   private String additionalInformationStr;
 
-  @Column(nullable = false)
-  private ValidFlag validFlag = ValidFlag.VALID;
+  @Column(nullable = false, updatable = false)
+  private long createdAt;
 
-  @CreatedDate
-  @Column(nullable = false)
-  private LocalDateTime createdDate = LocalDateTime.now();
+  @Column(nullable = false, updatable = false)
+  private long createdBy;
 
-  @CreatedBy
   @Column(nullable = false)
-  private Long createdBy;
+  private long lastModifiedAt;
 
-  @LastModifiedDate
   @Column(nullable = false)
-  private LocalDateTime lastModifiedDate = LocalDateTime.now();
-
-  @LastModifiedBy
-  @Column(nullable = false)
-  private Long lastModifiedBy;
+  private long lastModifiedBy;
 
   @Version
   @Column(nullable = false)
@@ -134,8 +137,6 @@ public class Client implements Serializable {
 
   @Column(nullable = false, length = 5000)
   private String publicKey;
-
-  public Client() {}
 
   public Client(Client client) {
     super();
@@ -151,171 +152,63 @@ public class Client implements Serializable {
     this.additionalInformationStr = client.getAdditionalInformationStr();
   }
 
-  @Override public String toString() {
-    final StringBuffer sb = new StringBuffer("Client{");
-    sb.append("id=").append(id);
-    sb.append(", clientIdAlias='").append(clientIdAlias).append('\'');
-    sb.append(", resourceIdStr='").append(resourceIdStr).append('\'');
-    sb.append(", clientSecretAlias='").append(clientSecretAlias).append('\'');
-    sb.append(", scopeStr='").append(scopeStr).append('\'');
-    sb.append(", authorizedGrantTypeStr='").append(authorizedGrantTypeStr).append('\'');
-    sb.append(", registeredRedirectUriStr='").append(registeredRedirectUriStr).append('\'');
-    sb.append(", authoritiesStr='").append(authoritiesStr).append('\'');
-    sb.append(", accessTokenValiditySecondsAlias=").append(accessTokenValiditySecondsAlias);
-    sb.append(", refreshTokenValiditySecondsAlias=").append(refreshTokenValiditySecondsAlias);
-    sb.append(", additionalInformationStr='").append(additionalInformationStr).append('\'');
-    sb.append(", validFlag=").append(validFlag);
-    sb.append(", createdDate=").append(createdDate);
-    sb.append(", createdBy=").append(createdBy);
-    sb.append(", lastModifiedDate=").append(lastModifiedDate);
-    sb.append(", lastModifiedBy=").append(lastModifiedBy);
-    sb.append(", version=").append(version);
-    sb.append(", publicKey='").append(publicKey).append('\'');
-    sb.append('}');
-    return sb.toString();
+  @Override public String getClientId() {
+    return getClientIdAlias();
   }
 
-  public Long getId() {
-    return id;
+  @Override public Set<String> getResourceIds() {
+    return str2Set(getResourceIdStr());
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  @Override public boolean isSecretRequired() {
+    return true;
   }
 
-  public String getClientIdAlias() {
-    return clientIdAlias;
+  @Override public String getClientSecret() {
+    return getClientSecretAlias();
   }
 
-  public void setClientIdAlias(String clientIdAlias) {
-    this.clientIdAlias = clientIdAlias;
+  @Override public boolean isScoped() {
+    return true;
   }
 
-  public String getResourceIdStr() {
-    return resourceIdStr;
+  @Override public Set<String> getScope() {
+    return str2Set(getScopeStr());
   }
 
-  public void setResourceIdStr(String resourceIdStr) {
-    this.resourceIdStr = resourceIdStr;
+  @Override public Set<String> getAuthorizedGrantTypes() {
+    return str2Set(getAuthorizedGrantTypeStr());
   }
 
-  public String getClientSecretAlias() {
-    return clientSecretAlias;
+  @Override public Set<String> getRegisteredRedirectUri() {
+    return str2Set(getRegisteredRedirectUriStr());
   }
 
-  public void setClientSecretAlias(String clientSecretAlias) {
-    this.clientSecretAlias = clientSecretAlias;
+  @Override public Collection<GrantedAuthority> getAuthorities() {
+    return Arrays.stream(getAuthorizedGrantTypeStr().split(CommonsConstant.COMMA))
+        .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
   }
 
-  public String getScopeStr() {
-    return scopeStr;
+  @Override public Integer getAccessTokenValiditySeconds() {
+    return getAccessTokenValiditySecondsAlias();
   }
 
-  public void setScopeStr(String scopeStr) {
-    this.scopeStr = scopeStr;
+  @Override public Integer getRefreshTokenValiditySeconds() {
+    return null;
   }
 
-  public String getAuthorizedGrantTypeStr() {
-    return authorizedGrantTypeStr;
+  @Override public boolean isAutoApprove(String scope) {
+    return false;
   }
 
-  public void setAuthorizedGrantTypeStr(String authorizedGrantTypeStr) {
-    this.authorizedGrantTypeStr = authorizedGrantTypeStr;
+  @Override public Map<String, Object> getAdditionalInformation() {
+    return null;
   }
 
-  public String getRegisteredRedirectUriStr() {
-    return registeredRedirectUriStr;
-  }
-
-  public void setRegisteredRedirectUriStr(String registeredRedirectUriStr) {
-    this.registeredRedirectUriStr = registeredRedirectUriStr;
-  }
-
-  public String getAuthoritiesStr() {
-    return authoritiesStr;
-  }
-
-  public void setAuthoritiesStr(String authoritiesStr) {
-    this.authoritiesStr = authoritiesStr;
-  }
-
-  public Integer getAccessTokenValiditySecondsAlias() {
-    return accessTokenValiditySecondsAlias;
-  }
-
-  public void setAccessTokenValiditySecondsAlias(Integer accessTokenValiditySecondsAlias) {
-    this.accessTokenValiditySecondsAlias = accessTokenValiditySecondsAlias;
-  }
-
-  public Integer getRefreshTokenValiditySecondsAlias() {
-    return refreshTokenValiditySecondsAlias;
-  }
-
-  public void setRefreshTokenValiditySecondsAlias(Integer refreshTokenValiditySecondsAlias) {
-    this.refreshTokenValiditySecondsAlias = refreshTokenValiditySecondsAlias;
-  }
-
-  public String getAdditionalInformationStr() {
-    return additionalInformationStr;
-  }
-
-  public void setAdditionalInformationStr(String additionalInformationStr) {
-    this.additionalInformationStr = additionalInformationStr;
-  }
-
-  public ValidFlag getValidFlag() {
-    return validFlag;
-  }
-
-  public void setValidFlag(ValidFlag validFlag) {
-    this.validFlag = validFlag;
-  }
-
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
-
-  public void setCreatedDate(LocalDateTime createdDate) {
-    this.createdDate = createdDate;
-  }
-
-  public Long getCreatedBy() {
-    return createdBy;
-  }
-
-  public void setCreatedBy(Long createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public LocalDateTime getLastModifiedDate() {
-    return lastModifiedDate;
-  }
-
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
-  }
-
-  public Long getLastModifiedBy() {
-    return lastModifiedBy;
-  }
-
-  public void setLastModifiedBy(Long lastModifiedBy) {
-    this.lastModifiedBy = lastModifiedBy;
-  }
-
-  public int getVersion() {
-    return version;
-  }
-
-  public void setVersion(int version) {
-    this.version = version;
-  }
-
-  public String getPublicKey() {
-    return publicKey;
-  }
-
-  public void setPublicKey(String publicKey) {
-    this.publicKey = publicKey;
+  private Set<String> str2Set(String str) {
+    if (StringUtils.isBlank(str)) {
+      return new HashSet<>();
+    }
+    return Sets.newHashSet(Arrays.stream(str.split(CommonsConstant.COMMA)).collect(Collectors.toList()));
   }
 }

@@ -13,13 +13,13 @@ import org.springframework.boot.autoconfigure.web.HttpMessageConvertersAutoConfi
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ServerPropertiesAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
- * Entrance of <p>spring-rest-oauth2</p>
+ * Entrance of <p>spring-micro-services-boilerplate</p>
  * <p>
  * "Engine start"
  * </p>
@@ -32,7 +32,7 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
     basePackageClasses = { Application.class, Jsr310JpaConverters.class }
 )
 @SpringBootApplication
-@EnableDiscoveryClient
+@EnableAsync
 // I don't use Jmx and web socket, so I comment them.
 @Import({
     DispatcherServletAutoConfiguration.class,

@@ -6,9 +6,11 @@ import com.saintdan.framework.constant.ResourceURL;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.GrantType;
+import com.saintdan.framework.exception.IllegalTokenTypeException;
 import com.saintdan.framework.param.LoginParam;
 import com.saintdan.framework.service.LoginService;
 import com.saintdan.framework.tools.Assert;
+import com.saintdan.framework.vo.ErrorVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -17,9 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,16 +38,20 @@ public class RefreshController {
   @ApiOperation(value = "refresh token", httpMethod = "POST", response = OAuth2AccessToken.class)
   @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   public ResponseEntity refresh(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
+    // Validate client, param.
+    ResponseEntity responseEntity;
     try {
-      // Validate current user, param and sign.
-      ResponseEntity responseEntity = validateHelper.validate(param, GrantType.REFRESH_TOKEN);
-      if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-        return responseEntity;
-      }
-      return service.refresh(param, request);
-    } catch (BadCredentialsException | InvalidGrantException e) {
-      // Return unknown error and log the exception.
-      return resultHelper.infoResp(logger, ErrorType.parse(e.getMessage()), ErrorType.parse(e.getMessage()).description(), HttpStatus.UNAUTHORIZED);
+      responseEntity = validateHelper.validate(request, param, GrantType.REFRESH_TOKEN);
+    } catch (IllegalTokenTypeException e) {
+      return resultHelper.infoResp(e.getErrorType(), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
+      return responseEntity;
+    }
+    try {
+      return loginService.refresh(param, request);
+    } catch (IllegalTokenTypeException e){
+      return new ResponseEntity<>(new ErrorVO(e.getErrorType().name(), e.getErrorType().description()), HttpStatus.UNAUTHORIZED);
     } catch (Exception e) {
       // Return unknown error and log the exception.
       return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -56,17 +60,17 @@ public class RefreshController {
 
   private static final Logger logger = LoggerFactory.getLogger(RefreshController.class);
 
-  private final LoginService service;
+  private final LoginService loginService;
 
   private final ResultHelper resultHelper;
 
   private final ValidateHelper validateHelper;
 
-  public RefreshController(LoginService service, ResultHelper resultHelper, ValidateHelper validateHelper) {
-    Assert.defaultNotNull(service);
+  public RefreshController(LoginService loginService, ResultHelper resultHelper, ValidateHelper validateHelper) {
+    Assert.defaultNotNull(loginService);
     Assert.defaultNotNull(resultHelper);
     Assert.defaultNotNull(validateHelper);
-    this.service = service;
+    this.loginService = loginService;
     this.resultHelper = resultHelper;
     this.validateHelper = validateHelper;
   }

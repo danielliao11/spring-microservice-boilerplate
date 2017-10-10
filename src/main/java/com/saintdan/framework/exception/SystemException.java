@@ -54,6 +54,10 @@ public abstract class SystemException extends Exception implements Serializable 
     this.errorType = type;
   }
 
+  public SystemException(String msg) {
+    super(msg);
+  }
+
   /**
    * Constructs an {@code SystemException}
    */

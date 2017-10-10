@@ -1,9 +1,9 @@
 package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
+import com.saintdan.framework.listener.PersistentListener;
+import com.saintdan.framework.listener.ValidFlagListener;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,14 +20,15 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Authorized roles, provide for spring security.
@@ -36,8 +37,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @date 6/23/15
  * @since JDK1.8
  */
-@Entity @EntityListeners({AuditingEntityListener.class}) @Table(name = "roles")
+@Entity @Table(name = "roles") @EntityListeners({PersistentListener.class, ValidFlagListener.class})
 @NamedEntityGraph(name = "Role.resources", attributeNodes = @NamedAttributeNode("resources"))
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode(exclude = "users") @ToString(exclude = "users")
 public class Role implements Serializable {
 
   private static final long serialVersionUID = -5193344128221526323L;
@@ -54,7 +57,7 @@ public class Role implements Serializable {
   @Id
   @GeneratedValue(generator = "roleSequenceGenerator")
   @Column(updatable = false)
-  private Long id;
+  private long id;
 
   @NotEmpty
   @Column(unique = true, nullable = false, length = 20)
@@ -64,149 +67,41 @@ public class Role implements Serializable {
   private String description;
 
   @Column(nullable = false)
+  @Builder.Default
   private ValidFlag validFlag = ValidFlag.VALID;
 
-  @CreatedDate
   @Column(nullable = false, updatable = false)
-  private LocalDateTime createdDate = LocalDateTime.now();
+  private long createdAt;
 
-  @CreatedBy
   @Column(nullable = false, updatable = false)
-  private Long createdBy;
+  private long createdBy;
 
-  @LastModifiedDate
   @Column(nullable = false)
-  private LocalDateTime lastModifiedDate = LocalDateTime.now();
+  private long lastModifiedAt;
 
-  @LastModifiedBy
   @Column(nullable = false)
-  private Long lastModifiedBy;
+  private long lastModifiedBy;
 
   @Version
   @Column(nullable = false)
-  private Integer version;
+  private int version;
 
   @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = CascadeType.REFRESH)
-  private Set<User> users = new HashSet<>();
+  private Set<User> users;
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REFRESH })
   @JoinTable(name = "roles_has_resources",
       joinColumns = { @JoinColumn(name = "role_id") },
       inverseJoinColumns = { @JoinColumn(name = "resource_id") })
-  private Set<Resource> resources = new HashSet<>();
+  private Set<Resource> resources;
 
   @PreRemove
   private void removeRolesFromUsers() {
     users.forEach(user -> user.getRoles().remove(this));
   }
 
-  public Role() {}
-
   public Role(String name, String description) {
     this.name = name;
     this.description = description;
-  }
-
-  @Override public String toString() {
-    final StringBuffer sb = new StringBuffer("Role{");
-    sb.append("id=").append(id);
-    sb.append(", name='").append(name).append('\'');
-    sb.append(", description='").append(description).append('\'');
-    sb.append(", validFlag=").append(validFlag);
-    sb.append(", createdDate=").append(createdDate);
-    sb.append(", createdBy=").append(createdBy);
-    sb.append(", lastModifiedDate=").append(lastModifiedDate);
-    sb.append(", lastModifiedBy=").append(lastModifiedBy);
-    sb.append(", version=").append(version);
-    sb.append('}');
-    return sb.toString();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public ValidFlag getValidFlag() {
-    return validFlag;
-  }
-
-  public void setValidFlag(ValidFlag validFlag) {
-    this.validFlag = validFlag;
-  }
-
-  public LocalDateTime getCreatedDate() {
-    return createdDate;
-  }
-
-  public void setCreatedDate(LocalDateTime createdDate) {
-    this.createdDate = createdDate;
-  }
-
-  public Long getCreatedBy() {
-    return createdBy;
-  }
-
-  public void setCreatedBy(Long createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public LocalDateTime getLastModifiedDate() {
-    return lastModifiedDate;
-  }
-
-  public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-    this.lastModifiedDate = lastModifiedDate;
-  }
-
-  public Long getLastModifiedBy() {
-    return lastModifiedBy;
-  }
-
-  public void setLastModifiedBy(Long lastModifiedBy) {
-    this.lastModifiedBy = lastModifiedBy;
-  }
-
-  public Integer getVersion() {
-    return version;
-  }
-
-  public void setVersion(Integer version) {
-    this.version = version;
-  }
-
-  public Set<User> getUsers() {
-    return users;
-  }
-
-  public void setUsers(Set<User> users) {
-    this.users = users;
-  }
-
-  public Set<Resource> getResources() {
-    return resources;
-  }
-
-  public void setResources(Set<Resource> resources) {
-    this.resources = resources;
   }
 }

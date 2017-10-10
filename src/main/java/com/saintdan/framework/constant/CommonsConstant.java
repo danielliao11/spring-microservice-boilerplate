@@ -25,9 +25,13 @@ public interface CommonsConstant {
 
   String VALID_FLAG = "validFlag";
 
+  String BLANK = "";
+
   String COMMA = ",";
 
   String COLON = ":";
 
   String SLASH = "/";
+
+  String ZERO = "0";
 }

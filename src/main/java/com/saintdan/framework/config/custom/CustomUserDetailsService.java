@@ -20,10 +20,9 @@ import org.springframework.stereotype.Service;
 @Service public class CustomUserDetailsService implements UserDetailsService {
 
   @Override public UserDetails loadUserByUsername(String usr) throws UsernameNotFoundException {
-    User user = userRepository.findByUsrAndValidFlag(usr, ValidFlag.VALID).orElseThrow(
+    return userRepository.findByUsrAndValidFlag(usr, ValidFlag.VALID).orElseThrow(
         // Throw cannot find any user by this usr param.
         () -> new UsernameNotFoundException(String.format("User %s does not exist!", usr)));
-    return new CustomUserRepositoryUserDetails(user);
   }
 
   private final UserRepository userRepository;

@@ -6,6 +6,12 @@
  *
  *   {@link com.saintdan.framework.annotation.SignField}
  *   Annotate param field for signature.
+ *
+ *   {@link com.saintdan.framework.annotation.NotNullField}
+ *   Param field not null validate.
+ *
+ *   {@link com.saintdan.framework.annotation.SizeField}
+ *   Param field size validate.
  * </pre>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
