@@ -1,7 +1,8 @@
 package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
-import com.saintdan.framework.listener.CreatedAtPersistentListener;
+import com.saintdan.framework.listener.PersistentListener;
+import com.saintdan.framework.listener.ValidFlagListener;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -36,7 +37,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @date 6/23/15
  * @since JDK1.8
  */
-@Entity @Table(name = "roles") @EntityListeners(CreatedAtPersistentListener.class)
+@Entity @Table(name = "roles") @EntityListeners({PersistentListener.class, ValidFlagListener.class})
 @NamedEntityGraph(name = "Role.resources", attributeNodes = @NamedAttributeNode("resources"))
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode(exclude = "users") @ToString(exclude = "users")

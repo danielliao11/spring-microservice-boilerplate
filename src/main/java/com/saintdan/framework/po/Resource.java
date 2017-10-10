@@ -1,7 +1,8 @@
 package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
-import com.saintdan.framework.listener.CreatedAtPersistentListener;
+import com.saintdan.framework.listener.PersistentListener;
+import com.saintdan.framework.listener.ValidFlagListener;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -35,7 +36,7 @@ import org.springframework.security.core.GrantedAuthority;
  * @date 6/25/15
  * @since JDK1.8
  */
-@Entity @Table(name = "resources") @EntityListeners(CreatedAtPersistentListener.class)
+@Entity @Table(name = "resources") @EntityListeners({PersistentListener.class, ValidFlagListener.class})
 @NamedEntityGraph(name = "Resource.roles", attributeNodes = @NamedAttributeNode("roles"))
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode(exclude = "roles") @ToString(exclude = "roles")

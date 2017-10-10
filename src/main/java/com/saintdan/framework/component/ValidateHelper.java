@@ -5,7 +5,6 @@ import com.saintdan.framework.annotation.SizeField;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.enums.GrantType;
 import com.saintdan.framework.enums.OperationType;
-import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.IllegalTokenTypeException;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.repo.ClientRepository;
@@ -38,7 +37,7 @@ import org.springframework.stereotype.Component;
    * @throws IllegalTokenTypeException
    */
   public ResponseEntity validate(HttpServletRequest request) throws IllegalTokenTypeException {
-    if (!clientRepository.findByClientIdAliasAndValidFlag(LoginUtils.getClientId(request), ValidFlag.VALID).isPresent()) {
+    if (!clientRepository.findByClientIdAlias(LoginUtils.getClientId(request)).isPresent()) {
       return resultHelper.infoResp(ErrorType.SYS0007, ErrorType.SYS0007.description(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
     return resultHelper.successResp(null, HttpStatus.OK);
@@ -54,7 +53,7 @@ import org.springframework.stereotype.Component;
    * @throws IllegalTokenTypeException
    */
   public ResponseEntity validate(HttpServletRequest request, Object param, GrantType grantType) throws IllegalTokenTypeException {
-    if (!clientRepository.findByClientIdAliasAndValidFlag(LoginUtils.getClientId(request), ValidFlag.VALID).isPresent()) {
+    if (!clientRepository.findByClientIdAlias(LoginUtils.getClientId(request)).isPresent()) {
       return resultHelper.infoResp(ErrorType.SYS0007, ErrorType.SYS0007.description(), HttpStatus.UNPROCESSABLE_ENTITY);
     }
     return validate(param, grantType);

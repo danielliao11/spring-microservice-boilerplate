@@ -56,15 +56,14 @@ import org.springframework.stereotype.Service;
     if (!customPasswordEncoder.matches(token.getCredentials().toString(), user.getPwd())) {
       throw new BadCredentialsException(ErrorType.LOG0002.name());
     }
-    CustomUserRepositoryUserDetails userDetails = new CustomUserRepositoryUserDetails(user);
     // Valid account.
-    if (!userDetails.isEnabled()) {
+    if (!user.isEnabled()) {
       throw new BadCredentialsException(ErrorType.LOG0003.name());
-    } else if (!userDetails.isAccountNonExpired()) {
+    } else if (!user.isAccountNonExpired()) {
       throw new BadCredentialsException(ErrorType.LOG0004.name());
-    } else if (!userDetails.isAccountNonLocked()) {
+    } else if (!user.isAccountNonLocked()) {
       throw new BadCredentialsException(ErrorType.LOG0005.name());
-    } else if (!userDetails.isCredentialsNonExpired()) {
+    } else if (!user.isCredentialsNonExpired()) {
       throw new BadCredentialsException(ErrorType.LOG0006.name());
     }
     // Get client ip address.
@@ -92,7 +91,7 @@ import org.springframework.stereotype.Service;
       LogUtils.traceError(logger, e, errMsg);
     }
     //Authorize.
-    return new UsernamePasswordAuthenticationToken(userDetails, user.getPwd(), userDetails.getAuthorities());
+    return new UsernamePasswordAuthenticationToken(user, user.getPwd(), user.getAuthorities());
   }
 
   @Override public boolean supports(Class<?> authentication) {

@@ -5,7 +5,6 @@ import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.AuthorityConstant;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.Client;
@@ -18,6 +17,7 @@ import com.saintdan.framework.vo.ClientVO;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
   }
 
   public Client findClientByClientId(String clientId) {
-    return clientRepository.findByClientIdAliasAndValidFlag(clientId, ValidFlag.VALID).orElse(null);
+    return clientRepository.findByClientIdAlias(clientId).orElse(null);
   }
 
   public Client findById(Long id) {
@@ -75,14 +75,14 @@ import org.springframework.transaction.annotation.Transactional;
 
   private Client param2Po(ClientParam param, User currentUser) throws Exception {
     Client client = transformer.param2PO(getClassT(), param, new Client(), currentUser);
-    if (client.getId() == null) {
+    if (client.getId() == 0) {
       RandomStringGenerator clientGenerator = new RandomStringGenerator.Builder()
           .withinRange('0', 'z').filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS).build();
       client.setClientIdAlias(clientGenerator.generate(16));
       client.setClientSecretAlias(clientGenerator.generate(32));
       client.setResourceIdStr(AuthorityConstant.RESOURCE_ID);
-      client.setScopeStr(AuthorityConstant.SCOPE);
-      client.setAuthorizedGrantTypeStr(AuthorityConstant.GRANT_TYPE);
+      client.setScopeStr(StringUtils.isBlank(param.getScope()) ? AuthorityConstant.SCOPE : param.getScope());
+      client.setAuthorizedGrantTypeStr(StringUtils.isBlank(param.getGrantType()) ? AuthorityConstant.GRANT_TYPE : param.getGrantType());
       client.setAuthoritiesStr(AuthorityConstant.AUTHORITY);
     }
     return client;

@@ -32,4 +32,6 @@ public interface CommonsConstant {
   String COLON = ":";
 
   String SLASH = "/";
+
+  String ZERO = "0";
 }

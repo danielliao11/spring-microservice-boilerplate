@@ -31,9 +31,13 @@ public class ClientParam extends BaseParam {
   @NotNullField(value = OperationType.UPDATE, message = "publicKey cannot be null.")
   private String publicKey;
 
-  private Integer accessTokenValiditySecondsAlias;
+  private String scope;
 
-  private Integer refreshTokenValiditySecondsAlias;
+  private String grantType;
+
+  private Integer accessTokenValiditySeconds;
+
+  private Integer refreshTokenValiditySeconds;
 
   public ClientParam(Long id) {
     this.id = id;

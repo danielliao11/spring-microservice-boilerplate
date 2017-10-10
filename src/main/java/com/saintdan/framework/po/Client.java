@@ -1,8 +1,14 @@
 package com.saintdan.framework.po;
 
-import com.saintdan.framework.enums.ValidFlag;
-import com.saintdan.framework.listener.CreatedAtPersistentListener;
-import java.io.Serializable;
+import com.google.common.collect.Sets;
+import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.listener.PersistentListener;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -14,9 +20,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.provider.ClientDetails;
 
 /**
  * Authorized client, provide for spring security.
@@ -25,9 +35,9 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @date 10/23/15
  * @since JDK1.8
  */
-@Entity @EntityListeners(CreatedAtPersistentListener.class) @Table(name = "clients")
+@Entity @EntityListeners(PersistentListener.class) @Table(name = "clients")
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
-public class Client implements Serializable {
+public class Client implements ClientDetails {
 
   private static final long serialVersionUID = 6500601540965188191L;
 
@@ -43,7 +53,7 @@ public class Client implements Serializable {
   @Id
   @GeneratedValue(generator = "clientSequenceGenerator")
   @Column(updatable = false)
-  private Long id;
+  private long id;
 
   @NotEmpty
   @Column(length = 50)
@@ -109,10 +119,6 @@ public class Client implements Serializable {
    */
   private String additionalInformationStr;
 
-  @Column(nullable = false)
-  @Builder.Default
-  private ValidFlag validFlag = ValidFlag.VALID;
-
   @Column(nullable = false, updatable = false)
   private long createdAt;
 
@@ -144,5 +150,65 @@ public class Client implements Serializable {
     this.accessTokenValiditySecondsAlias = client.getAccessTokenValiditySecondsAlias();
     this.refreshTokenValiditySecondsAlias = client.getRefreshTokenValiditySecondsAlias();
     this.additionalInformationStr = client.getAdditionalInformationStr();
+  }
+
+  @Override public String getClientId() {
+    return getClientIdAlias();
+  }
+
+  @Override public Set<String> getResourceIds() {
+    return str2Set(getResourceIdStr());
+  }
+
+  @Override public boolean isSecretRequired() {
+    return true;
+  }
+
+  @Override public String getClientSecret() {
+    return getClientSecretAlias();
+  }
+
+  @Override public boolean isScoped() {
+    return true;
+  }
+
+  @Override public Set<String> getScope() {
+    return str2Set(getScopeStr());
+  }
+
+  @Override public Set<String> getAuthorizedGrantTypes() {
+    return str2Set(getAuthorizedGrantTypeStr());
+  }
+
+  @Override public Set<String> getRegisteredRedirectUri() {
+    return str2Set(getRegisteredRedirectUriStr());
+  }
+
+  @Override public Collection<GrantedAuthority> getAuthorities() {
+    return Arrays.stream(getAuthorizedGrantTypeStr().split(CommonsConstant.COMMA))
+        .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+  }
+
+  @Override public Integer getAccessTokenValiditySeconds() {
+    return getAccessTokenValiditySecondsAlias();
+  }
+
+  @Override public Integer getRefreshTokenValiditySeconds() {
+    return null;
+  }
+
+  @Override public boolean isAutoApprove(String scope) {
+    return false;
+  }
+
+  @Override public Map<String, Object> getAdditionalInformation() {
+    return null;
+  }
+
+  private Set<String> str2Set(String str) {
+    if (StringUtils.isBlank(str)) {
+      return new HashSet<>();
+    }
+    return Sets.newHashSet(Arrays.stream(str.split(CommonsConstant.COMMA)).collect(Collectors.toList()));
   }
 }

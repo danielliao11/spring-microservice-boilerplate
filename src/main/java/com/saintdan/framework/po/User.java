@@ -1,8 +1,10 @@
 package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
-import com.saintdan.framework.listener.CreatedAtPersistentListener;
-import java.io.Serializable;
+import com.saintdan.framework.listener.PersistentListener;
+import com.saintdan.framework.listener.ValidFlagListener;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,6 +30,9 @@ import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Authorized users, provide for spring security oauth2.
@@ -37,11 +42,11 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @see {@link org.springframework.security.core.userdetails.UserDetails}
  * @since JDK1.8
  */
-@Entity @Table(name = "users") @EntityListeners(CreatedAtPersistentListener.class)
+@Entity @Table(name = "users") @EntityListeners({PersistentListener.class, ValidFlagListener.class})
 @NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"roles", "accounts"}) @ToString(exclude = {"roles", "accounts"})
-public class User implements Serializable {
+public class User implements UserDetails {
 
   private static final long serialVersionUID = 2680591198337929454L;
 
@@ -132,5 +137,42 @@ public class User implements Serializable {
     this.usr = user.getUsr();
     this.pwd = user.getPwd();
     this.roles = user.getRoles();
+  }
+
+  /**
+   * Get the authorities.
+   *
+   * @return GrantedAuthorities
+   */
+  @Override public Collection<? extends GrantedAuthority> getAuthorities() {
+    Collection<GrantedAuthority> authorities = new ArrayList<>();
+    getRoles()
+        .forEach(role -> role.getResources()
+            .forEach(resource -> authorities.add(new SimpleGrantedAuthority(resource.getName()))));
+    return authorities;
+  }
+
+  @Override public String getUsername() {
+    return getUsr();
+  }
+
+  @Override public String getPassword() {
+    return getPwd();
+  }
+
+  @Override public boolean isAccountNonExpired() {
+    return isAccountNonExpiredAlias();
+  }
+
+  @Override public boolean isAccountNonLocked() {
+    return isAccountNonLockedAlias();
+  }
+
+  @Override public boolean isCredentialsNonExpired() {
+    return isCredentialsNonExpiredAlias();
+  }
+
+  @Override public boolean isEnabled() {
+    return isEnabledAlias();
   }
 }

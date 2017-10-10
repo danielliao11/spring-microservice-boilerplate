@@ -1,7 +1,7 @@
 package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.AccountSourceType;
-import com.saintdan.framework.listener.CreatedAtPersistentListener;
+import com.saintdan.framework.listener.PersistentListener;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,7 +29,7 @@ import org.hibernate.annotations.Parameter;
  * @date 08/02/2017
  * @since JDK1.8
  */
-@Entity @EntityListeners(CreatedAtPersistentListener.class) @Table(name = "accounts")
+@Entity @EntityListeners(PersistentListener.class) @Table(name = "accounts")
 @Data @Builder @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode(exclude = "user") @ToString(exclude = "user")
 public class Account implements Serializable {

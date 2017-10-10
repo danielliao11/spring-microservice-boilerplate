@@ -87,9 +87,6 @@ import org.springframework.stereotype.Component;
     createdByField.setAccessible(true);
     Field lastModifiedByField = type.getDeclaredField(CommonsConstant.LAST_MODIFIED_BY);
     lastModifiedByField.setAccessible(true);
-    Field lastModifiedDateField = type.getDeclaredField(CommonsConstant.LAST_MODIFIED_DATE);
-    lastModifiedDateField.setAccessible(true);
-    long now = System.currentTimeMillis();
     if (idField.get(po) == null) {
       createdBy = currentUser.getId();
       lastModifiedBy = createdBy;
@@ -101,7 +98,6 @@ import org.springframework.stereotype.Component;
     BeanUtils.copyPropertiesIgnoreNull(param, po);
     createdByField.set(po, createdBy);
     lastModifiedByField.set(po, lastModifiedBy);
-    lastModifiedDateField.set(po, now);
     return po;
   }
 

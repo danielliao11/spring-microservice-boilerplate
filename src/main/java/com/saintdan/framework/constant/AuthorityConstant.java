@@ -9,9 +9,9 @@ package com.saintdan.framework.constant;
  */
 public interface AuthorityConstant {
 
-    String RESOURCE_ID = "api_gateway";
+    String RESOURCE_ID = "api";
 
-    String SCOPE = "read,write";
+    String SCOPE = "read";
 
     String GRANT_TYPE = "password,refresh_token";
 

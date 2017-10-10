@@ -12,8 +12,6 @@ import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.spec.LocalDateTimeAfter;
-import com.saintdan.framework.spec.LocalDateTimeBefore;
 import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.QueryHelper;
 import com.saintdan.framework.vo.UserVO;
@@ -21,7 +19,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import net.kaczmarzyk.spring.data.jpa.domain.GreaterThanOrEqual;
 import net.kaczmarzyk.spring.data.jpa.domain.In;
+import net.kaczmarzyk.spring.data.jpa.domain.LessThanOrEqual;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
@@ -75,19 +75,19 @@ import springfox.documentation.annotations.ApiIgnore;
       @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "name", value = "user's name", paramType = "query", dataType = "string"),
       @ApiImplicitParam(name = "usr", value = "user's username", paramType = "query", dataType = "string"),
-      @ApiImplicitParam(name = "createdDateAfter", value = "unix milli timestamp", dataType = "string", paramType = "query"),
-      @ApiImplicitParam(name = "createdDateBefore", value = "unix milli timestamp", dataType = "string", paramType = "query"),
-      @ApiImplicitParam(name = "pageNo", dataType = "date", paramType = "query"),
-      @ApiImplicitParam(name = "pageSize", dataType = "date", paramType = "query"),
-      @ApiImplicitParam(name = "sortBy", dataType = "date", paramType = "query", example = "sortBy=id:desc,username:desc")
+      @ApiImplicitParam(name = "createdAtAfter", value = "unix milli timestamp", paramType = "query", dataType = "number"),
+      @ApiImplicitParam(name = "createdAtBefore", value = "unix milli timestamp", paramType = "query", dataType = "number"),
+      @ApiImplicitParam(name = "pageNo", paramType = "query", dataType = "number"),
+      @ApiImplicitParam(name = "pageSize", paramType = "query", dataType = "number"),
+      @ApiImplicitParam(name = "sortBy", paramType = "query", dataType = "number", example = "sortBy=id:desc,username:desc")
   })
   public ResponseEntity all(
       @And({
           @Spec(path = "usr", spec = Like.class),
           @Spec(path = "name", spec = Like.class),
           @Spec(path = "validFlag", constVal = "VALID", spec = In.class),
-          @Spec(path = "createdDate", params = "createdDateAfter", spec = LocalDateTimeAfter.class),
-          @Spec(path = "createdDate", params = "createdDateBefore", spec = LocalDateTimeBefore.class)
+          @Spec(path = "createdAt", params = "createdAtAfter", spec = GreaterThanOrEqual.class),
+          @Spec(path = "createdAt", params = "createdAtBefore", spec = LessThanOrEqual.class)
       }) @ApiIgnore Specification<User> userSpecification, @ApiIgnore UserParam param) {
     try {
       if (param.getPageNo() == null) {
