@@ -1,7 +1,9 @@
 version: "3"
 services:
-  spring-rest-oauth2-sample:
+  core:
     build: <path of Dockerfile>
+    restart: always
+    container_name: "core"
     ports:
       - "<host port>:8443" # When you use HTTPS
       - "<host port>:8080" # When you use HTTP
@@ -15,6 +17,7 @@ services:
   db:
     restart: always
     image: postgres
+    container_name: "db"
     ports:
       - "<host port>:5432"
     networks:

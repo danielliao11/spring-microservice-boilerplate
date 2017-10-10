@@ -234,3 +234,8 @@
 
 - 0.18.2.RELEASE
   - [ADD] Add spring boot admin support.
+  
+- 1.0.0.RELEASE
+  - [ADD] Add lombok.
+  - [MOD] Modify PO.
+  - [DEL] Delete some useless codes.
