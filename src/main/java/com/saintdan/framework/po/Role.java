@@ -1,8 +1,8 @@
 package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
+import com.saintdan.framework.listener.CreatedAtPersistentListener;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,12 +21,13 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Authorized roles, provide for spring security.
@@ -35,9 +36,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @date 6/23/15
  * @since JDK1.8
  */
-@Entity @EntityListeners({AuditingEntityListener.class}) @Table(name = "roles")
+@Entity @Table(name = "roles") @EntityListeners(CreatedAtPersistentListener.class)
 @NamedEntityGraph(name = "Role.resources", attributeNodes = @NamedAttributeNode("resources"))
-@Builder @NoArgsConstructor @AllArgsConstructor
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode(exclude = "users") @ToString(exclude = "users")
 public class Role implements Serializable {
 
   private static final long serialVersionUID = -5193344128221526323L;
@@ -64,15 +66,17 @@ public class Role implements Serializable {
   private String description;
 
   @Column(nullable = false)
+  @Builder.Default
   private ValidFlag validFlag = ValidFlag.VALID;
 
-  @Column(updatable = false)
-  private long createdAt = System.currentTimeMillis();
+  @Column(nullable = false, updatable = false)
+  private long createdAt;
 
   @Column(nullable = false, updatable = false)
   private long createdBy;
 
-  private long lastModifiedAt = System.currentTimeMillis();
+  @Column(nullable = false)
+  private long lastModifiedAt;
 
   @Column(nullable = false)
   private long lastModifiedBy;
@@ -82,13 +86,13 @@ public class Role implements Serializable {
   private int version;
 
   @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = CascadeType.REFRESH)
-  private Set<User> users = new HashSet<>();
+  private Set<User> users;
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REFRESH })
   @JoinTable(name = "roles_has_resources",
       joinColumns = { @JoinColumn(name = "role_id") },
       inverseJoinColumns = { @JoinColumn(name = "resource_id") })
-  private Set<Resource> resources = new HashSet<>();
+  private Set<Resource> resources;
 
   @PreRemove
   private void removeRolesFromUsers() {
@@ -98,107 +102,5 @@ public class Role implements Serializable {
   public Role(String name, String description) {
     this.name = name;
     this.description = description;
-  }
-
-  @Override public String toString() {
-    return new ToStringBuilder(this)
-        .append("id", id)
-        .append("name", name)
-        .append("description", description)
-        .append("validFlag", validFlag.code())
-        .append("createdAt", createdAt)
-        .append("createdBy", createdBy)
-        .append("lastModifiedAt", lastModifiedAt)
-        .append("lastModifiedBy", lastModifiedBy)
-        .append("version", version)
-        .toString();
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public ValidFlag getValidFlag() {
-    return validFlag;
-  }
-
-  public void setValidFlag(ValidFlag validFlag) {
-    this.validFlag = validFlag;
-  }
-
-  public long getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(long createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public long getCreatedBy() {
-    return createdBy;
-  }
-
-  public void setCreatedBy(long createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public long getLastModifiedAt() {
-    return lastModifiedAt;
-  }
-
-  public void setLastModifiedAt(long lastModifiedAt) {
-    this.lastModifiedAt = lastModifiedAt;
-  }
-
-  public long getLastModifiedBy() {
-    return lastModifiedBy;
-  }
-
-  public void setLastModifiedBy(long lastModifiedBy) {
-    this.lastModifiedBy = lastModifiedBy;
-  }
-
-  public int getVersion() {
-    return version;
-  }
-
-  public void setVersion(int version) {
-    this.version = version;
-  }
-
-  public Set<User> getUsers() {
-    return users;
-  }
-
-  public void setUsers(Set<User> users) {
-    this.users = users;
-  }
-
-  public Set<Resource> getResources() {
-    return resources;
-  }
-
-  public void setResources(Set<Resource> resources) {
-    this.resources = resources;
   }
 }

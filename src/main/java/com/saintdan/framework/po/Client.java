@@ -1,6 +1,7 @@
 package com.saintdan.framework.po;
 
 import com.saintdan.framework.enums.ValidFlag;
+import com.saintdan.framework.listener.CreatedAtPersistentListener;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,12 +12,11 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Authorized client, provide for spring security.
@@ -25,8 +25,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @date 10/23/15
  * @since JDK1.8
  */
-@Entity @EntityListeners({ AuditingEntityListener.class }) @Table(name = "clients")
-@Builder @NoArgsConstructor @AllArgsConstructor
+@Entity @EntityListeners(CreatedAtPersistentListener.class) @Table(name = "clients")
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class Client implements Serializable {
 
   private static final long serialVersionUID = 6500601540965188191L;
@@ -93,12 +93,14 @@ public class Client implements Serializable {
    * The access token validity period in seconds (optional).
    * If unspecified a global default will be applied by the token services.
    */
+  @Builder.Default
   private int accessTokenValiditySecondsAlias = 1800;
 
   /**
    * The refresh token validity period in seconds (optional).
    * If unspecified a global default will  be applied by the token services.
    */
+  @Builder.Default
   private int refreshTokenValiditySecondsAlias = 3600;
 
   /**
@@ -108,15 +110,17 @@ public class Client implements Serializable {
   private String additionalInformationStr;
 
   @Column(nullable = false)
+  @Builder.Default
   private ValidFlag validFlag = ValidFlag.VALID;
 
-  @Column(updatable = false)
-  private long createdAt = System.currentTimeMillis();
+  @Column(nullable = false, updatable = false)
+  private long createdAt;
 
   @Column(nullable = false, updatable = false)
   private long createdBy;
 
-  private long lastModifiedAt = System.currentTimeMillis();
+  @Column(nullable = false)
+  private long lastModifiedAt;
 
   @Column(nullable = false)
   private long lastModifiedBy;
@@ -140,172 +144,5 @@ public class Client implements Serializable {
     this.accessTokenValiditySecondsAlias = client.getAccessTokenValiditySecondsAlias();
     this.refreshTokenValiditySecondsAlias = client.getRefreshTokenValiditySecondsAlias();
     this.additionalInformationStr = client.getAdditionalInformationStr();
-  }
-
-  @Override public String toString() {
-    return new ToStringBuilder(this)
-        .append("id", id)
-        .append("clientIdAlias", clientIdAlias)
-        .append("resourceIdStr", resourceIdStr)
-        .append("clientSecretAlias", clientSecretAlias)
-        .append("scopeStr", scopeStr)
-        .append("authorizedGrantTypeStr", authorizedGrantTypeStr)
-        .append("registeredRedirectUriStr", registeredRedirectUriStr)
-        .append("authoritiesStr", authoritiesStr)
-        .append("accessTokenValiditySecondsAlias", accessTokenValiditySecondsAlias)
-        .append("refreshTokenValiditySecondsAlias", refreshTokenValiditySecondsAlias)
-        .append("additionalInformationStr", additionalInformationStr)
-        .append("validFlag", validFlag.code())
-        .append("createdAt", createdAt)
-        .append("createdBy", createdBy)
-        .append("lastModifiedAt", lastModifiedAt)
-        .append("lastModifiedBy", lastModifiedBy)
-        .append("version", version)
-        .append("publicKey", publicKey)
-        .toString();
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getClientIdAlias() {
-    return clientIdAlias;
-  }
-
-  public void setClientIdAlias(String clientIdAlias) {
-    this.clientIdAlias = clientIdAlias;
-  }
-
-  public String getResourceIdStr() {
-    return resourceIdStr;
-  }
-
-  public void setResourceIdStr(String resourceIdStr) {
-    this.resourceIdStr = resourceIdStr;
-  }
-
-  public String getClientSecretAlias() {
-    return clientSecretAlias;
-  }
-
-  public void setClientSecretAlias(String clientSecretAlias) {
-    this.clientSecretAlias = clientSecretAlias;
-  }
-
-  public String getScopeStr() {
-    return scopeStr;
-  }
-
-  public void setScopeStr(String scopeStr) {
-    this.scopeStr = scopeStr;
-  }
-
-  public String getAuthorizedGrantTypeStr() {
-    return authorizedGrantTypeStr;
-  }
-
-  public void setAuthorizedGrantTypeStr(String authorizedGrantTypeStr) {
-    this.authorizedGrantTypeStr = authorizedGrantTypeStr;
-  }
-
-  public String getRegisteredRedirectUriStr() {
-    return registeredRedirectUriStr;
-  }
-
-  public void setRegisteredRedirectUriStr(String registeredRedirectUriStr) {
-    this.registeredRedirectUriStr = registeredRedirectUriStr;
-  }
-
-  public String getAuthoritiesStr() {
-    return authoritiesStr;
-  }
-
-  public void setAuthoritiesStr(String authoritiesStr) {
-    this.authoritiesStr = authoritiesStr;
-  }
-
-  public int getAccessTokenValiditySecondsAlias() {
-    return accessTokenValiditySecondsAlias;
-  }
-
-  public void setAccessTokenValiditySecondsAlias(int accessTokenValiditySecondsAlias) {
-    this.accessTokenValiditySecondsAlias = accessTokenValiditySecondsAlias;
-  }
-
-  public int getRefreshTokenValiditySecondsAlias() {
-    return refreshTokenValiditySecondsAlias;
-  }
-
-  public void setRefreshTokenValiditySecondsAlias(int refreshTokenValiditySecondsAlias) {
-    this.refreshTokenValiditySecondsAlias = refreshTokenValiditySecondsAlias;
-  }
-
-  public String getAdditionalInformationStr() {
-    return additionalInformationStr;
-  }
-
-  public void setAdditionalInformationStr(String additionalInformationStr) {
-    this.additionalInformationStr = additionalInformationStr;
-  }
-
-  public ValidFlag getValidFlag() {
-    return validFlag;
-  }
-
-  public void setValidFlag(ValidFlag validFlag) {
-    this.validFlag = validFlag;
-  }
-
-  public long getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(long createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public long getCreatedBy() {
-    return createdBy;
-  }
-
-  public void setCreatedBy(long createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public long getLastModifiedAt() {
-    return lastModifiedAt;
-  }
-
-  public void setLastModifiedAt(long lastModifiedAt) {
-    this.lastModifiedAt = lastModifiedAt;
-  }
-
-  public long getLastModifiedBy() {
-    return lastModifiedBy;
-  }
-
-  public void setLastModifiedBy(long lastModifiedBy) {
-    this.lastModifiedBy = lastModifiedBy;
-  }
-
-  public int getVersion() {
-    return version;
-  }
-
-  public void setVersion(int version) {
-    this.version = version;
-  }
-
-  public String getPublicKey() {
-    return publicKey;
-  }
-
-  public void setPublicKey(String publicKey) {
-    this.publicKey = publicKey;
   }
 }

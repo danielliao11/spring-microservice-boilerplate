@@ -14,12 +14,14 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @date 4/22/16
  * @since JDK1.8
  */
-public class CustomUserRepositoryUserDetails extends User implements UserDetails {
+public class CustomUserRepositoryUserDetails implements UserDetails {
 
   private static final long serialVersionUID = -2502869413772228006L;
 
+  private User user;
+
   public CustomUserRepositoryUserDetails(User user) {
-    super(user);
+    this.user = user;
   }
 
   /**
@@ -29,34 +31,34 @@ public class CustomUserRepositoryUserDetails extends User implements UserDetails
    */
   @Override public Collection<? extends GrantedAuthority> getAuthorities() {
     Collection<GrantedAuthority> authorities = new ArrayList<>();
-    getRoles()
+    user.getRoles()
         .forEach(role -> role.getResources()
             .forEach(resource -> authorities.add(new SimpleGrantedAuthority(resource.getName()))));
     return authorities;
   }
 
   @Override public String getUsername() {
-    return getUsr();
+    return user.getUsr();
   }
 
   @Override public String getPassword() {
-    return getPwd();
+    return user.getPwd();
   }
 
   @Override public boolean isAccountNonExpired() {
-    return isAccountNonExpiredAlias();
+    return user.isAccountNonExpiredAlias();
   }
 
   @Override public boolean isAccountNonLocked() {
-    return isAccountNonLockedAlias();
+    return user.isAccountNonLockedAlias();
   }
 
   @Override public boolean isCredentialsNonExpired() {
-    return isCredentialsNonExpiredAlias();
+    return user.isCredentialsNonExpiredAlias();
   }
 
   @Override public boolean isEnabled() {
-    return isEnabledAlias();
+    return user.isEnabledAlias();
   }
 
 }

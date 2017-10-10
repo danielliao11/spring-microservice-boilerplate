@@ -15,8 +15,10 @@ import lombok.NoArgsConstructor;
  * @date 10/16/15
  * @since JDK1.8
  */
-@Data @EqualsAndHashCode(callSuper = true)  @Builder @NoArgsConstructor @AllArgsConstructor
+@Data @EqualsAndHashCode(callSuper = false)  @Builder @NoArgsConstructor @AllArgsConstructor
 public class RoleParam extends BaseParam {
+
+  private static final long serialVersionUID = 5027600216405994820L;
 
   @NotNullField(value = {OperationType.UPDATE, OperationType.DELETE}, message = "id cannot be null.")
   private Long id; // role's ID.

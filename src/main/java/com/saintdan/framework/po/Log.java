@@ -23,7 +23,8 @@ import org.springframework.data.annotation.CreatedDate;
  * @date 10/27/15
  * @since JDK1.8
  */
-@Entity @Table(name = "logs") @Data  @Builder @NoArgsConstructor @AllArgsConstructor
+@Entity @Table(name = "logs")
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
 public class Log implements Serializable {
 
   private static final long serialVersionUID = 7088091769901805623L;
@@ -57,5 +58,5 @@ public class Log implements Serializable {
 
   @CreatedDate
   @Column(nullable = false)
-  private long createdAt = System.currentTimeMillis();
+  private long createdAt;
 }

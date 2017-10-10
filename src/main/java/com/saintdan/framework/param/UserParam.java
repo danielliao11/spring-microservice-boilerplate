@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
  * @date 9/22/15
  * @since JDK1.8
  */
-@Data @EqualsAndHashCode(callSuper = true) @Builder @NoArgsConstructor @AllArgsConstructor
+@Data @EqualsAndHashCode(callSuper = false) @Builder @NoArgsConstructor @AllArgsConstructor
 public class UserParam extends BaseParam {
 
   private static final long serialVersionUID = -9153801716112918626L;

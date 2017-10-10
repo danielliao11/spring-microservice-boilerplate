@@ -1,7 +1,7 @@
 package com.saintdan.framework.po;
 
-import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.AccountSourceType;
+import com.saintdan.framework.listener.CreatedAtPersistentListener;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,11 +15,12 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * Account of user.
@@ -28,8 +29,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * @date 08/02/2017
  * @since JDK1.8
  */
-@Entity @EntityListeners({ AuditingEntityListener.class }) @Table(name = "accounts")
-@Builder @NoArgsConstructor @AllArgsConstructor
+@Entity @EntityListeners(CreatedAtPersistentListener.class) @Table(name = "accounts")
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode(exclude = "user") @ToString(exclude = "user")
 public class Account implements Serializable {
 
   private static final long serialVersionUID = -6004454109313475045L;
@@ -53,15 +55,16 @@ public class Account implements Serializable {
   private AccountSourceType accountSourceType;
 
   @Column(updatable = false)
-  private long createdAt = System.currentTimeMillis();
+  private long createdAt;
 
   @Column(nullable = false, updatable = false)
-  private long createdBy = 0;
-
-  private long lastModifiedAt = System.currentTimeMillis();
+  private long createdBy;
 
   @Column(nullable = false)
-  private long lastModifiedBy = 0;
+  private long lastModifiedAt;
+
+  @Column(nullable = false)
+  private long lastModifiedBy;
 
   @Version
   @Column(nullable = false)
@@ -70,90 +73,4 @@ public class Account implements Serializable {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id")
   private User user;
-
-  @Override public String toString() {
-    return new ToStringBuilder(this)
-        .append("id", id)
-        .append("account", account)
-        .append("accountSourceType", accountSourceType == null ? CommonsConstant.BLANK : accountSourceType.code())
-        .append("createdAt", createdAt)
-        .append("createdBy", createdBy)
-        .append("lastModifiedAt", lastModifiedAt)
-        .append("lastModifiedBy", lastModifiedBy)
-        .append("version", version)
-        .append("user", user == null ? CommonsConstant.BLANK : user.getId())
-        .toString();
-  }
-
-  public long getId() {
-    return id;
-  }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-  public String getAccount() {
-    return account;
-  }
-
-  public void setAccount(String account) {
-    this.account = account;
-  }
-
-  public AccountSourceType getAccountSourceType() {
-    return accountSourceType;
-  }
-
-  public void setAccountSourceType(AccountSourceType accountSourceType) {
-    this.accountSourceType = accountSourceType;
-  }
-
-  public long getCreatedAt() {
-    return createdAt;
-  }
-
-  public void setCreatedAt(long createdAt) {
-    this.createdAt = createdAt;
-  }
-
-  public long getCreatedBy() {
-    return createdBy;
-  }
-
-  public void setCreatedBy(long createdBy) {
-    this.createdBy = createdBy;
-  }
-
-  public long getLastModifiedAt() {
-    return lastModifiedAt;
-  }
-
-  public void setLastModifiedAt(long lastModifiedAt) {
-    this.lastModifiedAt = lastModifiedAt;
-  }
-
-  public long getLastModifiedBy() {
-    return lastModifiedBy;
-  }
-
-  public void setLastModifiedBy(long lastModifiedBy) {
-    this.lastModifiedBy = lastModifiedBy;
-  }
-
-  public int getVersion() {
-    return version;
-  }
-
-  public void setVersion(int version) {
-    this.version = version;
-  }
-
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
 }
