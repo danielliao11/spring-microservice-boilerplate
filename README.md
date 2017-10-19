@@ -1,4 +1,4 @@
-# spring-micro-services-boilerplate
+# spring-microservices-boilerplate
 
 [中文版](README_zh.md)
 
@@ -13,7 +13,7 @@
 - [License](#license)
 - [Version History](#version)
 
-**spring-micro-services-boilerplate** is a boilerplate which is very helpful for java programmer and friendly to front end.
+**spring-microservices-boilerplate** is a boilerplate which is very helpful for java programmer and friendly to front end.
 
 And build with:
 
@@ -29,7 +29,7 @@ And use [specification-arg-resolver](https://github.com/tkaczmarzyk/specificatio
 ## <a name="build"></a>Build and Run [[TOP]](#index)
 
 ```
-$ cd <spring-micro-services-boilerplate root path>
+$ cd <spring-microservices-boilerplate root path>
 $ ./gradlew clean build bootRun
 ```
 
