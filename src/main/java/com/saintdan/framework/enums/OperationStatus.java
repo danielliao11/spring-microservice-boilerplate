@@ -22,5 +22,4 @@ public enum OperationStatus implements IntentStateWithDescription {
   @Override public String description() {
     return this.description;
   }
-
 }

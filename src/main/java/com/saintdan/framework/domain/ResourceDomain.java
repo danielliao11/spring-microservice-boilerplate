@@ -27,17 +27,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/17/15
  * @since JDK1.8
  */
-@Service @Transactional(readOnly = true) public class ResourceDomain extends BaseDomain<Resource, Long> {
+@Service
+@Transactional(readOnly = true)
+public class ResourceDomain extends BaseDomain<Resource, Long> {
 
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
-
-  public ResourceDomain(CustomRepository<Resource, Long> repository, LogHelper logHelper, Transformer transformer, ResourceRepository resourceRepository) {
-    super(repository, logHelper, transformer);
-    Assert.defaultNotNull(resourceRepository);
-    this.resourceRepository = resourceRepository;
-  }
 
   @Transactional public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
     nameExists(param.getName());
@@ -71,7 +67,8 @@ import org.springframework.transaction.annotation.Transactional;
     logHelper.log(OperationType.DELETE, getClassT().getName());
     Resource resource = findById(id);
     if (resource == null) {
-      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
+          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
     }
     resourceRepository.delete(resource);
   }
@@ -82,15 +79,23 @@ import org.springframework.transaction.annotation.Transactional;
 
   private final ResourceRepository resourceRepository;
 
-  private Resource resourceParam2PO(ResourceParam param, Resource resource, User currentUser) throws Exception {
+  public ResourceDomain(CustomRepository<Resource, Long> repository, LogHelper logHelper,
+      Transformer transformer, ResourceRepository resourceRepository) {
+    super(repository, logHelper, transformer);
+    Assert.defaultNotNull(resourceRepository);
+    this.resourceRepository = resourceRepository;
+  }
+
+  private Resource resourceParam2PO(ResourceParam param, Resource resource, User currentUser)
+      throws Exception {
     return transformer.param2PO(getClassT(), param, resource, currentUser);
   }
 
   private void nameExists(String name) throws Exception {
     if (resourceRepository.findByNameAndValidFlag(name, ValidFlag.VALID).isPresent()) {
       // Throw group already existing exception, name taken.
-      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
+      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper
+          .getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
     }
   }
-
 }

@@ -16,6 +16,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -25,6 +28,9 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @date 8/19/15
  * @since JDK1.8
  */
+@Data
+@EqualsAndHashCode(exclude = "currentUser")
+@ToString(exclude = "currentUser")
 public class BaseParam implements Serializable {
 
   private static final Set<String> baseFields = new HashSet<>();
@@ -50,66 +56,16 @@ public class BaseParam implements Serializable {
   @ApiModelProperty(hidden = true)
   private UserDetails currentUser;
 
-  @Override public String toString() {
-    final StringBuffer sb = new StringBuffer("BaseParam{");
-    sb.append("pageNo=").append(pageNo);
-    sb.append(", pageSize=").append(pageSize);
-    sb.append(", sortBy='").append(sortBy).append('\'');
-    sb.append(", sign='").append(sign).append('\'');
-    sb.append('}');
-    return sb.toString();
-  }
-
-  public Integer getPageNo() {
-    return pageNo;
-  }
-
-  public void setPageNo(Integer pageNo) {
-    this.pageNo = pageNo;
-  }
-
-  public Integer getPageSize() {
-    return pageSize;
-  }
-
-  public void setPageSize(Integer pageSize) {
-    this.pageSize = pageSize;
-  }
-
-  public String getSortBy() {
-    return sortBy;
-  }
-
-  public void setSortBy(String sortBy) {
-    this.sortBy = sortBy;
-  }
-
-  public String getSign() {
-    return sign;
-  }
-
-  public void setSign(String sign) {
-    this.sign = sign;
-  }
-
-  public UserDetails getCurrentUser() {
-    return currentUser;
-  }
-
-  public void setCurrentUser(UserDetails currentUser) {
-    this.currentUser = currentUser;
-  }
-
   public boolean isSignValid(String publicKey) throws CommonsException {
     String content = getSignContent();
-    return SignatureUtils.rsaCheckContent(content, this.getSign(), publicKey, SignatureConstant.CHARSET_UTF8);
+    return SignatureUtils
+        .rsaCheckContent(content, this.getSign(), publicKey, SignatureConstant.CHARSET_UTF8);
   }
 
   /**
    * Signature.
    *
    * @param privateKey Local private key.
-   * @throws CommonsException
    */
   public void sign(String privateKey) throws CommonsException {
     String content = getSignContent();//JsonConverter.convertToJSON(this).toString();
@@ -120,7 +76,6 @@ public class BaseParam implements Serializable {
    * Get the signature content.
    *
    * @return signature content
-   * @throws CommonsException
    */
   public String getSignContent() throws CommonsException {
     StringBuffer buffer = new StringBuffer();
@@ -137,7 +92,7 @@ public class BaseParam implements Serializable {
         String itemName = pd.getName();
         try {
           field = baseFields.contains(itemName) ? BaseParam.class.getDeclaredField(itemName) :
-          this.getClass().getDeclaredField(itemName);
+              this.getClass().getDeclaredField(itemName);
         } catch (Exception ignored) {
           // Ignore
         }
@@ -163,5 +118,4 @@ public class BaseParam implements Serializable {
       throw new CommonsException(ErrorType.UNKNOWN);
     }
   }
-
 }

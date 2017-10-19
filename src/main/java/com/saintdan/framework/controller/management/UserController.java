@@ -45,27 +45,35 @@ import springfox.documentation.annotations.ApiIgnore;
  * @date 6/25/15
  * @since JDK1.8
  */
-@Api("User") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.USERS) public class UserController {
+@Api("User")
+@RestController
+@RequestMapping(
+    ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.USERS)
+public class UserController {
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = UserVO.class)
   @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
-  public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser, @RequestBody UserParam param) {
+  public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
+      @RequestBody UserParam param) {
     // Validate current user, param and sign.
-    ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.CREATE);
+    ResponseEntity responseEntity = validateHelper
+        .validate(param, currentUser, logger, OperationType.CREATE);
     if (!responseEntity.getStatusCode().is2xxSuccessful()) {
       return responseEntity;
     }
     try {
       // Return result and message.
       return new ResponseEntity<>(userDomain.create(param, currentUser), HttpStatus.CREATED);
-//      return new ResponseEntity<>(userDomain.create(param, currentUser), HttpStatus.CREATED);
+      //      return new ResponseEntity<>(userDomain.create(param, currentUser), HttpStatus.CREATED);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper
+          .infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -91,17 +99,22 @@ import springfox.documentation.annotations.ApiIgnore;
       }) @ApiIgnore Specification<User> userSpecification, @ApiIgnore UserParam param) {
     try {
       if (param.getPageNo() == null) {
-        return new ResponseEntity<>(userDomain.getAll(userSpecification, QueryHelper.getSort(param.getSortBy())), HttpStatus.OK);
+        return new ResponseEntity<>(
+            userDomain.getAll(userSpecification, QueryHelper.getSort(param.getSortBy())),
+            HttpStatus.OK);
       }
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
     try {
-      return new ResponseEntity<>(userDomain.getPage(userSpecification, QueryHelper.getPageRequest(param)), HttpStatus.OK);
+      return new ResponseEntity<>(
+          userDomain.getPage(userSpecification, QueryHelper.getPageRequest(param)), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -113,13 +126,15 @@ import springfox.documentation.annotations.ApiIgnore;
   })
   public ResponseEntity detail(@ApiIgnore @PathVariable Long id) {
     if (id == null) {
-      return resultHelper.infoResp(ErrorType.SYS0002, CommonsConstant.ID_BLANK, HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper
+          .infoResp(ErrorType.SYS0002, CommonsConstant.ID_BLANK, HttpStatus.UNPROCESSABLE_ENTITY);
     }
     try {
       return new ResponseEntity<>(userDomain.getById(id, UserVO.class), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -128,9 +143,11 @@ import springfox.documentation.annotations.ApiIgnore;
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser, @RequestBody UserParam param) {
+  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
+      @RequestBody UserParam param) {
     // Validate current user, param and sign.
-    ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.UPDATE);
+    ResponseEntity responseEntity = validateHelper
+        .validate(param, currentUser, logger, OperationType.UPDATE);
     if (!responseEntity.getStatusCode().is2xxSuccessful()) {
       return responseEntity;
     }
@@ -139,10 +156,12 @@ import springfox.documentation.annotations.ApiIgnore;
       return new ResponseEntity<>(userDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper
+          .infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -151,10 +170,12 @@ import springfox.documentation.annotations.ApiIgnore;
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser, @ApiIgnore @PathVariable Long id) {
+  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser,
+      @ApiIgnore @PathVariable Long id) {
     UserParam param = new UserParam(id);
     // Validate current user and param.
-    ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
+    ResponseEntity responseEntity = validateHelper
+        .validate(param, currentUser, logger, OperationType.DELETE);
     if (!responseEntity.getStatusCode().is2xxSuccessful()) {
       return responseEntity;
     }
@@ -163,23 +184,23 @@ import springfox.documentation.annotations.ApiIgnore;
       userDomain.deepDelete(param.getId());
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper
+          .infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return ResponseEntity.noContent().build();
   }
 
   private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
   private final ResultHelper resultHelper;
-
   private final ValidateHelper validateHelper;
-
   private final UserDomain userDomain;
 
-  @Autowired public UserController(ResultHelper resultHelper, ValidateHelper validateHelper, UserDomain userDomain) {
+  @Autowired public UserController(ResultHelper resultHelper, ValidateHelper validateHelper,
+      UserDomain userDomain) {
     Assert.defaultNotNull(resultHelper);
     Assert.defaultNotNull(validateHelper);
     Assert.defaultNotNull(userDomain);
@@ -187,5 +208,4 @@ import springfox.documentation.annotations.ApiIgnore;
     this.validateHelper = validateHelper;
     this.userDomain = userDomain;
   }
-
 }

@@ -42,10 +42,16 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @see {@link org.springframework.security.core.userdetails.UserDetails}
  * @since JDK1.8
  */
-@Entity @Table(name = "users") @EntityListeners({PersistentListener.class, ValidFlagListener.class})
+@Entity
+@Table(name = "users")
+@EntityListeners({PersistentListener.class, ValidFlagListener.class})
 @NamedEntityGraph(name = "User.roles", attributeNodes = @NamedAttributeNode("roles"))
-@Data @Builder @NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"roles", "accounts"}) @ToString(exclude = {"roles", "accounts"})
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = {"roles", "accounts"})
+@ToString(exclude = {"roles", "accounts"})
 public class User implements UserDetails {
 
   private static final long serialVersionUID = 2680591198337929454L;
@@ -124,8 +130,8 @@ public class User implements UserDetails {
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
   @JoinTable(name = "users_has_roles",
-      joinColumns = { @JoinColumn(name = "user_id") },
-      inverseJoinColumns = { @JoinColumn(name = "role_id") })
+      joinColumns = {@JoinColumn(name = "user_id")},
+      inverseJoinColumns = {@JoinColumn(name = "role_id")})
   private Set<Role> roles;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)

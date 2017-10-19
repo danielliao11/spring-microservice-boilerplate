@@ -18,10 +18,12 @@ public class LocalDateTimeBetween<T> extends DateSpecification<T> {
   private LocalDateTime after;
   private LocalDateTime before;
 
-  public LocalDateTimeBetween(String path, String[] args, Converter converter) throws ParseException {
+  public LocalDateTimeBetween(String path, String[] args, Converter converter)
+      throws ParseException {
     super(path, args, converter);
     if (args == null || args.length != 2) {
-      throw new IllegalArgumentException("expected 2 http params (date boundaries), but was: " + args);
+      throw new IllegalArgumentException(
+          "expected 2 http params (date boundaries), but was: " + args);
     }
     String afterDateStr = args[0];
     String beforeDateStr = args[1];

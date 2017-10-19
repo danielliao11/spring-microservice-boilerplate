@@ -10,5 +10,4 @@ package com.saintdan.framework.constant;
 public interface VersionConstant {
 
   String V1 = "/v1";
-
 }

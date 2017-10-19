@@ -1,4 +1,4 @@
-description 'spring-micro-services-boilerplate'
+description 'spring-microservices-boilerplate'
 group 'com.saintdan.framework'
 version '1.0.0.RELEASE'
 
@@ -21,7 +21,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.6.RELEASE')
+    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE')
   }
 }
 
@@ -50,7 +50,7 @@ compileTestJava {
 }
 
 ext {
-  springBootVersion = '1.5.7.RELEASE'
+  springBootVersion = '1.5.8.RELEASE'
   springOAuth2Version = '2.2.0.RELEASE'
 
   lombokVersion = '1.16.18'

@@ -61,7 +61,8 @@ public class StreamUtils {
     return readText(in, encoding, -1);
   }
 
-  public static String readText(InputStream in, String encoding, int bufferSize) throws IOException {
+  public static String readText(InputStream in, String encoding, int bufferSize)
+      throws IOException {
     Reader reader = (encoding == null) ? new InputStreamReader(in) : new InputStreamReader(in,
         encoding);
 
@@ -82,6 +83,7 @@ public class StreamUtils {
   private static final int DEFAULT_BUFFER_SIZE = 8192;
 
   private static class SynchronizedOutputStream extends OutputStream {
+
     private OutputStream out;
     private Object lock;
 

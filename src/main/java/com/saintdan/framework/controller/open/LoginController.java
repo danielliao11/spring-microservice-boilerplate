@@ -26,13 +26,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api("Login") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.OPEN + ResourceURL.LOGIN)
+@Api("Login")
+@RestController
+@RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.OPEN + ResourceURL.LOGIN)
 public class LoginController {
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Login", httpMethod = "POST", response = OAuth2AccessToken.class)
   @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
-  public ResponseEntity postAccessToken(HttpServletRequest request, @RequestBody LoginParam param) throws HttpRequestMethodNotSupportedException {
+  public ResponseEntity postAccessToken(HttpServletRequest request, @RequestBody LoginParam param)
+      throws HttpRequestMethodNotSupportedException {
     // Validate current user, param and sign.
     ResponseEntity responseEntity;
     try {
@@ -47,19 +50,18 @@ public class LoginController {
       return loginService.login(param, request);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
   private final LoginService loginService;
-
   private final ResultHelper resultHelper;
-
   private final ValidateHelper validateHelper;
 
-  @Autowired public LoginController(LoginService loginService, ResultHelper resultHelper, ValidateHelper validateHelper) {
+  @Autowired public LoginController(LoginService loginService, ResultHelper resultHelper,
+      ValidateHelper validateHelper) {
     Assert.defaultNotNull(loginService);
     Assert.defaultNotNull(resultHelper);
     Assert.defaultNotNull(validateHelper);
@@ -67,6 +69,5 @@ public class LoginController {
     this.resultHelper = resultHelper;
     this.validateHelper = validateHelper;
   }
-
 }
 

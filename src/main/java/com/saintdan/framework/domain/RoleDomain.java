@@ -33,20 +33,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/17/15
  * @since JDK1.8
  */
-@Service @Transactional(readOnly = true) public class RoleDomain extends BaseDomain<Role, Long> {
+@Service
+@Transactional(readOnly = true)
+public class RoleDomain extends BaseDomain<Role, Long> {
 
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
-
-
-  @Autowired public RoleDomain(CustomRepository<Role, Long> repository, LogHelper logHelper, Transformer transformer, RoleRepository roleRepository, ResourceDomain resourceDomain) {
-    super(repository, logHelper, transformer);
-    Assert.defaultNotNull(roleRepository);
-    Assert.defaultNotNull(resourceDomain);
-    this.roleRepository = roleRepository;
-    this.resourceDomain = resourceDomain;
-  }
 
   @Transactional public RoleVO create(RoleParam param, User currentUser) throws Exception {
     nameExists(param.getName());
@@ -67,7 +60,8 @@ import org.springframework.transaction.annotation.Transactional;
   @Transactional public RoleVO update(RoleParam param, User currentUser) throws Exception {
     Role role = findById(param.getId());
     if (role == null) {
-      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
+          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
     }
     if (StringUtils.isNotBlank(param.getName()) && !param.getName().equals(role.getName())) {
       nameExists(param.getName());
@@ -87,7 +81,8 @@ import org.springframework.transaction.annotation.Transactional;
     logHelper.log(OperationType.DELETE, getClassT().getName());
     Role role = findById(id);
     if (role == null) {
-      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
+          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
     }
     roleRepository.delete(role);
   }
@@ -113,13 +108,22 @@ import org.springframework.transaction.annotation.Transactional;
   // --------------------------
 
   private final RoleRepository roleRepository;
-
   private final ResourceDomain resourceDomain;
+
+  @Autowired public RoleDomain(CustomRepository<Role, Long> repository, LogHelper logHelper,
+      Transformer transformer, RoleRepository roleRepository, ResourceDomain resourceDomain) {
+    super(repository, logHelper, transformer);
+    Assert.defaultNotNull(roleRepository);
+    Assert.defaultNotNull(resourceDomain);
+    this.roleRepository = roleRepository;
+    this.resourceDomain = resourceDomain;
+  }
 
   private Role param2Po(RoleParam param, Role role, User currentUser) throws Exception {
     transformer.param2PO(getClassT(), param, role, currentUser);
     if (StringUtils.isNotBlank(param.getResourceIds())) {
-      Set<Resource> resources = Sets.newHashSet(resourceDomain.getAllByIds(transformer.idsStr2List(param.getResourceIds())));
+      Set<Resource> resources = Sets
+          .newHashSet(resourceDomain.getAllByIds(transformer.idsStr2List(param.getResourceIds())));
       if (role.getResources() != null) {
         resources.addAll(role.getResources());
       }
@@ -131,8 +135,8 @@ import org.springframework.transaction.annotation.Transactional;
   private void nameExists(String name) throws Exception {
     if (roleRepository.findByNameAndValidFlag(name, ValidFlag.VALID).isPresent()) {
       // Throw role already existing exception, name taken.
-      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
+      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper
+          .getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
     }
   }
-
 }

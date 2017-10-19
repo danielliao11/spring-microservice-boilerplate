@@ -18,10 +18,12 @@ public class LocalDateTimeBefore<T> extends DateSpecification<T> {
 
   private LocalDateTime date;
 
-  public LocalDateTimeBefore(String path, String[] args, Converter converter) throws ParseException {
+  public LocalDateTimeBefore(String path, String[] args, Converter converter)
+      throws ParseException {
     super(path, args, converter);
     if (args == null || args.length != 1) {
-      throw new IllegalArgumentException("expected a single http-param, but was: " + Arrays.toString(args));
+      throw new IllegalArgumentException(
+          "expected a single http-param, but was: " + Arrays.toString(args));
     }
     String dateStr = args[0];
     this.date = covertToLocalDateTime(dateStr);

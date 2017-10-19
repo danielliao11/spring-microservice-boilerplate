@@ -35,8 +35,13 @@ import org.springframework.security.oauth2.provider.ClientDetails;
  * @date 10/23/15
  * @since JDK1.8
  */
-@Entity @EntityListeners(PersistentListener.class) @Table(name = "clients")
-@Data @Builder @NoArgsConstructor @AllArgsConstructor
+@Entity
+@EntityListeners(PersistentListener.class)
+@Table(name = "clients")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Client implements ClientDetails {
 
   private static final long serialVersionUID = 6500601540965188191L;
@@ -75,9 +80,8 @@ public class Client implements ClientDetails {
   private String scopeStr;
 
   /**
-   * grant types include
-   * "authorization_code", "password", "assertion", and "refresh_token".
-   * Default description is "authorization_code,refresh_token".
+   * grant types include "authorization_code", "password", "assertion", and "refresh_token". Default
+   * description is "authorization_code,refresh_token".
    */
   @NotEmpty
   @Column(length = 100)
@@ -100,22 +104,22 @@ public class Client implements ClientDetails {
   private String authoritiesStr;
 
   /**
-   * The access token validity period in seconds (optional).
-   * If unspecified a global default will be applied by the token services.
+   * The access token validity period in seconds (optional). If unspecified a global default will be
+   * applied by the token services.
    */
   @Builder.Default
   private int accessTokenValiditySecondsAlias = 1800;
 
   /**
-   * The refresh token validity period in seconds (optional).
-   * If unspecified a global default will  be applied by the token services.
+   * The refresh token validity period in seconds (optional). If unspecified a global default will
+   * be applied by the token services.
    */
   @Builder.Default
   private int refreshTokenValiditySecondsAlias = 3600;
 
   /**
-   * Additional information for this client, not needed by the vanilla OAuth protocol but might be useful, for example,
-   * for storing descriptive information.
+   * Additional information for this client, not needed by the vanilla OAuth protocol but might be
+   * useful, for example, for storing descriptive information.
    */
   private String additionalInformationStr;
 
@@ -209,6 +213,7 @@ public class Client implements ClientDetails {
     if (StringUtils.isBlank(str)) {
       return new HashSet<>();
     }
-    return Sets.newHashSet(Arrays.stream(str.split(CommonsConstant.COMMA)).collect(Collectors.toList()));
+    return Sets
+        .newHashSet(Arrays.stream(str.split(CommonsConstant.COMMA)).collect(Collectors.toList()));
   }
 }

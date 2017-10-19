@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 11/02/2017
  * @since JDK1.8
  */
-@Api(value = "Heartbeat") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.APP + ResourceURL.HEARTBEAT)
+@Api(value = "Heartbeat")
+@RestController
+@RequestMapping(
+    ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.APP + ResourceURL.HEARTBEAT)
 public class HeartbeatController {
 
   @RequestMapping(method = RequestMethod.GET)

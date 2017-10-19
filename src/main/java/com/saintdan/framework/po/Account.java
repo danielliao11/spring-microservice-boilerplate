@@ -29,9 +29,15 @@ import org.hibernate.annotations.Parameter;
  * @date 08/02/2017
  * @since JDK1.8
  */
-@Entity @EntityListeners(PersistentListener.class) @Table(name = "accounts")
-@Data @Builder @NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode(exclude = "user") @ToString(exclude = "user")
+@Entity
+@EntityListeners(PersistentListener.class)
+@Table(name = "accounts")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = "user")
+@ToString(exclude = "user")
 public class Account implements Serializable {
 
   private static final long serialVersionUID = -6004454109313475045L;

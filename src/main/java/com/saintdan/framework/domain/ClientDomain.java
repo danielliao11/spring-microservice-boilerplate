@@ -32,16 +32,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/25/15
  * @since JDK1.8
  */
-@Service @Transactional(readOnly = true) public class ClientDomain extends BaseDomain<Client, Long> {
+@Service
+@Transactional(readOnly = true)
+public class ClientDomain extends BaseDomain<Client, Long> {
 
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
-  @Autowired public ClientDomain(CustomRepository<Client, Long> repository, LogHelper logHelper, Transformer transformer, ClientRepository clientRepository) {
-    super(repository, logHelper, transformer);
-    Assert.defaultNotNull(clientRepository);
-    this.clientRepository = clientRepository;
-  }
 
   @Transactional public ClientVO create(ClientParam param, User currentUser) throws Exception {
     return po2Vo(super.createByPO(param2Po(param, currentUser)));
@@ -62,7 +59,8 @@ import org.springframework.transaction.annotation.Transactional;
   @Transactional public ClientVO update(ClientParam param, User currentUser) throws Exception {
     Client client = findById(param.getId());
     if (client == null) {
-      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
+          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
     }
     return po2Vo(super.updateByPO(param2Po(param, currentUser)));
   }
@@ -73,16 +71,27 @@ import org.springframework.transaction.annotation.Transactional;
 
   private final ClientRepository clientRepository;
 
+  @Autowired public ClientDomain(CustomRepository<Client, Long> repository, LogHelper logHelper,
+      Transformer transformer, ClientRepository clientRepository) {
+    super(repository, logHelper, transformer);
+    Assert.defaultNotNull(clientRepository);
+    this.clientRepository = clientRepository;
+  }
+
   private Client param2Po(ClientParam param, User currentUser) throws Exception {
     Client client = transformer.param2PO(getClassT(), param, new Client(), currentUser);
     if (client.getId() == 0) {
       RandomStringGenerator clientGenerator = new RandomStringGenerator.Builder()
-          .withinRange('0', 'z').filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS).build();
+          .withinRange('0', 'z').filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS)
+          .build();
       client.setClientIdAlias(clientGenerator.generate(16));
       client.setClientSecretAlias(clientGenerator.generate(32));
       client.setResourceIdStr(AuthorityConstant.RESOURCE_ID);
-      client.setScopeStr(StringUtils.isBlank(param.getScope()) ? AuthorityConstant.SCOPE : param.getScope());
-      client.setAuthorizedGrantTypeStr(StringUtils.isBlank(param.getGrantType()) ? AuthorityConstant.GRANT_TYPE : param.getGrantType());
+      client.setScopeStr(
+          StringUtils.isBlank(param.getScope()) ? AuthorityConstant.SCOPE : param.getScope());
+      client.setAuthorizedGrantTypeStr(
+          StringUtils.isBlank(param.getGrantType()) ? AuthorityConstant.GRANT_TYPE
+              : param.getGrantType());
       client.setAuthoritiesStr(AuthorityConstant.AUTHORITY);
     }
     return client;
@@ -107,5 +116,4 @@ import org.springframework.transaction.annotation.Transactional;
         .publicKey(client.getPublicKey())
         .build();
   }
-
 }

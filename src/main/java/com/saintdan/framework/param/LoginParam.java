@@ -14,7 +14,10 @@ import lombok.NoArgsConstructor;
  * @date 15/02/2017
  * @since JDK1.8
  */
-@Data  @Builder @NoArgsConstructor @AllArgsConstructor
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class LoginParam implements Serializable {
 
   private static final long serialVersionUID = 1148462952236125805L;

@@ -15,11 +15,14 @@ import org.springframework.stereotype.Service;
  * @date 10/23/15
  * @since JDK1.8
  */
-@Service public class CustomClientDetailsService implements ClientDetailsService {
+@Service
+public class CustomClientDetailsService implements ClientDetailsService {
 
-  @Override public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
+  @Override public ClientDetails loadClientByClientId(String clientId)
+      throws ClientRegistrationException {
     return clientRepository.findByClientIdAlias(clientId).orElseThrow(
-        () -> new ClientRegistrationException(String.format("Client %s does not exist!", clientId)));
+        () -> new ClientRegistrationException(
+            String.format("Client %s does not exist!", clientId)));
   }
 
   private final ClientRepository clientRepository;
@@ -28,5 +31,4 @@ import org.springframework.stereotype.Service;
     Assert.defaultNotNull(clientRepository);
     this.clientRepository = clientRepository;
   }
-
 }

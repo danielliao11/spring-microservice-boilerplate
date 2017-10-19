@@ -33,13 +33,14 @@ public class SignatureUtils {
    * @param publicKey opposite end public key
    * @param charset   charset
    * @return true/false
-   * @throws CommonsException
    */
-  public static boolean rsaCheckContent(String content, String sign, String publicKey, String charset)
+  public static boolean rsaCheckContent(String content, String sign, String publicKey,
+      String charset)
       throws CommonsException {
     try {
-      PublicKey pubKey = getPublicKeyFromX509(SignatureConstant.SIGN_TYPE_RSA, new ByteArrayInputStream(publicKey
-          .getBytes()));
+      PublicKey pubKey = getPublicKeyFromX509(SignatureConstant.SIGN_TYPE_RSA,
+          new ByteArrayInputStream(publicKey
+              .getBytes()));
 
       java.security.Signature signature = java.security.Signature
           .getInstance(SignatureConstant.SIGN_ALGORITHMS);
@@ -65,7 +66,6 @@ public class SignatureUtils {
    * @param privateKey local private key
    * @param charset    charset
    * @return signature
-   * @throws CommonsException
    */
   public static String rsaSign(String content, String privateKey, String charset)
       throws CommonsException {

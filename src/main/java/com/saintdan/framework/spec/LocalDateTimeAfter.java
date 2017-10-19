@@ -21,7 +21,8 @@ public class LocalDateTimeAfter<T> extends DateSpecification<T> {
   public LocalDateTimeAfter(String path, String[] args, Converter converter) throws ParseException {
     super(path, args, converter);
     if (args == null || args.length != 1) {
-      throw new IllegalArgumentException("expected a single http-param, but was: " + Arrays.toString(args));
+      throw new IllegalArgumentException(
+          "expected a single http-param, but was: " + Arrays.toString(args));
     }
     String dateStr = args[0];
     this.date = covertToLocalDateTime(dateStr);

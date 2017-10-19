@@ -17,7 +17,8 @@ import org.springframework.stereotype.Component;
  * @date 11/6/15
  * @since JDK1.8
  */
-@Component public class LogHelper {
+@Component
+public class LogHelper {
 
   public void log(HttpServletRequest request) {
     String ip = RemoteAddressUtils.getRealIp(request);
@@ -31,7 +32,8 @@ import org.springframework.stereotype.Component;
     logDomain.create(log);
   }
 
-  public void log(OperationType operationType, String usr, String ip, String clientId, String path) {
+  public void log(OperationType operationType, String usr, String ip, String clientId,
+      String path) {
     Log log = Log.builder()
         .usr(usr)
         .ip(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip)
@@ -70,5 +72,4 @@ import org.springframework.stereotype.Component;
   @Autowired public LogHelper(LogDomain logDomain) {
     this.logDomain = logDomain;
   }
-
 }

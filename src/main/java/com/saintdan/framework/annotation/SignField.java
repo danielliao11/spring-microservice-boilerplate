@@ -12,8 +12,9 @@ import java.lang.annotation.Target;
  * @date 8/19/15
  * @since JDK1.8
  */
-@Target(value = { ElementType.FIELD })
+@Target(value = {ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface SignField {
+
   String value() default "";
 }

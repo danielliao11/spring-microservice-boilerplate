@@ -14,13 +14,11 @@ import java.lang.annotation.Target;
  * @date 8/19/15
  * @since JDK1.8
  */
-@Target(value = { ElementType.FIELD })
+@Target(value = {ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotNullField {
 
   String message() default "{javax.validation.constraints.NotNull.message}";
-
   OperationType[] value() default OperationType.READ; // For resource access.
-
   GrantType[] grant() default GrantType.PASSWORD; // For login.
 }

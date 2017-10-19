@@ -22,7 +22,8 @@ import org.springframework.data.domain.Sort;
 public class QueryHelper {
 
   public static PageRequest getPageRequest(BaseParam param) {
-    return new PageRequest(param.getPageNo() == null ? 0 : param.getPageNo() - 1, param.getPageSize(), QueryHelper.getSort(param.getSortBy()));
+    return new PageRequest(param.getPageNo() == null ? 0 : param.getPageNo() - 1,
+        param.getPageSize(), QueryHelper.getSort(param.getSortBy()));
   }
 
   /**
@@ -65,18 +66,20 @@ public class QueryHelper {
   /**
    * Get {@link Sort}
    *
-   * @param sortBy  sortedBy
+   * @param sortBy sortedBy
    * @return {@link Sort}
    */
   public static Sort getSort(String sortBy) {
-    return StringUtils.isBlank(sortBy) ? getDefaultSort() : new Sort(Arrays.asList(sortBy.split(CommonsConstant.COMMA)).stream().map(
-        (orders) -> getOrder(orders.split(CommonsConstant.COLON))).collect(Collectors.toList()));
+    return StringUtils.isBlank(sortBy) ? getDefaultSort()
+        : new Sort(Arrays.asList(sortBy.split(CommonsConstant.COMMA)).stream().map(
+            (orders) -> getOrder(orders.split(CommonsConstant.COLON)))
+            .collect(Collectors.toList()));
   }
 
   /**
    * Get {@link Sort.Order}
    *
-   * @param orders    orders
+   * @param orders orders
    * @return {@link Sort.Order}
    */
   private static Sort.Order getOrder(String[] orders) {

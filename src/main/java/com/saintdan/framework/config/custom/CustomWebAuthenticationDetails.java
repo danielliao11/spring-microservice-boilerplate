@@ -26,8 +26,8 @@ public class CustomWebAuthenticationDetails implements Serializable {
   // ===================================================================================================
 
   /**
-   * Records the remote address and will also set the session Id if a session already
-   * exists (it won't create one).
+   * Records the remote address and will also set the session Id if a session already exists (it
+   * won't create one).
    *
    * @param request that the authentication request was received from
    */
@@ -88,8 +88,7 @@ public class CustomWebAuthenticationDetails implements Serializable {
   }
 
   /**
-   * Indicates the <code>HttpSession</code> id the authentication request was received
-   * from.
+   * Indicates the <code>HttpSession</code> id the authentication request was received from.
    *
    * @return the session ID
    */
@@ -119,5 +118,4 @@ public class CustomWebAuthenticationDetails implements Serializable {
 
     return sb.toString();
   }
-
 }

@@ -25,7 +25,8 @@ import org.springframework.stereotype.Component;
  * @date 10/19/15
  * @since JDK1.8
  */
-@Component public class Transformer {
+@Component
+public class Transformer {
 
   // ------------------------
   // PUBLIC METHODS
@@ -38,7 +39,8 @@ import org.springframework.stereotype.Component;
    * @return ids iterable
    */
   public List<Long> idsStr2List(String idsStr) {
-    return Lists.newArrayList(niceCommaSplitter.split(idsStr)).stream().map(Long::valueOf).collect(Collectors.toList());
+    return Lists.newArrayList(niceCommaSplitter.split(idsStr)).stream().map(Long::valueOf)
+        .collect(Collectors.toList());
   }
 
   public Set<String> str2Set(String str) {
@@ -48,7 +50,7 @@ import org.springframework.stereotype.Component;
     return Sets.newHashSet(niceCommaSplitter.split(str));
   }
 
-  public String IdList2IdsStr(List<Long> list){
+  public String IdList2IdsStr(List<Long> list) {
     return list.stream().map(String::valueOf).collect(Collectors.joining(CommonsConstant.COMMA));
   }
 
@@ -74,7 +76,6 @@ import org.springframework.stereotype.Component;
    * @param currentUser current user
    * @param <T>         class
    * @return PO
-   * @throws Exception
    */
   public <T> T param2PO(Class<T> type, Object param, T po, User currentUser) throws Exception {
     // Init createdBy, lastModifiedBy
@@ -108,7 +109,8 @@ import org.springframework.stereotype.Component;
    * @return VO
    */
   @SuppressWarnings("unchecked")
-  public List pos2VOs(Class<?> type, List pos) throws InstantiationException, IllegalAccessException {
+  public List pos2VOs(Class<?> type, List pos)
+      throws InstantiationException, IllegalAccessException {
     List voList = new ArrayList();
     for (Object po : pos) {
       Object vo = po2VO(type, po);
@@ -123,12 +125,13 @@ import org.springframework.stereotype.Component;
    * @param po PO
    * @return VO
    */
-  public <T> T po2VO(Class<T> clazz, Object po) throws InstantiationException, IllegalAccessException {
+  public <T> T po2VO(Class<T> clazz, Object po)
+      throws InstantiationException, IllegalAccessException {
     T vo = clazz.newInstance();
     BeanUtils.copyPropertiesIgnoreNull(po, vo);
     return vo;
   }
 
-  private final Splitter niceCommaSplitter = Splitter.on(CommonsConstant.COMMA).omitEmptyStrings().trimResults();
-
+  private final Splitter niceCommaSplitter = Splitter.on(CommonsConstant.COMMA).omitEmptyStrings()
+      .trimResults();
 }

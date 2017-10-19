@@ -36,7 +36,10 @@ import springfox.documentation.annotations.ApiIgnore;
  * @date 10/28/15
  * @since JDK1.8
  */
-@Api("Client") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.CLIENTS)
+@Api("Client")
+@RestController
+@RequestMapping(
+    ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.CLIENTS)
 public class ClientController {
 
   /**
@@ -48,7 +51,8 @@ public class ClientController {
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = ClientVO.class)
   @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
-  public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser, @RequestBody ClientParam param) {
+  public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
+      @RequestBody ClientParam param) {
     // Validate current user, param and sign.
     ResponseEntity responseEntity;
     responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.CREATE);
@@ -60,10 +64,12 @@ public class ClientController {
       return new ResponseEntity<>(clientDomain.create(param, currentUser), HttpStatus.CREATED);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper
+          .infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -80,7 +86,8 @@ public class ClientController {
       return new ResponseEntity<>(clientDomain.all(), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -96,9 +103,11 @@ public class ClientController {
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "id", value = "client's id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser, @RequestBody ClientParam param) {
+  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
+      @RequestBody ClientParam param) {
     // Validate current user, param and sign.
-    ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.UPDATE);
+    ResponseEntity responseEntity = validateHelper
+        .validate(param, currentUser, logger, OperationType.UPDATE);
     if (!responseEntity.getStatusCode().is2xxSuccessful()) {
       return responseEntity;
     }
@@ -107,10 +116,12 @@ public class ClientController {
       return new ResponseEntity<>(clientDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper
+          .infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -126,10 +137,12 @@ public class ClientController {
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "id", value = "client's id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser, @ApiIgnore @PathVariable Long id) {
+  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser,
+      @ApiIgnore @PathVariable Long id) {
     ClientParam param = new ClientParam(id);
     // Validate current user and param.
-    ResponseEntity responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.DELETE);
+    ResponseEntity responseEntity = validateHelper
+        .validate(param, currentUser, logger, OperationType.DELETE);
     if (!responseEntity.getStatusCode().is2xxSuccessful()) {
       return responseEntity;
     }
@@ -138,23 +151,23 @@ public class ClientController {
       clientDomain.deepDelete(param.getId());
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper
+          .infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return ResponseEntity.noContent().build();
   }
 
   private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
-
   private final ResultHelper resultHelper;
-
   private final ValidateHelper validateHelper;
-
   private final ClientDomain clientDomain;
 
-  @Autowired public ClientController(ResultHelper resultHelper, ValidateHelper validateHelper, ClientDomain clientDomain) {
+  @Autowired public ClientController(ResultHelper resultHelper, ValidateHelper validateHelper,
+      ClientDomain clientDomain) {
     Assert.defaultNotNull(resultHelper);
     Assert.defaultNotNull(validateHelper);
     Assert.defaultNotNull(clientDomain);
@@ -162,5 +175,4 @@ public class ClientController {
     this.validateHelper = validateHelper;
     this.clientDomain = clientDomain;
   }
-
 }
