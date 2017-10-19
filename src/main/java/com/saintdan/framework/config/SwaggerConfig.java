@@ -15,12 +15,12 @@ import static springfox.documentation.builders.PathSelectors.regex;
 /**
  * Config of swagger
  */
-@Configuration @EnableSwagger2 public class SwaggerConfig {
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
 
   /**
    * API of APP
-   *
-   * @return
    */
   @Bean public Docket appApi() {
     return new Docket(DocumentationType.SWAGGER_2)
@@ -37,8 +37,6 @@ import static springfox.documentation.builders.PathSelectors.regex;
 
   /**
    * API of open
-   *
-   * @return
    */
   @Bean public Docket openApi() {
     return new Docket(DocumentationType.SWAGGER_2)
@@ -55,8 +53,6 @@ import static springfox.documentation.builders.PathSelectors.regex;
 
   /**
    * API of management
-   *
-   * @return
    */
   @Bean public Docket managementApi() {
     return new Docket(DocumentationType.SWAGGER_2)
@@ -73,16 +69,19 @@ import static springfox.documentation.builders.PathSelectors.regex;
 
 
   private ApiInfo appApiInfo() {
-    return new ApiInfo(TITLE, DESCRIPTION_APP, VERSION, TERMS, new Contact(NAME, URL, EMAIL), LICENSE, LICENSE_URL
+    return new ApiInfo(TITLE, DESCRIPTION_APP, VERSION, TERMS, new Contact(NAME, URL, EMAIL),
+        LICENSE, LICENSE_URL
     );
   }
 
   private ApiInfo openApiInfo() {
-    return new ApiInfo(TITLE, DESCRIPTION_OPEN, VERSION, TERMS, new Contact(NAME, URL, EMAIL), LICENSE, LICENSE_URL);
+    return new ApiInfo(TITLE, DESCRIPTION_OPEN, VERSION, TERMS, new Contact(NAME, URL, EMAIL),
+        LICENSE, LICENSE_URL);
   }
 
   private ApiInfo managementApiInfo() {
-    return new ApiInfo(TITLE, DESCRIPTION_MANAGEMENT, VERSION, TERMS, new Contact(NAME, URL, EMAIL), LICENSE, LICENSE_URL);
+    return new ApiInfo(TITLE, DESCRIPTION_MANAGEMENT, VERSION, TERMS, new Contact(NAME, URL, EMAIL),
+        LICENSE, LICENSE_URL);
   }
 
   // ------------------------
@@ -90,30 +89,17 @@ import static springfox.documentation.builders.PathSelectors.regex;
   // ------------------------
 
   private static final String VERSION = "v1";
-
   private static final String TITLE = "Spring rest oauth2 sample API";
-
   private static final String TERMS = "NO terms of service";
-
   private static final String LICENSE = "MIT";
-
   private static final String LICENSE_URL = "www.saintdan.com";
-
   private static final String NAME = "saintdan";
-
   private static final String URL = "http://github.com/saintdan";
-
   private static final String EMAIL = "saintdan1011@gmail.com";
-
   private static final String OPEN = "open";
-
   private static final String APP = "app";
-
   private static final String MANAGEMENT = "management";
-
   private static final String DESCRIPTION_APP = "App API";
-
   private static final String DESCRIPTION_OPEN = "Open API";
-
   private static final String DESCRIPTION_MANAGEMENT = "Management API";
 }

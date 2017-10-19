@@ -17,9 +17,12 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
  * @date 08/02/2017
  * @since JDK1.8
  */
-@Configuration @EnableAuthorizationServer public class CustomAuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+@Configuration
+@EnableAuthorizationServer
+public class CustomAuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-  @Override public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+  @Override public void configure(AuthorizationServerEndpointsConfigurer endpoints)
+      throws Exception {
     endpoints
         .tokenStore(tokenStore())
         .authenticationManager(authenticationManager)
@@ -37,15 +40,15 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
   }
 
   private final DataSource dataSource;
-
   private final AuthenticationManager authenticationManager;
 
   // When you use memory client, you can comment the custom client details service.
   private final CustomClientDetailsService clientDetailsService;
-
   private final CustomUserDetailsService userDetailsService;
 
-  @Autowired public CustomAuthorizationServerConfiguration(DataSource dataSource, AuthenticationManager authenticationManager, CustomClientDetailsService clientDetailsService, CustomUserDetailsService userDetailsService) {
+  @Autowired public CustomAuthorizationServerConfiguration(DataSource dataSource,
+      AuthenticationManager authenticationManager, CustomClientDetailsService clientDetailsService,
+      CustomUserDetailsService userDetailsService) {
     Assert.defaultNotNull(dataSource);
     Assert.defaultNotNull(authenticationManager);
     Assert.defaultNotNull(clientDetailsService);

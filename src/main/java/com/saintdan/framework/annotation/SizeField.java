@@ -22,17 +22,17 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @date 31/03/2017
  * @since JDK1.8
  */
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = { })
+@Constraint(validatedBy = {})
 public @interface SizeField {
 
   String message() default "{javax.validation.constraints.Size.message}";
 
-  Class<?>[] groups() default { };
+  Class<?>[] groups() default {};
 
-  Class<? extends Payload>[] payload() default { };
+  Class<? extends Payload>[] payload() default {};
 
   /**
    * @return size the element must be higher or equal to
@@ -49,7 +49,7 @@ public @interface SizeField {
    *
    * @see javax.validation.constraints.Size
    */
-  @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+  @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
   @Retention(RUNTIME)
   @Documented
   @interface List {

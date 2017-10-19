@@ -36,10 +36,16 @@ import org.springframework.security.core.GrantedAuthority;
  * @date 6/25/15
  * @since JDK1.8
  */
-@Entity @Table(name = "resources") @EntityListeners({PersistentListener.class, ValidFlagListener.class})
+@Entity
+@Table(name = "resources")
+@EntityListeners({PersistentListener.class, ValidFlagListener.class})
 @NamedEntityGraph(name = "Resource.roles", attributeNodes = @NamedAttributeNode("roles"))
-@Data @Builder @NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode(exclude = "roles") @ToString(exclude = "roles")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = "roles")
+@ToString(exclude = "roles")
 public class Resource implements GrantedAuthority, Serializable {
 
   private static final long serialVersionUID = 6298843159549723556L;

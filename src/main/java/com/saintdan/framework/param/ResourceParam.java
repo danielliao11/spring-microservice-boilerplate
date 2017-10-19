@@ -15,12 +15,17 @@ import lombok.NoArgsConstructor;
  * @date 10/16/15
  * @since JDK1.8
  */
-@Data @EqualsAndHashCode(callSuper = false)  @Builder @NoArgsConstructor @AllArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ResourceParam extends BaseParam {
 
   private static final long serialVersionUID = 8542867394907970893L;
 
-  @NotNullField(value = {OperationType.UPDATE, OperationType.DELETE}, message = "id cannot be null.")
+  @NotNullField(value = {OperationType.UPDATE,
+      OperationType.DELETE}, message = "id cannot be null.")
   private Long id; // role's ID.
 
   @NotNullField(value = OperationType.CREATE, message = "name cannot be null.")

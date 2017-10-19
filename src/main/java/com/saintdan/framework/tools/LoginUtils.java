@@ -21,12 +21,14 @@ public class LoginUtils {
 
   public static String getClientId(HttpServletRequest request) throws IllegalTokenTypeException {
     final String BEARER = "bearer";
-    if (request.getHeader(AUTHORIZATION) == null || request.getHeader(AUTHORIZATION).contains(BEARER)) {
+    if (request.getHeader(AUTHORIZATION) == null || request.getHeader(AUTHORIZATION)
+        .contains(BEARER)) {
       throw new IllegalTokenTypeException();
     }
     final String AUTHORIZATION = "Authorization";
     final String BASIC = "basic";
-    String clientId64 = new String(Base64.decodeBase64(request.getHeader(AUTHORIZATION).replace(BASIC, CommonsConstant.BLANK)));
+    String clientId64 = new String(Base64
+        .decodeBase64(request.getHeader(AUTHORIZATION).replace(BASIC, CommonsConstant.BLANK)));
     return clientId64.trim().substring(0, clientId64.indexOf(CommonsConstant.COLON));
   }
 
@@ -54,5 +56,4 @@ public class LoginUtils {
   private static final String GRANT_TYPE = "grant_type";
   private static final String SCOPE = "scope";
   private static final String READ = "read";
-
 }

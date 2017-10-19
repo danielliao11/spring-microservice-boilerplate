@@ -45,9 +45,9 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @param currentUser current user
    * @param <VO>        VO extends to ResultVO
    * @return VO
-   * @throws Exception
    */
-  @Transactional public <VO> VO create(Class<VO> voType, Object inputParam, User currentUser) throws Exception {
+  @Transactional public <VO> VO create(Class<VO> voType, Object inputParam, User currentUser)
+      throws Exception {
     T po = transformer.param2PO(getClassT(), inputParam, getClassT().newInstance(), currentUser);
     return createByPO(voType, po);
   }
@@ -55,11 +55,10 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   /**
    * Create <T> by PO.
    *
-   * @param voType      VO of some class
-   * @param inputPO     input PO
-   * @param <VO>        VO extends to ResultVO
+   * @param voType  VO of some class
+   * @param inputPO input PO
+   * @param <VO>    VO extends to ResultVO
    * @return VO
-   * @throws Exception
    */
   @Transactional public <VO> VO createByPO(Class<VO> voType, T inputPO) throws Exception {
     return transformer.po2VO(voType, createByPO(inputPO));
@@ -74,10 +73,10 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * Get all <T>.
    *
    * @return <T>s
-   * @throws Exception
    */
   @SuppressWarnings("unchecked")
-  public <VO> List<VO> getAll(Specification<T> specification, Sort sort, Class<VO> voType) throws InstantiationException, IllegalAccessException {
+  public <VO> List<VO> getAll(Specification<T> specification, Sort sort, Class<VO> voType)
+      throws InstantiationException, IllegalAccessException {
     List pos = repository.findAll(specification, sort);
     if (pos.isEmpty()) {
       return null;
@@ -92,10 +91,10 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @param pageable      pageable
    * @param voType        VO of some class
    * @return page of <T>
-   * @throws Exception
    */
   @SuppressWarnings("unchecked")
-  public Page getPage(Specification<T> specification, Pageable pageable, Class voType) throws InstantiationException, IllegalAccessException {
+  public Page getPage(Specification<T> specification, Pageable pageable, Class voType)
+      throws InstantiationException, IllegalAccessException {
     Page<T> poPage = repository.findAll(specification, pageable);
     if (poPage.getSize() == 0) {
       return null;
@@ -109,7 +108,6 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    *
    * @param ids ids
    * @return page of <T>
-   * @throws Exception
    */
   public List<T> getAllByIds(List<ID> ids) throws Exception {
     return repository.findAll(ids);
@@ -122,7 +120,6 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @param voType VO of some class
    * @param <VO>   VO extends to ResultVO
    * @return <T>
-   * @throws Exception
    */
   @SuppressWarnings("unchecked")
   public <VO> VO getById(Long id, Class<VO> voType) throws Exception {
@@ -132,16 +129,16 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   /**
    * Update <T> by param.
    *
-   * @param voType      VO of some class
-   * @param inputParam  input param
-   * @param <VO>        VO extends to ResultVO
+   * @param voType     VO of some class
+   * @param inputParam input param
+   * @param <VO>       VO extends to ResultVO
    * @return VO
-   * @throws Exception
    */
   @Transactional public <VO> VO update(Class<VO> voType, Object inputParam) throws Exception {
     T po = findByIdParam(inputParam);
     if (po == null) {
-      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, voType.getName(), CommonsConstant.ID));
+      throw new CommonsException(ErrorType.SYS0122,
+          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, voType.getName(), CommonsConstant.ID));
     }
     BeanUtils.copyPropertiesIgnoreNull(inputParam, po);
     return updateByPO(voType, po);
@@ -150,11 +147,10 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   /**
    * Update <T> by param.
    *
-   * @param voType      VO of some class
-   * @param inputPO     input PO
-   * @param <VO>        VO extends to ResultVO
+   * @param voType  VO of some class
+   * @param inputPO input PO
+   * @param <VO>    VO extends to ResultVO
    * @return VO
-   * @throws Exception
    */
   @Transactional public <VO> VO updateByPO(Class<VO> voType, T inputPO) throws Exception {
     return transformer.po2VO(voType, updateByPO(inputPO));
@@ -164,9 +160,8 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   /**
    * Update <T> by param.
    *
-   * @param po     input PO
+   * @param po input PO
    * @return VO
-   * @throws Exception
    */
   @Transactional public T updateByPO(T po) throws Exception {
     logHelper.log(OperationType.UPDATE, getClassT().getSimpleName());
@@ -177,8 +172,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   /**
    * Delete <T>, update valid flag to invalid.
    *
-   * @param inputParam  input param
-   * @throws Exception
+   * @param inputParam input param
    */
   @Transactional public void delete(Object inputParam) throws Exception {
     T po = findByIdParam(inputParam);
@@ -188,9 +182,6 @@ public abstract class BaseDomain<T, ID extends Serializable> {
 
   /**
    * update valid flag to invalid.by id
-   *
-   * @param id
-   * @throws Exception
    */
   @Transactional public void deleteById(Long id) throws Exception {
     T po = findById(id);
@@ -206,8 +197,6 @@ public abstract class BaseDomain<T, ID extends Serializable> {
 
   /**
    * update valid flag to invalid.by ids
-   * @param ids
-   * @throws Exception
    */
   @Transactional public void deleteByIds(String ids) throws RuntimeException {
     transformer.idsStr2List(ids).forEach(id -> {
@@ -224,7 +213,6 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    *
    * @param inputParam id
    * @return class
-   * @throws Exception
    */
   @SuppressWarnings("unchecked")
   public T findByIdParam(Object inputParam) throws Exception {
@@ -242,7 +230,6 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * Get class of <T>
    *
    * @return class of <T>
-   * @throws Exception
    */
   @SuppressWarnings("unchecked")
   protected Class<T> getClassT() throws Exception {
@@ -256,7 +243,8 @@ public abstract class BaseDomain<T, ID extends Serializable> {
 
   protected final Transformer transformer;
 
-  @Autowired public BaseDomain(CustomRepository<T, ID> repository, LogHelper logHelper, Transformer transformer) {
+  @Autowired public BaseDomain(CustomRepository<T, ID> repository, LogHelper logHelper,
+      Transformer transformer) {
     Assert.defaultNotNull(repository);
     Assert.defaultNotNull(logHelper);
     Assert.defaultNotNull(transformer);
@@ -270,7 +258,6 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    *
    * @param po po
    * @return po with invalid flag
-   * @throws Exception
    */
   private T setInvalid(T po) throws Exception {
     Field validFlagField = po.getClass().getDeclaredField(CommonsConstant.VALID_FLAG);

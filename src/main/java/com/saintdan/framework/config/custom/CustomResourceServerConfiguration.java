@@ -19,7 +19,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
  * @date 6/30/15
  * @since JDK1.8
  */
-@Configuration public class CustomResourceServerConfiguration {
+@Configuration
+public class CustomResourceServerConfiguration {
 
   /**
    * Resource of api
@@ -62,6 +63,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
   private static final String OPEN_URL = getURL(ResourceURL.OPEN);
 
   private static String getURL(CharSequence element) {
-    return String.join("", ResourceURL.FIX, ResourceURL.RESOURCES, VersionConstant.V1, element, ResourceURL.FIX);
+    return String.join("", ResourceURL.FIX, ResourceURL.RESOURCES, VersionConstant.V1, element,
+        ResourceURL.FIX);
   }
 }

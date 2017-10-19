@@ -17,12 +17,17 @@ import lombok.NoArgsConstructor;
  * @date 9/22/15
  * @since JDK1.8
  */
-@Data @EqualsAndHashCode(callSuper = false) @Builder @NoArgsConstructor @AllArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserParam extends BaseParam {
 
   private static final long serialVersionUID = -9153801716112918626L;
 
-  @NotNullField(value = {OperationType.UPDATE, OperationType.DELETE}, message = "id cannot be null.")
+  @NotNullField(value = {OperationType.UPDATE,
+      OperationType.DELETE}, message = "id cannot be null.")
   private Long id; // user's ID
 
   @ApiModelProperty(value = "username", required = true, notes = "usr must greater than or equal to 4 and less than or equal to 50.")

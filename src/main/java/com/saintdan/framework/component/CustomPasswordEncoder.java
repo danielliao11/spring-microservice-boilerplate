@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
  * @date 6/28/15
  * @since JDK1.8
  */
-@Component public class CustomPasswordEncoder implements PasswordEncoder {
+@Component
+public class CustomPasswordEncoder implements PasswordEncoder {
 
   /**
    * Encode the password.

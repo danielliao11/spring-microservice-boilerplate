@@ -15,7 +15,8 @@ import org.springframework.stereotype.Component;
  * @date 9/22/15
  * @since JDK1.8
  */
-@Component public class ResultHelper {
+@Component
+public class ResultHelper {
 
   /**
    * Return success result.
@@ -58,27 +59,27 @@ import org.springframework.stereotype.Component;
    * @return response entity with information.
    */
   @SuppressWarnings("unchecked")
-  public ResponseEntity infoResp(Logger logger, ErrorType errorType, String msg, HttpStatus httpStatus) {
+  public ResponseEntity infoResp(Logger logger, ErrorType errorType, String msg,
+      HttpStatus httpStatus) {
     LogUtils.trackInfo(logger, msg);
     return new ResponseEntity(new ErrorVO(errorType.name(), msg), httpStatus);
   }
 
   /**
-   * Return error information,
-   * and log it to error.
+   * Return error information, and log it to error.
    *
    * @param logger    Log
    * @param errorType error type
    * @param e         e
    * @return response entity with error message.
    */
-  public ResponseEntity errorResp(Logger logger, Throwable e, ErrorType errorType, HttpStatus httpStatus) {
+  public ResponseEntity errorResp(Logger logger, Throwable e, ErrorType errorType,
+      HttpStatus httpStatus) {
     return errorResp(logger, e, errorType, errorType.description(), httpStatus);
   }
 
   /**
-   * Return error information,
-   * and log it to error.
+   * Return error information, and log it to error.
    *
    * @param logger    Log
    * @param errorType error type
@@ -87,9 +88,9 @@ import org.springframework.stereotype.Component;
    * @return response entity with error message.
    */
   @SuppressWarnings("unchecked")
-  public ResponseEntity errorResp(Logger logger, Throwable e, ErrorType errorType, String msg, HttpStatus httpStatus) {
+  public ResponseEntity errorResp(Logger logger, Throwable e, ErrorType errorType, String msg,
+      HttpStatus httpStatus) {
     LogUtils.traceError(logger, e, errorType.description());
     return new ResponseEntity(new ErrorVO(errorType.name(), msg), httpStatus);
   }
-
 }

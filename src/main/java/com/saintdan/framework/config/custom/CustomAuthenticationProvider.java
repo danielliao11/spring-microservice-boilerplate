@@ -34,9 +34,11 @@ import org.springframework.stereotype.Service;
  * @date 12/9/15
  * @since JDK1.8
  */
-@Service public class CustomAuthenticationProvider implements AuthenticationProvider {
+@Service
+public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-  @Override public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+  @Override public Authentication authenticate(Authentication authentication)
+      throws AuthenticationException {
     UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
     String clientId;
     try {
@@ -72,7 +74,8 @@ import org.springframework.stereotype.Service;
     if (user.getIp() != null) {
       if (!user.getIp().equals(ip) && oauthAccessToken != null) {
         accessTokenRepository.delete(oauthAccessToken);
-        OauthRefreshToken refreshToken = refreshTokenRepository.findByTokenId(oauthAccessToken.getTokenId()).orElse(null);
+        OauthRefreshToken refreshToken = refreshTokenRepository
+            .findByTokenId(oauthAccessToken.getTokenId()).orElse(null);
         if (refreshToken != null) {
           refreshTokenRepository.delete(refreshToken);
         }
@@ -99,22 +102,18 @@ import org.springframework.stereotype.Service;
   }
 
   private final UserRepository userRepository;
-
   private final OauthAccessTokenRepository accessTokenRepository;
-
   private final OauthRefreshTokenRepository refreshTokenRepository;
-
   private final HttpServletRequest request;
-
   private final UserDomain userDomain;
-
   private final LogHelper logHelper;
-
   private final CustomPasswordEncoder customPasswordEncoder;
-
   private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
 
-  @Autowired public CustomAuthenticationProvider(UserRepository userRepository, OauthAccessTokenRepository accessTokenRepository, OauthRefreshTokenRepository refreshTokenRepository, HttpServletRequest request, UserDomain userDomain, LogHelper logHelper, CustomPasswordEncoder customPasswordEncoder) {
+  @Autowired public CustomAuthenticationProvider(UserRepository userRepository,
+      OauthAccessTokenRepository accessTokenRepository,
+      OauthRefreshTokenRepository refreshTokenRepository, HttpServletRequest request,
+      UserDomain userDomain, LogHelper logHelper, CustomPasswordEncoder customPasswordEncoder) {
     Assert.defaultNotNull(userRepository);
     Assert.defaultNotNull(accessTokenRepository);
     Assert.defaultNotNull(refreshTokenRepository);
