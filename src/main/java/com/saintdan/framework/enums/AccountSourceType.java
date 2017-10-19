@@ -20,8 +20,6 @@ public enum AccountSourceType implements IntentStateWithCodeAndDescription {
   QQ(8, "qq account"),
   WEIBO(9, "weibo account"),
 
-
-
   UNKNOWN(-1, "unknown account"),;
 
   private int code;

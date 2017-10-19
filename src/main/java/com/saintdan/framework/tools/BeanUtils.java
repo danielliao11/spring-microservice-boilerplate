@@ -17,8 +17,8 @@ public class BeanUtils {
   /**
    * Bean properties copy ignore null.
    *
-   * @param src     source
-   * @param target  target
+   * @param src    source
+   * @param target target
    */
   public static void copyPropertiesIgnoreNull(Object src, Object target) {
     org.springframework.beans.BeanUtils.copyProperties(src, target, getNamesOfNullProperties(src));
@@ -27,8 +27,7 @@ public class BeanUtils {
   /**
    * Get names of null properties
    *
-   * @param source  source object
-   * @return
+   * @param source source object
    */
   private static String[] getNamesOfNullProperties(Object source) {
     final BeanWrapper src = new BeanWrapperImpl(source);
@@ -37,7 +36,9 @@ public class BeanUtils {
     Set<String> emptyNames = new HashSet<>();
     for (java.beans.PropertyDescriptor pd : pds) {
       Object srcValue = src.getPropertyValue(pd.getName());
-      if (srcValue == null) emptyNames.add(pd.getName());
+      if (srcValue == null) {
+        emptyNames.add(pd.getName());
+      }
     }
     String[] result = new String[emptyNames.size()];
     return emptyNames.toArray(result);

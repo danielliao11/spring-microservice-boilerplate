@@ -23,21 +23,26 @@ import org.springframework.stereotype.Service;
  * @date 23/01/2017
  * @since JDK1.8
  */
-@Service public class LoginServiceImpl implements LoginService {
+@Service
+public class LoginServiceImpl implements LoginService {
 
-  @Override public ResponseEntity login(LoginParam param, HttpServletRequest request) throws Exception {
+  @Override public ResponseEntity login(LoginParam param, HttpServletRequest request)
+      throws Exception {
     return execute(param, request);
   }
 
-  @Override public ResponseEntity refresh(LoginParam param, HttpServletRequest request) throws Exception {
+  @Override public ResponseEntity refresh(LoginParam param, HttpServletRequest request)
+      throws Exception {
     return execute(param, request);
   }
 
   private static final String AUTHORITY_PROP = "client.authorities";
 
   private ResponseEntity execute(LoginParam param, HttpServletRequest request) throws Exception {
-    final List<GrantedAuthority> CLIENT_AUTHORITIES = AuthorityUtils.commaSeparatedStringToAuthorityList(environment.getProperty(AUTHORITY_PROP));
-    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(LoginUtils.getClientId(request), "", CLIENT_AUTHORITIES);
+    final List<GrantedAuthority> CLIENT_AUTHORITIES = AuthorityUtils
+        .commaSeparatedStringToAuthorityList(environment.getProperty(AUTHORITY_PROP));
+    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+        LoginUtils.getClientId(request), "", CLIENT_AUTHORITIES);
     Map<String, String> params = LoginUtils.getParams(param);
     return tokenEndpoint.postAccessToken(token, params);
   }

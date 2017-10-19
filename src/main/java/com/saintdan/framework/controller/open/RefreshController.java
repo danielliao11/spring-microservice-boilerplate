@@ -31,13 +31,16 @@ import springfox.documentation.annotations.ApiIgnore;
  * @date 15/02/2017
  * @since JDK1.8
  */
-@Api("refresh token") @RestController @RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.OPEN + ResourceURL.REFRESH)
+@Api("refresh token")
+@RestController
+@RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.OPEN + ResourceURL.REFRESH)
 public class RefreshController {
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "refresh token", httpMethod = "POST", response = OAuth2AccessToken.class)
   @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
-  public ResponseEntity refresh(@RequestBody LoginParam param, @ApiIgnore HttpServletRequest request) {
+  public ResponseEntity refresh(@RequestBody LoginParam param,
+      @ApiIgnore HttpServletRequest request) {
     // Validate client, param.
     ResponseEntity responseEntity;
     try {
@@ -50,23 +53,24 @@ public class RefreshController {
     }
     try {
       return loginService.refresh(param, request);
-    } catch (IllegalTokenTypeException e){
-      return new ResponseEntity<>(new ErrorVO(e.getErrorType().name(), e.getErrorType().description()), HttpStatus.UNAUTHORIZED);
+    } catch (IllegalTokenTypeException e) {
+      return new ResponseEntity<>(
+          new ErrorVO(e.getErrorType().name(), e.getErrorType().description()),
+          HttpStatus.UNAUTHORIZED);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   private static final Logger logger = LoggerFactory.getLogger(RefreshController.class);
-
   private final LoginService loginService;
-
   private final ResultHelper resultHelper;
-
   private final ValidateHelper validateHelper;
 
-  public RefreshController(LoginService loginService, ResultHelper resultHelper, ValidateHelper validateHelper) {
+  public RefreshController(LoginService loginService, ResultHelper resultHelper,
+      ValidateHelper validateHelper) {
     Assert.defaultNotNull(loginService);
     Assert.defaultNotNull(resultHelper);
     Assert.defaultNotNull(validateHelper);
@@ -74,5 +78,4 @@ public class RefreshController {
     this.resultHelper = resultHelper;
     this.validateHelper = validateHelper;
   }
-
 }

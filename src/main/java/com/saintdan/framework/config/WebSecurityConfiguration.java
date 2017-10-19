@@ -40,5 +40,4 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     Assert.defaultNotNull(customAuthenticationProvider);
     this.customAuthenticationProvider = customAuthenticationProvider;
   }
-
 }

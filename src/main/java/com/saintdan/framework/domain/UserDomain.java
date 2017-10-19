@@ -35,21 +35,13 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 7/21/15
  * @since JDK1.8
  */
-@Service @Transactional(readOnly = true) public class UserDomain extends BaseDomain<User, Long> {
+@Service
+@Transactional(readOnly = true)
+public class UserDomain extends BaseDomain<User, Long> {
 
   // ------------------------
   // PUBLIC METHODS
   // ------------------------
-
-  public UserDomain(CustomRepository<User, Long> repository, LogHelper logHelper, Transformer transformer, AccountRepository accountRepository, UserRepository userRepository, RoleDomain roleDomain) {
-    super(repository, logHelper, transformer);
-    Assert.defaultNotNull(accountRepository);
-    Assert.defaultNotNull(userRepository);
-    Assert.defaultNotNull(roleDomain);
-    this.accountRepository = accountRepository;
-    this.userRepository = userRepository;
-    this.roleDomain = roleDomain;
-  }
 
   @Transactional public UserVO create(UserParam param, User currentUser) throws Exception {
     return po2Vo(createReturnPo(param, currentUser));
@@ -59,7 +51,8 @@ import org.springframework.transaction.annotation.Transactional;
     if (usrUsed(param.getUsr())) {
       // Throw user already exists error, usr taken.
       final String ACCOUNT = "account";
-      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ACCOUNT, ACCOUNT));
+      throw new CommonsException(ErrorType.SYS0111,
+          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ACCOUNT, ACCOUNT));
     }
     User user = param2Po(param, new User(), currentUser);
     Account account = param2Account(param, new Account(), user, currentUser);
@@ -88,7 +81,9 @@ import org.springframework.transaction.annotation.Transactional;
 
   public User findByAccount(String usr) {
     Account account = accountRepository.findByAccount(usr).orElse(null);
-    return account == null ? null : userRepository.findByIdAndValidFlag(account.getUser().getId(), ValidFlag.VALID).orElse(null);
+    return account == null ? null
+        : userRepository.findByIdAndValidFlag(account.getUser().getId(), ValidFlag.VALID)
+            .orElse(null);
   }
 
   public boolean usrUsed(String usr) {
@@ -102,7 +97,8 @@ import org.springframework.transaction.annotation.Transactional;
   @Transactional public User updateReturnPo(UserParam param, User currentUser) throws Exception {
     User user = findById(param.getId());
     if (user == null) {
-      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
+          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
     }
     if (StringUtils.isNotBlank(param.getUsr())) {
       param.setUsr(null);
@@ -110,7 +106,8 @@ import org.springframework.transaction.annotation.Transactional;
     return super.updateByPO(param2Po(param, user, currentUser));
   }
 
-  public Account param2Account(UserParam param, Account account, User user, User currentUser) throws Exception {
+  public Account param2Account(UserParam param, Account account, User user, User currentUser)
+      throws Exception {
     account = transformer.param2PO(Account.class, param, account, currentUser);
     account.setAccount(param.getUsr());
     account.setUser(user);
@@ -122,15 +119,26 @@ import org.springframework.transaction.annotation.Transactional;
   // --------------------------
 
   private final AccountRepository accountRepository;
-
   private final UserRepository userRepository;
-
   private final RoleDomain roleDomain;
+
+  public UserDomain(CustomRepository<User, Long> repository, LogHelper logHelper,
+      Transformer transformer, AccountRepository accountRepository, UserRepository userRepository,
+      RoleDomain roleDomain) {
+    super(repository, logHelper, transformer);
+    Assert.defaultNotNull(accountRepository);
+    Assert.defaultNotNull(userRepository);
+    Assert.defaultNotNull(roleDomain);
+    this.accountRepository = accountRepository;
+    this.userRepository = userRepository;
+    this.roleDomain = roleDomain;
+  }
 
   private User param2Po(UserParam param, User user, User currentUser) throws Exception {
     user = transformer.param2PO(User.class, param, user, currentUser);
     if (StringUtils.isNotBlank(param.getRoleIds())) {
-      Set<Role> roles = Sets.newHashSet(roleDomain.getAllByIds(transformer.idsStr2List(param.getRoleIds())));
+      Set<Role> roles = Sets
+          .newHashSet(roleDomain.getAllByIds(transformer.idsStr2List(param.getRoleIds())));
       if (user.getRoles() != null) {
         roles.addAll(user.getRoles());
       }
@@ -142,5 +150,4 @@ import org.springframework.transaction.annotation.Transactional;
   public UserVO po2Vo(User user) throws Exception {
     return transformer.po2VO(UserVO.class, user);
   }
-
 }

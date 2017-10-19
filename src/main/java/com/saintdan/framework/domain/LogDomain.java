@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
  * @date 10/28/15
  * @since JDK1.8
  */
-@Service @Transactional(readOnly = true) public class LogDomain {
+@Service
+@Transactional(readOnly = true)
+public class LogDomain {
 
   // ------------------------
   // PUBLIC METHODS
@@ -35,7 +37,8 @@ import org.springframework.transaction.annotation.Transactional;
    * Show logs.
    *
    * @return {@link Page}
-   * @throws CommonsException {@link com.saintdan.framework.enums.ErrorType#SYS0121} No group exists.
+   * @throws CommonsException {@link com.saintdan.framework.enums.ErrorType#SYS0121} No group
+   *                          exists.
    */
   @SuppressWarnings("unchecked")
   public Page page(Specification<Log> specification, Pageable pageable) throws Exception {

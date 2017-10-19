@@ -27,18 +27,19 @@ import org.springframework.stereotype.Component;
  * @date 11/4/15
  * @since JDK1.8
  */
-@Component public class ValidateHelper {
+@Component
+public class ValidateHelper {
 
   /**
    * Validate client
    *
    * @param request request
    * @return 422
-   * @throws IllegalTokenTypeException
    */
   public ResponseEntity validate(HttpServletRequest request) throws IllegalTokenTypeException {
     if (!clientRepository.findByClientIdAlias(LoginUtils.getClientId(request)).isPresent()) {
-      return resultHelper.infoResp(ErrorType.SYS0007, ErrorType.SYS0007.description(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper.infoResp(ErrorType.SYS0007, ErrorType.SYS0007.description(),
+          HttpStatus.UNPROCESSABLE_ENTITY);
     }
     return resultHelper.successResp(null, HttpStatus.OK);
   }
@@ -50,11 +51,12 @@ import org.springframework.stereotype.Component;
    * @param param     param
    * @param grantType {@link GrantType}
    * @return 422
-   * @throws IllegalTokenTypeException
    */
-  public ResponseEntity validate(HttpServletRequest request, Object param, GrantType grantType) throws IllegalTokenTypeException {
+  public ResponseEntity validate(HttpServletRequest request, Object param, GrantType grantType)
+      throws IllegalTokenTypeException {
     if (!clientRepository.findByClientIdAlias(LoginUtils.getClientId(request)).isPresent()) {
-      return resultHelper.infoResp(ErrorType.SYS0007, ErrorType.SYS0007.description(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper.infoResp(ErrorType.SYS0007, ErrorType.SYS0007.description(),
+          HttpStatus.UNPROCESSABLE_ENTITY);
     }
     return validate(param, grantType);
   }
@@ -67,12 +69,13 @@ import org.springframework.stereotype.Component;
    * @param logger        log
    * @param operationType {@link OperationType}
    * @return 422
-   * @throws Exception
    */
-  public ResponseEntity validate(Object param, User currentUser, Logger logger, OperationType operationType) {
+  public ResponseEntity validate(Object param, User currentUser, Logger logger,
+      OperationType operationType) {
     //check currentUser
     if (currentUser == null || currentUser.getId() == 0) {
-      return resultHelper.infoResp(logger, ErrorType.SYS0003, ErrorType.SYS0003.description(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper.infoResp(logger, ErrorType.SYS0003, ErrorType.SYS0003.description(),
+          HttpStatus.UNPROCESSABLE_ENTITY);
     }
     return validate(param, operationType);
   }
@@ -86,7 +89,8 @@ import org.springframework.stereotype.Component;
    */
   public ResponseEntity validate(User currentUser, Logger logger) {
     if (currentUser == null || currentUser.getId() == 0) {
-      return resultHelper.infoResp(logger, ErrorType.SYS0003, ErrorType.SYS0003.description(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper.infoResp(logger, ErrorType.SYS0003, ErrorType.SYS0003.description(),
+          HttpStatus.UNPROCESSABLE_ENTITY);
     }
     return resultHelper.successResp(null, HttpStatus.OK);
   }
@@ -97,7 +101,6 @@ import org.springframework.stereotype.Component;
    * @param param         Param bean
    * @param operationType {@link OperationType}
    * @return 422
-   * @throws Exception
    */
   public ResponseEntity validate(Object param, OperationType operationType) {
     Field[] fields = param.getClass().getDeclaredFields();
@@ -108,18 +111,24 @@ import org.springframework.stereotype.Component;
       field.setAccessible(true);
       NotNullField notNullField = field.getAnnotation(NotNullField.class);
       try {
-        if (ArrayUtils.contains(notNullField.value(), operationType) && (field.get(param) == null || StringUtils.isBlank(field.get(param).toString()))) {
-          return resultHelper.infoResp(ErrorType.SYS0002, notNullField.message(), HttpStatus.UNPROCESSABLE_ENTITY);
+        if (ArrayUtils.contains(notNullField.value(), operationType) && (field.get(param) == null
+            || StringUtils.isBlank(field.get(param).toString()))) {
+          return resultHelper
+              .infoResp(ErrorType.SYS0002, notNullField.message(), HttpStatus.UNPROCESSABLE_ENTITY);
         }
-      } catch (IllegalAccessException ignore) {}
+      } catch (IllegalAccessException ignore) {
+      }
       if (field.isAnnotationPresent(SizeField.class)) {
         SizeField size = field.getAnnotation(SizeField.class);
         try {
           if (ArrayUtils.contains(size.value(), operationType)
-              && (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min())) {
-            return resultHelper.infoResp(ErrorType.SYS0002, size.message(), HttpStatus.UNPROCESSABLE_ENTITY);
+              && (field.get(param).toString().length() > size.max()
+              || field.get(param).toString().length() < size.min())) {
+            return resultHelper
+                .infoResp(ErrorType.SYS0002, size.message(), HttpStatus.UNPROCESSABLE_ENTITY);
           }
-        } catch (IllegalAccessException ignore) {}
+        } catch (IllegalAccessException ignore) {
+        }
       }
     }
     return ResponseEntity.ok().build();
@@ -128,10 +137,9 @@ import org.springframework.stereotype.Component;
   /**
    * Bean properties null validation for auth.
    *
-   * @param param         Param bean
+   * @param param     Param bean
    * @param grantType {@link GrantType}
    * @return 422
-   * @throws Exception
    */
   public ResponseEntity validate(Object param, GrantType grantType) {
     Field[] fields = param.getClass().getDeclaredFields();
@@ -142,25 +150,30 @@ import org.springframework.stereotype.Component;
       field.setAccessible(true);
       NotNullField notNullField = field.getAnnotation(NotNullField.class);
       try {
-        if (ArrayUtils.contains(notNullField.grant(), grantType) && (field.get(param) == null || StringUtils.isBlank(field.get(param).toString()))) {
-          return resultHelper.infoResp(ErrorType.SYS0002, notNullField.message(), HttpStatus.UNPROCESSABLE_ENTITY);
+        if (ArrayUtils.contains(notNullField.grant(), grantType) && (field.get(param) == null
+            || StringUtils.isBlank(field.get(param).toString()))) {
+          return resultHelper
+              .infoResp(ErrorType.SYS0002, notNullField.message(), HttpStatus.UNPROCESSABLE_ENTITY);
         }
-      } catch (IllegalAccessException ignore) {}
+      } catch (IllegalAccessException ignore) {
+      }
       if (field.isAnnotationPresent(SizeField.class)) {
         SizeField size = field.getAnnotation(SizeField.class);
         try {
           if (ArrayUtils.contains(size.grant(), grantType)
-              && (field.get(param).toString().length() > size.max() || field.get(param).toString().length() < size.min())) {
-            return resultHelper.infoResp(ErrorType.SYS0002, size.message(), HttpStatus.UNPROCESSABLE_ENTITY);
+              && (field.get(param).toString().length() > size.max()
+              || field.get(param).toString().length() < size.min())) {
+            return resultHelper
+                .infoResp(ErrorType.SYS0002, size.message(), HttpStatus.UNPROCESSABLE_ENTITY);
           }
-        } catch (IllegalAccessException ignore) {}
+        } catch (IllegalAccessException ignore) {
+        }
       }
     }
     return ResponseEntity.ok().build();
   }
 
   private final ResultHelper resultHelper;
-
   private final ClientRepository clientRepository;
 
   @Autowired
@@ -170,5 +183,4 @@ import org.springframework.stereotype.Component;
     this.resultHelper = resultHelper;
     this.clientRepository = clientRepository;
   }
-
 }

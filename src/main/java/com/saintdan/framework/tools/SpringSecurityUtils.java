@@ -93,7 +93,8 @@ public class SpringSecurityUtils {
    * @param request     request
    */
   public static void saveUserDetailsToContext(UserDetails userDetails, HttpServletRequest request) {
-    PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userDetails,
+    PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(
+        userDetails,
         userDetails.getPassword(), userDetails.getAuthorities());
 
     if (request != null) {
@@ -115,5 +116,4 @@ public class SpringSecurityUtils {
     }
     return context.getAuthentication();
   }
-
 }

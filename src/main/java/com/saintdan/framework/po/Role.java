@@ -37,10 +37,16 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @date 6/23/15
  * @since JDK1.8
  */
-@Entity @Table(name = "roles") @EntityListeners({PersistentListener.class, ValidFlagListener.class})
+@Entity
+@Table(name = "roles")
+@EntityListeners({PersistentListener.class, ValidFlagListener.class})
 @NamedEntityGraph(name = "Role.resources", attributeNodes = @NamedAttributeNode("resources"))
-@Data @Builder @NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode(exclude = "users") @ToString(exclude = "users")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = "users")
+@ToString(exclude = "users")
 public class Role implements Serializable {
 
   private static final long serialVersionUID = -5193344128221526323L;
@@ -89,10 +95,10 @@ public class Role implements Serializable {
   @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = CascadeType.REFRESH)
   private Set<User> users;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.REFRESH })
+  @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
   @JoinTable(name = "roles_has_resources",
-      joinColumns = { @JoinColumn(name = "role_id") },
-      inverseJoinColumns = { @JoinColumn(name = "resource_id") })
+      joinColumns = {@JoinColumn(name = "role_id")},
+      inverseJoinColumns = {@JoinColumn(name = "resource_id")})
   private Set<Resource> resources;
 
   @PreRemove

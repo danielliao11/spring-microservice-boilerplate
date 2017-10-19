@@ -12,13 +12,13 @@ import lombok.Data;
  * @date 26/10/2016
  * @since JDK1.8
  */
-@Entity @Table(name = "oauth_access_token") @Data public class OauthAccessToken {
+@Entity
+@Table(name = "oauth_access_token")
+@Data
+public class OauthAccessToken {
 
   @Id
   private String tokenId;
-
   private String userName;
-
   private String clientId;
-
 }

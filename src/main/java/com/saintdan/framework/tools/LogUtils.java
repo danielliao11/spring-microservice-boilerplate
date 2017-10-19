@@ -78,5 +78,4 @@ public class LogUtils {
     }
     return w.toString();
   }
-
 }

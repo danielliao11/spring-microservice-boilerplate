@@ -14,16 +14,15 @@ import lombok.NoArgsConstructor;
  * @date 10/16/15
  * @since JDK1.8
  */
-@Data @Builder @NoArgsConstructor @AllArgsConstructor
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RoleVO implements Serializable {
 
   private static final long serialVersionUID = 1444065316565469644L;
-
   private Long id;
-
   private String name;
-
   private String description;
-
   private Set<ResourceVO> resources;
 }

@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
  * @date 10/29/15
  * @since JDK1.8
  */
-@Target({ ElementType.PARAMETER })
+@Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @AuthenticationPrincipal
 public @interface CurrentUser {
