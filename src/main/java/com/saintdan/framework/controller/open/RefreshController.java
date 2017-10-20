@@ -6,6 +6,7 @@ import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.IllegalTokenTypeException;
 import com.saintdan.framework.param.LoginParam;
+import com.saintdan.framework.param.RefreshParam;
 import com.saintdan.framework.service.LoginService;
 import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.vo.ErrorVO;
@@ -38,7 +39,7 @@ public class RefreshController {
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "refresh token", httpMethod = "POST", response = OAuth2AccessToken.class)
   @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
-  public ResponseEntity refresh(@RequestBody LoginParam param,
+  public ResponseEntity refresh(@RequestBody RefreshParam param,
       @ApiIgnore HttpServletRequest request) {
     try {
       return loginService.refresh(param, request);

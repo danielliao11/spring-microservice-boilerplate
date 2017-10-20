@@ -15,6 +15,8 @@ public enum ResourceUri {
 
   LOGIN(ResourcePath.RESOURCES + VersionConstant.V1 + ResourcePath.OPEN + ResourcePath.LOGIN,
       LoginParam.class),
+  REFRESH(ResourcePath.RESOURCES + VersionConstant.V1 + ResourcePath.OPEN + ResourcePath.REFRESH,
+      LoginParam.class),
 
   UNKNOWN("", null);
 

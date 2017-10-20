@@ -24,6 +24,7 @@ public class ResourceParam extends BaseParam {
 
   private static final long serialVersionUID = 8542867394907970893L;
 
+  @NotNullField(method = {HttpMethod.PUT, HttpMethod.DELETE}, message = "id cannot be null.")
   private Long id;
 
   @NotNullField(method = HttpMethod.POST, message = "name cannot be null.")

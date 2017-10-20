@@ -1,11 +1,13 @@
 package com.saintdan.framework.param;
 
+import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.domain.ClientDomain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpMethod;
 
 /**
  * Param bean for {@link ClientDomain}
@@ -22,10 +24,20 @@ import lombok.NoArgsConstructor;
 public class ClientParam extends BaseParam {
 
   private static final long serialVersionUID = 6065608866944007796L;
+
+  @NotNullField(method = {HttpMethod.PUT, HttpMethod.DELETE}, message = "id cannot be null.")
   private Long id;
+
+  @NotNullField(method = HttpMethod.POST, message = "name cannot be null.")
   private String name;
+
+  @NotNullField(method = HttpMethod.POST, message = "publicKey cannot be null.")
   private String publicKey;
+
+  @NotNullField(method = HttpMethod.POST, message = "scope cannot be null.")
   private String scope;
+
+  @NotNullField(method = HttpMethod.POST, message = "grantType cannot be null.")
   private String grantType;
   private Integer accessTokenValiditySeconds;
   private Integer refreshTokenValiditySeconds;

@@ -29,7 +29,4 @@ public class LoginParam implements Serializable {
   @NotNullField(method = HttpMethod.POST, message = "pwd cannot be null.")
   @Size(min = 4, max = 16, message = "pwd must greater than or equal to 4 and less than or equal to 16.")
   private String pwd;
-
-  @NotNullField(method = HttpMethod.PUT, message = "refresh token cannot be null.")
-  private String refreshToken;
 }

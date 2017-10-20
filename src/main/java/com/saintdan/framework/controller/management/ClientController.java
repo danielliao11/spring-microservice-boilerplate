@@ -86,7 +86,9 @@ public class ClientController {
   /**
    * Update client.
    *
-   * @param param {@link ClientParam}
+   * @param currentUser {@link User}
+   * @param id          {@link User#id}
+   * @param param       {@link ClientParam}
    * @return {@link com.saintdan.framework.vo.ClientVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -95,10 +97,11 @@ public class ClientController {
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "id", value = "client's id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
+  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser, @PathVariable Long id,
       @RequestBody ClientParam param) {
     try {
       // Update client.
+      param.setId(id);
       return new ResponseEntity<>(clientDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.

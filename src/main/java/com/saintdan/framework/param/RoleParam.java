@@ -24,6 +24,7 @@ public class RoleParam extends BaseParam {
 
   private static final long serialVersionUID = 5027600216405994820L;
 
+  @NotNullField(method = {HttpMethod.PUT, HttpMethod.DELETE}, message = "id cannot be null.")
   private Long id;
 
   @NotNullField(method = HttpMethod.POST, message = "name cannot be null.")
