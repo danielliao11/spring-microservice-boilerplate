@@ -20,13 +20,12 @@ import org.apache.commons.lang3.StringUtils;
 public class LoginUtils {
 
   public static String getClientId(HttpServletRequest request) throws IllegalTokenTypeException {
-    final String BEARER = "bearer";
-    if (request.getHeader(AUTHORIZATION) == null || request.getHeader(AUTHORIZATION)
-        .contains(BEARER)) {
+    final String BASIC = "basic";
+    if (request.getHeader(AUTHORIZATION) == null || !request.getHeader(AUTHORIZATION).toLowerCase()
+        .contains(BASIC)) {
       throw new IllegalTokenTypeException();
     }
     final String AUTHORIZATION = "Authorization";
-    final String BASIC = "basic";
     String clientId64 = new String(Base64
         .decodeBase64(request.getHeader(AUTHORIZATION).replace(BASIC, CommonsConstant.BLANK)));
     return clientId64.trim().substring(0, clientId64.indexOf(CommonsConstant.COLON));

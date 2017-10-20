@@ -2,13 +2,11 @@ package com.saintdan.framework.controller.management;
 
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
-import com.saintdan.framework.component.ValidateHelper;
 import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.ResourcePath;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.UserParam;
 import com.saintdan.framework.po.User;
@@ -48,7 +46,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("User")
 @RestController
 @RequestMapping(
-    ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.USERS)
+    ResourcePath.RESOURCES + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.USERS)
 public class UserController {
 
   @RequestMapping(method = RequestMethod.POST)
@@ -56,12 +54,6 @@ public class UserController {
   @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
   public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody UserParam param) {
-    // Validate current user, param and sign.
-    ResponseEntity responseEntity = validateHelper
-        .validate(param, currentUser, logger, OperationType.CREATE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
     try {
       // Return result and message.
       return new ResponseEntity<>(userDomain.create(param, currentUser), HttpStatus.CREATED);
@@ -145,12 +137,6 @@ public class UserController {
   })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody UserParam param) {
-    // Validate current user, param and sign.
-    ResponseEntity responseEntity = validateHelper
-        .validate(param, currentUser, logger, OperationType.UPDATE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
     try {
       // Update user.
       return new ResponseEntity<>(userDomain.update(param, currentUser), HttpStatus.OK);
@@ -170,18 +156,10 @@ public class UserController {
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser,
-      @ApiIgnore @PathVariable Long id) {
-    UserParam param = new UserParam(id);
-    // Validate current user and param.
-    ResponseEntity responseEntity = validateHelper
-        .validate(param, currentUser, logger, OperationType.DELETE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
+  public ResponseEntity delete(@ApiIgnore @PathVariable Long id) {
     try {
       // Delete user.
-      userDomain.deepDelete(param.getId());
+      userDomain.deepDelete(id);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper
@@ -196,16 +174,12 @@ public class UserController {
 
   private static final Logger logger = LoggerFactory.getLogger(UserController.class);
   private final ResultHelper resultHelper;
-  private final ValidateHelper validateHelper;
   private final UserDomain userDomain;
 
-  @Autowired public UserController(ResultHelper resultHelper, ValidateHelper validateHelper,
-      UserDomain userDomain) {
+  @Autowired public UserController(ResultHelper resultHelper, UserDomain userDomain) {
     Assert.defaultNotNull(resultHelper);
-    Assert.defaultNotNull(validateHelper);
     Assert.defaultNotNull(userDomain);
     this.resultHelper = resultHelper;
-    this.validateHelper = validateHelper;
     this.userDomain = userDomain;
   }
 }

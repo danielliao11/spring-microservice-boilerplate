@@ -1,12 +1,9 @@
 package com.saintdan.framework.controller.open;
 
 import com.saintdan.framework.component.ResultHelper;
-import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.ResourcePath;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.GrantType;
-import com.saintdan.framework.exception.IllegalTokenTypeException;
 import com.saintdan.framework.param.LoginParam;
 import com.saintdan.framework.service.LoginService;
 import com.saintdan.framework.tools.Assert;
@@ -28,7 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Api("Login")
 @RestController
-@RequestMapping(ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.OPEN + ResourceURL.LOGIN)
+@RequestMapping(
+    ResourcePath.RESOURCES + VersionConstant.V1 + ResourcePath.OPEN + ResourcePath.LOGIN)
 public class LoginController {
 
   @RequestMapping(method = RequestMethod.POST)
@@ -36,16 +34,6 @@ public class LoginController {
   @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   public ResponseEntity postAccessToken(HttpServletRequest request, @RequestBody LoginParam param)
       throws HttpRequestMethodNotSupportedException {
-    // Validate current user, param and sign.
-    ResponseEntity responseEntity;
-    try {
-      responseEntity = validateHelper.validate(request, param, GrantType.PASSWORD);
-    } catch (IllegalTokenTypeException e) {
-      return resultHelper.infoResp(e.getErrorType(), HttpStatus.UNPROCESSABLE_ENTITY);
-    }
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
     try {
       return loginService.login(param, request);
     } catch (Exception e) {
@@ -58,16 +46,12 @@ public class LoginController {
   private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
   private final LoginService loginService;
   private final ResultHelper resultHelper;
-  private final ValidateHelper validateHelper;
 
-  @Autowired public LoginController(LoginService loginService, ResultHelper resultHelper,
-      ValidateHelper validateHelper) {
+  @Autowired public LoginController(LoginService loginService, ResultHelper resultHelper) {
     Assert.defaultNotNull(loginService);
     Assert.defaultNotNull(resultHelper);
-    Assert.defaultNotNull(validateHelper);
     this.loginService = loginService;
     this.resultHelper = resultHelper;
-    this.validateHelper = validateHelper;
   }
 }
 

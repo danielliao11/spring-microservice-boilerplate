@@ -1,11 +1,10 @@
 package com.saintdan.framework.annotation;
 
-import com.saintdan.framework.enums.GrantType;
-import com.saintdan.framework.enums.OperationType;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.springframework.http.HttpMethod;
 
 /**
  * Param field not null validate.
@@ -19,6 +18,5 @@ import java.lang.annotation.Target;
 public @interface NotNullField {
 
   String message() default "{javax.validation.constraints.NotNull.message}";
-  OperationType[] value() default OperationType.READ; // For resource access.
-  GrantType[] grant() default GrantType.PASSWORD; // For login.
+  HttpMethod[] method() default HttpMethod.GET; // For resource access.
 }

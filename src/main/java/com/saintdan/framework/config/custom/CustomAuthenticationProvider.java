@@ -4,7 +4,6 @@ import com.saintdan.framework.component.CustomPasswordEncoder;
 import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.IllegalTokenTypeException;
 import com.saintdan.framework.po.OauthAccessToken;
 import com.saintdan.framework.po.OauthRefreshToken;
@@ -20,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -88,7 +88,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     // Save to log.
     try {
       final String LOGIN = "login";
-      logHelper.log(OperationType.LOGIN, username, ip, clientId, LOGIN);
+      logHelper.log(HttpMethod.POST, username, ip, clientId, LOGIN);
     } catch (Exception e) {
       final String errMsg = "Log user login failed.";
       LogUtils.traceError(logger, e, errMsg);

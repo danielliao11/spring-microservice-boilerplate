@@ -1,6 +1,5 @@
 package com.saintdan.framework.po;
 
-import com.saintdan.framework.enums.OperationType;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.http.HttpMethod;
 
 /**
  * Log, record users' behavior.
@@ -53,10 +53,9 @@ public class Log implements Serializable {
 
   @Column(nullable = false)
   private String usr;
-
   private String clientId;
   private String path;
-  private OperationType operationType;
+  private HttpMethod method;
 
   @CreatedDate
   @Column(nullable = false)
