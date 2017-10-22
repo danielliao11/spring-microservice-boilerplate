@@ -239,3 +239,9 @@
   - [ADD] Add lombok.
   - [MOD] Modify PO.
   - [DEL] Delete some useless codes.
+  
+- 1.1.0.RELEASE
+  - [ADD] Add request config bean.
+  - [ADD] Add limit filter.
+  - [MOD] Modify ValidateHelper to ValidateFilter.
+  - [DEL] Delete validate in controller.

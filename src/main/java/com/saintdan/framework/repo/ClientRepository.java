@@ -13,5 +13,4 @@ import java.util.Optional;
 public interface ClientRepository extends CustomRepository<Client, Long> {
 
   Optional<Client> findByClientIdAlias(String clientIdAlias);
-
 }

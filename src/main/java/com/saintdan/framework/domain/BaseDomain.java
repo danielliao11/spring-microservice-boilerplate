@@ -4,7 +4,6 @@ import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.po.User;
@@ -22,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpMethod;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -65,7 +65,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   }
 
   @Transactional public T createByPO(T inputPO) throws Exception {
-    logHelper.log(OperationType.CREATE, getClassT().getSimpleName());
+    logHelper.log(HttpMethod.POST, getClassT().getSimpleName());
     return repository.save(inputPO);
   }
 
@@ -164,7 +164,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @return VO
    */
   @Transactional public T updateByPO(T po) throws Exception {
-    logHelper.log(OperationType.UPDATE, getClassT().getSimpleName());
+    logHelper.log(HttpMethod.PUT, getClassT().getSimpleName());
     return repository.save(po);
   }
 
@@ -177,7 +177,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   @Transactional public void delete(Object inputParam) throws Exception {
     T po = findByIdParam(inputParam);
     repository.save(setInvalid(po));
-    logHelper.log(OperationType.DELETE, getClassT().getSimpleName());
+    logHelper.log(HttpMethod.DELETE, getClassT().getSimpleName());
   }
 
   /**
@@ -186,13 +186,13 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   @Transactional public void deleteById(Long id) throws Exception {
     T po = findById(id);
     repository.save(setInvalid(po));
-    logHelper.log(OperationType.DELETE, getClassT().getSimpleName());
+    logHelper.log(HttpMethod.DELETE, getClassT().getSimpleName());
   }
 
   @SuppressWarnings("unchecked")
   @Transactional public void deepDelete(Long id) throws Exception {
     repository.delete((ID) id);
-    logHelper.log(OperationType.DELETE, getClassT().getSimpleName());
+    logHelper.log(HttpMethod.DELETE, getClassT().getSimpleName());
   }
 
   /**
@@ -238,9 +238,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
   }
 
   private final CustomRepository<T, ID> repository;
-
   protected final LogHelper logHelper;
-
   protected final Transformer transformer;
 
   @Autowired public BaseDomain(CustomRepository<T, ID> repository, LogHelper logHelper,

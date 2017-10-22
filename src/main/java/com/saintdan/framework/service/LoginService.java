@@ -16,5 +16,4 @@ public interface LoginService {
   ResponseEntity login(LoginParam param, HttpServletRequest request) throws Exception;
 
   ResponseEntity refresh(LoginParam param, HttpServletRequest request) throws Exception;
-
 }

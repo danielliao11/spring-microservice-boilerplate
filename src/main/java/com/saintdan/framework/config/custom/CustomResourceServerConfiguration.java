@@ -1,6 +1,6 @@
 package com.saintdan.framework.config.custom;
 
-import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.ResourcePath;
 import com.saintdan.framework.constant.VersionConstant;
 import java.util.Collections;
 import java.util.List;
@@ -58,12 +58,12 @@ public class CustomResourceServerConfiguration {
   }
 
   private static final String RESOURCE_ID = "api";
-  private static final String MANAGEMENT_URL = getURL(ResourceURL.MANAGEMENT);
-  private static final String APP_URL = getURL(ResourceURL.APP);
-  private static final String OPEN_URL = getURL(ResourceURL.OPEN);
+  private static final String MANAGEMENT_URL = getURL(ResourcePath.MANAGEMENT);
+  private static final String APP_URL = getURL(ResourcePath.APP);
+  private static final String OPEN_URL = getURL(ResourcePath.OPEN);
 
   private static String getURL(CharSequence element) {
-    return String.join("", ResourceURL.FIX, ResourceURL.RESOURCES, VersionConstant.V1, element,
-        ResourceURL.FIX);
+    return String.join("", ResourcePath.FIX, ResourcePath.RESOURCES, VersionConstant.V1, element,
+        ResourcePath.FIX);
   }
 }

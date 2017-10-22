@@ -1,13 +1,13 @@
 package com.saintdan.framework.component;
 
 import com.saintdan.framework.domain.LogDomain;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.po.Log;
 import com.saintdan.framework.tools.RemoteAddressUtils;
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,42 +27,42 @@ public class LogHelper {
         .ip(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip)
         .clientId(SpringSecurityUtils.getCurrentClientId())
         .path(request.getRequestURI().substring(request.getContextPath().length()))
-        .operationType(OperationType.READ)
+        .method(HttpMethod.GET)
         .build();
     logDomain.create(log);
   }
 
-  public void log(OperationType operationType, String usr, String ip, String clientId,
+  public void log(HttpMethod method, String usr, String ip, String clientId,
       String path) {
     Log log = Log.builder()
         .usr(usr)
         .ip(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip)
         .clientId(clientId)
         .path(path)
-        .operationType(operationType)
+        .method(method)
         .build();
     logDomain.create(log);
   }
 
-  public void log(OperationType operationType) {
+  public void log(HttpMethod method) {
     String ip = SpringSecurityUtils.getCurrentUserIp();
     Log log = Log.builder()
         .usr(SpringSecurityUtils.getCurrentUsername())
         .ip(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip)
         .clientId(SpringSecurityUtils.getCurrentClientId())
-        .operationType(operationType)
+        .method(method)
         .build();
     logDomain.create(log);
   }
 
-  public void log(OperationType operationType, String path) {
+  public void log(HttpMethod method, String path) {
     String ip = SpringSecurityUtils.getCurrentUserIp();
     Log log = Log.builder()
         .usr(SpringSecurityUtils.getCurrentUsername())
         .ip(StringUtils.isBlank(ip) ? "0.0.0.0.0.0.0.0:1" : ip)
         .clientId(SpringSecurityUtils.getCurrentClientId())
         .path(path)
-        .operationType(operationType)
+        .method(method)
         .build();
     logDomain.create(log);
   }

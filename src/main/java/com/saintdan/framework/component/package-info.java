@@ -23,7 +23,7 @@
  *   {@link com.saintdan.framework.component.Transformer}
  *   Ids string transform to iterable helper.
  *
- *   {@link com.saintdan.framework.component.ValidateHelper}
+ *   {@link com.saintdan.framework.filter.ValidateFilter}
  *   Custom Validate helper.
  * </pre>
  *

@@ -2,12 +2,10 @@ package com.saintdan.framework.controller.management;
 
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
-import com.saintdan.framework.component.ValidateHelper;
-import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.ResourcePath;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.po.User;
@@ -39,7 +37,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("Client")
 @RestController
 @RequestMapping(
-    ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.CLIENTS)
+    ResourcePath.API + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.CLIENTS)
 public class ClientController {
 
   /**
@@ -50,15 +48,12 @@ public class ClientController {
    */
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = ClientVO.class)
-  @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+  })
   public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody ClientParam param) {
-    // Validate current user, param and sign.
-    ResponseEntity responseEntity;
-    responseEntity = validateHelper.validate(param, currentUser, logger, OperationType.CREATE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
     try {
       // Return result and message.
       return new ResponseEntity<>(clientDomain.create(param, currentUser), HttpStatus.CREATED);
@@ -80,7 +75,10 @@ public class ClientController {
    */
   @RequestMapping(method = RequestMethod.GET)
   @ApiOperation(value = "List", httpMethod = "GET", response = ClientVO.class)
-  @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+  })
   public ResponseEntity all() {
     try {
       return new ResponseEntity<>(clientDomain.all(), HttpStatus.OK);
@@ -94,25 +92,23 @@ public class ClientController {
   /**
    * Update client.
    *
-   * @param param {@link ClientParam}
+   * @param currentUser {@link User}
+   * @param id          {@link User#id}
+   * @param param       {@link ClientParam}
    * @return {@link com.saintdan.framework.vo.ClientVO}
    */
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   @ApiOperation(value = "Update", httpMethod = "PUT", response = ClientVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", value = "client's id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
+  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser, @PathVariable Long id,
       @RequestBody ClientParam param) {
-    // Validate current user, param and sign.
-    ResponseEntity responseEntity = validateHelper
-        .validate(param, currentUser, logger, OperationType.UPDATE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
     try {
       // Update client.
+      param.setId(id);
       return new ResponseEntity<>(clientDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
@@ -135,20 +131,13 @@ public class ClientController {
   @ApiOperation(value = "Delete", httpMethod = "DELETE", response = ResponseEntity.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", value = "client's id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser,
-      @ApiIgnore @PathVariable Long id) {
-    ClientParam param = new ClientParam(id);
-    // Validate current user and param.
-    ResponseEntity responseEntity = validateHelper
-        .validate(param, currentUser, logger, OperationType.DELETE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
+  public ResponseEntity delete(@ApiIgnore @PathVariable Long id) {
     try {
       // Delete client.
-      clientDomain.deepDelete(param.getId());
+      clientDomain.deepDelete(id);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper
@@ -163,16 +152,12 @@ public class ClientController {
 
   private static final Logger logger = LoggerFactory.getLogger(ClientController.class);
   private final ResultHelper resultHelper;
-  private final ValidateHelper validateHelper;
   private final ClientDomain clientDomain;
 
-  @Autowired public ClientController(ResultHelper resultHelper, ValidateHelper validateHelper,
-      ClientDomain clientDomain) {
+  @Autowired public ClientController(ResultHelper resultHelper, ClientDomain clientDomain) {
     Assert.defaultNotNull(resultHelper);
-    Assert.defaultNotNull(validateHelper);
     Assert.defaultNotNull(clientDomain);
     this.resultHelper = resultHelper;
-    this.validateHelper = validateHelper;
     this.clientDomain = clientDomain;
   }
 }
