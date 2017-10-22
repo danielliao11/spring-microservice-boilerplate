@@ -30,7 +30,7 @@ public class SwaggerConfig {
         .forCodeGeneration(false)
         .pathMapping("/")
         .select()
-        .paths(or(regex("/resources/.*/app/.*")))
+        .paths(or(regex("/api/.*/app/.*")))
         .build()
         .apiInfo(appApiInfo());
   }
@@ -46,7 +46,7 @@ public class SwaggerConfig {
         .forCodeGeneration(false)
         .pathMapping("/")
         .select()
-        .paths(or(regex("/resources/.*/open/.*")))
+        .paths(or(regex("/api/.*/open/.*")))
         .build()
         .apiInfo(openApiInfo());
   }
@@ -62,7 +62,7 @@ public class SwaggerConfig {
         .forCodeGeneration(false)
         .pathMapping("/")
         .select()
-        .paths(or(regex("/resources/.*/management/.*")))
+        .paths(or(regex("/api/.*/management/.*")))
         .build()
         .apiInfo(managementApiInfo());
   }

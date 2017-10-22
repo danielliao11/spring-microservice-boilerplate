@@ -13,4 +13,6 @@ public interface AuthorityConstant {
     String SCOPE = "read";
     String GRANT_TYPE = "password,refresh_token";
     String AUTHORITY = "USER";
+    String BASIC = "basic";
+    String BEARER = "bearer";
 }

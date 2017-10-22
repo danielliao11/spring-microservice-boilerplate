@@ -2,13 +2,11 @@ package com.saintdan.framework.controller.management;
 
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
-import com.saintdan.framework.component.ValidateHelper;
 import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.ResourcePath;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.ResourceDomain;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.User;
@@ -41,20 +39,17 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("Resource")
 @RestController
 @RequestMapping(
-    ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.RESOURCES)
+    ResourcePath.API + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.RESOURCES)
 public class ResourceController {
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = ResourceVO.class)
-  @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+  })
   public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody ResourceParam param) {
-    // Validate current user, param and sign.
-    ResponseEntity responseEntity = validateHelper
-        .validate(param, currentUser, logger, OperationType.CREATE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
     try {
       // Return result and message.
       return new ResponseEntity<>(resourceDomain.create(param, currentUser), HttpStatus.CREATED);
@@ -71,7 +66,10 @@ public class ResourceController {
 
   @RequestMapping(method = RequestMethod.GET)
   @ApiOperation(value = "List", httpMethod = "GET", response = ResourceVO.class)
-  @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+  })
   public ResponseEntity all() {
     try {
       return new ResponseEntity<>(resourceDomain.all(), HttpStatus.OK);
@@ -86,6 +84,7 @@ public class ResourceController {
   @ApiOperation(value = "Detail", httpMethod = "GET", response = ResourceVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "string", required = true)
   })
   public ResponseEntity detail(@ApiIgnore @PathVariable String id) {
@@ -107,16 +106,11 @@ public class ResourceController {
   @ApiOperation(value = "Update", httpMethod = "PUT", response = ResourceVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "string", required = true)
   })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody ResourceParam param) {
-    // Validate current user, param and sign.
-    ResponseEntity responseEntity = validateHelper
-        .validate(param, currentUser, logger, OperationType.UPDATE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
     try {
       // Update resource.
       return new ResponseEntity<>(resourceDomain.update(param, currentUser), HttpStatus.OK);
@@ -135,20 +129,14 @@ public class ResourceController {
   @ApiOperation(value = "Delete", httpMethod = "DELETE", response = ResponseEntity.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "string", required = true)
   })
-  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser,
-      @ApiIgnore @PathVariable Long id) {
-    ResourceParam param = new ResourceParam(id);
+  public ResponseEntity delete(@ApiIgnore @PathVariable Long id) {
     // Validate current user and param.
-    ResponseEntity responseEntity = validateHelper
-        .validate(param, currentUser, logger, OperationType.DELETE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
     try {
       // Delete resource.
-      resourceDomain.deepDelete(param.getId());
+      resourceDomain.deepDelete(id);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper
@@ -163,16 +151,12 @@ public class ResourceController {
 
   private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
   private final ResultHelper resultHelper;
-  private final ValidateHelper validateHelper;
   private final ResourceDomain resourceDomain;
 
-  @Autowired public ResourceController(ResultHelper resultHelper, ValidateHelper validateHelper,
-      ResourceDomain resourceDomain) {
+  @Autowired public ResourceController(ResultHelper resultHelper, ResourceDomain resourceDomain) {
     Assert.defaultNotNull(resultHelper);
-    Assert.defaultNotNull(validateHelper);
     Assert.defaultNotNull(resourceDomain);
     this.resultHelper = resultHelper;
-    this.validateHelper = validateHelper;
     this.resourceDomain = resourceDomain;
   }
 }

@@ -26,9 +26,6 @@
  *   {@link com.saintdan.framework.config.custom.CustomUserDetailsService}
  *   Custom user details service.
  *
- *   {@link com.saintdan.framework.config.custom.CustomUserRepositoryUserDetails}
- *   Custom user repository user details.
- *
  *   {@link com.saintdan.framework.config.custom.CustomWebAuthenticationDetails}
  *   Custom web authentication details.
  * </pre>

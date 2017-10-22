@@ -5,7 +5,6 @@ import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
@@ -23,6 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,7 +78,7 @@ public class RoleDomain extends BaseDomain<Role, Long> {
   }
 
   @Transactional @Override public void deepDelete(Long id) throws Exception {
-    logHelper.log(OperationType.DELETE, getClassT().getName());
+    logHelper.log(HttpMethod.DELETE, getClassT().getName());
     Role role = findById(id);
     if (role == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper

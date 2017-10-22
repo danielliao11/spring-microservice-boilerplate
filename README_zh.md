@@ -71,8 +71,16 @@ Windows 下，直接双击 gradlew.bat 运行。
 ![](imgs/login.png)
 得到结果
 ![](imgs/token.png)
+
+如果给 "Limit-Key" header 添加一个值，比如 "root", 当你频繁请求这个 API 时，便会返回 429 错误响应。
+
+![](imags/limit.png)
+得到结果:
+![](imgs/429.png)
+
 2. 或者使用 refresh token 来获取新的token。
 ![](imgs/refresh.png)
+
 3. 用得到的 access_token 来访问资源
 ![](imgs/users.png)
 得到结果
@@ -80,13 +88,13 @@ Windows 下，直接双击 gradlew.bat 运行。
 
 ### <a name="deploy"></a>部署 [[TOP]](#index)
 
-1. 传统，打个war包丢tomcat里
-2. 高效，打成jar包直接通过`java -jar foo.jar`运行
-3. 高效独立干净，使用Docker。[Dockerfile](Dockerfile)已写好，按您的需要做修改即可build Docker镜像。
+1. 传统，打个 war 包丢 tomcat 里
+2. 高效，打成 jar 包直接通过 `java -jar foo.jar` 运行
+3. 高效独立干净，使用 Docker.[Dockerfile](Dockerfile) 已写好，按您的需要做修改即可 build Docker 镜像。
 
-此外，[docker-compose.yml](docker-compose.yml)也已写好，方便您快速一键部署Docker容器。
+此外，[docker-compose.yml](docker-compose.yml) 也已写好，方便您快速一键部署 Docker 容器。
 > **NOTE**  
-> 现使用了docker-compose3的新特性，需要您的docker版本高于1.13.0
+> 现使用了 docker-compose3 的新特性，需要您的 docker 版本高于1.13.0
 
 ## <a name="license"></a>许可证 [[TOP]](#index)
 

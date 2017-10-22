@@ -7,19 +7,18 @@ package com.saintdan.framework.constant;
  * @date 7/5/15
  * @since JDK1.8
  */
-public interface ResourceURL {
+public interface ResourcePath {
 
   String FIX = "/**";
+  String API = "/api";
   String APP = "/app";
   String MANAGEMENT = "/management";
   String OPEN = "/open";
   String LOGIN = "/login";
   String REFRESH = "/refresh";
   String HEARTBEAT = "/heartbeat";
-  String WELCOME = "/welcome";
   String RESOURCES = "/resources";
   String USERS = "/users";
   String ROLES = "/roles";
-  String GROUPS = "/groups";
   String CLIENTS = "/clients";
 }

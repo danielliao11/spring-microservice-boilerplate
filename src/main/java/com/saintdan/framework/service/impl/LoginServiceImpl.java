@@ -48,7 +48,6 @@ public class LoginServiceImpl implements LoginService {
   }
 
   private final TokenEndpoint tokenEndpoint;
-
   private final Environment environment;
 
   @Autowired public LoginServiceImpl(TokenEndpoint tokenEndpoint, Environment environment) {

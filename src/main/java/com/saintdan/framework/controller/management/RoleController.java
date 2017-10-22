@@ -2,13 +2,11 @@ package com.saintdan.framework.controller.management;
 
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
-import com.saintdan.framework.component.ValidateHelper;
 import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.constant.ResourceURL;
+import com.saintdan.framework.constant.ResourcePath;
 import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.RoleDomain;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.OperationType;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.User;
@@ -41,20 +39,17 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("Role")
 @RestController
 @RequestMapping(
-    ResourceURL.RESOURCES + VersionConstant.V1 + ResourceURL.MANAGEMENT + ResourceURL.ROLES)
+    ResourcePath.API + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.ROLES)
 public class RoleController {
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = RoleVO.class)
-  @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+  })
   public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody RoleParam param) {
-    // Validate current user, param and sign.
-    ResponseEntity responseEntity = validateHelper
-        .validate(param, currentUser, logger, OperationType.CREATE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
     try {
       // Return result and message.
       return new ResponseEntity<>(roleDomain.create(param, currentUser), HttpStatus.CREATED);
@@ -71,7 +66,10 @@ public class RoleController {
 
   @RequestMapping(method = RequestMethod.GET)
   @ApiOperation(value = "List", httpMethod = "GET", response = RoleVO.class)
-  @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+  })
   public ResponseEntity all() {
     try {
       return new ResponseEntity<>(roleDomain.all(), HttpStatus.OK);
@@ -86,6 +84,7 @@ public class RoleController {
   @ApiOperation(value = "Detail", httpMethod = "GET", response = RoleVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "string", required = true)
   })
   public ResponseEntity detail(@ApiIgnore @PathVariable String id) {
@@ -106,16 +105,11 @@ public class RoleController {
   @ApiOperation(value = "Update", httpMethod = "PUT", response = RoleVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "string", required = true)
   })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody RoleParam param) {
-    // Validate current user, param and sign.
-    ResponseEntity responseEntity = validateHelper
-        .validate(param, currentUser, logger, OperationType.UPDATE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
     try {
       // Update role.
       return new ResponseEntity<>(roleDomain.update(param, currentUser), HttpStatus.OK);
@@ -134,20 +128,13 @@ public class RoleController {
   @ApiOperation(value = "Delete", httpMethod = "DELETE", response = ResponseEntity.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity delete(@ApiIgnore @CurrentUser User currentUser,
-      @ApiIgnore @PathVariable Long id) {
-    RoleParam param = new RoleParam(id);
-    // Validate current user and param.
-    ResponseEntity responseEntity = validateHelper
-        .validate(param, currentUser, logger, OperationType.DELETE);
-    if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-      return responseEntity;
-    }
+  public ResponseEntity delete(@ApiIgnore @PathVariable Long id) {
     try {
       // Delete role.
-      roleDomain.deepDelete(param.getId());
+      roleDomain.deepDelete(id);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper
@@ -162,16 +149,12 @@ public class RoleController {
 
   private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
   private final ResultHelper resultHelper;
-  private final ValidateHelper validateHelper;
   private final RoleDomain roleDomain;
 
-  @Autowired public RoleController(ResultHelper resultHelper, ValidateHelper validateHelper,
-      RoleDomain roleDomain) {
+  @Autowired public RoleController(ResultHelper resultHelper, RoleDomain roleDomain) {
     Assert.defaultNotNull(resultHelper);
-    Assert.defaultNotNull(validateHelper);
     Assert.defaultNotNull(roleDomain);
     this.resultHelper = resultHelper;
-    this.validateHelper = validateHelper;
     this.roleDomain = roleDomain;
   }
 }
