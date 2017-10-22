@@ -32,6 +32,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * Validate helper.
+ * <pre>
+ *   Validate param bean.
+ * </pre>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 11/4/15

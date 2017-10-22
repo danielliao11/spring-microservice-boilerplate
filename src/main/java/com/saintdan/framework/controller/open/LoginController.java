@@ -9,6 +9,7 @@ import com.saintdan.framework.service.LoginService;
 import com.saintdan.framework.tools.Assert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -26,13 +27,16 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("Login")
 @RestController
 @RequestMapping(
-    ResourcePath.RESOURCES + VersionConstant.V1 + ResourcePath.OPEN + ResourcePath.LOGIN)
+    ResourcePath.API + VersionConstant.V1 + ResourcePath.OPEN + ResourcePath.LOGIN)
 public class LoginController {
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Login", httpMethod = "POST", response = OAuth2AccessToken.class)
-  @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
-  public ResponseEntity postAccessToken(HttpServletRequest request, @RequestBody LoginParam param)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+  })
+  public ResponseEntity login(HttpServletRequest request, @RequestBody LoginParam param)
       throws HttpRequestMethodNotSupportedException {
     try {
       return loginService.login(param, request);

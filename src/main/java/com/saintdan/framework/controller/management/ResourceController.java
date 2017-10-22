@@ -39,12 +39,15 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("Resource")
 @RestController
 @RequestMapping(
-    ResourcePath.RESOURCES + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.RESOURCES)
+    ResourcePath.API + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.RESOURCES)
 public class ResourceController {
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = ResourceVO.class)
-  @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+  })
   public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody ResourceParam param) {
     try {
@@ -63,7 +66,10 @@ public class ResourceController {
 
   @RequestMapping(method = RequestMethod.GET)
   @ApiOperation(value = "List", httpMethod = "GET", response = ResourceVO.class)
-  @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+  })
   public ResponseEntity all() {
     try {
       return new ResponseEntity<>(resourceDomain.all(), HttpStatus.OK);
@@ -78,6 +84,7 @@ public class ResourceController {
   @ApiOperation(value = "Detail", httpMethod = "GET", response = ResourceVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "string", required = true)
   })
   public ResponseEntity detail(@ApiIgnore @PathVariable String id) {
@@ -99,6 +106,7 @@ public class ResourceController {
   @ApiOperation(value = "Update", httpMethod = "PUT", response = ResourceVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "string", required = true)
   })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
@@ -121,6 +129,7 @@ public class ResourceController {
   @ApiOperation(value = "Delete", httpMethod = "DELETE", response = ResponseEntity.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "string", required = true)
   })
   public ResponseEntity delete(@ApiIgnore @PathVariable Long id) {

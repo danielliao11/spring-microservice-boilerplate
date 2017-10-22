@@ -1,7 +1,6 @@
 package com.saintdan.framework.service;
 
 import com.saintdan.framework.param.LoginParam;
-import com.saintdan.framework.param.RefreshParam;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 
@@ -16,5 +15,5 @@ public interface LoginService {
 
   ResponseEntity login(LoginParam param, HttpServletRequest request) throws Exception;
 
-  ResponseEntity refresh(RefreshParam param, HttpServletRequest request) throws Exception;
+  ResponseEntity refresh(LoginParam param, HttpServletRequest request) throws Exception;
 }

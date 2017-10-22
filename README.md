@@ -47,8 +47,6 @@ $ ./gradlew clean build bootRun
 Run it, Open your browser and access [http://localhost:8080/swagger-ui.html#/](http://localhost:8080/swagger-ui.html#/).
 > **NOTE** Default port is 8080, you can modify it which key is `server.port` in [application.yml](src/main/resources/application.yml).
 
-and then:
-
 ![](imgs/swagger.png)
 
 You can test API by the tips.
@@ -57,8 +55,18 @@ You can test API by the tips.
 ![](imgs/login.png)
 and result is:
 ![](imgs/token.png)
+
+You'll get a 429 response when you add a "Limit-Key" header value like "root" and request the api too often.  
+(3 times in 10 seconds, you can config it in application.yml).
+
+Request with "Limit-Key" header:
+![](imags/limit.png)
+and result is:
+![](imgs/429.png)
+
 2. Or get new `access_token` with `refresh_token`.
 ![](imgs/refresh.png)
+
 3. Access users.
 ![](imgs/users.png)
 and result is:

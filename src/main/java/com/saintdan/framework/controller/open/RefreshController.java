@@ -6,12 +6,12 @@ import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.IllegalTokenTypeException;
 import com.saintdan.framework.param.LoginParam;
-import com.saintdan.framework.param.RefreshParam;
 import com.saintdan.framework.service.LoginService;
 import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.vo.ErrorVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -32,14 +32,16 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api("refresh token")
 @RestController
-@RequestMapping(
-    ResourcePath.RESOURCES + VersionConstant.V1 + ResourcePath.OPEN + ResourcePath.REFRESH)
+@RequestMapping(ResourcePath.API + VersionConstant.V1 + ResourcePath.OPEN + ResourcePath.REFRESH)
 public class RefreshController {
 
-  @RequestMapping(method = RequestMethod.POST)
+  @RequestMapping(method = RequestMethod.PUT)
   @ApiOperation(value = "refresh token", httpMethod = "POST", response = OAuth2AccessToken.class)
-  @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
-  public ResponseEntity refresh(@RequestBody RefreshParam param,
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+  })
+  public ResponseEntity refresh(@RequestBody LoginParam param,
       @ApiIgnore HttpServletRequest request) {
     try {
       return loginService.refresh(param, request);

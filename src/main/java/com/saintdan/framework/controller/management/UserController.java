@@ -46,12 +46,15 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("User")
 @RestController
 @RequestMapping(
-    ResourcePath.RESOURCES + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.USERS)
+    ResourcePath.API + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.USERS)
 public class UserController {
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = UserVO.class)
-  @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true)
+  @ApiImplicitParams({
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+  })
   public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody UserParam param) {
     try {
@@ -73,6 +76,7 @@ public class UserController {
   @ApiOperation(value = "List", httpMethod = "GET", response = UserVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "name", value = "user's name", paramType = "query", dataType = "string"),
       @ApiImplicitParam(name = "usr", value = "user's username", paramType = "query", dataType = "string"),
       @ApiImplicitParam(name = "createdAtAfter", value = "unix milli timestamp", paramType = "query", dataType = "number"),
@@ -114,6 +118,7 @@ public class UserController {
   @ApiOperation(value = "Detail", httpMethod = "GET", response = UserVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity detail(@ApiIgnore @PathVariable Long id) {
@@ -133,6 +138,7 @@ public class UserController {
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
@@ -154,6 +160,7 @@ public class UserController {
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity delete(@ApiIgnore @PathVariable Long id) {

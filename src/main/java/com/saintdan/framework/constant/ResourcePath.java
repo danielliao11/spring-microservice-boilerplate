@@ -10,6 +10,7 @@ package com.saintdan.framework.constant;
 public interface ResourcePath {
 
   String FIX = "/**";
+  String API = "/api";
   String APP = "/app";
   String MANAGEMENT = "/management";
   String OPEN = "/open";
