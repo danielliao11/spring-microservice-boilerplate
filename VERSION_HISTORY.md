@@ -245,3 +245,7 @@
   - [ADD] Add limit filter.
   - [MOD] Modify ValidateHelper to ValidateFilter.
   - [DEL] Delete validate in controller.
+
+- 1.2.0.RELEASE
+  - [ADD] Add LogInterceptor.
+  - [DEL] Delete log logic in domain.

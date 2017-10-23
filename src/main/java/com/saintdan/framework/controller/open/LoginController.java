@@ -2,7 +2,6 @@ package com.saintdan.framework.controller.open;
 
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.constant.ResourcePath;
-import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.param.LoginParam;
 import com.saintdan.framework.service.LoginService;
@@ -27,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api("Login")
 @RestController
 @RequestMapping(
-    ResourcePath.API + VersionConstant.V1 + ResourcePath.OPEN + ResourcePath.LOGIN)
+    ResourcePath.API + ResourcePath.V1 + ResourcePath.OPEN + ResourcePath.LOGIN)
 public class LoginController {
 
   @RequestMapping(method = RequestMethod.POST)

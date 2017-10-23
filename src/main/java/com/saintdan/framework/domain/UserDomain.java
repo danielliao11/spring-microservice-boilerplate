@@ -1,7 +1,6 @@
 package com.saintdan.framework.domain;
 
 import com.google.common.collect.Sets;
-import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
@@ -122,10 +121,10 @@ public class UserDomain extends BaseDomain<User, Long> {
   private final UserRepository userRepository;
   private final RoleDomain roleDomain;
 
-  public UserDomain(CustomRepository<User, Long> repository, LogHelper logHelper,
-      Transformer transformer, AccountRepository accountRepository, UserRepository userRepository,
+  public UserDomain(CustomRepository<User, Long> repository, Transformer transformer,
+      AccountRepository accountRepository, UserRepository userRepository,
       RoleDomain roleDomain) {
-    super(repository, logHelper, transformer);
+    super(repository, transformer);
     Assert.defaultNotNull(accountRepository);
     Assert.defaultNotNull(userRepository);
     Assert.defaultNotNull(roleDomain);

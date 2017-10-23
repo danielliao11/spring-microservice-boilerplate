@@ -4,7 +4,6 @@ import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourcePath;
-import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.RoleDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.CommonsException;
@@ -39,7 +38,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("Role")
 @RestController
 @RequestMapping(
-    ResourcePath.API + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.ROLES)
+    ResourcePath.API + ResourcePath.V1 + ResourcePath.MANAGEMENT + ResourcePath.ROLES)
 public class RoleController {
 
   @RequestMapping(method = RequestMethod.POST)
