@@ -1,7 +1,6 @@
 package com.saintdan.framework.config.custom;
 
 import com.saintdan.framework.constant.ResourcePath;
-import com.saintdan.framework.constant.VersionConstant;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
@@ -63,7 +62,7 @@ public class CustomResourceServerConfiguration {
   private static final String OPEN_URL = getURL(ResourcePath.OPEN);
 
   private static String getURL(CharSequence element) {
-    return String.join("", ResourcePath.FIX, ResourcePath.RESOURCES, VersionConstant.V1, element,
+    return String.join("", ResourcePath.FIX, ResourcePath.RESOURCES, ResourcePath.V1, element,
         ResourcePath.FIX);
   }
 }

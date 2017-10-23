@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.saintdan.framework</groupId>
   <artifactId>spring-micro-services-boilerplate</artifactId>
-  <version>1.0.0.RELEASE</version>
+  <version>1.2.0.RELEASE</version>
   <inceptionYear>2017</inceptionYear>
   <licenses>
     <license>

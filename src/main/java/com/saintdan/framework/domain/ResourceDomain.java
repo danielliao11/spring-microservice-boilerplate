@@ -1,6 +1,5 @@
 package com.saintdan.framework.domain;
 
-import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
@@ -16,7 +15,6 @@ import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ResourceVO;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,7 +62,6 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
   }
 
   @Transactional @Override public void deepDelete(Long id) throws Exception {
-    logHelper.log(HttpMethod.DELETE, getClassT().getName());
     Resource resource = findById(id);
     if (resource == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
@@ -79,9 +76,9 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
 
   private final ResourceRepository resourceRepository;
 
-  public ResourceDomain(CustomRepository<Resource, Long> repository, LogHelper logHelper,
-      Transformer transformer, ResourceRepository resourceRepository) {
-    super(repository, logHelper, transformer);
+  public ResourceDomain(CustomRepository<Resource, Long> repository, Transformer transformer,
+      ResourceRepository resourceRepository) {
+    super(repository, transformer);
     Assert.defaultNotNull(resourceRepository);
     this.resourceRepository = resourceRepository;
   }

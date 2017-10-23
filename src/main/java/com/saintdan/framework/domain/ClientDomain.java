@@ -1,6 +1,5 @@
 package com.saintdan.framework.domain;
 
-import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.AuthorityConstant;
 import com.saintdan.framework.constant.CommonsConstant;
@@ -71,9 +70,9 @@ public class ClientDomain extends BaseDomain<Client, Long> {
 
   private final ClientRepository clientRepository;
 
-  @Autowired public ClientDomain(CustomRepository<Client, Long> repository, LogHelper logHelper,
-      Transformer transformer, ClientRepository clientRepository) {
-    super(repository, logHelper, transformer);
+  @Autowired public ClientDomain(CustomRepository<Client, Long> repository, Transformer transformer,
+      ClientRepository clientRepository) {
+    super(repository, transformer);
     Assert.defaultNotNull(clientRepository);
     this.clientRepository = clientRepository;
   }
