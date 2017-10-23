@@ -1,7 +1,6 @@
 package com.saintdan.framework.controller.app;
 
 import com.saintdan.framework.constant.ResourcePath;
-import com.saintdan.framework.constant.VersionConstant;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(value = "Heartbeat")
 @RestController
-@RequestMapping(ResourcePath.API + VersionConstant.V1 + ResourcePath.APP + ResourcePath.HEARTBEAT)
+@RequestMapping(ResourcePath.API + ResourcePath.V1 + ResourcePath.APP + ResourcePath.HEARTBEAT)
 public class HeartbeatController {
 
   @RequestMapping(method = RequestMethod.GET)

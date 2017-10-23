@@ -3,7 +3,6 @@ package com.saintdan.framework.controller.management;
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.constant.ResourcePath;
-import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.domain.ClientDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.CommonsException;
@@ -37,7 +36,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api("Client")
 @RestController
 @RequestMapping(
-    ResourcePath.API + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.CLIENTS)
+    ResourcePath.API + ResourcePath.V1 + ResourcePath.MANAGEMENT + ResourcePath.CLIENTS)
 public class ClientController {
 
   /**

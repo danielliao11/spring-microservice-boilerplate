@@ -1,7 +1,6 @@
 package com.saintdan.framework.enums;
 
 import com.saintdan.framework.constant.ResourcePath;
-import com.saintdan.framework.constant.VersionConstant;
 import com.saintdan.framework.param.ClientParam;
 import com.saintdan.framework.param.LoginParam;
 import com.saintdan.framework.param.ResourceParam;
@@ -17,18 +16,18 @@ import java.util.Map;
  */
 public enum ResourceUri {
 
-  LOGIN(ResourcePath.API + VersionConstant.V1 + ResourcePath.OPEN + ResourcePath.LOGIN,
+  LOGIN(ResourcePath.API + ResourcePath.V1 + ResourcePath.OPEN + ResourcePath.LOGIN,
       LoginParam.class),
-  REFRESH(ResourcePath.API + VersionConstant.V1 + ResourcePath.OPEN + ResourcePath.REFRESH,
+  REFRESH(ResourcePath.API + ResourcePath.V1 + ResourcePath.OPEN + ResourcePath.REFRESH,
       LoginParam.class),
-  CLIENTS(ResourcePath.API + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.CLIENTS,
+  CLIENTS(ResourcePath.API + ResourcePath.V1 + ResourcePath.MANAGEMENT + ResourcePath.CLIENTS,
       ClientParam.class),
   RESOURCES(
-      ResourcePath.API + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.RESOURCES,
+      ResourcePath.API + ResourcePath.V1 + ResourcePath.MANAGEMENT + ResourcePath.RESOURCES,
       ResourceParam.class),
-  ROLES(ResourcePath.API + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.ROLES,
+  ROLES(ResourcePath.API + ResourcePath.V1 + ResourcePath.MANAGEMENT + ResourcePath.ROLES,
       RoleParam.class),
-  USERS(ResourcePath.API + VersionConstant.V1 + ResourcePath.MANAGEMENT + ResourcePath.USERS,
+  USERS(ResourcePath.API + ResourcePath.V1 + ResourcePath.MANAGEMENT + ResourcePath.USERS,
       UserParam.class),
 
   UNKNOWN("",null);

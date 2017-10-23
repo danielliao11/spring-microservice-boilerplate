@@ -1,7 +1,6 @@
 package com.saintdan.framework.domain;
 
 import com.google.common.collect.Sets;
-import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
@@ -22,7 +21,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,7 +76,6 @@ public class RoleDomain extends BaseDomain<Role, Long> {
   }
 
   @Transactional @Override public void deepDelete(Long id) throws Exception {
-    logHelper.log(HttpMethod.DELETE, getClassT().getName());
     Role role = findById(id);
     if (role == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
@@ -110,9 +107,9 @@ public class RoleDomain extends BaseDomain<Role, Long> {
   private final RoleRepository roleRepository;
   private final ResourceDomain resourceDomain;
 
-  @Autowired public RoleDomain(CustomRepository<Role, Long> repository, LogHelper logHelper,
-      Transformer transformer, RoleRepository roleRepository, ResourceDomain resourceDomain) {
-    super(repository, logHelper, transformer);
+  @Autowired public RoleDomain(CustomRepository<Role, Long> repository, Transformer transformer,
+      RoleRepository roleRepository, ResourceDomain resourceDomain) {
+    super(repository, transformer);
     Assert.defaultNotNull(roleRepository);
     Assert.defaultNotNull(resourceDomain);
     this.roleRepository = roleRepository;
