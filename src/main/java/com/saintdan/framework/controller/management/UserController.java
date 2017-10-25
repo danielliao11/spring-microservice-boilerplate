@@ -2,7 +2,6 @@ package com.saintdan.framework.controller.management;
 
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
-import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourcePath;
 import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.enums.ErrorType;
@@ -78,11 +77,11 @@ public class UserController {
       @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "name", value = "user's name", paramType = "query", dataType = "string"),
       @ApiImplicitParam(name = "usr", value = "user's username", paramType = "query", dataType = "string"),
-      @ApiImplicitParam(name = "createdAtAfter", value = "unix milli timestamp", paramType = "query", dataType = "number"),
-      @ApiImplicitParam(name = "createdAtBefore", value = "unix milli timestamp", paramType = "query", dataType = "number"),
-      @ApiImplicitParam(name = "pageNo", paramType = "query", dataType = "number"),
-      @ApiImplicitParam(name = "pageSize", paramType = "query", dataType = "number"),
-      @ApiImplicitParam(name = "sortBy", paramType = "query", dataType = "number", example = "sortBy=id:desc,username:desc")
+      @ApiImplicitParam(name = "createdAtAfter", value = "unix milli timestamp", paramType = "query", dataType = "long"),
+      @ApiImplicitParam(name = "createdAtBefore", value = "unix milli timestamp", paramType = "query", dataType = "long"),
+      @ApiImplicitParam(name = "pageNo", paramType = "query", dataType = "int"),
+      @ApiImplicitParam(name = "pageSize", paramType = "query", dataType = "int"),
+      @ApiImplicitParam(name = "sortBy", paramType = "query", dataType = "string", example = "sortBy=id:desc,username:desc")
   })
   public ResponseEntity all(
       @And({
@@ -121,10 +120,6 @@ public class UserController {
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity detail(@ApiIgnore @PathVariable Long id) {
-    if (id == null) {
-      return resultHelper
-          .infoResp(ErrorType.SYS0002, CommonsConstant.ID_BLANK, HttpStatus.UNPROCESSABLE_ENTITY);
-    }
     try {
       return new ResponseEntity<>(userDomain.getById(id, UserVO.class), HttpStatus.OK);
     } catch (Exception e) {
@@ -134,16 +129,18 @@ public class UserController {
     }
   }
 
-  @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+  @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
+  public ResponseEntity update(@ApiIgnore @PathVariable Long id,
+      @ApiIgnore @CurrentUser User currentUser,
       @RequestBody UserParam param) {
     try {
       // Update user.
+      param.setId(id);
       return new ResponseEntity<>(userDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.

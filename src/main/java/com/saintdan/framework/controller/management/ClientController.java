@@ -96,14 +96,15 @@ public class ClientController {
    * @param param       {@link ClientParam}
    * @return {@link com.saintdan.framework.vo.ClientVO}
    */
-  @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+  @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
   @ApiOperation(value = "Update", httpMethod = "PUT", response = ClientVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", value = "client's id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser, @PathVariable Long id,
+  public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
+      @ApiIgnore @PathVariable Long id,
       @RequestBody ClientParam param) {
     try {
       // Update client.

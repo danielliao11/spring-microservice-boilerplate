@@ -79,7 +79,8 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     Role role = findById(id);
     if (role == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
-          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName().toLowerCase(),
+              CommonsConstant.ID));
     }
     roleRepository.delete(role);
   }
@@ -133,7 +134,8 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     if (roleRepository.findByNameAndValidFlag(name, ValidFlag.VALID).isPresent()) {
       // Throw role already existing exception, name taken.
       throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper
-          .getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
+          .getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName().toLowerCase(),
+              CommonsConstant.NAME));
     }
   }
 }

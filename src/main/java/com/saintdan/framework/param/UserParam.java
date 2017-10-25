@@ -26,7 +26,7 @@ public class UserParam extends BaseParam {
 
   private static final long serialVersionUID = -9153801716112918626L;
 
-  @NotNullField(method = {HttpMethod.PUT, HttpMethod.DELETE}, message = "id cannot be null.")
+  @ApiModelProperty(hidden = true)
   private Long id;
 
   @ApiModelProperty(value = "username", required = true, notes = "usr must greater than or equal to 4 and less than or equal to 50.")

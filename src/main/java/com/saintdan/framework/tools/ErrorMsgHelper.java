@@ -14,18 +14,13 @@ public class ErrorMsgHelper {
   /**
    * Get return error message.
    *
-   * @param msg  error type
-   * @param args args
+   * @param msg    error type
+   * @param param1 args
+   * @param param2 args
    * @return return error message
    */
-  public static String getReturnMsg(ErrorType msg, String... args) {
-    final String COLON = ": ";
-    final String PREFIX = String.join("", msg.name(), COLON);
-    if (args != null) {
-      return String.join("", PREFIX, String.format(msg.description(), (Object) args));
-    } else {
-      return String.join("", PREFIX, msg.description());
-    }
+  public static String getReturnMsg(ErrorType msg, String param1, String param2) {
+    return param1 != null ? String.format(msg.description(), param1, param2) : msg.description();
   }
 
 }
