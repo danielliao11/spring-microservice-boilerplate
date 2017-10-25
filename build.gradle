@@ -1,6 +1,6 @@
 description 'spring-microservices-boilerplate'
 group 'com.saintdan.framework'
-version '1.2.0.RELEASE'
+version '1.2.1.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
