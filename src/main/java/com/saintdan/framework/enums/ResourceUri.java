@@ -30,7 +30,7 @@ public enum ResourceUri {
   USERS(ResourcePath.API + ResourcePath.V1 + ResourcePath.MANAGEMENT + ResourcePath.USERS,
       UserParam.class),
 
-  UNKNOWN("",null);
+  UNKNOWN("unknown", null);
 
   private String uri;
   private Class clazz;
@@ -57,7 +57,11 @@ public enum ResourceUri {
   }
 
   public static ResourceUri resolve(String uri) {
-    return (uri != null ? mappings.get(uri) : UNKNOWN);
+    String matchUri = mappings.keySet().stream()
+        .filter(uri::contains)
+        .findFirst()
+        .orElse(null);
+    return (matchUri != null ? mappings.get(matchUri) : UNKNOWN);
   }
 
   public boolean matches(String uri) {

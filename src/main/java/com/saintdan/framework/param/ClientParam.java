@@ -2,6 +2,7 @@ package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
 import com.saintdan.framework.domain.ClientDomain;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +26,7 @@ public class ClientParam extends BaseParam {
 
   private static final long serialVersionUID = 6065608866944007796L;
 
-  @NotNullField(method = {HttpMethod.PUT, HttpMethod.DELETE}, message = "id cannot be null.")
+  @ApiModelProperty(hidden = true)
   private Long id;
 
   @NotNullField(method = HttpMethod.POST, message = "name cannot be null.")

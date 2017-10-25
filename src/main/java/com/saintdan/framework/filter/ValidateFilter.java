@@ -11,6 +11,7 @@ import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.vo.ErrorVO;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -56,14 +57,16 @@ public class ValidateFilter implements Filter {
     if (request instanceof HttpServletRequest) {
       RequestWrapper req = new RequestWrapper((HttpServletRequest) request);
       StringBuilder stringBuilder = new StringBuilder();
-      if (!(HttpMethod.GET.matches(req.getMethod())
-          || HttpMethod.DELETE.matches(req.getMethod()))) {
+      final String method = req.getMethod();
+      if ((HttpMethod.POST.matches(method)
+          || HttpMethod.PUT.matches(method)
+          || HttpMethod.PATCH.matches(method))) {
         req.getReader().lines().forEach(stringBuilder::append);
         String json = stringBuilder.toString();
         ObjectMapper mapper = new ObjectMapper();
         String result = validate(
             mapper.readValue(json, ResourceUri.resolve(req.getRequestURI()).clazz()),
-            HttpMethod.resolve(req.getMethod()));
+            HttpMethod.resolve(method));
         if (StringUtils.isNotBlank(result)) {
           HttpServletResponse resp = ((HttpServletResponse) response);
           resp.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
@@ -97,9 +100,9 @@ public class ValidateFilter implements Filter {
       field.setAccessible(true);
       NotNullField notNullField = field.getAnnotation(NotNullField.class);
       try {
-        if (ArrayUtils.contains(notNullField.method(), method) && (field.get(param) == null
-            || StringUtils
-            .isBlank(field.get(param).toString()))) {
+        if (Arrays.stream(notNullField.method()).anyMatch(m -> m.matches(method.name()))
+            && (field.get(param) == null
+            || StringUtils.isBlank(field.get(param).toString()))) {
           return notNullField.message();
         }
       } catch (IllegalAccessException ignore) {
