@@ -1,16 +1,17 @@
 package com.saintdan.framework.config;
 
+import static com.google.common.base.Predicates.or;
+import static springfox.documentation.builders.PathSelectors.regex;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.async.DeferredResult;
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import static com.google.common.base.Predicates.or;
-import static springfox.documentation.builders.PathSelectors.regex;
 
 /**
  * Config of swagger
@@ -69,19 +70,39 @@ public class SwaggerConfig {
 
 
   private ApiInfo appApiInfo() {
-    return new ApiInfo(TITLE, DESCRIPTION_APP, VERSION, TERMS, new Contact(NAME, URL, EMAIL),
-        LICENSE, LICENSE_URL
-    );
+    return new ApiInfoBuilder()
+        .title(TITLE)
+        .description(DESCRIPTION_APP)
+        .termsOfServiceUrl(TERMS)
+        .contact(new Contact(NAME, URL, EMAIL))
+        .license(LICENSE)
+        .licenseUrl(LICENSE_URL)
+        .version(VERSION)
+        .build();
   }
 
   private ApiInfo openApiInfo() {
-    return new ApiInfo(TITLE, DESCRIPTION_OPEN, VERSION, TERMS, new Contact(NAME, URL, EMAIL),
-        LICENSE, LICENSE_URL);
+    return new ApiInfoBuilder()
+        .title(TITLE)
+        .description(DESCRIPTION_OPEN)
+        .termsOfServiceUrl(TERMS)
+        .contact(new Contact(NAME, URL, EMAIL))
+        .license(LICENSE)
+        .licenseUrl(LICENSE_URL)
+        .version(VERSION)
+        .build();
   }
 
   private ApiInfo managementApiInfo() {
-    return new ApiInfo(TITLE, DESCRIPTION_MANAGEMENT, VERSION, TERMS, new Contact(NAME, URL, EMAIL),
-        LICENSE, LICENSE_URL);
+    return new ApiInfoBuilder()
+        .title(TITLE)
+        .description(DESCRIPTION_MANAGEMENT)
+        .termsOfServiceUrl(TERMS)
+        .contact(new Contact(NAME, URL, EMAIL))
+        .license(LICENSE)
+        .licenseUrl(LICENSE_URL)
+        .version(VERSION)
+        .build();
   }
 
   // ------------------------
@@ -92,9 +113,9 @@ public class SwaggerConfig {
   private static final String TITLE = "Spring rest oauth2 sample API";
   private static final String TERMS = "NO terms of service";
   private static final String LICENSE = "MIT";
-  private static final String LICENSE_URL = "www.saintdan.com";
+  private static final String LICENSE_URL = "https://github.com/saintdan/spring-microservices-boilerplate/blob/master/LICENSE";
   private static final String NAME = "saintdan";
-  private static final String URL = "http://github.com/saintdan";
+  private static final String URL = "https://github.com/saintdan";
   private static final String EMAIL = "saintdan1011@gmail.com";
   private static final String OPEN = "open";
   private static final String APP = "app";

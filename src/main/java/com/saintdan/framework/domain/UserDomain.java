@@ -96,8 +96,9 @@ public class UserDomain extends BaseDomain<User, Long> {
   @Transactional public User updateReturnPo(UserParam param, User currentUser) throws Exception {
     User user = findById(param.getId());
     if (user == null) {
-      throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
-          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+      throw new CommonsException(ErrorType.SYS0122,
+          ErrorMsgHelper.getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName().toLowerCase(),
+              CommonsConstant.ID));
     }
     if (StringUtils.isNotBlank(param.getUsr())) {
       param.setUsr(null);

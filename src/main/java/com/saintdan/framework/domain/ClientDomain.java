@@ -59,7 +59,8 @@ public class ClientDomain extends BaseDomain<Client, Long> {
     Client client = findById(param.getId());
     if (client == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
-          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName().toLowerCase(),
+              CommonsConstant.ID));
     }
     return po2Vo(super.updateByPO(param2Po(param, currentUser)));
   }

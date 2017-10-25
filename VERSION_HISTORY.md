@@ -249,3 +249,6 @@
 - 1.2.0.RELEASE
   - [ADD] Add LogInterceptor.
   - [DEL] Delete log logic in domain.
+  
+- 1.2.1.RELEASE
+  - [FIX] Fix validate bug.

@@ -65,7 +65,8 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     Resource resource = findById(id);
     if (resource == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
-          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
+          .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName().toLowerCase(),
+              CommonsConstant.ID));
     }
     resourceRepository.delete(resource);
   }
@@ -92,7 +93,8 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
     if (resourceRepository.findByNameAndValidFlag(name, ValidFlag.VALID).isPresent()) {
       // Throw group already existing exception, name taken.
       throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper
-          .getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName(), CommonsConstant.NAME));
+          .getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName().toLowerCase(),
+              CommonsConstant.NAME));
     }
   }
 }

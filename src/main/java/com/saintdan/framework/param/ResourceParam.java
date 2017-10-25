@@ -1,6 +1,7 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,7 @@ public class ResourceParam extends BaseParam {
 
   private static final long serialVersionUID = 8542867394907970893L;
 
-  @NotNullField(method = {HttpMethod.PUT, HttpMethod.DELETE}, message = "id cannot be null.")
+  @ApiModelProperty(hidden = true)
   private Long id;
 
   @NotNullField(method = HttpMethod.POST, message = "name cannot be null.")

@@ -2,7 +2,6 @@ package com.saintdan.framework.controller.management;
 
 import com.saintdan.framework.annotation.CurrentUser;
 import com.saintdan.framework.component.ResultHelper;
-import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.constant.ResourcePath;
 import com.saintdan.framework.domain.ResourceDomain;
 import com.saintdan.framework.enums.ErrorType;
@@ -15,7 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,15 +82,11 @@ public class ResourceController {
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
-      @ApiImplicitParam(name = "id", paramType = "path", dataType = "string", required = true)
+      @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
-  public ResponseEntity detail(@ApiIgnore @PathVariable String id) {
-    if (StringUtils.isBlank(id)) {
-      return resultHelper
-          .infoResp(ErrorType.SYS0002, CommonsConstant.ID_BLANK, HttpStatus.UNPROCESSABLE_ENTITY);
-    }
+  public ResponseEntity detail(@ApiIgnore @PathVariable Long id) {
     try {
-      return new ResponseEntity<>(resourceDomain.getById(Long.valueOf(id), ResourceVO.class),
+      return new ResponseEntity<>(resourceDomain.getById(id, ResourceVO.class),
           HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
@@ -101,17 +95,19 @@ public class ResourceController {
     }
   }
 
-  @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+  @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
   @ApiOperation(value = "Update", httpMethod = "PUT", response = ResourceVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
-      @ApiImplicitParam(name = "id", paramType = "path", dataType = "string", required = true)
+      @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
+      @ApiIgnore @PathVariable Long id,
       @RequestBody ResourceParam param) {
     try {
       // Update resource.
+      param.setId(id);
       return new ResponseEntity<>(resourceDomain.update(param, currentUser), HttpStatus.OK);
     } catch (CommonsException e) {
       // Return error information and log the exception.
@@ -129,7 +125,7 @@ public class ResourceController {
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
-      @ApiImplicitParam(name = "id", paramType = "path", dataType = "string", required = true)
+      @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity delete(@ApiIgnore @PathVariable Long id) {
     // Validate current user and param.

@@ -1,6 +1,6 @@
 description 'spring-microservices-boilerplate'
 group 'com.saintdan.framework'
-version '1.2.0.RELEASE'
+version '1.2.1.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -58,7 +58,7 @@ ext {
   commonsLang3Version = '3.6'
   commonsBeanutilsVersion = '1.9.3'
   guavaVersion = '21.0'
-  swaggerVersion = '2.6.1'
+  swaggerVersion = '2.7.0'
   specVersion = '0.9.2'
 
 //  hsqldbVersion = '1.8.0.10'
