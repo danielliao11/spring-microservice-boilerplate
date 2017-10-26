@@ -26,7 +26,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 
 /**
@@ -64,7 +63,6 @@ public class Resource implements GrantedAuthority, Serializable {
   @Column(updatable = false)
   private long id;
 
-  @NotEmpty
   @Column(unique = true, nullable = false, length = 20)
   private String name;
 

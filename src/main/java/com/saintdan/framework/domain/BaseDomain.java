@@ -15,6 +15,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -107,7 +109,10 @@ public abstract class BaseDomain<T, ID extends Serializable> {
    * @return page of <T>
    */
   public List<T> getAllByIds(List<ID> ids) throws Exception {
-    return repository.findAll(ids);
+    return ids.stream()
+        .map(id -> repository.findById(id).orElse(null))
+        .filter(Objects::nonNull)
+        .collect(Collectors.toList());
   }
 
   /**
@@ -185,7 +190,7 @@ public abstract class BaseDomain<T, ID extends Serializable> {
 
   @SuppressWarnings("unchecked")
   @Transactional public void deepDelete(Long id) throws Exception {
-    repository.delete((ID) id);
+    repository.deleteById((ID) id);
   }
 
   /**

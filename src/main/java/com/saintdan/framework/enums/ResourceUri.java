@@ -64,6 +64,10 @@ public enum ResourceUri {
     return (matchUri != null ? mappings.get(matchUri) : UNKNOWN);
   }
 
+  public boolean isUnknown() {
+    return ResourceUri.UNKNOWN.uri.equals(this.uri);
+  }
+
   public boolean matches(String uri) {
     return (this == resolve(uri));
   }

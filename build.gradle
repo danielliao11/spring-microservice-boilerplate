@@ -21,7 +21,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE')
+    classpath('org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M4')
   }
 }
 
@@ -50,7 +50,7 @@ compileTestJava {
 }
 
 ext {
-  springBootVersion = '1.5.8.RELEASE'
+  springBootVersion = '2.0.0.M5'
   springOAuth2Version = '2.2.0.RELEASE'
 
   lombokVersion = '1.16.18'

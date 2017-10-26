@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 /**
  * Query helper.
@@ -22,7 +23,7 @@ import org.springframework.data.domain.Sort;
 public class QueryHelper {
 
   public static PageRequest getPageRequest(BaseParam param) {
-    return new PageRequest(param.getPageNo() == null ? 0 : param.getPageNo() - 1,
+    return PageRequest.of(param.getPageNo() == null ? 0 : param.getPageNo() - 1,
         param.getPageSize(), QueryHelper.getSort(param.getSortBy()));
   }
 
@@ -32,8 +33,7 @@ public class QueryHelper {
    * @return {@link Sort}
    */
   public static Sort getDefaultSort() {
-    Sort.Order order = new Sort.Order(Sort.Direction.ASC, "id");
-    return new Sort(order);
+    return Sort.by(Direction.ASC, "id");
   }
 
   /**
@@ -44,8 +44,7 @@ public class QueryHelper {
    * @return {@link Sort}
    */
   public static Sort getSort(String param, Sort.Direction direction) {
-    Sort.Order order = new Sort.Order(direction, param);
-    return new Sort(order);
+    return Sort.by(direction, param);
   }
 
   /**
@@ -60,7 +59,7 @@ public class QueryHelper {
       Sort.Order order = new Sort.Order(entry.getValue(), entry.getKey());
       orderList.add(order);
     }
-    return new Sort(orderList);
+    return Sort.by(orderList);
   }
 
   /**
@@ -71,7 +70,7 @@ public class QueryHelper {
    */
   public static Sort getSort(String sortBy) {
     return StringUtils.isBlank(sortBy) ? getDefaultSort()
-        : new Sort(Arrays.asList(sortBy.split(CommonsConstant.COMMA)).stream().map(
+        : Sort.by(Arrays.stream(sortBy.split(CommonsConstant.COMMA)).map(
             (orders) -> getOrder(orders.split(CommonsConstant.COLON)))
             .collect(Collectors.toList()));
   }

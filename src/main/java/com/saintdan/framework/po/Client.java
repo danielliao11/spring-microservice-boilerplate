@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -60,22 +59,18 @@ public class Client implements ClientDetails {
   @Column(updatable = false)
   private long id;
 
-  @NotEmpty
   @Column(length = 50)
   private String clientIdAlias;
 
-  @NotEmpty
   @Column(length = 100)
   private String resourceIdStr;
 
-  @NotEmpty
   @Column(length = 100)
   private String clientSecretAlias;
 
   /**
    * Available values: read, write
    */
-  @NotEmpty
   @Column(length = 100)
   private String scopeStr;
 
@@ -83,7 +78,6 @@ public class Client implements ClientDetails {
    * grant types include "authorization_code", "password", "assertion", and "refresh_token". Default
    * description is "authorization_code,refresh_token".
    */
-  @NotEmpty
   @Column(length = 100)
   private String authorizedGrantTypeStr;
 

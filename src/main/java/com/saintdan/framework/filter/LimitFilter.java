@@ -23,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -39,7 +40,7 @@ import org.springframework.stereotype.Component;
  * @since JDK1.8
  */
 @Component
-@Order(2)
+@Order(1)
 @WebFilter(filterName = "LimitFilter")
 public class LimitFilter implements Filter {
 

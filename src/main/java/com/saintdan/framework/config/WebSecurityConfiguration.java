@@ -12,14 +12,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
- * Spring web security config.
- * Extends {@link WebSecurityConfigurerAdapter}
+ * Spring web security config. Extends {@link WebSecurityConfigurerAdapter}
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/25/15
  * @since JDK1.8
  */
-@Configuration @EnableWebSecurity @EnableSpringDataWebSupport
+@Configuration
+@EnableWebSecurity
+@EnableSpringDataWebSupport
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override protected void configure(AuthenticationManagerBuilder auth) throws Exception {
