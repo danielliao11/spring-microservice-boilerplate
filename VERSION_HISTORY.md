@@ -252,3 +252,8 @@
   
 - 1.2.1.RELEASE
   - [FIX] Fix validate bug.
+
+- 1.2.2.RELEASE
+  - [MOD] Upgrade spring boot to 2.0.
+  - [DEL] Delete some deprecated code.
+  - [FIX] Fix uri bug.

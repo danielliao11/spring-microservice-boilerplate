@@ -16,6 +16,7 @@ import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ResourceVO;
 import com.saintdan.framework.vo.RoleVO;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -122,10 +123,9 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     if (StringUtils.isNotBlank(param.getResourceIds())) {
       Set<Resource> resources = Sets
           .newHashSet(resourceDomain.getAllByIds(transformer.idsStr2List(param.getResourceIds())));
-      if (role.getResources() != null) {
-        resources.addAll(role.getResources());
-      }
       role.setResources(resources);
+    } else {
+      role.setResources(new HashSet<>());
     }
     return role;
   }

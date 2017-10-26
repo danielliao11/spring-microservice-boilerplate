@@ -1,5 +1,6 @@
 package com.saintdan.framework.param;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.saintdan.framework.annotation.SignField;
 import com.saintdan.framework.constant.SignatureConstant;
 import com.saintdan.framework.enums.ErrorType;
@@ -77,6 +78,7 @@ public class BaseParam implements Serializable {
    *
    * @return signature content
    */
+  @ApiModelProperty(hidden = true)
   public String getSignContent() throws CommonsException {
     StringBuffer buffer = new StringBuffer();
     try {

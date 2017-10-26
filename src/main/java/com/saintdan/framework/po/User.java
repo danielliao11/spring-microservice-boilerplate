@@ -29,7 +29,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -70,15 +69,12 @@ public class User implements UserDetails {
   @Column(updatable = false)
   private long id;
 
-  @NotEmpty
   @Column(length = 50)
   private String name;
 
-  @NotEmpty
   @Column(nullable = false, length = 20)
   private String usr;
 
-  @NotEmpty
   @Column(nullable = false, length = 200)
   private String pwd;
 
