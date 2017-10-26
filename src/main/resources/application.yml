@@ -91,11 +91,6 @@ spring:
       dialect: org.hibernate.dialect.PostgreSQLDialect
 
 # ===============================
-# = SECURITY
-# ===============================
-security.oauth2.resource.filter-order: 3
-
-# ===============================
 # = SPRING BOOT ADMIN
 # ===============================
-management.security.enabled: false
+management.security.enabled: true

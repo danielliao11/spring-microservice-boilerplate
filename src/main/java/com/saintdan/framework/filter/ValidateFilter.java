@@ -25,6 +25,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,7 @@ import org.springframework.stereotype.Component;
  * @since JDK1.8
  */
 @Component
-@Order(1)
+@Order(2)
 @WebFilter(filterName = "ValidateFilter")
 public class ValidateFilter implements Filter {
 
@@ -64,11 +65,19 @@ public class ValidateFilter implements Filter {
         req.getReader().lines().forEach(stringBuilder::append);
         String json = stringBuilder.toString();
         ObjectMapper mapper = new ObjectMapper();
-        String result = validate(
-            mapper.readValue(json, ResourceUri.resolve(req.getRequestURI()).clazz()),
+        ResourceUri resourceUri = ResourceUri.resolve(req.getRequestURI());
+        HttpServletResponse resp = ((HttpServletResponse) response);
+        if (resourceUri.isUnknown()) {
+          resp.setStatus(HttpStatus.NOT_FOUND.value());
+          return;
+        }
+        if (StringUtils.isBlank(json)) {
+          resp.setStatus(HttpStatus.BAD_REQUEST.value());
+          return;
+        }
+        String result = validate(mapper.readValue(json, resourceUri.clazz()),
             HttpMethod.resolve(method));
         if (StringUtils.isNotBlank(result)) {
-          HttpServletResponse resp = ((HttpServletResponse) response);
           resp.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
           resp.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
           resp.getWriter().write(mapper.writeValueAsString(

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,7 +36,8 @@ public class LogInterceptor implements HandlerInterceptor {
     if (!(HttpMethod.GET.matches(request.getMethod())
         || HttpMethod.DELETE.matches(request.getMethod()))) {
       String path = request.getRequestURI();
-      if (!path.contains(ResourcePath.OPEN)) {
+      HttpStatus status = HttpStatus.resolve(response.getStatus());
+      if (!path.contains(ResourcePath.OPEN) && status != null && !status.isError()) {
         logHelper.log(HttpMethod.resolve(request.getMethod()), path);
       }
     }
