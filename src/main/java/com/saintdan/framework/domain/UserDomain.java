@@ -16,6 +16,7 @@ import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.UserVO;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -139,15 +140,14 @@ public class UserDomain extends BaseDomain<User, Long> {
     if (StringUtils.isNotBlank(param.getRoleIds())) {
       Set<Role> roles = Sets
           .newHashSet(roleDomain.getAllByIds(transformer.idsStr2List(param.getRoleIds())));
-      if (user.getRoles() != null) {
-        roles.addAll(user.getRoles());
-      }
       user.setRoles(roles);
+    } else {
+      user.setRoles(new HashSet<>());
     }
     return user;
   }
 
-  public UserVO po2Vo(User user) throws Exception {
+  private UserVO po2Vo(User user) throws Exception {
     return transformer.po2VO(UserVO.class, user);
   }
 }

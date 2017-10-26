@@ -62,7 +62,7 @@ public class CustomResourceServerConfiguration {
   private static final String OPEN_URL = getURL(ResourcePath.OPEN);
 
   private static String getURL(CharSequence element) {
-    return String.join("", ResourcePath.FIX, ResourcePath.RESOURCES, ResourcePath.V1, element,
+    return String.join("", ResourcePath.FIX, ResourcePath.API, ResourcePath.V1, element,
         ResourcePath.FIX);
   }
 }
