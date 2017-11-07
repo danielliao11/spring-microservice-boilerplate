@@ -12,7 +12,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.http.HttpMethod;
 
@@ -47,7 +46,6 @@ public class Log implements Serializable {
   @Column(updatable = false)
   private long id;
 
-  @NotEmpty
   @Column(nullable = false, length = 50)
   private String ip;
 
