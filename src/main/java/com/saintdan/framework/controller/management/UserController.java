@@ -27,7 +27,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,7 +50,7 @@ import springfox.documentation.annotations.ApiIgnore;
     ResourcePath.API + ResourcePath.V1 + ResourcePath.MANAGEMENT + ResourcePath.USERS)
 public class UserController {
 
-  @RequestMapping(method = RequestMethod.POST)
+  @PostMapping
   @ApiOperation(value = "Create", httpMethod = "POST", response = UserVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
@@ -70,7 +73,7 @@ public class UserController {
     }
   }
 
-  @RequestMapping(method = RequestMethod.GET)
+  @GetMapping
   @ApiOperation(value = "List", httpMethod = "GET", response = UserVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
@@ -112,7 +115,7 @@ public class UserController {
     }
   }
 
-  @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+  @GetMapping(value = "/{id}")
   @ApiOperation(value = "Detail", httpMethod = "GET", response = UserVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
@@ -153,7 +156,7 @@ public class UserController {
     }
   }
 
-  @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+  @DeleteMapping(value = "/{id}")
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
       @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
