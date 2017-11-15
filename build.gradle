@@ -1,126 +1,104 @@
 description 'spring-microservices-boilerplate'
 group 'com.saintdan.framework'
-version '1.2.2.RELEASE'
+version '1.2.3.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven' // If you want use maven.
 //apply plugin: 'war' // If you want use provide runtime dependencies.
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 buildscript {
+  ext {
+    dependency_management_version = '1.0.3.RELEASE'
+    spring_boot_version = '2.0.0.M6'
+    spring_oauth2_version = '2.2.0.RELEASE'
+    lombok_version = '1.16.18'
+    commons_text_version = '1.1'
+    commons_lang3_version = '3.6'
+    commons_beanutils_version = '1.9.3'
+    guava_version = '21.0'
+    swagger_version = '2.7.0'
+    spec_version = '0.9.2'
+//  hsqldb_version = '1.8.0.10'
+//  mysql_version = '5.1.36'
+    postgresql_version = '42.1.4'
+    json_path_version = '2.0.0'
+    junit_version = '4.12'
+  }
   repositories {
-    // If you live in China. You can use ali's repository.
-    maven {
-      url 'http://maven.aliyun.com/nexus/content/groups/public/'
-    }
-    maven {
-      url 'https://repo.spring.io/plugins-release'
-    }
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
     mavenCentral()
-    jcenter()
+    maven { url "https://repo.spring.io/plugins-release" }
   }
   dependencies {
-    classpath('org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M4')
+    classpath "io.spring.gradle:dependency-management-plugin:$dependency_management_version"
+    classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
   }
 }
 
-allprojects {
-  repositories {
-    // If you live in China. You can use ali's repository.
-    maven {
-      url 'http://maven.aliyun.com/nexus/content/groups/public/'
-    }
-    maven {
-      url 'https://repo.spring.io/plugins-release'
-    }
-    mavenCentral()
-    jcenter()
-  }
-}
-
-compileJava {
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
-}
-
-compileTestJava {
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
-}
-
-ext {
-  springBootVersion = '2.0.0.M5'
-  springOAuth2Version = '2.2.0.RELEASE'
-
-  lombokVersion = '1.16.18'
-  commonsTextVersion = '1.1'
-  commonsLang3Version = '3.6'
-  commonsBeanutilsVersion = '1.9.3'
-  guavaVersion = '21.0'
-  swaggerVersion = '2.7.0'
-  specVersion = '0.9.2'
-
-//  hsqldbVersion = '1.8.0.10'
-//  mysqlVersion = '5.1.36'
-  postgresqlVersion = '42.1.4'
-
-  jsonPathVersion = '2.0.0'
-  junitVersion = '4.12'
+repositories {
+  maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+  mavenCentral()
+  maven { url "https://repo.spring.io/plugins-release" }
 }
 
 dependencies {
   // Spring boot dependencies.
-  compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-  compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
-  compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
-  compile "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+  compile "org.springframework.boot:spring-boot-starter-web"
+  compile "org.springframework.boot:spring-boot-starter-security"
+  compile "org.springframework.boot:spring-boot-starter-data-jpa"
+  compile "org.springframework.boot:spring-boot-devtools"
 
   // Spring oauth2 dependency.
-  compile ("org.springframework.security.oauth:spring-security-oauth2:${springOAuth2Version}") {
+  compile ("org.springframework.security.oauth:spring-security-oauth2:$spring_oauth2_version") {
     exclude group: 'org.codehaus.jackson'
   }
 
   // Other dependencies.
-  compile "org.projectlombok:lombok:${lombokVersion}"
-  compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
-  compile "org.apache.commons:commons-text:${commonsTextVersion}"
-  compile "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"
-  compile "com.google.guava:guava:${guavaVersion}"
-  compile ("net.kaczmarzyk:specification-arg-resolver:${specVersion}") {
+  compile "org.projectlombok:lombok:$lombok_version"
+  compile "org.apache.commons:commons-lang3:$commons_lang3_version"
+  compile "org.apache.commons:commons-text:$commons_text_version"
+  compile "commons-beanutils:commons-beanutils:$commons_beanutils_version"
+  compile "com.google.guava:guava:$guava_version"
+  compile ("net.kaczmarzyk:specification-arg-resolver:$spec_version") {
     exclude group:'org.hibernate.javax.persistence'
   }
 
   //swagger
-  compile "io.springfox:springfox-swagger2:${swaggerVersion}"
-  compile "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+  compile "io.springfox:springfox-swagger2:$swagger_version"
+  compile "io.springfox:springfox-swagger-ui:$swagger_version"
 
   // DB dependencies.
   // You can choose one of them.
   // HSQLDB
-//  compile "org.hsqldb:hsqldb:${hsqldbVersion}"
+//  compile "org.hsqldb:hsqldb:hsqldb_version"
 
   // Mysql
-//  compile "mysql:mysql-connector-java:${mysqlVersion}"
+//  compile "mysql:mysql-connector-java:mysql_version"
 
   // Postgres
-  compile "org.postgresql:postgresql:${postgresqlVersion}"
+  compile "org.postgresql:postgresql:$postgresql_version"
 
   // Provide runtime dependencies.
   // Tomcat
-//  providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+//  providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${spring_boot_version}"
   // Undertow - Undertow is a lightweight servlet container from JBoss
-//  providedRuntime "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
+//  providedRuntime "org.springframework.boot:spring-boot-starter-undertow:${spring_boot_version}"
 
   // Test dependencies.
-  testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-  testCompile "com.jayway.jsonpath:json-path:${jsonPathVersion}"
-  testCompile "com.jayway.jsonpath:json-path-assert:${jsonPathVersion}"
-  testCompile "junit:junit:${junitVersion}"
+  testCompile "org.springframework.boot:spring-boot-starter-test"
+  testCompile "com.jayway.jsonpath:json-path:$json_path_version"
+  testCompile "com.jayway.jsonpath:json-path-assert:$json_path_version"
+  testCompile "junit:junit:$junit_version"
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '3.5'
+  gradleVersion = '4.3'
 }
 
 task writeNewPom {
