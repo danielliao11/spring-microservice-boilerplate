@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.1
--- Dumped by pg_dump version 9.6.1
+-- Dumped from database version 10.0
+-- Dumped by pg_dump version 10.0
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -36,14 +36,14 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -54,6 +54,39 @@ SET search_path = public, pg_catalog;
 SET default_tablespace = '';
 
 SET default_with_oids = false;
+
+--
+-- Name: accounts; Type: TABLE; Schema: public; Owner: core
+--
+
+CREATE TABLE accounts (
+    id bigint NOT NULL,
+    account character varying(255),
+    account_source_type integer,
+    created_at bigint NOT NULL,
+    created_by bigint NOT NULL,
+    last_modified_at bigint NOT NULL,
+    last_modified_by bigint NOT NULL,
+    version integer NOT NULL,
+    user_id bigint
+);
+
+
+ALTER TABLE accounts OWNER TO core;
+
+--
+-- Name: accounts_seq; Type: SEQUENCE; Schema: public; Owner: core
+--
+
+CREATE SEQUENCE accounts_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE accounts_seq OWNER TO core;
 
 --
 -- Name: clients; Type: TABLE; Schema: public; Owner: core
@@ -68,16 +101,16 @@ CREATE TABLE clients (
     client_id_alias character varying(50) NOT NULL,
     client_secret_alias character varying(100) NOT NULL,
     created_by bigint NOT NULL,
-    created_date timestamp without time zone NOT NULL,
     last_modified_by bigint NOT NULL,
-    last_modified_date timestamp without time zone NOT NULL,
     public_key character varying(5000) NOT NULL,
     refresh_token_validity_seconds_alias integer,
     registered_redirect_uri_str character varying(1024),
     resource_id_str character varying(100) NOT NULL,
     scope_str character varying(100) NOT NULL,
     valid_flag integer NOT NULL,
-    version integer NOT NULL
+    version integer NOT NULL,
+    created_at bigint NOT NULL,
+    last_modified_at bigint NOT NULL
 );
 
 
@@ -109,7 +142,11 @@ CREATE TABLE logs (
     ip character varying(50) NOT NULL,
     type integer NOT NULL,
     user_id bigint NOT NULL,
-    username character varying(255) NOT NULL
+    username character varying(255) NOT NULL,
+    created_at bigint NOT NULL,
+    method integer,
+    path character varying(255),
+    usr character varying(255) NOT NULL
 );
 
 
@@ -230,13 +267,13 @@ ALTER TABLE oauth_refresh_token OWNER TO core;
 CREATE TABLE resources (
     id bigint NOT NULL,
     created_by bigint NOT NULL,
-    created_date timestamp without time zone NOT NULL,
     description character varying(500),
     last_modified_by bigint NOT NULL,
-    last_modified_date timestamp without time zone NOT NULL,
     name character varying(20) NOT NULL,
     valid_flag integer NOT NULL,
-    version integer NOT NULL
+    version integer NOT NULL,
+    created_at bigint NOT NULL,
+    last_modified_at bigint NOT NULL
 );
 
 
@@ -263,13 +300,13 @@ ALTER TABLE resources_seq OWNER TO core;
 CREATE TABLE roles (
     id bigint NOT NULL,
     created_by bigint NOT NULL,
-    created_date timestamp without time zone NOT NULL,
     description character varying(500),
     last_modified_by bigint NOT NULL,
-    last_modified_date timestamp without time zone NOT NULL,
     name character varying(20) NOT NULL,
     valid_flag integer NOT NULL,
-    version integer NOT NULL
+    version integer NOT NULL,
+    created_at bigint NOT NULL,
+    last_modified_at bigint NOT NULL
 );
 
 
@@ -308,21 +345,21 @@ ALTER TABLE roles_seq OWNER TO core;
 CREATE TABLE users (
     id bigint NOT NULL,
     created_by bigint NOT NULL,
-    created_date timestamp without time zone NOT NULL,
     description text,
     ip character varying(255),
     is_account_non_expired_alias boolean NOT NULL,
     is_account_non_locked_alias boolean NOT NULL,
     is_credentials_non_expired_alias boolean NOT NULL,
     is_enabled_alias boolean NOT NULL,
-    last_login_time timestamp without time zone,
     last_modified_by bigint NOT NULL,
-    last_modified_date timestamp without time zone NOT NULL,
     name character varying(50) NOT NULL,
     pwd character varying(200) NOT NULL,
     usr character varying(20) NOT NULL,
     valid_flag integer NOT NULL,
-    version integer NOT NULL
+    version integer NOT NULL,
+    created_at bigint NOT NULL,
+    last_modified_at bigint NOT NULL,
+    last_login_at bigint NOT NULL
 );
 
 
@@ -355,35 +392,32 @@ CREATE SEQUENCE users_seq
 ALTER TABLE users_seq OWNER TO core;
 
 --
--- Data for Name: clients; Type: TABLE DATA; Schema: public; Owner: core
+-- Data for Name: accounts; Type: TABLE DATA; Schema: public; Owner: core
 --
 
-COPY clients (id, access_token_validity_seconds_alias, additional_information_str, authorities_str, authorized_grant_type_str, client_id_alias, client_secret_alias, created_by, created_date, last_modified_by, last_modified_date, public_key, refresh_token_validity_seconds_alias, registered_redirect_uri_str, resource_id_str, scope_str, valid_flag, version) FROM stdin;
-2	86400	\N	\N	password,refresh_token,authorization_code	ios_app	123456	1	2016-06-27 14:24:50.327	1	2016-06-27 14:24:50.327	MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvpO6M1Ghv4YeEeOFHB41FtzwDLB49ovrjfYU4+YvTvXvwL1AdVlJhKfp/MveMK8tzL5Prya11nsIQnyz/dVdiWhu7xqC6fE/xbWswEskBRa/QUvOFaKZS6ZRenGsst7YTQmiEWlhZwduDvCcPrz4pEusRg+GtETdbWqO3D0O+NF9bmkEGcKvHB1BHKv6Nj8PSL0Zt8h2fbZLWNSEYWPLCA+onhtGL7pAkpGQxAtZLJTYhrTw4oo7+bcSjha/2AHfnsCcMa65EoU1BSjD18bjG+AAE6JNURH5Nl2NgRL7wT4LH1/0vJpUnCxjkWWN46648k22ogciDSr73msJuAzp9wIDAQAB	86400	http://www.apple.com	api	read	1	0
-1	86400	\N	\N	password,refresh_token,authorization_code	admin	123456	1	2016-06-27 14:24:50.327	1	2016-06-27 14:24:50.327	MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvpO6M1Ghv4YeEeOFHB41FtzwDLB49ovrjfYU4+YvTvXvwL1AdVlJhKfp/MveMK8tzL5Prya11nsIQnyz/dVdiWhu7xqC6fE/xbWswEskBRa/QUvOFaKZS6ZRenGsst7YTQmiEWlhZwduDvCcPrz4pEusRg+GtETdbWqO3D0O+NF9bmkEGcKvHB1BHKv6Nj8PSL0Zt8h2fbZLWNSEYWPLCA+onhtGL7pAkpGQxAtZLJTYhrTw4oo7+bcSjha/2AHfnsCcMa65EoU1BSjD18bjG+AAE6JNURH5Nl2NgRL7wT4LH1/0vJpUnCxjkWWN46648k22ogciDSr73msJuAzp9wIDAQAB	86400	http://github.com/saintdan	api	read	1	0
+COPY accounts (id, account, account_source_type, created_at, created_by, last_modified_at, last_modified_by, version, user_id) FROM stdin;
+1	root	0	1467037490081	0	1467037490081	0	1	1
+2	admin	0	1467037490352	1	1467037490352	1	1	2
+3	guest	0	1467037490352	1	1467037490352	1	1	3
 \.
 
 
 --
--- Name: clients_seq; Type: SEQUENCE SET; Schema: public; Owner: core
+-- Data for Name: clients; Type: TABLE DATA; Schema: public; Owner: core
 --
 
-SELECT pg_catalog.setval('clients_seq', 2, false);
+COPY clients (id, access_token_validity_seconds_alias, additional_information_str, authorities_str, authorized_grant_type_str, client_id_alias, client_secret_alias, created_by, last_modified_by, public_key, refresh_token_validity_seconds_alias, registered_redirect_uri_str, resource_id_str, scope_str, valid_flag, version, created_at, last_modified_at) FROM stdin;
+2	86400	\N	\N	password,refresh_token,authorization_code	ios_app	123456	1	1	MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvpO6M1Ghv4YeEeOFHB41FtzwDLB49ovrjfYU4+YvTvXvwL1AdVlJhKfp/MveMK8tzL5Prya11nsIQnyz/dVdiWhu7xqC6fE/xbWswEskBRa/QUvOFaKZS6ZRenGsst7YTQmiEWlhZwduDvCcPrz4pEusRg+GtETdbWqO3D0O+NF9bmkEGcKvHB1BHKv6Nj8PSL0Zt8h2fbZLWNSEYWPLCA+onhtGL7pAkpGQxAtZLJTYhrTw4oo7+bcSjha/2AHfnsCcMa65EoU1BSjD18bjG+AAE6JNURH5Nl2NgRL7wT4LH1/0vJpUnCxjkWWN46648k22ogciDSr73msJuAzp9wIDAQAB	86400	http://www.apple.com	api	read	1	0	1467037490327	1467037490327
+1	86400	\N	\N	password,refresh_token,authorization_code	admin	123456	1	1	MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvpO6M1Ghv4YeEeOFHB41FtzwDLB49ovrjfYU4+YvTvXvwL1AdVlJhKfp/MveMK8tzL5Prya11nsIQnyz/dVdiWhu7xqC6fE/xbWswEskBRa/QUvOFaKZS6ZRenGsst7YTQmiEWlhZwduDvCcPrz4pEusRg+GtETdbWqO3D0O+NF9bmkEGcKvHB1BHKv6Nj8PSL0Zt8h2fbZLWNSEYWPLCA+onhtGL7pAkpGQxAtZLJTYhrTw4oo7+bcSjha/2AHfnsCcMa65EoU1BSjD18bjG+AAE6JNURH5Nl2NgRL7wT4LH1/0vJpUnCxjkWWN46648k22ogciDSr73msJuAzp9wIDAQAB	86400	http://github.com/saintdan	api	read	1	0	1467037490327	1467037490327
+\.
 
 
 --
 -- Data for Name: logs; Type: TABLE DATA; Schema: public; Owner: core
 --
 
-COPY logs (id, access_resource, client_id, created_date, ip, type, user_id, username) FROM stdin;
+COPY logs (id, access_resource, client_id, created_date, ip, type, user_id, username, created_at, method, path, usr) FROM stdin;
 \.
-
-
---
--- Name: logs_seq; Type: SEQUENCE SET; Schema: public; Owner: core
---
-
-SELECT pg_catalog.setval('logs_seq', 1, true);
 
 
 --
@@ -438,28 +472,21 @@ COPY oauth_refresh_token (token_id, token, authentication) FROM stdin;
 -- Data for Name: resources; Type: TABLE DATA; Schema: public; Owner: core
 --
 
-COPY resources (id, created_by, created_date, description, last_modified_by, last_modified_date, name, valid_flag, version) FROM stdin;
-1	1	2016-05-03 14:25:32	all resources	1	2016-05-03 14:25:32	root	1	1
-2	1	2016-05-03 14:25:32	management	1	2016-05-03 14:25:32	management	1	1
-3	1	2016-05-03 14:25:32	app resource	1	2016-05-03 14:25:32	app	1	1
+COPY resources (id, created_by, description, last_modified_by, name, valid_flag, version, created_at, last_modified_at) FROM stdin;
+1	1	all resources	1	root	1	1	1462285532000	1462285532000
+2	1	management	1	management	1	1	1462285532000	1462285532000
+3	1	app resource	1	app	1	1	1462285532000	1462285532000
 \.
-
-
---
--- Name: resources_seq; Type: SEQUENCE SET; Schema: public; Owner: core
---
-
-SELECT pg_catalog.setval('resources_seq', 3, false);
 
 
 --
 -- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: core
 --
 
-COPY roles (id, created_by, created_date, description, last_modified_by, last_modified_date, name, valid_flag, version) FROM stdin;
-1	1	2016-06-27 14:24:50.575	root role	1	2016-06-27 14:24:50.575	root	1	2
-2	1	2016-06-27 14:24:50.575	admin role	1	2016-06-27 14:24:50.575	admin	1	2
-3	1	2016-06-27 14:24:50.575	guest role	1	2016-06-27 14:24:50.575	guest	1	2
+COPY roles (id, created_by, description, last_modified_by, name, valid_flag, version, created_at, last_modified_at) FROM stdin;
+1	1	root role	1	root	1	2	1467037490575	1467037490575
+2	1	admin role	1	admin	1	2	1467037490575	1467037490575
+3	1	guest role	1	guest	1	2	1467037490575	1467037490575
 \.
 
 
@@ -475,20 +502,13 @@ COPY roles_has_resources (role_id, resource_id) FROM stdin;
 
 
 --
--- Name: roles_seq; Type: SEQUENCE SET; Schema: public; Owner: core
---
-
-SELECT pg_catalog.setval('roles_seq', 3, false);
-
-
---
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: core
 --
 
-COPY users (id, created_by, created_date, description, ip, is_account_non_expired_alias, is_account_non_locked_alias, is_credentials_non_expired_alias, is_enabled_alias, last_login_time, last_modified_by, last_modified_date, name, pwd, usr, valid_flag, version) FROM stdin;
-2	1	2016-06-27 14:24:50.352	admin account	true	t	t	t	t	2016-07-14 11:23:53.7	1	2016-06-27 14:24:50.352	admin	$2a$10$QTh9AVEsHEexICX3Yu/rCuM/N4wDDslcx8bLJTU9oFBMeW0etPjGS	admin	1	1
-3	1	2016-06-27 14:24:50.352	guest account	true	t	t	t	t	\N	1	2016-06-27 14:24:50.352	guest	$2a$10$L45.IZTSKhdKD4bqBjHJHOpCY9x6eUse1URqoBn5Z0saFD/x.p92i	guest	1	1
-1	0	2016-06-27 14:24:50.081	root account	0:0:0:0:0:0:0:1	t	t	t	t	2017-02-20 15:57:07.598	0	2016-06-27 14:24:50.081	root	$2a$10$ZBqt0Z73hxXZWCGUM51g8OLqti.8XqBEQRpmIgjw/wcEtyXlG9Jey	root	1	2
+COPY users (id, created_by, description, ip, is_account_non_expired_alias, is_account_non_locked_alias, is_credentials_non_expired_alias, is_enabled_alias, last_modified_by, name, pwd, usr, valid_flag, version, created_at, last_modified_at, last_login_at) FROM stdin;
+2	1	admin account	true	t	t	t	t	1	admin	$2a$10$QTh9AVEsHEexICX3Yu/rCuM/N4wDDslcx8bLJTU9oFBMeW0etPjGS	admin	1	1	1467037490352	1467037490352	1468495433700
+1	0	root account	0:0:0:0:0:0:0:1	t	t	t	t	0	root	$2a$10$ZBqt0Z73hxXZWCGUM51g8OLqti.8XqBEQRpmIgjw/wcEtyXlG9Jey	root	1	2	1467037490081	1467037490081	1487606227598
+3	1	guest account	true	t	t	t	t	1	guest	$2a$10$L45.IZTSKhdKD4bqBjHJHOpCY9x6eUse1URqoBn5Z0saFD/x.p92i	guest	1	1	1467037490352	1467037490352	1468495433700
 \.
 
 
@@ -504,10 +524,53 @@ COPY users_has_roles (user_id, role_id) FROM stdin;
 
 
 --
+-- Name: accounts_seq; Type: SEQUENCE SET; Schema: public; Owner: core
+--
+
+SELECT pg_catalog.setval('accounts_seq', 1, false);
+
+
+--
+-- Name: clients_seq; Type: SEQUENCE SET; Schema: public; Owner: core
+--
+
+SELECT pg_catalog.setval('clients_seq', 2, false);
+
+
+--
+-- Name: logs_seq; Type: SEQUENCE SET; Schema: public; Owner: core
+--
+
+SELECT pg_catalog.setval('logs_seq', 1, true);
+
+
+--
+-- Name: resources_seq; Type: SEQUENCE SET; Schema: public; Owner: core
+--
+
+SELECT pg_catalog.setval('resources_seq', 3, false);
+
+
+--
+-- Name: roles_seq; Type: SEQUENCE SET; Schema: public; Owner: core
+--
+
+SELECT pg_catalog.setval('roles_seq', 3, false);
+
+
+--
 -- Name: users_seq; Type: SEQUENCE SET; Schema: public; Owner: core
 --
 
 SELECT pg_catalog.setval('users_seq', 3, false);
+
+
+--
+-- Name: accounts accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: core
+--
+
+ALTER TABLE ONLY accounts
+    ADD CONSTRAINT accounts_pkey PRIMARY KEY (id);
 
 
 --
@@ -636,6 +699,21 @@ ALTER TABLE ONLY roles_has_resources
 
 ALTER TABLE ONLY users_has_roles
     ADD CONSTRAINT fkinp2sirarlxndem3m3bfo61d2 FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
+-- Name: accounts fknjuop33mo69pd79ctplkck40n; Type: FK CONSTRAINT; Schema: public; Owner: core
+--
+
+ALTER TABLE ONLY accounts
+    ADD CONSTRAINT fknjuop33mo69pd79ctplkck40n FOREIGN KEY (user_id) REFERENCES users(id);
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: Yifan
+--
+
+GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --

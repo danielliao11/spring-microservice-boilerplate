@@ -1,6 +1,6 @@
 description 'spring-microservices-boilerplate'
 group 'com.saintdan.framework'
-version '1.2.2.RELEASE'
+version '1.2.3.RELEASE'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -15,7 +15,7 @@ targetCompatibility = 1.8
 buildscript {
   ext {
     dependency_management_version = '1.0.3.RELEASE'
-    spring_boot_version = '2.0.0.M5'
+    spring_boot_version = '2.0.0.M6'
     spring_oauth2_version = '2.2.0.RELEASE'
     lombok_version = '1.16.18'
     commons_text_version = '1.1'
