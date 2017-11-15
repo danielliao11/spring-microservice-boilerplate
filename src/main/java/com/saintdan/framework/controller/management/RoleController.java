@@ -80,7 +80,7 @@ public class RoleController {
     }
   }
 
-  @GetMapping
+  @GetMapping("/{id}")
   @ApiOperation(value = "Detail", httpMethod = "GET", response = RoleVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),

@@ -257,3 +257,7 @@
   - [MOD] Upgrade spring boot to 2.0.
   - [DEL] Delete some deprecated code.
   - [FIX] Fix uri bug.
+  
+- 1.2.3.RELEASE
+  - [MOD] Modify init.sql.
+  - [FIX] Fix mapping bug.
