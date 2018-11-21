@@ -89,6 +89,13 @@ spring:
 # Mysql
 #      dialect: org.hibernate.dialect.MySQL5Dialect
       dialect: org.hibernate.dialect.PostgreSQLDialect
+# Redis cache
+  cache:
+    type: redis
+    cache-names: core_cache
+  redis:
+    host: localhost
+    port: 6379
 
 # ===============================
 # = SPRING BOOT ADMIN

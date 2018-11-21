@@ -14,21 +14,23 @@ targetCompatibility = 1.8
 
 buildscript {
   ext {
-    dependency_management_version = '1.0.3.RELEASE'
-    spring_boot_version = '2.0.0.M6'
-    spring_oauth2_version = '2.2.0.RELEASE'
-    lombok_version = '1.16.18'
-    commons_text_version = '1.1'
+    dependency_management_version = '1.0.6.RELEASE'
+    spring_boot_version = '2.1.0.RELEASE'
+    spring_oauth2_version = '2.3.4.RELEASE'
+    lombok_version = '1.18.4'
+    commons_text_version = '1.3'
     commons_lang3_version = '3.6'
     commons_beanutils_version = '1.9.3'
     guava_version = '21.0'
-    swagger_version = '2.7.0'
-    spec_version = '0.9.2'
+    swagger_version = '2.9.2'
+    spec_version = '1.1.1'
+    jackson_version = '2.9.7'
 //  hsqldb_version = '1.8.0.10'
 //  mysql_version = '5.1.36'
-    postgresql_version = '42.1.4'
-    json_path_version = '2.0.0'
-    junit_version = '4.12'
+    postgresql_version = '42.2.5'
+    jedis_version = '2.9.0'
+    json_path_version = '2.4.0'
+    jupiter_version = '5.2.0'
   }
   repositories {
     maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
@@ -52,6 +54,7 @@ dependencies {
   compile "org.springframework.boot:spring-boot-starter-web"
   compile "org.springframework.boot:spring-boot-starter-security"
   compile "org.springframework.boot:spring-boot-starter-data-jpa"
+  compile "org.springframework.boot:spring-boot-starter-data-redis"
   compile "org.springframework.boot:spring-boot-devtools"
 
   // Spring oauth2 dependency.
@@ -68,6 +71,7 @@ dependencies {
   compile ("net.kaczmarzyk:specification-arg-resolver:$spec_version") {
     exclude group:'org.hibernate.javax.persistence'
   }
+  compile "com.fasterxml.jackson.core:jackson-core:$jackson_version"
 
   //swagger
   compile "io.springfox:springfox-swagger2:$swagger_version"
@@ -84,6 +88,9 @@ dependencies {
   // Postgres
   compile "org.postgresql:postgresql:$postgresql_version"
 
+  // Redis
+  compile "redis.clients:jedis:$jedis_version"
+
   // Provide runtime dependencies.
   // Tomcat
 //  providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${spring_boot_version}"
@@ -91,10 +98,13 @@ dependencies {
 //  providedRuntime "org.springframework.boot:spring-boot-starter-undertow:${spring_boot_version}"
 
   // Test dependencies.
-  testCompile "org.springframework.boot:spring-boot-starter-test"
   testCompile "com.jayway.jsonpath:json-path:$json_path_version"
   testCompile "com.jayway.jsonpath:json-path-assert:$json_path_version"
-  testCompile "junit:junit:$junit_version"
+  // Test
+  testCompile ("org.springframework.boot:spring-boot-starter-test") {
+    exclude group: 'junit'
+  }
+  testCompile "org.junit.jupiter:junit-jupiter-api:$jupiter_version"
 }
 
 task wrapper(type: Wrapper) {
