@@ -1,11 +1,13 @@
 package com.saintdan.framework.filter;
 
 import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.enums.CacheType;
 import com.saintdan.framework.servlet.RequestWrapper;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.RemoteAddressUtils;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.Resource;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -21,7 +23,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -47,6 +48,7 @@ public class LimitFilter implements Filter {
   @Override public void init(FilterConfig filterConfig) {
     range = Long.valueOf(env.getProperty(rangeProp, rangeDefaultValue));
     count = Integer.valueOf(env.getProperty(countProp, countDefaultValue));
+    type = CacheType.valueOf(env.getProperty(typeProp, typeDefaultValue));
     LogUtils.trackInfo(logger, "Initiating LimitFilter");
   }
 
@@ -60,7 +62,7 @@ public class LimitFilter implements Filter {
               RemoteAddressUtils.getRealIp(req),
               req.getRequestURI(),
               range,
-              count))) {
+              count), type)) {
         ((HttpServletResponse) response).setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
         return;
       }
@@ -74,7 +76,15 @@ public class LimitFilter implements Filter {
     LogUtils.trackInfo(logger, "Destroying LimitFilter");
   }
 
-  private boolean limit(RequestLimit requestLimit) {
+  private boolean limit(RequestLimit requestLimit, CacheType type) {
+    if (type.isRedis()) {
+      return limitWithRedis(requestLimit);
+    } else {
+      return limitWithMap(requestLimit);
+    }
+  }
+
+  private boolean limitWithMap(RequestLimit requestLimit) {
     String key = String.join(CommonsConstant.UNDERLINE, requestLimit.getIp(), requestLimit.getPath());
     if (!map.containsKey(key)) {
       map.put(key, new RequestCount(key, 1, System.currentTimeMillis()));
@@ -92,6 +102,23 @@ public class LimitFilter implements Filter {
           map.remove(key);
           map.put(key, requestCount);
         }
+      }
+    }
+    return true;
+  }
+
+  private boolean limitWithRedis(RequestLimit requestLimit) {
+    String key = String.join(CommonsConstant.UNDERLINE, requestLimit.getIp(), requestLimit.getPath());
+    if (!limitRedisTemplate.hasKey(key)) {
+      limitRedisTemplate.opsForValue().set(key, new RequestCount(key, count, System.currentTimeMillis()), range, TimeUnit.MILLISECONDS);
+    } else {
+      RequestCount requestCount = limitRedisTemplate.opsForValue().get(key);
+      long frequency = System.currentTimeMillis() - requestCount.firstReqAt;
+      if (requestCount.count >= requestLimit.count && frequency <= requestLimit.range) {
+        return false;
+      } else {
+        requestCount.count += 1;
+        limitRedisTemplate.opsForValue().set(key, requestCount);
       }
     }
     return true;
@@ -122,10 +149,13 @@ public class LimitFilter implements Filter {
   private HashMap<String, RequestCount> map = new HashMap<>();
   private long range = 0L;
   private int count = 0;
+  private CacheType type;
   private String rangeProp = "request.range";
   private String rangeDefaultValue = "10000";
   private String countProp = "request.count";
   private String countDefaultValue = "3";
+  private String typeProp = "request.type";
+  private String typeDefaultValue = "map";
 
   private final Environment env;
 
