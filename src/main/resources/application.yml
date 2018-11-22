@@ -9,9 +9,11 @@ local:
   privateKey: MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC+k7ozUaG/hh4R44UcHjUW3PAMsHj2i+uN9hTj5i9O9e/AvUB1WUmEp+n8y94wry3Mvk+vJrXWewhCfLP91V2JaG7vGoLp8T/FtazASyQFFr9BS84VoplLplF6cayy3thNCaIRaWFnB24O8Jw+vPikS6xGD4a0RN1tao7cPQ740X1uaQQZwq8cHUEcq/o2Pw9IvRm3yHZ9tktY1IRhY8sID6ieG0YvukCSkZDEC1kslNiGtPDiijv5txKOFr/YAd+ewJwxrrkShTUFKMPXxuMb4AATok1REfk2XY2BEvvBPgsfX/S8mlScLGORZY3jrrjyTbaiByINKvveawm4DOn3AgMBAAECggEBAKT1S+vV0fLszSRg0rv27a8fiG0DZ4DIthjIE2b8vKBVQrSLW7r3kSpRCbk2Ydm0GCmr5V9PW4AOOKUMOeQSBofErJksUnraxn+E9MXxhHkfKmcDjZuuhZA0ozwgHwMo3wM3vl/h3lyG0t39qNCpU3MqyTBPiiKJpTxrSsMZ2tbFRunHN1g4sCIOzm28TlBrzO+tSl1fKqwstlCAJlJ4zwMpKh7lmAPIYXlmCPfDiwqaKBJezCBtThLHKeEgJxTXbrJ1mZwvPaW3ZtZVFwQjJy4N8XM4B3q+IQRBndw7/FR1aLIcFIunOEW13ZPy1PIJ8O94BCb9+n627Gx8xFrq+hkCgYEA635aeLESPIlBQMvzQznLPkGS/ht/1XxJ+NqLZgLbwrL1Qyab2zOgfoXea1pSjFXKZx/OHG96A7Js0p2rsPjOHdydKb7uD7qRdV1foKg7OVKQVXufhGlIIQ3F0d3WbwZNPsHMvtrN6nF5DdhIfxKQMIiwCPtRTj1zcfs9WhaRhsUCgYEAzywXL6SQxAuPZL8FZ+Li+tCTfK7pCs6/Jztz7aHcxcN9rp/LT477mh74UTzzwb3FTMAzz+00vEmq0AYbVVJnWGJMQsoCUdEyzdl48CrBtSTuLFUv4zLB7zeq0TbWuCs5z5XZ59xWya5xfJaqRjL1TJRW14oUiB1G+7MOokdZmYsCgYEAonA3y8SohaVPo3iLRjXZYgotcKZbWVEwXT2yph0WpYh38WfyXhOQg3Wn5HkbM74BrXyc2bRzf5VVxzoHMj2NP7/rkN4orCTPLRvJWLJyl6nB8ZUihV1x6Yrsh0T0IwU/xyg7KPMY0ryO+ePUrgKJ/1BpzOg+Py/YMClTOo8SttkCgYARnfk2xvK8iRMfiRLnm6abl4MDNkiA78XXizm3em0wsAgPAm2ijVEd8QZCukEsN3wAo9OEGfLDFCyfVfWbEs/Q90Lu5wi9dmGwmY6sNaaVRdevE2toEZfmRMCU2+n0bVCUM3T9P4Jt0hS6eIFwSMMNSQv9djN6w6qWmspiyFh5MwKBgBUe9odIUmpCgQSny1VR0W2Okkn8KWmWVC/qksilIIMIOxT0v8d+/cs8P0k/uH4hIqyRuvuOqvR3p2myxKewczbt2bRfSCtgceVswMM8LacbkLuaIdWZtX4encyJVWgZXdzvSp011xwGCJ7t4KZ7G/VyLJwDLHRk7feROgqUUTsb
 client.authorities: USER
 request:
-  type: redis # redis / map
+  type: REDIS # REDIS / MAP, config cache type
   range: 10000
   count: 3
+token:
+  store: REDIS # REDIS / DB, config TokenStore type
 
 # ===============================
 # = HTTP/HTTPS
@@ -20,7 +22,13 @@ request:
 # You can generate your own keystore with keytool.
 # And copy it to resources package.
 # Finally modify the application-https.properties.
-server.port: 8080
+server:
+  port: 8080
+  undertow:
+    io-threads: 4
+    worker-threads: 32
+    buffer-size: 1024
+    direct-buffers: true
 # Configure the server to run with SSL/TLS and using HTTPS
 #  port: 8443
 #  ssl:
@@ -51,19 +59,8 @@ spring:
     url: jdbc:postgresql://localhost/core?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull
     username: core
     password: core
-    tomcat:
-      initial-size: 10
-      max-idle: 60
-      min-idle: 10
-      max-active: 80
-      test-while-idle: true
-      validation-query: SELECT 1
-      test-on-borrow: false
-      time-between-eviction-runs-millis: 30000
-      min-evictable-idle-time-millis: 1800000
-      num-tests-per-eviction-run: 10
-      remove-abandoned: true
-      remove-abandoned-timeout: 180
+    hikari:
+      connection-test-query: SELECT 1
 # Keep the connection alive if idle for a long time (needed in production)
 
 # ===============================
@@ -86,7 +83,9 @@ spring:
     properties:
       hibernate:
         format_sql: false
-        generate_statistics: true
+        generate_statistics: false
+        temp:
+          use_jdbc_metadata_defaults: false
 # Mysql
 #      dialect: org.hibernate.dialect.MySQL5Dialect
       dialect: org.hibernate.dialect.PostgreSQLDialect

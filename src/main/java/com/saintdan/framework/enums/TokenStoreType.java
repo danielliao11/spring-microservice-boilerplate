@@ -5,15 +5,16 @@ package com.saintdan.framework.enums;
  * @date 2018/11/21
  * @since JDK1.8
  */
-public enum CacheType {
+public enum TokenStoreType {
+
   REDIS,
-  MAP;
+  DB;
 
   public boolean isRedis() {
     return name().equals(REDIS.name());
   }
 
-  public boolean isMap() {
-    return name().equals(MAP.name());
+  public boolean isDB() {
+    return name().equals(DB.name());
   }
 }

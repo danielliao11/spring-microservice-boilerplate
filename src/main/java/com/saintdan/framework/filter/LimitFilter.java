@@ -2,6 +2,7 @@ package com.saintdan.framework.filter;
 
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.CacheType;
+import com.saintdan.framework.param.RequestCount;
 import com.saintdan.framework.servlet.RequestWrapper;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.RemoteAddressUtils;
@@ -46,10 +47,16 @@ import org.springframework.stereotype.Component;
 public class LimitFilter implements Filter {
 
   @Override public void init(FilterConfig filterConfig) {
-    range = Long.valueOf(env.getProperty(rangeProp, rangeDefaultValue));
-    count = Integer.valueOf(env.getProperty(countProp, countDefaultValue));
-    type = CacheType.valueOf(env.getProperty(typeProp, typeDefaultValue));
-    LogUtils.trackInfo(logger, "Initiating LimitFilter");
+    String rangeProp = "request.range";
+    String defaultRange = "10000";
+    range = Long.valueOf(env.getProperty(rangeProp, defaultRange));
+    String countProp = "request.count";
+    String defaultCount = "3";
+    count = Integer.valueOf(env.getProperty(countProp, defaultCount));
+    String typeProp = "request.type";
+    String defaultType = "MAP";
+    type = CacheType.valueOf(env.getProperty(typeProp, defaultType));
+    LogUtils.trackInfo(logger, "Initiating LimitFilter with: " + type.name());
   }
 
   @Override
@@ -87,7 +94,7 @@ public class LimitFilter implements Filter {
   private boolean limitWithMap(RequestLimit requestLimit) {
     String key = String.join(CommonsConstant.UNDERLINE, requestLimit.getIp(), requestLimit.getPath());
     if (!map.containsKey(key)) {
-      map.put(key, new RequestCount(key, 1, System.currentTimeMillis()));
+      map.put(key, new RequestCount(key, 1));
     } else {
       RequestCount requestCount = map.get(key);
       long frequency = (System.currentTimeMillis() - requestCount.getFirstReqAt());
@@ -110,14 +117,14 @@ public class LimitFilter implements Filter {
   private boolean limitWithRedis(RequestLimit requestLimit) {
     String key = String.join(CommonsConstant.UNDERLINE, requestLimit.getIp(), requestLimit.getPath());
     if (!limitRedisTemplate.hasKey(key)) {
-      limitRedisTemplate.opsForValue().set(key, new RequestCount(key, count, System.currentTimeMillis()), range, TimeUnit.MILLISECONDS);
+      limitRedisTemplate.opsForValue().set(key, new RequestCount(key, count), range, TimeUnit.MILLISECONDS);
     } else {
       RequestCount requestCount = limitRedisTemplate.opsForValue().get(key);
-      long frequency = System.currentTimeMillis() - requestCount.firstReqAt;
-      if (requestCount.count >= requestLimit.count && frequency <= requestLimit.range) {
+      long frequency = System.currentTimeMillis() - requestCount.getFirstReqAt();
+      if (requestCount.getCount() >= requestLimit.count && frequency <= requestLimit.range) {
         return false;
       } else {
-        requestCount.count += 1;
+        requestCount.setCount(requestCount.getCount() + 1);
         limitRedisTemplate.opsForValue().set(key, requestCount);
       }
     }
@@ -135,31 +142,15 @@ public class LimitFilter implements Filter {
     private int count; // Request count
   }
 
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  private class RequestCount {
-
-    private String key;
-    private int count;
-    private long firstReqAt;
-  }
-
   private static final Logger logger = LoggerFactory.getLogger(LimitFilter.class);
   private HashMap<String, RequestCount> map = new HashMap<>();
   private long range = 0L;
   private int count = 0;
   private CacheType type;
-  private String rangeProp = "request.range";
-  private String rangeDefaultValue = "10000";
-  private String countProp = "request.count";
-  private String countDefaultValue = "3";
-  private String typeProp = "request.type";
-  private String typeDefaultValue = "map";
 
   private final Environment env;
 
-  @Resource private RedisTemplate<String, RequestCount> limitRedisTemplate;
+  @Resource(name = "limitRedisTemplate") private RedisTemplate<String, RequestCount> limitRedisTemplate;
 
   public LimitFilter(Environment env) {
     this.env = env;

@@ -110,7 +110,7 @@ public class SwaggerConfig {
   // ------------------------
 
   private static final String VERSION = "v1";
-  private static final String TITLE = "Spring rest oauth2 sample API";
+  private static final String TITLE = "Spring microservices boilerplate sample API";
   private static final String TERMS = "NO terms of service";
   private static final String LICENSE = "MIT";
   private static final String LICENSE_URL = "https://github.com/saintdan/spring-microservices-boilerplate/blob/master/LICENSE";

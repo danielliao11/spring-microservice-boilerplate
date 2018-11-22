@@ -48,8 +48,7 @@ public class ClientController {
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = ClientVO.class)
   @ApiImplicitParams({
-      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   })
   public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody ClientParam param) {
@@ -75,8 +74,7 @@ public class ClientController {
   @RequestMapping(method = RequestMethod.GET)
   @ApiOperation(value = "List", httpMethod = "GET", response = ClientVO.class)
   @ApiImplicitParams({
-      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   })
   public ResponseEntity all() {
     try {
@@ -100,7 +98,6 @@ public class ClientController {
   @ApiOperation(value = "Update", httpMethod = "PUT", response = ClientVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", value = "client's id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
@@ -131,7 +128,6 @@ public class ClientController {
   @ApiOperation(value = "Delete", httpMethod = "DELETE", response = ResponseEntity.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", value = "client's id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity delete(@ApiIgnore @PathVariable Long id) {

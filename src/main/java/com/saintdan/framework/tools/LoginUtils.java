@@ -1,17 +1,16 @@
 package com.saintdan.framework.tools;
 
-import static com.saintdan.framework.constant.AuthorityConstant.BASIC;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.GrantType;
 import com.saintdan.framework.exception.IllegalTokenTypeException;
-import com.saintdan.framework.param.LoginParam;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+
+import static com.saintdan.framework.constant.AuthorityConstant.BASIC;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 /**
  * Login utils.
@@ -31,17 +30,17 @@ public class LoginUtils {
     return clientId64.trim().substring(0, clientId64.indexOf(CommonsConstant.COLON));
   }
 
-  public static Map<String, String> getParams(LoginParam param) {
+  public static Map<String, String> getParams(String usr, String pwd, String refreshToken) {
     Map<String, String> map = new HashMap<>();
-    if (StringUtils.isNotBlank(param.getUsr())) {
-      map.put(USERNAME, param.getUsr());
+    if (StringUtils.isNotBlank(usr)) {
+      map.put(USERNAME, usr);
     }
-    if (StringUtils.isNotBlank(param.getPwd())) {
-      map.put(PASSWORD, param.getPwd());
+    if (StringUtils.isNotBlank(pwd)) {
+      map.put(PASSWORD, pwd);
       map.put(GRANT_TYPE, GrantType.PASSWORD.description());
     }
-    if (StringUtils.isNotBlank(param.getRefreshToken())) {
-      map.put(REFRESH_TOKEN, param.getRefreshToken());
+    if (StringUtils.isNotBlank(refreshToken)) {
+      map.put(REFRESH_TOKEN, refreshToken);
       map.put(GRANT_TYPE, GrantType.REFRESH_TOKEN.description());
     }
     map.put(SCOPE, READ);

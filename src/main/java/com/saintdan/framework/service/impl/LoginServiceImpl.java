@@ -1,6 +1,7 @@
 package com.saintdan.framework.service.impl;
 
 import com.saintdan.framework.param.LoginParam;
+import com.saintdan.framework.param.RefreshParam;
 import com.saintdan.framework.service.LoginService;
 import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.LoginUtils;
@@ -26,24 +27,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginServiceImpl implements LoginService {
 
-  @Override public ResponseEntity login(LoginParam param, HttpServletRequest request)
-      throws Exception {
-    return execute(param, request);
+  @Override public ResponseEntity login(LoginParam param, HttpServletRequest request) throws Exception {
+    return execute(param.getUsr(), param.getPwd(), null, request);
   }
 
-  @Override public ResponseEntity refresh(LoginParam param, HttpServletRequest request)
-      throws Exception {
-    return execute(param, request);
+  @Override public ResponseEntity refresh(RefreshParam param, HttpServletRequest request) throws Exception {
+    return execute(null, null, param.getRefreshToken(), request);
   }
 
   private static final String AUTHORITY_PROP = "client.authorities";
 
-  private ResponseEntity execute(LoginParam param, HttpServletRequest request) throws Exception {
+  private ResponseEntity execute(String usr, String pwd, String refreshToken, HttpServletRequest request) throws Exception {
     final List<GrantedAuthority> CLIENT_AUTHORITIES = AuthorityUtils
         .commaSeparatedStringToAuthorityList(environment.getProperty(AUTHORITY_PROP));
     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
         LoginUtils.getClientId(request), "", CLIENT_AUTHORITIES);
-    Map<String, String> params = LoginUtils.getParams(param);
+    Map<String, String> params = LoginUtils.getParams(usr, pwd, refreshToken);
     return tokenEndpoint.postAccessToken(token, params);
   }
 

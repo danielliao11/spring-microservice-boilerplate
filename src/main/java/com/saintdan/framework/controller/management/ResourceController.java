@@ -9,6 +9,7 @@ import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.Assert;
+import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.ResourceVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,14 +44,15 @@ public class ResourceController {
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = ResourceVO.class)
   @ApiImplicitParams({
-      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   })
   public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody ResourceParam param) {
     try {
       // Return result and message.
       return new ResponseEntity<>(resourceDomain.create(param, currentUser), HttpStatus.CREATED);
+    } catch (DataIntegrityViolationException e) {
+      return resultHelper.infoResp(logger, ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, RESOURCE, NAME), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper
@@ -64,8 +67,7 @@ public class ResourceController {
   @RequestMapping(method = RequestMethod.GET)
   @ApiOperation(value = "List", httpMethod = "GET", response = ResourceVO.class)
   @ApiImplicitParams({
-      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   })
   public ResponseEntity all() {
     try {
@@ -81,7 +83,6 @@ public class ResourceController {
   @ApiOperation(value = "Detail", httpMethod = "GET", response = ResourceVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity detail(@ApiIgnore @PathVariable Long id) {
@@ -99,7 +100,6 @@ public class ResourceController {
   @ApiOperation(value = "Update", httpMethod = "PUT", response = ResourceVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
@@ -109,6 +109,8 @@ public class ResourceController {
       // Update resource.
       param.setId(id);
       return new ResponseEntity<>(resourceDomain.update(param, currentUser), HttpStatus.OK);
+    } catch (DataIntegrityViolationException e) {
+      return resultHelper.infoResp(logger, ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, RESOURCE, NAME), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (CommonsException e) {
       // Return error information and log the exception.
       return resultHelper
@@ -147,6 +149,8 @@ public class ResourceController {
   private static final Logger logger = LoggerFactory.getLogger(ResourceController.class);
   private final ResultHelper resultHelper;
   private final ResourceDomain resourceDomain;
+  private final static String RESOURCE = "Resource";
+  private final static String NAME = "name";
 
   @Autowired public ResourceController(ResultHelper resultHelper, ResourceDomain resourceDomain) {
     Assert.defaultNotNull(resultHelper);

@@ -13,15 +13,14 @@
             <charset>UTF8</charset>
         </encoder>
 
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>data/logs/core-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy
-                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <!-- or whenever the file size reaches 64 MB -->
-                <maxFileSize>5 MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>data/logs/ivy-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- each file should be at most 5MB, keep 60 days worth of history, but at most 20GB -->
+            <maxFileSize>5MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>20GB</totalSizeCap>
         </rollingPolicy>
-
 
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>DEBUG</level>
@@ -30,7 +29,7 @@
         <prudent>true</prudent>
     </appender>
 
-    <!-- Enable FILE and STDOUT appenders for all log messages.
+    <!-- Enable FILE and STDOUT appenders covers all log messages.
          By default, only log at level INFO and above. -->
     <root level="INFO">
         <appender-ref ref="FILE" />

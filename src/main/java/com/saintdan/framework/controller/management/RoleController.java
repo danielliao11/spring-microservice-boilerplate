@@ -9,6 +9,7 @@ import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.RoleParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.Assert;
+import com.saintdan.framework.tools.ErrorMsgHelper;
 import com.saintdan.framework.vo.RoleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,38 +47,35 @@ public class RoleController {
   @PostMapping
   @ApiOperation(value = "Create", httpMethod = "POST", response = RoleVO.class)
   @ApiImplicitParams({
-      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   })
   public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
       @RequestBody RoleParam param) {
     try {
       // Return result and message.
       return new ResponseEntity<>(roleDomain.create(param, currentUser), HttpStatus.CREATED);
+    } catch (DataIntegrityViolationException e) {
+      return resultHelper.infoResp(logger, ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ROLE, NAME), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper
-          .infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
-          HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @GetMapping
   @ApiOperation(value = "List", httpMethod = "GET", response = RoleVO.class)
   @ApiImplicitParams({
-      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   })
   public ResponseEntity all() {
     try {
       return new ResponseEntity<>(roleDomain.all(), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
-          HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -84,7 +83,6 @@ public class RoleController {
   @ApiOperation(value = "Detail", httpMethod = "GET", response = RoleVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity detail(@ApiIgnore @PathVariable String id) {
@@ -92,8 +90,7 @@ public class RoleController {
       return new ResponseEntity<>(roleDomain.getById(Long.valueOf(id)), HttpStatus.OK);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
-          HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -101,7 +98,6 @@ public class RoleController {
   @ApiOperation(value = "Update", httpMethod = "PUT", response = RoleVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity update(@ApiIgnore @CurrentUser User currentUser,
@@ -111,14 +107,14 @@ public class RoleController {
       // Update role.
       param.setId(id);
       return new ResponseEntity<>(roleDomain.update(param, currentUser), HttpStatus.OK);
+    } catch (DataIntegrityViolationException e) {
+      return resultHelper.infoResp(logger, ErrorType.SYS0111, ErrorMsgHelper.getReturnMsg(ErrorType.SYS0111, ROLE, NAME), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper
-          .infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
-          HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -126,7 +122,6 @@ public class RoleController {
   @ApiOperation(value = "Delete", httpMethod = "DELETE", response = ResponseEntity.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity delete(@ApiIgnore @PathVariable Long id) {
@@ -135,12 +130,10 @@ public class RoleController {
       roleDomain.deepDelete(id);
     } catch (CommonsException e) {
       // Return error information and log the exception.
-      return resultHelper
-          .infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+      return resultHelper.infoResp(logger, e.getErrorType(), e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
-          HttpStatus.INTERNAL_SERVER_ERROR);
+      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
     return ResponseEntity.noContent().build();
   }
@@ -148,6 +141,8 @@ public class RoleController {
   private static final Logger logger = LoggerFactory.getLogger(RoleController.class);
   private final ResultHelper resultHelper;
   private final RoleDomain roleDomain;
+  private final static String ROLE = "Role";
+  private final static String NAME = "name";
 
   @Autowired public RoleController(ResultHelper resultHelper, RoleDomain roleDomain) {
     Assert.defaultNotNull(resultHelper);

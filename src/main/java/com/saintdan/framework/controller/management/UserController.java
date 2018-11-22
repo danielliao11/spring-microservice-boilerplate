@@ -50,11 +50,9 @@ public class UserController {
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Create", httpMethod = "POST", response = UserVO.class)
   @ApiImplicitParams({
-      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
+      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true)
   })
-  public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser,
-      @RequestBody UserParam param) {
+  public ResponseEntity create(@ApiIgnore @CurrentUser User currentUser, @RequestBody UserParam param) {
     try {
       // Return result and message.
       return new ResponseEntity<>(userDomain.create(param, currentUser), HttpStatus.CREATED);
@@ -74,14 +72,13 @@ public class UserController {
   @ApiOperation(value = "List", httpMethod = "GET", response = UserVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "name", value = "user's name", paramType = "query", dataType = "string"),
       @ApiImplicitParam(name = "usr", value = "user's username", paramType = "query", dataType = "string"),
       @ApiImplicitParam(name = "createdAtAfter", value = "unix milli timestamp", paramType = "query", dataType = "long"),
       @ApiImplicitParam(name = "createdAtBefore", value = "unix milli timestamp", paramType = "query", dataType = "long"),
       @ApiImplicitParam(name = "pageNo", paramType = "query", dataType = "int"),
       @ApiImplicitParam(name = "pageSize", paramType = "query", dataType = "int"),
-      @ApiImplicitParam(name = "sortBy", paramType = "query", dataType = "string", example = "sortBy=id:desc,username:desc")
+      @ApiImplicitParam(name = "sortBy", paramType = "query", dataType = "string", example = "id:desc,usr:desc")
   })
   public ResponseEntity all(
       @And({
@@ -116,7 +113,6 @@ public class UserController {
   @ApiOperation(value = "Detail", httpMethod = "GET", response = UserVO.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity detail(@ApiIgnore @PathVariable Long id) {
@@ -132,7 +128,6 @@ public class UserController {
   @RequestMapping(value = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity update(@ApiIgnore @PathVariable Long id,
@@ -156,7 +151,6 @@ public class UserController {
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string"),
       @ApiImplicitParam(name = "id", paramType = "path", dataType = "long", required = true)
   })
   public ResponseEntity delete(@ApiIgnore @PathVariable Long id) {

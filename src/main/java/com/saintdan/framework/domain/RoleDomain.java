@@ -41,7 +41,6 @@ public class RoleDomain extends BaseDomain<Role, Long> {
   // ------------------------
 
   @Transactional public RoleVO create(RoleParam param, User currentUser) throws Exception {
-    nameExists(param.getName());
     return po2Vo(super.createByPO(param2Po(param, new Role(), currentUser)));
   }
 
@@ -61,9 +60,6 @@ public class RoleDomain extends BaseDomain<Role, Long> {
     if (role == null) {
       throw new CommonsException(ErrorType.SYS0122, ErrorMsgHelper
           .getReturnMsg(ErrorType.SYS0122, getClassT().getSimpleName(), CommonsConstant.ID));
-    }
-    if (StringUtils.isNotBlank(param.getName()) && !param.getName().equals(role.getName())) {
-      nameExists(param.getName());
     }
     return po2Vo(super.updateByPO(param2Po(param, role, currentUser)));
   }

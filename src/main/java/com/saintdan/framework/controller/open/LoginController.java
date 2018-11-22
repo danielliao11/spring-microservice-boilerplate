@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,18 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Api("Login")
 @RestController
-@RequestMapping(
-    ResourcePath.API + ResourcePath.V1 + ResourcePath.OPEN + ResourcePath.LOGIN)
+@RequestMapping(ResourcePath.API + ResourcePath.V1 + ResourcePath.OPEN + ResourcePath.LOGIN)
 public class LoginController {
 
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Login", httpMethod = "POST", response = OAuth2AccessToken.class)
   @ApiImplicitParams({
       @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
-      @ApiImplicitParam(name = "Limit-Key", value = "limit key", paramType = "header", dataType = "string")
   })
-  public ResponseEntity login(HttpServletRequest request, @RequestBody LoginParam param)
-      throws HttpRequestMethodNotSupportedException {
+  public ResponseEntity login(HttpServletRequest request, @RequestBody LoginParam param) {
     try {
       return loginService.login(param, request);
     } catch (Exception e) {

@@ -1,25 +1,23 @@
 package com.saintdan.framework.param;
 
-import java.io.Serializable;
+import com.saintdan.framework.annotation.NotNullField;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpMethod;
 
 /**
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
- * @date 2018/11/20
+ * @date 15/02/2017
  * @since JDK1.8
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestCount implements Serializable {
+public class RefreshParam {
 
-  private String key;
-  private int count = 0;
-  private final long firstReqAt = System.currentTimeMillis();
+  @NotNullField(method = HttpMethod.PUT, message = "refresh token cannot be null.")
+  private String refreshToken;
 }
