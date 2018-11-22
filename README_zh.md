@@ -7,11 +7,11 @@
 - [编译运行](#build)
 - [注意](#notice)
 - [使用](#usage)
-  - [导入init.sql](#init)
+  - [导入 init.sql](#init)
+  - [编辑 application.yml](#config)
   - [使用 **Swagger** 文档访问资源](#swagger)
 - [部署](#deploy)
 - [许可证](#license)
-- [版本信息](#version)
 
 spring-microservices-boilerplate，是一个方便JAVA后端人员快速开发的微服务脚手架。对前端友好，适于前后端分离，敏捷开发模式。
 
@@ -20,7 +20,8 @@ spring-microservices-boilerplate，是一个方便JAVA后端人员快速开发�
  - 采用领域驱动模型结构定义package结构；
  - 微服务架构，更加灵活，降低开发及维护的复杂度；
  - 使用 OAuth2 作为授权验证；
- - 使用 json 方式请求数据；
+ - 可通过配置文件 [application.yml](src/main/resources/application.yml) 配置使用 Redis 或者数据库作为 TokenStore；
+ - RESTFul API 使用 json 方式请求数据；
  - 返回标准的 ResponseEntity，并按 HttpStatus 标准返回状态码；
  - 使用 [Gradle](https://gradle.org/) 作为项目构建工具；
  - 使用 [Swagger](http://swagger.io/) 作为文档工具，方便维护文档，同时可使用Swagger做简易的API测试；
@@ -55,7 +56,9 @@ Windows 下，直接双击 gradlew.bat 运行。
 
 ## <a name="usage"></a>使用 [[TOP]](#index)
 
-### <a name="init">导入[init.sql](src/main/resources/init.sql)到您的数据库，建议使用 [PostgreSQL](https://www.postgresql.org/) [[TOP]](#index)
+### <a name="init">导入 [init.sql](src/main/resources/init.sql) 到您的数据库，建议使用 [PostgreSQL](https://www.postgresql.org/) [[TOP]](#index)
+
+### <a name="config">编辑 [application.yml](src/main/resources/application.yml), 选择缓存类型及 TokenStore 类型。[[TOP]](#index)
 
 ### <a name="swagger"></a>使用 Swagger 文档访问资源 [[TOP]](#index)
 

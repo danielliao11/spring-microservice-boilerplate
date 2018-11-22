@@ -6,25 +6,28 @@ import com.saintdan.framework.domain.UserDomain;
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.IllegalTokenTypeException;
 import com.saintdan.framework.po.OauthAccessToken;
-import com.saintdan.framework.po.OauthRefreshToken;
 import com.saintdan.framework.po.User;
-import com.saintdan.framework.repo.OauthAccessTokenRepository;
-import com.saintdan.framework.repo.OauthRefreshTokenRepository;
 import com.saintdan.framework.repo.UserRepository;
 import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.LoginUtils;
 import com.saintdan.framework.tools.RemoteAddressUtils;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 
 /**
@@ -49,11 +52,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     // Find user.
     String username = token.getName();
     User user = userDomain.findByAccount(username);
+    TokenStore tokenStore = customTokenStore.customTokenStore();
     if (user == null) {
       throw new BadCredentialsException(ErrorType.LOG0001.name());
     }
-    // Get token object
-    OauthAccessToken oauthAccessToken = accessTokenRepository.findByUserName(username).orElse(null);
     // Compare password and credentials of authentication.
     if (!customPasswordEncoder.matches(token.getCredentials().toString(), user.getPwd())) {
       throw new BadCredentialsException(ErrorType.LOG0002.name());
@@ -71,15 +73,13 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     // Get client ip address.
     String ip = RemoteAddressUtils.getRealIp(request);
     // Delete token if repeat login.
-    if (user.getIp() != null) {
-      if (!user.getIp().equals(ip) && oauthAccessToken != null) {
-        accessTokenRepository.delete(oauthAccessToken);
-        OauthRefreshToken refreshToken = refreshTokenRepository
-            .findByTokenId(oauthAccessToken.getTokenId()).orElse(null);
-        if (refreshToken != null) {
-          refreshTokenRepository.delete(refreshToken);
-        }
-      }
+    if (user.getIp() != null && !user.getIp().equals(ip)) {
+      tokenStore.findTokensByClientIdAndUserName(clientId, username).stream()
+          .map(oAuth2AccessToken -> {
+            tokenStore.removeAccessToken(oAuth2AccessToken);
+            tokenStore.removeRefreshToken(oAuth2AccessToken.getRefreshToken());
+            return null;
+          });
     }
     // Save user login info.
     user.setIp(ip);
@@ -102,31 +102,33 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   }
 
   private final UserRepository userRepository;
-  private final OauthAccessTokenRepository accessTokenRepository;
-  private final OauthRefreshTokenRepository refreshTokenRepository;
   private final HttpServletRequest request;
   private final UserDomain userDomain;
   private final LogHelper logHelper;
   private final CustomPasswordEncoder customPasswordEncoder;
+  private final CustomTokenStore customTokenStore;
   private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
 
-  @Autowired public CustomAuthenticationProvider(UserRepository userRepository,
-      OauthAccessTokenRepository accessTokenRepository,
-      OauthRefreshTokenRepository refreshTokenRepository, HttpServletRequest request,
-      UserDomain userDomain, LogHelper logHelper, CustomPasswordEncoder customPasswordEncoder) {
+  @Autowired public CustomAuthenticationProvider(
+      UserRepository userRepository,
+      HttpServletRequest request,
+      Environment environment,
+      UserDomain userDomain,
+      LogHelper logHelper,
+      CustomPasswordEncoder customPasswordEncoder,
+      CustomTokenStore customTokenStore) {
     Assert.defaultNotNull(userRepository);
-    Assert.defaultNotNull(accessTokenRepository);
-    Assert.defaultNotNull(refreshTokenRepository);
     Assert.defaultNotNull(request);
+    Assert.defaultNotNull(environment);
     Assert.defaultNotNull(userDomain);
     Assert.defaultNotNull(logHelper);
     Assert.defaultNotNull(customPasswordEncoder);
+    Assert.defaultNotNull(customTokenStore);
     this.userRepository = userRepository;
-    this.accessTokenRepository = accessTokenRepository;
-    this.refreshTokenRepository = refreshTokenRepository;
     this.request = request;
     this.userDomain = userDomain;
     this.logHelper = logHelper;
     this.customPasswordEncoder = customPasswordEncoder;
+    this.customTokenStore = customTokenStore;
   }
 }

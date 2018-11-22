@@ -25,7 +25,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -47,7 +46,7 @@ import org.springframework.stereotype.Component;
 @WebFilter(filterName = "ValidateFilter")
 public class ValidateFilter implements Filter {
 
-  @Override public void init(FilterConfig filterConfig) throws ServletException {
+  @Override public void init(FilterConfig filterConfig) {
     LogUtils.trackInfo(logger, "Initiating ValidateFilter");
   }
 
@@ -59,9 +58,9 @@ public class ValidateFilter implements Filter {
       RequestWrapper req = new RequestWrapper((HttpServletRequest) request);
       StringBuilder stringBuilder = new StringBuilder();
       final String method = req.getMethod();
-      if ((HttpMethod.POST.matches(method)
-          || HttpMethod.PUT.matches(method)
-          || HttpMethod.PATCH.matches(method))) {
+      if (!HttpMethod.GET.matches(method) && req.getContentType().contains("application/json")
+          && (HttpMethod.POST.matches(method) || HttpMethod.PUT.matches(method) || HttpMethod.PATCH.matches(method))) {
+        System.out.println(method);
         req.getReader().lines().forEach(stringBuilder::append);
         String json = stringBuilder.toString();
         ObjectMapper mapper = new ObjectMapper();

@@ -1,12 +1,15 @@
 package com.saintdan.framework.filter;
 
-import com.saintdan.framework.config.bean.RequestBean;
 import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.enums.CacheType;
+import com.saintdan.framework.param.RequestCount;
 import com.saintdan.framework.servlet.RequestWrapper;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.RemoteAddressUtils;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.Resource;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -19,12 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -44,8 +46,17 @@ import org.springframework.stereotype.Component;
 @WebFilter(filterName = "LimitFilter")
 public class LimitFilter implements Filter {
 
-  @Override public void init(FilterConfig filterConfig) throws ServletException {
-    LogUtils.trackInfo(logger, "Initiating LimitFilter");
+  @Override public void init(FilterConfig filterConfig) {
+    String rangeProp = "request.range";
+    String defaultRange = "10000";
+    range = Long.valueOf(env.getProperty(rangeProp, defaultRange));
+    String countProp = "request.count";
+    String defaultCount = "3";
+    count = Integer.valueOf(env.getProperty(countProp, defaultCount));
+    String typeProp = "request.type";
+    String defaultType = "MAP";
+    type = CacheType.valueOf(env.getProperty(typeProp, defaultType));
+    LogUtils.trackInfo(logger, "Initiating LimitFilter with: " + type.name());
   }
 
   @Override
@@ -53,14 +64,12 @@ public class LimitFilter implements Filter {
       throws IOException, ServletException {
     if (request instanceof HttpServletRequest) {
       RequestWrapper req = new RequestWrapper((HttpServletRequest) request);
-      final String LIMIT_KEY = "Limit-Key";
-      String limitKey = req.getHeader(LIMIT_KEY);
-      if (StringUtils.isNotBlank(limitKey)
-          && !limit(new RequestLimit(RemoteAddressUtils.getRealIp(req),
-          req.getRequestURI(),
-          limitKey,
-          requestBean.getRange(),
-          requestBean.getCount()))) {
+      if (!limit(
+          new RequestLimit(
+              RemoteAddressUtils.getRealIp(req),
+              req.getRequestURI(),
+              range,
+              count), type)) {
         ((HttpServletResponse) response).setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
         return;
       }
@@ -74,19 +83,18 @@ public class LimitFilter implements Filter {
     LogUtils.trackInfo(logger, "Destroying LimitFilter");
   }
 
-  private static final Logger logger = LoggerFactory.getLogger(LimitFilter.class);
-  private final RequestBean requestBean;
-
-  @Autowired public LimitFilter(RequestBean requestBean) {
-    this.requestBean = requestBean;
+  private boolean limit(RequestLimit requestLimit, CacheType type) {
+    if (type.isRedis()) {
+      return limitWithRedis(requestLimit);
+    } else {
+      return limitWithMap(requestLimit);
+    }
   }
 
-  private boolean limit(RequestLimit requestLimit) {
-    String key = String
-        .join(CommonsConstant.UNDERLINE, requestLimit.getIp(), requestLimit.getPath(),
-            requestLimit.getLimitKey());
+  private boolean limitWithMap(RequestLimit requestLimit) {
+    String key = String.join(CommonsConstant.UNDERLINE, requestLimit.getIp(), requestLimit.getPath());
     if (!map.containsKey(key)) {
-      map.put(key, new RequestCount(key, 1, System.currentTimeMillis()));
+      map.put(key, new RequestCount(key, 1));
     } else {
       RequestCount requestCount = map.get(key);
       long frequency = (System.currentTimeMillis() - requestCount.getFirstReqAt());
@@ -106,7 +114,22 @@ public class LimitFilter implements Filter {
     return true;
   }
 
-  private HashMap<String, RequestCount> map = new HashMap<>();
+  private boolean limitWithRedis(RequestLimit requestLimit) {
+    String key = String.join(CommonsConstant.UNDERLINE, requestLimit.getIp(), requestLimit.getPath());
+    if (!limitRedisTemplate.hasKey(key)) {
+      limitRedisTemplate.opsForValue().set(key, new RequestCount(key, count), range, TimeUnit.MILLISECONDS);
+    } else {
+      RequestCount requestCount = limitRedisTemplate.opsForValue().get(key);
+      long frequency = System.currentTimeMillis() - requestCount.getFirstReqAt();
+      if (requestCount.getCount() >= requestLimit.count && frequency <= requestLimit.range) {
+        return false;
+      } else {
+        requestCount.setCount(requestCount.getCount() + 1);
+        limitRedisTemplate.opsForValue().set(key, requestCount);
+      }
+    }
+    return true;
+  }
 
   @Data
   @NoArgsConstructor
@@ -115,18 +138,21 @@ public class LimitFilter implements Filter {
 
     private String ip; // Request ip
     private String path; // Request resource's path
-    private String limitKey; // Key of limit
     private long range; // Millisecond
     private int count; // Request count
   }
 
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  private class RequestCount {
+  private static final Logger logger = LoggerFactory.getLogger(LimitFilter.class);
+  private HashMap<String, RequestCount> map = new HashMap<>();
+  private long range = 0L;
+  private int count = 0;
+  private CacheType type;
 
-    private String key;
-    private int count;
-    private Long firstReqAt;
+  private final Environment env;
+
+  @Resource(name = "limitRedisTemplate") private RedisTemplate<String, RequestCount> limitRedisTemplate;
+
+  public LimitFilter(Environment env) {
+    this.env = env;
   }
 }

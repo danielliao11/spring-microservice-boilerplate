@@ -20,9 +20,6 @@
  *   {@link com.saintdan.framework.config.custom.CustomResourceServerConfiguration}
  *   Custom oauth2 resource server configuration.
  *
- *   {@link com.saintdan.framework.config.custom.CustomSpecificationConfiguration}
- *   Custom specification configuration.
- *
  *   {@link com.saintdan.framework.config.custom.CustomUserDetailsService}
  *   Custom user details service.
  *

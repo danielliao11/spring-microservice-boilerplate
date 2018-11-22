@@ -3,7 +3,6 @@ package com.saintdan.framework.domain;
 import com.saintdan.framework.component.Transformer;
 import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.enums.ValidFlag;
 import com.saintdan.framework.exception.CommonsException;
 import com.saintdan.framework.param.ResourceParam;
 import com.saintdan.framework.po.Resource;
@@ -34,7 +33,6 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
   // ------------------------
 
   @Transactional public ResourceVO create(ResourceParam param, User currentUser) throws Exception {
-    nameExists(param.getName());
     return super.createByPO(ResourceVO.class, resourceParam2PO(param, new Resource(), currentUser));
   }
 
@@ -51,9 +49,6 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
 
   @Transactional public ResourceVO update(ResourceParam param, User currentUser) throws Exception {
     Resource resource = findById(param.getId());
-    if (!param.getName().equals(resource.getName())) {
-      nameExists(param.getName());
-    }
     return super.updateByPO(ResourceVO.class, resourceParam2PO(param, resource, currentUser));
   }
 
@@ -87,14 +82,5 @@ public class ResourceDomain extends BaseDomain<Resource, Long> {
   private Resource resourceParam2PO(ResourceParam param, Resource resource, User currentUser)
       throws Exception {
     return transformer.param2PO(getClassT(), param, resource, currentUser);
-  }
-
-  private void nameExists(String name) throws Exception {
-    if (resourceRepository.findByNameAndValidFlag(name, ValidFlag.VALID).isPresent()) {
-      // Throw group already existing exception, name taken.
-      throw new CommonsException(ErrorType.SYS0111, ErrorMsgHelper
-          .getReturnMsg(ErrorType.SYS0111, getClassT().getSimpleName().toLowerCase(),
-              CommonsConstant.NAME));
-    }
   }
 }
