@@ -41,9 +41,9 @@ import org.springframework.stereotype.Component;
  * @date 11/4/15
  * @since JDK1.8
  */
-@Component
-@Order(2)
-@WebFilter(filterName = "ValidateFilter")
+//@Component
+//@Order(2)
+//@WebFilter(filterName = "ValidateFilter")
 public class ValidateFilter implements Filter {
 
   @Override public void init(FilterConfig filterConfig) {

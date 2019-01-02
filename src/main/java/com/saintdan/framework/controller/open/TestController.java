@@ -1,10 +1,13 @@
 package com.saintdan.framework.controller.open;
 
+import com.saintdan.framework.domain.AccountDomain;
 import com.saintdan.framework.po.Account;
-import com.saintdan.framework.mapper.AccountMapper;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,15 +20,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("open/test")
 public class TestController {
 
-  @GetMapping
-  public List<Account> all() {
-    return accountMapper.selectAll();
+  @PostMapping
+  public Account create(@RequestBody Account account) {
+    accountDomain.create(account);
+    return account;
   }
 
-  private final AccountMapper accountMapper;
+  @GetMapping
+  public List<Account> all() {
+    return accountDomain.findAll();
+  }
+
+  @PutMapping("{id}")
+  public Account update(@RequestBody Account account) {
+    accountDomain.update(account);
+    return account;
+  }
+
+  private final AccountDomain accountDomain;
 
   @Autowired
-  public TestController(AccountMapper accountMapper) {
-    this.accountMapper = accountMapper;
+  public TestController(AccountDomain accountDomain) {
+    this.accountDomain = accountDomain;
   }
 }

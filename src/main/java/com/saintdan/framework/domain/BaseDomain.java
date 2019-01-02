@@ -83,11 +83,10 @@ public abstract class BaseDomain<M extends CommonMapper<T>, T>  {
     return mapper.deleteByPrimaryKey(id);
   }
 
+  @Autowired
   protected M mapper;
 
-  @Autowired
-  public BaseDomain(M mapper) {
-    this.mapper = mapper;
+  public BaseDomain() {
   }
 
   public void setMapper(M mapper) {
