@@ -2,7 +2,7 @@
  * Package of enums.
  * <p>
  *   Need code + description,
- *   please implement {@link com.saintdan.framework.enums.IntentStateWithDescription}.
+ *   please implement {@link com.saintdan.framework.enums.EnumWithDescription}.
  * </p>
  * <pre>
  *   String description();
@@ -10,7 +10,7 @@
  *
  * <p>
  *   Need code + number + description,
- *   please implement {@link com.saintdan.framework.enums.IntentStateWithCodeAndDescription}
+ *   please implement {@link com.saintdan.framework.enums.EnumWithCodeAndDescription}
  * </p>
  * <pre>
  *   int code();

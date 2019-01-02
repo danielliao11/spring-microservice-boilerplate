@@ -1,8 +1,6 @@
 package com.saintdan.framework.controller.open;
 
-import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.constant.ResourcePath;
-import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.exception.IllegalTokenTypeException;
 import com.saintdan.framework.param.RefreshParam;
 import com.saintdan.framework.service.LoginService;
@@ -43,18 +41,15 @@ public class RefreshController {
       return new ResponseEntity<>(new ErrorVO(e.getErrorType().name(), e.getErrorType().description()), HttpStatus.UNAUTHORIZED);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+      return null;
     }
   }
 
   private static final Logger logger = LoggerFactory.getLogger(RefreshController.class);
   private final LoginService loginService;
-  private final ResultHelper resultHelper;
 
-  public RefreshController(LoginService loginService, ResultHelper resultHelper) {
+  public RefreshController(LoginService loginService) {
     Assert.defaultNotNull(loginService);
-    Assert.defaultNotNull(resultHelper);
     this.loginService = loginService;
-    this.resultHelper = resultHelper;
   }
 }

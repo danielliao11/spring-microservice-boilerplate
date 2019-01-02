@@ -7,7 +7,7 @@ package com.saintdan.framework.enums;
  * @date 10/29/15
  * @since JDK1.8
  */
-public enum AccountSourceType implements IntentStateWithCodeAndDescription {
+public enum AccountSourceType implements EnumWithCodeAndDescription {
 
   MOBILE(0, "mobile account"),
   EMAIL(1, "email account"),

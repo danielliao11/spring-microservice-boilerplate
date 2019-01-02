@@ -1,10 +1,8 @@
 package com.saintdan.framework.interceptor;
 
-import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.constant.ResourcePath;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -37,14 +35,8 @@ public class LogInterceptor implements HandlerInterceptor {
       String path = request.getRequestURI();
       HttpStatus status = HttpStatus.resolve(response.getStatus());
       if (!path.contains(ResourcePath.OPEN) && status != null && !status.isError()) {
-        logHelper.log(HttpMethod.resolve(request.getMethod()), path);
+        // todo log
       }
     }
-  }
-
-  private final LogHelper logHelper;
-
-  @Autowired public LogInterceptor(LogHelper logHelper) {
-    this.logHelper = logHelper;
   }
 }

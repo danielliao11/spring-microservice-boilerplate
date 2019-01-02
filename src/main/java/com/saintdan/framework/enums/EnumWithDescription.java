@@ -10,7 +10,7 @@ package com.saintdan.framework.enums;
  * @date 7/21/15
  * @since JDK1.8
  */
-public interface IntentStateWithDescription {
+public interface EnumWithDescription {
 
   // Enum translation.
   String description();

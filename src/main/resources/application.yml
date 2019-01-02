@@ -63,32 +63,6 @@ spring:
       connection-test-query: SELECT 1
 # Keep the connection alive if idle for a long time (needed in production)
 
-# ===============================
-# = JPA / HIBERNATE
-# ===============================
-
-# Use 'spring.jpa.properties.*' for Hibernate native properties (the prefix is
-# stripped before adding them to the entity manager).
-
-# Show or not log for each sql query
-  jpa:
-    show-sql: true
-# Hibernate ddl auto (create, create-drop, update): with "update" the database
-# schema will be automatically updated accordingly to java entities found in
-# the project
-    hibernate:
-      ddl-auto: update
-      naming:
-        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
-    properties:
-      hibernate:
-        format_sql: false
-        generate_statistics: false
-        temp:
-          use_jdbc_metadata_defaults: false
-# Mysql
-#      dialect: org.hibernate.dialect.MySQL5Dialect
-      dialect: org.hibernate.dialect.PostgreSQLDialect
 # Redis cache
   cache:
     type: redis
@@ -101,3 +75,21 @@ spring:
 # = SPRING BOOT ADMIN
 # ===============================
 management.security.enabled: true
+
+
+# ===============================
+# = SWAGGER
+# ===============================
+swagger:
+  enabled: true
+  base-package: com.saintdan.framework
+  title: spring-microservices-boilerplate
+  version: 2.0.0.RELEASE
+  description: boilerplate for spring boot microservices
+  exclude-path: /oauth/**, /error
+  contact:
+    name: saintdan
+  authorization:
+    key-name: Authorization
+    name: Authorization
+    auth-regex: ^.*$

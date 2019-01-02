@@ -1,8 +1,6 @@
 package com.saintdan.framework.controller.open;
 
-import com.saintdan.framework.component.ResultHelper;
 import com.saintdan.framework.constant.ResourcePath;
-import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.param.LoginParam;
 import com.saintdan.framework.service.LoginService;
 import com.saintdan.framework.tools.Assert;
@@ -14,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,20 +34,16 @@ public class LoginController {
       return loginService.login(param, request);
     } catch (Exception e) {
       // Return unknown error and log the exception.
-      return resultHelper.errorResp(logger, e, ErrorType.UNKNOWN, e.getMessage(),
-          HttpStatus.INTERNAL_SERVER_ERROR);
+      return null;
     }
   }
 
   private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
   private final LoginService loginService;
-  private final ResultHelper resultHelper;
 
-  @Autowired public LoginController(LoginService loginService, ResultHelper resultHelper) {
+  @Autowired public LoginController(LoginService loginService) {
     Assert.defaultNotNull(loginService);
-    Assert.defaultNotNull(resultHelper);
     this.loginService = loginService;
-    this.resultHelper = resultHelper;
   }
 }
 

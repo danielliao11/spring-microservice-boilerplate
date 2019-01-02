@@ -1,7 +1,6 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
-import com.saintdan.framework.domain.ClientDomain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

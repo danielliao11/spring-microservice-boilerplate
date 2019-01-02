@@ -7,7 +7,7 @@ package com.saintdan.framework.enums;
  * @date 8/19/15
  * @since JDK1.8
  */
-public enum GrantType implements IntentStateWithDescription {
+public enum GrantType implements EnumWithDescription {
 
   PASSWORD("password"),
   REFRESH_TOKEN("refresh_token"),

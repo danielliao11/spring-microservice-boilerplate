@@ -2,7 +2,7 @@ package com.saintdan.framework.po;
 
 import com.google.common.collect.Sets;
 import com.saintdan.framework.constant.CommonsConstant;
-import com.saintdan.framework.listener.PersistentListener;
+import com.saintdan.framework.tools.UUIDGenId;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,9 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -21,11 +18,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.ClientDetails;
+import tk.mybatis.mapper.annotation.KeySql;
 
 /**
  * Authorized client, provide for spring security.
@@ -34,8 +30,6 @@ import org.springframework.security.oauth2.provider.ClientDetails;
  * @date 10/23/15
  * @since JDK1.8
  */
-@Entity
-@EntityListeners(PersistentListener.class)
 @Table(name = "clients")
 @Data
 @Builder
@@ -45,46 +39,37 @@ public class Client implements ClientDetails {
 
   private static final long serialVersionUID = 6500601540965188191L;
 
-  @GenericGenerator(
-      name = "clientSequenceGenerator",
-      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-      parameters = {
-          @Parameter(name = "sequence_name", value = "clients_seq"),
-          @Parameter(name = "initial_value", value = "1"),
-          @Parameter(name = "increment_size", value = "1")
-      }
-  )
   @Id
-  @GeneratedValue(generator = "clientSequenceGenerator")
-  @Column(updatable = false)
-  private long id;
+  @KeySql(genId = UUIDGenId.class)
+  @Column(name = "id", updatable = false)
+  private String id;
 
-  @Column(length = 50)
+  @Column(name = "client_id_alias")
   private String clientIdAlias;
 
-  @Column(length = 100)
+  @Column(name = "resource_id_str")
   private String resourceIdStr;
 
-  @Column(length = 100)
+  @Column(name = "client_secret_alias")
   private String clientSecretAlias;
 
   /**
    * Available values: read, write
    */
-  @Column(length = 100)
+  @Column(name = "scope_str")
   private String scopeStr;
 
   /**
    * grant types include "authorization_code", "password", "assertion", and "refresh_token". Default
    * description is "authorization_code,refresh_token".
    */
-  @Column(length = 100)
+  @Column(name = "authorized_grant_type_str")
   private String authorizedGrantTypeStr;
 
   /**
    * The redirect URI(s) established during registration (optional, comma separated).
    */
-  @Column(length = 1024)
+  @Column(name = "registered_redirect_uri_str")
   private String registeredRedirectUriStr;
 
   /**
@@ -94,7 +79,7 @@ public class Client implements ClientDetails {
    *     For example: USER
    * </pre>
    */
-  @Column(length = 500)
+  @Column(name = "authorities_str")
   private String authoritiesStr;
 
   /**
@@ -102,6 +87,7 @@ public class Client implements ClientDetails {
    * applied by the token services.
    */
   @Builder.Default
+  @Column(name = "access_token_validity_seconds_alias")
   private int accessTokenValiditySecondsAlias = 1800;
 
   /**
@@ -109,31 +95,33 @@ public class Client implements ClientDetails {
    * be applied by the token services.
    */
   @Builder.Default
+  @Column(name = "refresh_token_validity_seconds_alias")
   private int refreshTokenValiditySecondsAlias = 3600;
 
   /**
    * Additional information for this client, not needed by the vanilla OAuth protocol but might be
    * useful, for example, for storing descriptive information.
    */
+  @Column(name = "additional_information_str")
   private String additionalInformationStr;
 
-  @Column(nullable = false, updatable = false)
+  @Column(name = "created_at", nullable = false, updatable = false)
   private long createdAt;
 
-  @Column(nullable = false, updatable = false)
-  private long createdBy;
+  @Column(name = "created_by", nullable = false, updatable = false)
+  private String createdBy;
 
-  @Column(nullable = false)
+  @Column(name = "last_modified_at", nullable = false)
   private long lastModifiedAt;
 
-  @Column(nullable = false)
-  private long lastModifiedBy;
+  @Column(name = "last_modified_by", nullable = false)
+  private String lastModifiedBy;
 
   @Version
-  @Column(nullable = false)
+  @Column(name = "version", nullable = false)
   private int version;
 
-  @Column(nullable = false, length = 5000)
+  @Column(name = "public_key", nullable = false)
   private String publicKey;
 
   public Client(Client client) {

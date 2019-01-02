@@ -7,7 +7,7 @@ package com.saintdan.framework.enums;
  * @date 7/21/15
  * @since JDK1.8
  */
-public enum ErrorType implements IntentStateWithDescription {
+public enum ErrorType implements EnumWithDescription {
 
   // System
   SYS0001("System error."),

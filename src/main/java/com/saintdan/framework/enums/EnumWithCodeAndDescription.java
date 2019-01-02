@@ -11,7 +11,7 @@ package com.saintdan.framework.enums;
  * @date 10/29/15
  * @since JDK1.8
  */
-public interface IntentStateWithCodeAndDescription {
+public interface EnumWithCodeAndDescription {
 
   int code();
 

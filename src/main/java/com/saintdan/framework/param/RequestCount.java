@@ -20,6 +20,9 @@ import lombok.NoArgsConstructor;
 public class RequestCount implements Serializable {
 
   private String key;
+
+  @Builder.Default
   private int count = 0;
+
   private final long firstReqAt = System.currentTimeMillis();
 }
