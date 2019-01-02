@@ -9,15 +9,14 @@ package com.saintdan.framework.constant;
  */
 public interface CommonsConstant {
 
-  String ID_BLANK = "Param id cannot be null.";
-  String ID = "id";
-  String NAME = "name";
+  String CONTEXT_KEY_USER_ID = "currentUserId";
+  String CONTEXT_KEY_USERNAME = "currentUserName";
   String CREATED_BY = "createdBy";
+  String CREATED_AT = "createdAt";
   String LAST_MODIFIED_BY = "lastModifiedBy";
-  String VALID_FLAG = "validFlag";
+  String LAST_MODIFIED_At = "lastModifiedAt";
   String BLANK = "";
   String COMMA = ",";
   String COLON = ":";
   String UNDERLINE = "_";
-  String ZERO = "0";
 }

@@ -7,7 +7,7 @@ package com.saintdan.framework.constant;
  * @date 2017/8/7
  * @since JDK1.8
  */
-public interface AuthorityConstant {
+public interface AuthConstant {
 
     String RESOURCE_ID = "api";
     String SCOPE = "read";
@@ -15,4 +15,5 @@ public interface AuthorityConstant {
     String AUTHORITY = "USER";
     String BASIC = "basic";
     String BEARER = "bearer";
+    String AUTHORIZATION = "Authorization";
 }

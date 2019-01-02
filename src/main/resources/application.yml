@@ -12,8 +12,6 @@ request:
   type: REDIS # REDIS / MAP, config cache type
   range: 10000
   count: 3
-token:
-  store: REDIS # REDIS / DB, config TokenStore type
 
 # ===============================
 # = HTTP/HTTPS

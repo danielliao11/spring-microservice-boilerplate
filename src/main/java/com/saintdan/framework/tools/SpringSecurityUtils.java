@@ -1,5 +1,7 @@
 package com.saintdan.framework.tools;
 
+import com.saintdan.framework.po.User;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,8 +10,6 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * Spring security utils.
@@ -49,13 +49,13 @@ public class SpringSecurityUtils {
    * @return user details
    */
   @SuppressWarnings("unchecked")
-  public static <T extends UserDetails> T getCurrentUser() {
+  public static <T extends User> T getCurrentUser() {
     Authentication authentication = getAuthentication();
     if (authentication == null) {
       return null;
     }
     Object principal = authentication.getPrincipal();
-    if (!(principal instanceof UserDetails)) {
+    if (!(principal instanceof User)) {
       return null;
     }
     return (T) principal;

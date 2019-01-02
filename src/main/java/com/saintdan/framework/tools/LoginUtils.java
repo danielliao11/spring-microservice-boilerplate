@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 
-import static com.saintdan.framework.constant.AuthorityConstant.BASIC;
+import static com.saintdan.framework.constant.AuthConstant.BASIC;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 /**

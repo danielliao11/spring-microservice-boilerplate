@@ -1,5 +1,6 @@
 package com.saintdan.framework.tools;
 
+import tk.mybatis.mapper.additional.insert.InsertListMapper;
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.ids.SelectByIdsMapper;
 
@@ -10,5 +11,5 @@ import tk.mybatis.mapper.common.ids.SelectByIdsMapper;
  * @date 2019/1/2
  * @since JDK1.8
  */
-public interface CommonMapper<T> extends SelectByIdsMapper<T>, Mapper<T> {
+public interface CommonMapper<T> extends SelectByIdsMapper<T>, Mapper<T>, InsertListMapper<T> {
 }
