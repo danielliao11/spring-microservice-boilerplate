@@ -1,8 +1,10 @@
 package com.saintdan.framework.po;
 
+import com.saintdan.framework.constant.CommonsConstant;
 import com.saintdan.framework.tools.UUIDGenId;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -11,6 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import tk.mybatis.mapper.annotation.KeySql;
 
@@ -34,7 +37,7 @@ public class User implements UserDetails {
   @Id
   @KeySql(genId = UUIDGenId.class)
   @Column(name = "id", updatable = false)
-  private long id;
+  private String id;
 
   @Column(name = "name")
   private String name;
@@ -47,50 +50,52 @@ public class User implements UserDetails {
 
   @Builder.Default
   @Column(name = "is_account_non_expired_alias", nullable = false)
-  private boolean isAccountNonExpiredAlias = true;
+  private Boolean isAccountNonExpiredAlias = true;
 
   @Builder.Default
   @Column(name = "is_account_non_locked_alias", nullable = false)
-  private boolean isAccountNonLockedAlias = true;
+  private Boolean isAccountNonLockedAlias = true;
 
   @Builder.Default
   @Column(name = "is_credentials_non_expired_alias", nullable = false)
-  private boolean isCredentialsNonExpiredAlias = true;
+  private Boolean isCredentialsNonExpiredAlias = true;
 
   @Builder.Default
   @Column(name = "is_enabled_alias", nullable = false)
-  private boolean isEnabledAlias = true;
+  private Boolean isEnabledAlias = true;
 
   @Builder.Default
   @Column(name = "status", nullable = false)
-  private int status = 0;
+  private Integer status = 0;
 
   @Column(name = "description")
   private String description;
 
   // Last login time
-  @Builder.Default
   @Column(name = "last_login_at")
-  private long lastLoginAt = System.currentTimeMillis();
+  private Long lastLoginAt;
 
   // Last login IP address
   @Column(name = "ip")
   private String ip;
 
   @Column(name = "created_at", nullable = false, updatable = false)
-  private long createdAt;
+  private Long createdAt;
 
   @Column(name = "created_by", nullable = false, updatable = false)
   private String createdBy;
 
   @Column(name = "last_modified_at", nullable = false)
-  private long lastModifiedAt;
+  private Long lastModifiedAt;
 
   @Column(name = "last_modified_by", nullable = false)
   private String lastModifiedBy;
 
   @Column(name = "version", nullable = false)
-  private int version;
+  private Integer version;
+
+  @Column(name = "authorities")
+  private String authorities;
 
   public User(User user) {
     this.id = user.getId();
@@ -105,8 +110,9 @@ public class User implements UserDetails {
    * @return GrantedAuthorities
    */
   @Override public Collection<? extends GrantedAuthority> getAuthorities() {
-    Collection<GrantedAuthority> authorities = new ArrayList<>();
-    return authorities;
+    return Arrays.stream(
+        authorities.split(CommonsConstant.COMMA))
+        .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
   }
 
   @Override public String getUsername() {
@@ -118,18 +124,18 @@ public class User implements UserDetails {
   }
 
   @Override public boolean isAccountNonExpired() {
-    return isAccountNonExpiredAlias();
+    return isAccountNonExpiredAlias;
   }
 
   @Override public boolean isAccountNonLocked() {
-    return isAccountNonLockedAlias();
+    return isAccountNonLockedAlias;
   }
 
   @Override public boolean isCredentialsNonExpired() {
-    return isCredentialsNonExpiredAlias();
+    return isCredentialsNonExpiredAlias;
   }
 
   @Override public boolean isEnabled() {
-    return isEnabledAlias();
+    return isEnabledAlias;
   }
 }

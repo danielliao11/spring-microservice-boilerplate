@@ -41,22 +41,22 @@ public class Resource implements GrantedAuthority, Serializable {
 
   @Builder.Default
   @Column(name = "status")
-  private int status = 0;
+  private Integer status = 0;
 
   @Column(name = "created_at", nullable = false, updatable = false)
-  private long createdAt;
+  private Long createdAt;
 
   @Column(name = "created_by", nullable = false, updatable = false)
   private String createdBy;
 
   @Column(name = "last_modified_at", nullable = false)
-  private long lastModifiedAt;
+  private Long lastModifiedAt;
 
   @Column(name = "last_modified_by", nullable = false)
   private String lastModifiedBy;
 
   @Column(name = "version", nullable = false)
-  private int version;
+  private Integer version;
 
   public Resource(String id) {
     this.id = id;

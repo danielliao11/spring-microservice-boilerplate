@@ -45,11 +45,11 @@ public class Log implements Serializable {
   private String path;
 
   @Column(name = "method")
-  private int method;
+  private String method;
 
   @Column(name = "created_by", nullable = false)
   private String createdBy;
 
   @Column(name = "created_at", nullable = false)
-  private long createdAt;
+  private Long createdAt;
 }

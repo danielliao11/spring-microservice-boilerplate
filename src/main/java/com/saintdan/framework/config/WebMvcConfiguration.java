@@ -1,6 +1,6 @@
 package com.saintdan.framework.config;
 
-import com.saintdan.framework.interceptor.LogInterceptor;
+import com.saintdan.framework.interceptor.CustomInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -15,12 +15,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
   @Override public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(logInterceptor);
+    registry.addInterceptor(customInterceptor);
   }
 
-  private final LogInterceptor logInterceptor;
+  private final CustomInterceptor customInterceptor;
 
-  @Autowired public WebMvcConfiguration(LogInterceptor logInterceptor) {
-    this.logInterceptor = logInterceptor;
+  @Autowired public WebMvcConfiguration(CustomInterceptor customInterceptor) {
+    this.customInterceptor = customInterceptor;
   }
 }

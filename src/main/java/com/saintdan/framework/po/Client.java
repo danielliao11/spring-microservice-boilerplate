@@ -87,7 +87,7 @@ public class Client implements ClientDetails {
    */
   @Builder.Default
   @Column(name = "access_token_validity_seconds_alias")
-  private int accessTokenValiditySecondsAlias = 1800;
+  private Integer accessTokenValiditySecondsAlias = 1800;
 
   /**
    * The refresh token validity period in seconds (optional). If unspecified a global default will
@@ -95,7 +95,7 @@ public class Client implements ClientDetails {
    */
   @Builder.Default
   @Column(name = "refresh_token_validity_seconds_alias")
-  private int refreshTokenValiditySecondsAlias = 3600;
+  private Integer refreshTokenValiditySecondsAlias = 3600;
 
   /**
    * Additional information for this client, not needed by the vanilla OAuth protocol but might be
@@ -105,19 +105,19 @@ public class Client implements ClientDetails {
   private String additionalInformationStr;
 
   @Column(name = "created_at", nullable = false, updatable = false)
-  private long createdAt;
+  private Long createdAt;
 
   @Column(name = "created_by", nullable = false, updatable = false)
   private String createdBy;
 
   @Column(name = "last_modified_at", nullable = false)
-  private long lastModifiedAt;
+  private Long lastModifiedAt;
 
   @Column(name = "last_modified_by", nullable = false)
   private String lastModifiedBy;
 
   @Column(name = "version", nullable = false)
-  private int version;
+  private Integer version;
 
   @Column(name = "public_key", nullable = false)
   private String publicKey;
