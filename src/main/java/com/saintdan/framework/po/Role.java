@@ -40,7 +40,7 @@ public class Role implements Serializable {
 
   @Builder.Default
   @Column(name = "status", nullable = false)
-  private Integer status = 0;
+  private Integer status = 1;
 
   @Column(name = "created_at", nullable = false, updatable = false)
   private Long createdAt;

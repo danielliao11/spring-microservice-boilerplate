@@ -41,7 +41,7 @@ public class Resource implements GrantedAuthority, Serializable {
 
   @Builder.Default
   @Column(name = "status")
-  private Integer status = 0;
+  private Integer status = 1;
 
   @Column(name = "created_at", nullable = false, updatable = false)
   private Long createdAt;

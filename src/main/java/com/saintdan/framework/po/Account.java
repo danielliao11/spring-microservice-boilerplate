@@ -58,5 +58,5 @@ public class Account implements Serializable {
 
   @Builder.Default
   @Column(name = "status", nullable = false)
-  private Integer status = 0;
+  private Integer status = 1;
 }
