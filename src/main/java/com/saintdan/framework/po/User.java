@@ -6,7 +6,6 @@ import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -90,7 +89,6 @@ public class User implements UserDetails {
   @Column(name = "last_modified_by", nullable = false)
   private String lastModifiedBy;
 
-  @Version
   @Column(name = "version", nullable = false)
   private int version;
 

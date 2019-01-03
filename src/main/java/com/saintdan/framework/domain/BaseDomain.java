@@ -2,6 +2,7 @@ package com.saintdan.framework.domain;
 
 import com.github.pagehelper.PageHelper;
 import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.CommonMapper;
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import com.saintdan.framework.vo.Page;
@@ -94,20 +95,26 @@ public abstract class BaseDomain<M extends CommonMapper<T>, T>  {
   }
 
   private void setCreateInfo(T entity) {
+    User user = SpringSecurityUtils.getCurrentUser();
     try {
-      BeanUtils.setProperty(entity, CommonsConstant.CREATED_BY, SpringSecurityUtils.getCurrentUser().getId());
+      BeanUtils.setProperty(entity, CommonsConstant.CREATED_BY, user == null ? 0 : user.getId());
       BeanUtils.setProperty(entity, CommonsConstant.CREATED_AT, System.currentTimeMillis());
+      BeanUtils.setProperty(entity, CommonsConstant.LAST_MODIFIED_BY, user == null ? 0 : user.getId());
+      BeanUtils.setProperty(entity, CommonsConstant.LAST_MODIFIED_At, System.currentTimeMillis());
+      BeanUtils.setProperty(entity, CommonsConstant.VERSION, 0);
     } catch (IllegalAccessException e) {
       e.printStackTrace();
     } catch (InvocationTargetException ignore) {}
   }
 
   private void setModifyInfo(T entity) {
+    User user = SpringSecurityUtils.getCurrentUser();
     try {
-      BeanUtils.setProperty(entity, CommonsConstant.LAST_MODIFIED_BY, SpringSecurityUtils.getCurrentUser().getId());
+      BeanUtils.setProperty(entity, CommonsConstant.LAST_MODIFIED_BY, user == null ? 0 : user.getId());
       BeanUtils.setProperty(entity, CommonsConstant.LAST_MODIFIED_At, System.currentTimeMillis());
+      BeanUtils.setProperty(entity, CommonsConstant.VERSION, Integer.valueOf(BeanUtils.getProperty(entity, CommonsConstant.VERSION)) + 1);
     } catch (IllegalAccessException e) {
       e.printStackTrace();
-    } catch (InvocationTargetException ignore) {}
+    } catch (InvocationTargetException | NoSuchMethodException ignore) {}
   }
 }

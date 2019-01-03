@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.saintdan.framework.mapper.ClientMapper">
+
+    <resultMap type="com.saintdan.framework.po.Client" id="clientMap">
+        <result property="id" column="id"/>
+        <result property="clientIdAlias" column="client_id_alias"/>
+        <result property="resourceIdStr" column="resource_id_str"/>
+        <result property="clientSecretAlias" column="client_secret_alias"/>
+        <result property="scopeStr" column="scope_str"/>
+        <result property="authorizedGrantTypeStr" column="authorized_grant_type_str"/>
+        <result property="registeredRedirectUriStr" column="registered_redirect_uri_str"/>
+        <result property="authoritiesStr" column="authorities_str"/>
+        <result property="accessTokenValiditySecondsAlias" column="access_token_validity_seconds_alias"/>
+        <result property="refreshTokenValiditySecondsAlias" column="refresh_token_validity_seconds_alias"/>
+        <result property="additionalInformationStr" column="additional_information_str"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="lastModifiedAt" column="last_modified_at"/>
+        <result property="lastModifiedBy" column="last_modified_by"/>
+        <result property="version" column="version"/>
+        <result property="publicKey" column="public_key"/>
+    </resultMap>
+
+</mapper>

@@ -38,7 +38,7 @@ public class Log implements Serializable {
   @Column(name = "usr", nullable = false)
   private String usr;
 
-  @Column(name = "clientId")
+  @Column(name = "client_id")
   private String clientId;
 
   @Column(name = "path")
