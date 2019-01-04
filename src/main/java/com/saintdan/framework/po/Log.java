@@ -50,6 +50,7 @@ public class Log implements Serializable {
   @Column(name = "created_by", nullable = false)
   private String createdBy;
 
+  @Builder.Default
   @Column(name = "created_at", nullable = false)
-  private Long createdAt;
+  private Long createdAt = System.currentTimeMillis();
 }

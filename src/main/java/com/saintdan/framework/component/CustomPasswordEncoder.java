@@ -2,7 +2,6 @@ package com.saintdan.framework.component;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 /**
  * Custom encrypt utilities.
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
  * @date 6/28/15
  * @since JDK1.8
  */
-@Component
 public class CustomPasswordEncoder implements PasswordEncoder {
 
   /**

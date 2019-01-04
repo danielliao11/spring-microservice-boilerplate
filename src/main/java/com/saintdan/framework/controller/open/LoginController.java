@@ -9,8 +9,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api("Login")
+@Slf4j
 @RestController
 @RequestMapping(ResourcePath.API + ResourcePath.V1 + ResourcePath.OPEN + ResourcePath.LOGIN)
 public class LoginController {
@@ -38,7 +38,6 @@ public class LoginController {
     }
   }
 
-  private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
   private final LoginService loginService;
 
   @Autowired public LoginController(LoginService loginService) {

@@ -12,6 +12,10 @@ import org.apache.ibatis.annotations.Select;
  */
 public interface UserMapper extends CommonMapper<User> {
 
-  @Select("select * from users where usr=#{usr} and status=#{status}")
+  @Select("select u.id, u.name, u.usr, u.pwd, u.is_account_non_expired_alias, u.is_account_non_locked_alias, u.is_credentials_non_expired_alias, u.is_enabled_alias, u.status, u.description, u.last_login_at, u.ip, u.created_at, u.created_by, u.last_modified_at, u.last_modified_by, u.version, u.authorities " +
+      "from users u " +
+      "left join accounts a " +
+      "on u.id = a.user_id " +
+      "where a.account = #{usr} and u.status = #{status}")
   User findByUsr(@Param("usr") String usr, @Param("status") Integer status);
 }

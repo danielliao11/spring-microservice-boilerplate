@@ -84,8 +84,7 @@ public abstract class BaseDomain<M extends CommonMapper<T>, T>  {
     return mapper.deleteByPrimaryKey(id);
   }
 
-  @Autowired
-  protected M mapper;
+  @Autowired protected M mapper;
 
   public BaseDomain() {
   }

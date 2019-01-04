@@ -1,15 +1,18 @@
 package com.saintdan.framework.config.custom;
 
 import com.saintdan.framework.component.CustomPasswordEncoder;
+import com.saintdan.framework.component.LogHelper;
 import com.saintdan.framework.enums.ErrorType;
+import com.saintdan.framework.enums.ObjectStatus;
 import com.saintdan.framework.exception.IllegalTokenTypeException;
+import com.saintdan.framework.mapper.UserMapper;
 import com.saintdan.framework.po.User;
+import com.saintdan.framework.tools.Assert;
 import com.saintdan.framework.tools.LogUtils;
 import com.saintdan.framework.tools.LoginUtils;
 import com.saintdan.framework.tools.RemoteAddressUtils;
 import javax.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,6 +30,7 @@ import org.springframework.stereotype.Service;
  * @since JDK1.8
  */
 @Service
+@Slf4j
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
   @Override public Authentication authenticate(Authentication authentication)
@@ -39,8 +43,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
       throw new BadCredentialsException(ErrorType.LOG0007.name());
     }
     // Find user.
-    String username = token.getName();
-    User user = new User(); // TODO find user
+    String usr = token.getName();
+    User user = userMapper.findByUsr(usr, ObjectStatus.VALID.code());
     TokenStore tokenStore = customTokenStore.customTokenStore();
     if (user == null) {
       throw new BadCredentialsException(ErrorType.LOG0001.name());
@@ -63,22 +67,21 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     String ip = RemoteAddressUtils.getRealIp(request);
     // Delete token if repeat login.
     if (user.getIp() != null && !user.getIp().equals(ip)) {
-      tokenStore.findTokensByClientIdAndUserName(clientId, username).stream()
-          .map(oAuth2AccessToken -> {
+      tokenStore.findTokensByClientIdAndUserName(clientId, usr)
+          .forEach(oAuth2AccessToken -> {
             tokenStore.removeAccessToken(oAuth2AccessToken);
             tokenStore.removeRefreshToken(oAuth2AccessToken.getRefreshToken());
-            return null;
           });
     }
     // Save user login info.
     user.setIp(ip);
     user.setLastLoginAt(System.currentTimeMillis());
-    // Save to log.
     try {
-      final String LOGIN = "login";
+      // Log login.
+      logHelper.logLogin(ip, user.getId(), usr, clientId);
     } catch (Exception e) {
       final String errMsg = "Log user login failed.";
-      LogUtils.traceError(logger, e, errMsg);
+      LogUtils.traceError(log, e, errMsg);
     }
     //Authorize.
     return new UsernamePasswordAuthenticationToken(user, user.getPwd(), user.getAuthorities());
@@ -89,14 +92,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
   }
 
   private final HttpServletRequest request;
-  private final CustomPasswordEncoder customPasswordEncoder;
+  private final UserMapper userMapper;
   private final CustomTokenStore customTokenStore;
-  private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationProvider.class);
+  private final LogHelper logHelper;
+  private final CustomPasswordEncoder customPasswordEncoder = new CustomPasswordEncoder();
 
   @Autowired
-  public CustomAuthenticationProvider(HttpServletRequest request, CustomPasswordEncoder customPasswordEncoder, CustomTokenStore customTokenStore) {
+  public CustomAuthenticationProvider(HttpServletRequest request, UserMapper userMapper, CustomTokenStore customTokenStore, LogHelper logHelper) {
+    Assert.defaultNotNull(request);
+    Assert.defaultNotNull(userMapper);
+    Assert.defaultNotNull(customPasswordEncoder);
+    Assert.defaultNotNull(logHelper);
     this.request = request;
-    this.customPasswordEncoder = customPasswordEncoder;
+    this.userMapper = userMapper;
+    this.logHelper = logHelper;
     this.customTokenStore = customTokenStore;
   }
 }

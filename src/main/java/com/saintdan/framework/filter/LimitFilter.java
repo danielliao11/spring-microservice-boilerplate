@@ -22,8 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,6 +43,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(1)
 @WebFilter(filterName = "LimitFilter")
+@Slf4j
 public class LimitFilter implements Filter {
 
   @Override public void init(FilterConfig filterConfig) {
@@ -56,7 +56,7 @@ public class LimitFilter implements Filter {
     String typeProp = "request.type";
     String defaultType = "MAP";
     type = CacheType.valueOf(env.getProperty(typeProp, defaultType));
-    LogUtils.trackInfo(logger, "Initiating LimitFilter with: " + type.name());
+    LogUtils.trackInfo(log, "Initiating LimitFilter with: " + type.name());
   }
 
   @Override
@@ -80,7 +80,7 @@ public class LimitFilter implements Filter {
   }
 
   @Override public void destroy() {
-    LogUtils.trackInfo(logger, "Destroying LimitFilter");
+    LogUtils.trackInfo(log, "Destroying LimitFilter");
   }
 
   private boolean limit(RequestLimit requestLimit, CacheType type) {
@@ -142,7 +142,6 @@ public class LimitFilter implements Filter {
     private int count; // Request count
   }
 
-  private static final Logger logger = LoggerFactory.getLogger(LimitFilter.class);
   private HashMap<String, RequestCount> map = new HashMap<>();
   private long range = 0L;
   private int count = 0;

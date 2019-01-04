@@ -10,8 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -27,6 +26,7 @@ import springfox.documentation.annotations.ApiIgnore;
  * @since JDK1.8
  */
 @Api("refresh token")
+@Slf4j
 @RestController
 @RequestMapping(ResourcePath.API + ResourcePath.V1 + ResourcePath.OPEN + ResourcePath.REFRESH)
 public class RefreshController {
@@ -45,7 +45,6 @@ public class RefreshController {
     }
   }
 
-  private static final Logger logger = LoggerFactory.getLogger(RefreshController.class);
   private final LoginService loginService;
 
   public RefreshController(LoginService loginService) {

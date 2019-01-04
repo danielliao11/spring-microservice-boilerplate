@@ -79,6 +79,9 @@ public class User implements UserDetails {
   @Column(name = "ip")
   private String ip;
 
+  @Column(name = "authority_str")
+  private String authorityStr;
+
   @Column(name = "created_at", nullable = false, updatable = false)
   private Long createdAt;
 
@@ -94,9 +97,6 @@ public class User implements UserDetails {
   @Column(name = "version", nullable = false)
   private Integer version;
 
-  @Column(name = "authorities")
-  private String authorities;
-
   public User(User user) {
     this.id = user.getId();
     this.name = user.getName();
@@ -111,7 +111,7 @@ public class User implements UserDetails {
    */
   @Override public Collection<? extends GrantedAuthority> getAuthorities() {
     return Arrays.stream(
-        authorities.split(CommonsConstant.COMMA))
+        authorityStr.split(CommonsConstant.COMMA))
         .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
   }
 

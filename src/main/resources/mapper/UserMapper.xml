@@ -16,6 +16,7 @@
         <result property="description" column="description"/>
         <result property="lastLoginAt" column="last_login_at"/>
         <result property="ip" column="ip"/>
+        <result property="authorityStr" column="authority_str"/>
         <result property="createdAt" column="created_at"/>
         <result property="createdBy" column="created_by"/>
         <result property="lastModifiedAt" column="last_modified_at"/>
