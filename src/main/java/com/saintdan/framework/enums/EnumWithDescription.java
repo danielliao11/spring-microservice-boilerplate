@@ -3,7 +3,7 @@ package com.saintdan.framework.enums;
 /**
  * Intent state interface.
  * <pre>
- *     String description;
+ *     String msg;
  * </pre>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>

@@ -4,7 +4,7 @@ package com.saintdan.framework.enums;
  * Intent state interface.
  * <pre>
  *     String code;
- *     String description;
+ *     String msg;
  * </pre>
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
@@ -14,6 +14,5 @@ package com.saintdan.framework.enums;
 public interface EnumWithCodeAndDescription {
 
   int code();
-
-  String description();
+  String msg();
 }

@@ -35,7 +35,7 @@ public enum AccountSourceType implements EnumWithCodeAndDescription {
     return code;
   }
 
-  @Override public String description() {
+  @Override public String msg() {
     return description;
   }
 

@@ -1,10 +1,8 @@
 package com.saintdan.framework.param;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.saintdan.framework.annotation.SignField;
 import com.saintdan.framework.constant.SignatureConstant;
-import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.exception.CommonsException;
+import com.saintdan.framework.exception.SignFailedException;
 import com.saintdan.framework.tools.SignatureUtils;
 import io.swagger.annotations.ApiModelProperty;
 import java.beans.BeanInfo;
@@ -57,10 +55,9 @@ public class BaseParam implements Serializable {
   @ApiModelProperty(hidden = true)
   private UserDetails currentUser;
 
-  public boolean isSignValid(String publicKey) throws CommonsException {
+  public boolean isSignValid(String publicKey) throws SignFailedException {
     String content = getSignContent();
-    return SignatureUtils
-        .rsaCheckContent(content, this.getSign(), publicKey, SignatureConstant.CHARSET_UTF8);
+    return SignatureUtils.rsaCheckContent(content, this.getSign(), publicKey, SignatureConstant.CHARSET_UTF8);
   }
 
   /**
@@ -68,7 +65,7 @@ public class BaseParam implements Serializable {
    *
    * @param privateKey Local private key.
    */
-  public void sign(String privateKey) throws CommonsException {
+  public void sign(String privateKey) throws SignFailedException {
     String content = getSignContent();//JsonConverter.convertToJSON(this).toString();
     this.sign = SignatureUtils.rsaSign(content, privateKey, SignatureConstant.CHARSET_UTF8);
   }
@@ -79,7 +76,7 @@ public class BaseParam implements Serializable {
    * @return signature content
    */
   @ApiModelProperty(hidden = true)
-  public String getSignContent() throws CommonsException {
+  public String getSignContent() throws SignFailedException {
     StringBuffer buffer = new StringBuffer();
     try {
       BeanInfo beanInfo = Introspector.getBeanInfo(this.getClass());
@@ -95,10 +92,7 @@ public class BaseParam implements Serializable {
         try {
           field = baseFields.contains(itemName) ? BaseParam.class.getDeclaredField(itemName) :
               this.getClass().getDeclaredField(itemName);
-        } catch (Exception ignored) {
-          // Ignore
-        }
-
+        } catch (Exception ignored) {}
         if (field == null || !field.isAnnotationPresent(SignField.class)) {
           continue; // Ignore field without ParamField annotation.
         }
@@ -117,7 +111,7 @@ public class BaseParam implements Serializable {
       }
       return buffer.toString();
     } catch (Exception e) {
-      throw new CommonsException(ErrorType.UNKNOWN);
+      throw new SignFailedException();
     }
   }
 }

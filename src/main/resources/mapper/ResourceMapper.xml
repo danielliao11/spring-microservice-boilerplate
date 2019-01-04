@@ -6,7 +6,7 @@
     <resultMap type="com.saintdan.framework.po.Resource" id="resourceMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
-        <result property="description" column="description"/>
+        <result property="msg" column="msg"/>
         <result property="status" column="status"/>
         <result property="createdAt" column="created_at"/>
         <result property="createdBy" column="created_by"/>

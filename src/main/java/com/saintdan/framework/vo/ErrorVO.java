@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Result VO.
+ * Error VO.
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 8/19/15
@@ -20,10 +20,10 @@ import lombok.NoArgsConstructor;
 public class ErrorVO implements Serializable {
 
   private static final long serialVersionUID = -7144407219523712074L;
-  private String error;
-  private String error_description;
+  private int code;
+  private String description;
 
-  public ErrorVO(String error) {
-    this.error = error;
+  public ErrorVO(int code) {
+    this.code = code;
   }
 }

@@ -60,7 +60,7 @@ public class Client implements ClientDetails {
 
   /**
    * grant types include "authorization_code", "password", "assertion", and "refresh_token". Default
-   * description is "authorization_code,refresh_token".
+   * msg is "authorization_code,refresh_token".
    */
   @Column(name = "grant_type")
   private String grantType;

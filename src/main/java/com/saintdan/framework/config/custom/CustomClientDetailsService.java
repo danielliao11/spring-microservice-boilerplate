@@ -1,5 +1,9 @@
 package com.saintdan.framework.config.custom;
 
+import com.saintdan.framework.enums.ObjectStatus;
+import com.saintdan.framework.mapper.ClientMapper;
+import com.saintdan.framework.po.Client;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
@@ -15,9 +19,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomClientDetailsService implements ClientDetailsService {
 
-  @Override public ClientDetails loadClientByClientId(String clientId)
-      throws ClientRegistrationException {
-    // get client
-    return null;
+  @Override public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
+    Client client = clientMapper.findByClient(clientId, ObjectStatus.VALID.code());
+    if (client == null) {
+      throw new ClientRegistrationException(String.format("Client %s hasn't registered!", clientId));
+    }
+    return client;
+  }
+
+  private final ClientMapper clientMapper;
+
+  @Autowired public CustomClientDetailsService(ClientMapper clientMapper) {
+    this.clientMapper = clientMapper;
   }
 }

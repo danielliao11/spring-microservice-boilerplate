@@ -144,13 +144,8 @@ public class CustomOAuth2AuthenticationDetails implements Serializable {
       return false;
     }
     if (tokenValue == null) {
-      if (other.tokenValue != null) {
-        return false;
-      }
-    } else if (!tokenValue.equals(other.tokenValue)) {
-      return false;
-    }
-    return true;
+      return other.tokenValue == null;
+    } else return tokenValue.equals(other.tokenValue);
   }
 
   private static final long serialVersionUID = -4809832298438307309L;

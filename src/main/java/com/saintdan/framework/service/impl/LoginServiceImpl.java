@@ -38,10 +38,8 @@ public class LoginServiceImpl implements LoginService {
   private static final String AUTHORITY_PROP = "client.authorities";
 
   private ResponseEntity execute(String usr, String pwd, String refreshToken, HttpServletRequest request) throws Exception {
-    final List<GrantedAuthority> CLIENT_AUTHORITIES = AuthorityUtils
-        .commaSeparatedStringToAuthorityList(environment.getProperty(AUTHORITY_PROP));
-    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-        LoginUtils.getClientId(request), "", CLIENT_AUTHORITIES);
+    final List<GrantedAuthority> CLIENT_AUTHORITIES = AuthorityUtils.commaSeparatedStringToAuthorityList(environment.getProperty(AUTHORITY_PROP));
+    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(LoginUtils.getClientId(request), "", CLIENT_AUTHORITIES);
     Map<String, String> params = LoginUtils.getParams(usr, pwd, refreshToken);
     return tokenEndpoint.postAccessToken(token, params);
   }

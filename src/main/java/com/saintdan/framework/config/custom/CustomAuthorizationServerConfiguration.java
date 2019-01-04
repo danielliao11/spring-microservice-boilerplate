@@ -44,8 +44,6 @@ public class CustomAuthorizationServerConfiguration extends AuthorizationServerC
     return defaultTokenServices;
   }
 
-
-
   private final AuthenticationManager authenticationManager;
 
 

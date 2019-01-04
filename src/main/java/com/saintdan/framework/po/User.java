@@ -68,7 +68,7 @@ public class User implements UserDetails {
   @Column(name = "status", nullable = false)
   private Integer status = 1;
 
-  @Column(name = "description")
+  @Column(name = "msg")
   private String description;
 
   // Last login time

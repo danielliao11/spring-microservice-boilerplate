@@ -1,8 +1,8 @@
 package com.saintdan.framework.tools;
 
 
-import com.saintdan.framework.enums.ErrorType;
-import com.saintdan.framework.exception.CommonsException;
+import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.exception.IllegalExtTypeException;
 
 /**
  * decode base64 image utilities.
@@ -22,9 +22,9 @@ public class Base64ImageHelper {
    *
    * @param image Mr.Base64Image
    * @return Headless Knight
-   * @throws CommonsException not in the list
+   * @throws IllegalExtTypeException not in the list
    */
-  public static byte[] transformToHeadlessKnight(String image) throws CommonsException {
+  public static byte[] transformToHeadlessKnight(String image) throws IllegalExtTypeException {
     return org.apache.commons.codec.binary.Base64.decodeBase64(cutHead(image));
   }
 
@@ -45,9 +45,9 @@ public class Base64ImageHelper {
    *
    * @param image Mr.Base64Image
    * @return Mr.Headless
-   * @throws CommonsException not in the list
+   * @throws IllegalExtTypeException not in the list
    */
-  private static String cutHead(String image) throws CommonsException {
+  private static String cutHead(String image) throws IllegalExtTypeException {
     return image.replace(formHead(HAIR, cutWhom(image), NECK), "");
   }
 
@@ -60,7 +60,7 @@ public class Base64ImageHelper {
    * @return head
    */
   private static String formHead(String hair, String face, String neck) {
-    return String.join("", hair, face, neck);
+    return String.join(CommonsConstant.BLANK, hair, face, neck);
   }
 
   /**
@@ -68,9 +68,9 @@ public class Base64ImageHelper {
    *
    * @param image luckless guy
    * @return name of luckless guy
-   * @throws CommonsException not in the list
+   * @throws IllegalExtTypeException not in the list
    */
-  private static String cutWhom(String image) throws CommonsException {
+  private static String cutWhom(String image) throws IllegalExtTypeException {
     if (image.contains(PNG)) {
       return PNG;
     } else if (image.contains(JPEG)) {
@@ -80,7 +80,7 @@ public class Base64ImageHelper {
     } else if (image.contains(GIF)) {
       return GIF;
     } else {
-      throw new CommonsException(ErrorType.SYS0005);
+      throw new IllegalExtTypeException("Illegal picture ext.");
     }
   }
 

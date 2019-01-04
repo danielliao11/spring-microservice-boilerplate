@@ -7,66 +7,33 @@ package com.saintdan.framework.enums;
  * @date 7/21/15
  * @since JDK1.8
  */
-public enum ErrorType implements EnumWithDescription {
+public enum ErrorType implements EnumWithCodeAndDescription {
 
-  // System
-  SYS0001("System error."),
-  SYS0002("Param is not acceptable."),
-  SYS0003("You need use 'bearer' token."),
-  SYS0004("Signature error."),
-  SYS0005("Format error."),
-  SYS0006("Invalid client"),
-  SYS0007("Invalid token"),
-  SYS0008("Request too frequently"),
+  CLIENT_ERROR(40000, "Client error."),
+  ILLEGAL_PARAM_ERROR(42200, "Illegal param error."),
+  CLIENT_REGISTER_ERROR(42201, "Client register error."),
+  ILLEGAL_TOKEN_TYPE_ERROR(42202, "Illegal token type error."),
+  ILLEGAL_EXT_TYPE_ERROR(42203, "Illegal ext type error."),
 
-  // COMMONS
-  SYS0100("%s error."),
-  SYS0110("%s create failed."),
-  SYS0111("%s already existing, %s taken"),
-  SYS0120("%s find error."),
-  SYS0121("%s find error, no %s exists."),
-  SYS0122("Cannot find any %s by %s param."),
-  SYS0130("%s update failed."),
-  SYS0131("%s's %s update failed."),
-  SYS0140("%s delete failed."),
+  SERVER_ERROR(50000, "Server error"),
+  SIGN_FAILED(50001, "Sign failed."),
 
-  // LOGIN
-  LOG0001("User not exists."),
-  LOG0002("Wrong password."),
-  LOG0003("Disabled account."),
-  LOG0004("Expired account."),
-  LOG0005("Locked account."),
-  LOG0006("Expired credentials."),
-  LOG0007("Illegal token type."),
+  UNKNOWN_ERROR(99999, "Unknown error.");
 
-  // Unknown error.
-  UNKNOWN("unknown error."),;
+  private int code;
+  private String msg;
 
-  /**
-   * Description
-   */
-  private final String description;
-
-  /**
-   * Constructor
-   *
-   * @param description description
-   */
-  ErrorType(String description) {
-    this.description = description;
+  ErrorType(int code, String msg) {
+    this.code = code;
+    this.msg = msg;
   }
 
-  @Override public String description() {
-    return this.description;
+
+  @Override public int code() {
+    return 0;
   }
 
-  public static ErrorType parse(String name) {
-    ErrorType[] errorTypes = ErrorType.values();
-    for (ErrorType errorType : errorTypes) {
-      if (errorType.name().equals(name)) {
-        return errorType;
-      }
-    }
-    return UNKNOWN;
+  @Override public String msg() {
+    return null;
   }
 }
