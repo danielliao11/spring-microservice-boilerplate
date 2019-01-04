@@ -33,35 +33,28 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-  @Override public Authentication authenticate(Authentication authentication)
-      throws AuthenticationException {
+  @Override public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
     String clientId;
     try {
       clientId = LoginUtils.getClientId(request);
     } catch (IllegalTokenTypeException e) {
-      throw new BadCredentialsException(ErrorType.LOG0007.name());
+      throw new BadCredentialsException(ErrorType.ILLEGAL_TOKEN_TYPE_ERROR.code().toString());
     }
     // Find user.
     String usr = token.getName();
     User user = userMapper.findByUsr(usr, ObjectStatus.VALID.code());
     TokenStore tokenStore = customTokenStore.customTokenStore();
     if (user == null) {
-      throw new BadCredentialsException(ErrorType.LOG0001.name());
+      throw new BadCredentialsException(ErrorType.NO_SUCH_ELEMENT_ERROR.code().toString());
     }
     // Compare password and credentials of authentication.
     if (!customPasswordEncoder.matches(token.getCredentials().toString(), user.getPwd())) {
-      throw new BadCredentialsException(ErrorType.LOG0002.name());
+      throw new BadCredentialsException(ErrorType.USERNAME_OR_PASSWORD_IS_WRONG_ERROR.code().toString());
     }
     // Valid account.
-    if (!user.isEnabled()) {
-      throw new BadCredentialsException(ErrorType.LOG0003.name());
-    } else if (!user.isAccountNonExpired()) {
-      throw new BadCredentialsException(ErrorType.LOG0004.name());
-    } else if (!user.isAccountNonLocked()) {
-      throw new BadCredentialsException(ErrorType.LOG0005.name());
-    } else if (!user.isCredentialsNonExpired()) {
-      throw new BadCredentialsException(ErrorType.LOG0006.name());
+    if (!user.isEnabled() || !user.isAccountNonExpired() || !user.isAccountNonLocked() || !user.isCredentialsNonExpired()) {
+      throw new BadCredentialsException(ErrorType.INVALID_USER_ERROR.code().toString());
     }
     // Get client ip address.
     String ip = RemoteAddressUtils.getRealIp(request);

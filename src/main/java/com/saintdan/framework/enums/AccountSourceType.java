@@ -22,7 +22,7 @@ public enum AccountSourceType implements EnumWithCodeAndDescription {
 
   UNKNOWN(-1, "unknown account"),;
 
-  private int code;
+  private Integer code;
 
   private String description;
 
@@ -31,7 +31,7 @@ public enum AccountSourceType implements EnumWithCodeAndDescription {
     this.description = description;
   }
 
-  @Override public int code() {
+  @Override public Integer code() {
     return code;
   }
 
@@ -40,23 +40,23 @@ public enum AccountSourceType implements EnumWithCodeAndDescription {
   }
 
   public boolean isMobile() {
-    return code == MOBILE.code();
+    return code.equals(MOBILE.code());
   }
 
   public boolean isWechat() {
-    return code == WECHAT.code();
+    return code.equals(WECHAT.code());
   }
 
   public boolean isQq() {
-    return code == QQ.code();
+    return code.equals(QQ.code());
   }
 
   public boolean isWeibo() {
-    return code == WEIBO.code();
+    return code.equals(WEIBO.code());
   }
 
   public boolean isUnknown() {
-    return code == UNKNOWN.code();
+    return code.equals(UNKNOWN.code());
   }
 
   public static AccountSourceType parse(int code) {

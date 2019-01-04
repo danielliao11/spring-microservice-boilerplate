@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.provider.ClientRegistrationException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,8 @@ public class LoginController {
       return loginService.login(param, request);
     } catch (ClientRegistrationException e) {
       return ResponseHelper.clientError(ErrorType.CLIENT_REGISTER_ERROR.code(), e.getMessage());
+    } catch (InvalidGrantException e) {
+      return ResponseHelper.clientError(Integer.valueOf(e.getMessage()), ErrorType.parse(Integer.valueOf(e.getMessage())).msg());
     } catch (Exception e) {
       return ResponseHelper.unknownError();
     }

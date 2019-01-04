@@ -36,7 +36,7 @@ public class Resource implements GrantedAuthority, Serializable {
   @Column(name = "name", unique = true, nullable = false)
   private String name;
 
-  @Column(name = "msg")
+  @Column(name = "description")
   private String description;
 
   @Builder.Default

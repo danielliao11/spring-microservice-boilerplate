@@ -13,6 +13,6 @@ package com.saintdan.framework.enums;
  */
 public interface EnumWithCodeAndDescription {
 
-  int code();
+  Integer code();
   String msg();
 }

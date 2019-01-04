@@ -20,10 +20,10 @@ import lombok.NoArgsConstructor;
 public class ErrorVO implements Serializable {
 
   private static final long serialVersionUID = -7144407219523712074L;
-  private int code;
+  private Integer code;
   private String description;
 
-  public ErrorVO(int code) {
+  public ErrorVO(Integer code) {
     this.code = code;
   }
 }

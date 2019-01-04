@@ -10,13 +10,13 @@ public enum ObjectStatus implements EnumWithCode {
   INVALID(0),
   VALID(1);
 
-  private final int code;
+  private final Integer code;
 
-  ObjectStatus(int code) {
+  ObjectStatus(Integer code) {
     this.code = code;
   }
 
-  @Override public int code() {
+  @Override public Integer code() {
     return code;
   }
 }

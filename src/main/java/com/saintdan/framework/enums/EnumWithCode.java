@@ -12,5 +12,5 @@ package com.saintdan.framework.enums;
  */
 public interface EnumWithCode {
 
-  int code();
+  Integer code();
 }

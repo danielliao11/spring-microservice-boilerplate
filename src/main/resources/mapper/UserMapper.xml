@@ -13,7 +13,7 @@
         <result property="isCredentialsNonExpiredAlias" column="is_credentials_non_expired_alias"/>
         <result property="isEnabledAlias" column="is_enabled_alias"/>
         <result property="status" column="status"/>
-        <result property="msg" column="msg"/>
+        <result property="description" column="description"/>
         <result property="lastLoginAt" column="last_login_at"/>
         <result property="ip" column="ip"/>
         <result property="authorityStr" column="authority_str"/>
