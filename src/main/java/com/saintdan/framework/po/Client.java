@@ -43,14 +43,14 @@ public class Client implements ClientDetails {
   @Column(name = "id", updatable = false)
   private String id;
 
-  @Column(name = "client_id_alias")
-  private String clientIdAlias;
+  @Column(name = "client")
+  private String client;
 
-  @Column(name = "resource_id_str")
-  private String resourceIdStr;
+  @Column(name = "resource")
+  private String resource;
 
-  @Column(name = "client_secret_alias")
-  private String clientSecretAlias;
+  @Column(name = "secret")
+  private String secret;
 
   /**
    * Available values: read, write
@@ -62,14 +62,14 @@ public class Client implements ClientDetails {
    * grant types include "authorization_code", "password", "assertion", and "refresh_token". Default
    * description is "authorization_code,refresh_token".
    */
-  @Column(name = "authorized_grant_type_str")
-  private String authorizedGrantTypeStr;
+  @Column(name = "grant_type")
+  private String grantType;
 
   /**
    * The redirect URI(s) established during registration (optional, comma separated).
    */
-  @Column(name = "registered_redirect_uri_str")
-  private String registeredRedirectUriStr;
+  @Column(name = "redirect_uri")
+  private String redirectUri;
 
   /**
    * Authorities that are granted to the client (comma-separated). Distinct from the authorities
@@ -86,23 +86,30 @@ public class Client implements ClientDetails {
    * applied by the token services.
    */
   @Builder.Default
-  @Column(name = "access_token_validity_seconds_alias")
-  private Integer accessTokenValiditySecondsAlias = 1800;
+  @Column(name = "access_token_seconds")
+  private Integer accessTokenSeconds = 1800;
 
   /**
    * The refresh token validity period in seconds (optional). If unspecified a global default will
    * be applied by the token services.
    */
   @Builder.Default
-  @Column(name = "refresh_token_validity_seconds_alias")
-  private Integer refreshTokenValiditySecondsAlias = 3600;
+  @Column(name = "refresh_token_seconds")
+  private Integer refreshTokenSeconds = 3600;
+
+  @Column(name = "public_key", nullable = false)
+  private String publicKey;
+
+  @Builder.Default
+  @Column(name = "status", nullable = false)
+  private Integer status = 1;
 
   /**
    * Additional information for this client, not needed by the vanilla OAuth protocol but might be
    * useful, for example, for storing descriptive information.
    */
-  @Column(name = "additional_information_str")
-  private String additionalInformationStr;
+  @Column(name = "additional")
+  private String additional;
 
   @Column(name = "created_at", nullable = false, updatable = false)
   private Long createdAt;
@@ -119,29 +126,26 @@ public class Client implements ClientDetails {
   @Column(name = "version", nullable = false)
   private Integer version;
 
-  @Column(name = "public_key", nullable = false)
-  private String publicKey;
-
   public Client(Client client) {
     super();
-    this.clientIdAlias = client.getClientIdAlias();
-    this.resourceIdStr = client.getResourceIdStr();
-    this.clientSecretAlias = client.getClientSecretAlias();
+    this.client = client.getClient();
+    this.resource = client.getResource();
+    this.secret = client.getSecret();
     this.scopeStr = client.getScopeStr();
-    this.authorizedGrantTypeStr = client.getAuthorizedGrantTypeStr();
-    this.registeredRedirectUriStr = client.getRegisteredRedirectUriStr();
+    this.grantType = client.getGrantType();
+    this.redirectUri = client.getRedirectUri();
     this.authoritiesStr = client.getAuthoritiesStr();
-    this.accessTokenValiditySecondsAlias = client.getAccessTokenValiditySecondsAlias();
-    this.refreshTokenValiditySecondsAlias = client.getRefreshTokenValiditySecondsAlias();
-    this.additionalInformationStr = client.getAdditionalInformationStr();
+    this.accessTokenSeconds = client.getAccessTokenSeconds();
+    this.refreshTokenSeconds = client.getRefreshTokenSeconds();
+    this.additional = client.getAdditional();
   }
 
   @Override public String getClientId() {
-    return getClientIdAlias();
+    return getClient();
   }
 
   @Override public Set<String> getResourceIds() {
-    return str2Set(getResourceIdStr());
+    return str2Set(getResource());
   }
 
   @Override public boolean isSecretRequired() {
@@ -149,7 +153,7 @@ public class Client implements ClientDetails {
   }
 
   @Override public String getClientSecret() {
-    return getClientSecretAlias();
+    return getSecret();
   }
 
   @Override public boolean isScoped() {
@@ -161,20 +165,20 @@ public class Client implements ClientDetails {
   }
 
   @Override public Set<String> getAuthorizedGrantTypes() {
-    return str2Set(getAuthorizedGrantTypeStr());
+    return str2Set(getGrantType());
   }
 
   @Override public Set<String> getRegisteredRedirectUri() {
-    return str2Set(getRegisteredRedirectUriStr());
+    return str2Set(getRedirectUri());
   }
 
   @Override public Collection<GrantedAuthority> getAuthorities() {
-    return Arrays.stream(getAuthorizedGrantTypeStr().split(CommonsConstant.COMMA))
+    return Arrays.stream(getGrantType().split(CommonsConstant.COMMA))
         .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
   }
 
   @Override public Integer getAccessTokenValiditySeconds() {
-    return getAccessTokenValiditySecondsAlias();
+    return getAccessTokenSeconds();
   }
 
   @Override public Integer getRefreshTokenValiditySeconds() {
@@ -193,7 +197,6 @@ public class Client implements ClientDetails {
     if (StringUtils.isBlank(str)) {
       return new HashSet<>();
     }
-    return Sets
-        .newHashSet(Arrays.stream(str.split(CommonsConstant.COMMA)).collect(Collectors.toList()));
+    return Sets.newHashSet(Arrays.stream(str.split(CommonsConstant.COMMA)).collect(Collectors.toList()));
   }
 }
