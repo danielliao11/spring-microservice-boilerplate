@@ -87,10 +87,10 @@ dependencies {
   // DB dependencies.
   // You can choose one of them.
   // HSQLDB
-//  compile "org.hsqldb:hsqldb:hsqldb_version"
+//  compile "org.hsqldb:hsqldb:$hsqldb_version"
 
   // Mysql
-//  compile "mysql:mysql-connector-java:mysql_version"
+//  compile "mysql:mysql-connector-java:$mysql_version"
 
   // Postgres
   compile "org.postgresql:postgresql:$postgresql_version"
