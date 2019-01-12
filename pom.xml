@@ -13,6 +13,14 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.1.0.RELEASE</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -157,6 +165,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.11.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>com.jayway.jsonpath</groupId>
       <artifactId>json-path-assert</artifactId>
       <version>2.4.0</version>
@@ -179,5 +193,6 @@
       <version>5.2.0</version>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 </project>

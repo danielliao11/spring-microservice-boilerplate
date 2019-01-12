@@ -1,8 +1,10 @@
 package com.saintdan.framework.tool;
 
 import com.saintdan.framework.tools.QueryHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Sort;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test case for {@link com.saintdan.framework.tools.QueryHelper}
@@ -15,9 +17,15 @@ public class QueryHelperTest {
 
   @Test
   public void testGetSort() throws Exception {
-    Sort sort = QueryHelper.getSort(sortBy);
-    System.out.println(sort);
-  }
+    //given
+    String sortBy = "id:asc,name:desc,date:desc";
 
-  private static final String sortBy = "id:asc,name:desc,date:desc";
+    //when
+    Sort sort = QueryHelper.getSort(sortBy);
+
+    //then
+    assertThat(sort.getOrderFor("id").isAscending()).isTrue();
+    assertThat(sort.getOrderFor("name").isDescending()).isTrue();
+    assertThat(sort.getOrderFor("date").isDescending()).isTrue();
+  }
 }

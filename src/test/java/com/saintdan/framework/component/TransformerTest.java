@@ -1,10 +1,12 @@
 package com.saintdan.framework.component;
 
 import com.google.common.collect.Lists;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test case for {@link Transformer}
@@ -15,20 +17,25 @@ import org.junit.Test;
  */
 public class TransformerTest {
 
+  private Transformer transformer = new Transformer();
+
   @Test
   public void TestIdsStr2Iterable() throws Exception {
+    //given
     final String ids = "1,2,3,4,5";
-    List<Long> expected = new ArrayList<>();
-    expected.add(1L);
-    expected.add(2L);
-    expected.add(3L);
-    expected.add(4L);
-    expected.add(5L);
-    List<Long> actual = Lists.newArrayList(transformer.idsStr2List(ids));
-    actual.forEach(System.out::println);
-    Assert.assertEquals(expected, actual);
+    List<Long> given = new ArrayList<>();
+    given.add(1L);
+    given.add(2L);
+    given.add(3L);
+    given.add(4L);
+    given.add(5L);
+
+    //when
+    List<Long> output = Lists.newArrayList(transformer.idsStr2List(ids));
+
+    //then
+    assertThat(output).isEqualTo(given);
   }
 
-  private Transformer transformer = new Transformer();
 
 }

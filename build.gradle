@@ -13,124 +13,126 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 buildscript {
-  ext {
-    dependency_management_version = '1.0.6.RELEASE'
-    spring_boot_version = '2.1.0.RELEASE'
-    spring_oauth2_version = '2.3.4.RELEASE'
-    lombok_version = '1.18.4'
-    commons_text_version = '1.3'
-    commons_lang3_version = '3.6'
-    commons_beanutils_version = '1.9.3'
-    guava_version = '21.0'
-    swagger_version = '2.9.2'
-    swagger_exclude_version = '1.5.21'
-    spec_version = '1.1.1'
-    jackson_version = '2.9.7'
+    ext {
+        dependency_management_version = '1.0.6.RELEASE'
+        spring_boot_version = '2.1.0.RELEASE'
+        spring_oauth2_version = '2.3.4.RELEASE'
+        lombok_version = '1.18.4'
+        commons_text_version = '1.3'
+        commons_lang3_version = '3.6'
+        commons_beanutils_version = '1.9.3'
+        guava_version = '21.0'
+        swagger_version = '2.9.2'
+        swagger_exclude_version = '1.5.21'
+        spec_version = '1.1.1'
+        jackson_version = '2.9.7'
 //  hsqldb_version = '1.8.0.10'
 //  mysql_version = '5.1.36'
-    postgresql_version = '42.2.5'
-    jedis_version = '2.9.0'
-    json_path_version = '2.4.0'
-    jupiter_version = '5.2.0'
-  }
-  repositories {
-    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
-    mavenCentral()
-    maven { url "https://repo.spring.io/plugins-release" }
-  }
-  dependencies {
-    classpath "io.spring.gradle:dependency-management-plugin:$dependency_management_version"
-    classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
-  }
+        postgresql_version = '42.2.5'
+        jedis_version = '2.9.0'
+        json_path_version = '2.4.0'
+        jupiter_version = '5.2.0'
+        assertj_version = '3.11.1'
+    }
+    repositories {
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+        mavenCentral()
+        maven { url "https://repo.spring.io/plugins-release" }
+    }
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:$dependency_management_version"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
+    }
 }
 
 repositories {
-  maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
-  mavenCentral()
-  maven { url "https://repo.spring.io/plugins-release" }
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+    mavenCentral()
+    maven { url "https://repo.spring.io/plugins-release" }
 }
 
 dependencies {
-  // Spring boot dependencies.
-  compile "org.springframework.boot:spring-boot-starter-web"
-  compile "org.springframework.boot:spring-boot-starter-undertow"
-  compile "org.springframework.boot:spring-boot-starter-security"
-  compile "org.springframework.boot:spring-boot-starter-data-jpa"
-  compile "org.springframework.boot:spring-boot-starter-data-redis"
-  compile "org.springframework.boot:spring-boot-devtools"
+    // Spring boot dependencies.
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile "org.springframework.boot:spring-boot-starter-undertow"
+    compile "org.springframework.boot:spring-boot-starter-security"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile "org.springframework.boot:spring-boot-starter-data-redis"
+    compile "org.springframework.boot:spring-boot-devtools"
 
-  // Spring oauth2 dependency.
-  compile ("org.springframework.security.oauth:spring-security-oauth2:$spring_oauth2_version") {
-    exclude group: 'org.codehaus.jackson'
-  }
+    // Spring oauth2 dependency.
+    compile("org.springframework.security.oauth:spring-security-oauth2:$spring_oauth2_version") {
+        exclude group: 'org.codehaus.jackson'
+    }
 
-  // Other dependencies.
-  compile "org.projectlombok:lombok:$lombok_version"
-  compile "org.apache.commons:commons-lang3:$commons_lang3_version"
-  compile "org.apache.commons:commons-text:$commons_text_version"
-  compile "commons-beanutils:commons-beanutils:$commons_beanutils_version"
-  compile "com.google.guava:guava:$guava_version"
-  compile ("net.kaczmarzyk:specification-arg-resolver:$spec_version") {
-    exclude group:'org.hibernate.javax.persistence'
-  }
-  compile "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+    // Other dependencies.
+    compile "org.projectlombok:lombok:$lombok_version"
+    compile "org.apache.commons:commons-lang3:$commons_lang3_version"
+    compile "org.apache.commons:commons-text:$commons_text_version"
+    compile "commons-beanutils:commons-beanutils:$commons_beanutils_version"
+    compile "com.google.guava:guava:$guava_version"
+    compile("net.kaczmarzyk:specification-arg-resolver:$spec_version") {
+        exclude group: 'org.hibernate.javax.persistence'
+    }
+    compile "com.fasterxml.jackson.core:jackson-core:$jackson_version"
 
-  //swagger
-  compile("io.springfox:springfox-swagger2:$swagger_version") {
-    exclude module: 'swagger-annotations'
-    exclude module: 'swagger-models'
-  }
-  compile("io.swagger:swagger-annotations:$swagger_exclude_version")
-  compile("io.swagger:swagger-models:$swagger_exclude_version")
-  compile "io.springfox:springfox-swagger-ui:$swagger_version"
+    //swagger
+    compile("io.springfox:springfox-swagger2:$swagger_version") {
+        exclude module: 'swagger-annotations'
+        exclude module: 'swagger-models'
+    }
+    compile("io.swagger:swagger-annotations:$swagger_exclude_version")
+    compile("io.swagger:swagger-models:$swagger_exclude_version")
+    compile "io.springfox:springfox-swagger-ui:$swagger_version"
 
-  // DB dependencies.
-  // You can choose one of them.
-  // HSQLDB
+    // DB dependencies.
+    // You can choose one of them.
+    // HSQLDB
 //  compile "org.hsqldb:hsqldb:$hsqldb_version"
 
-  // Mysql
+    // Mysql
 //  compile "mysql:mysql-connector-java:$mysql_version"
 
-  // Postgres
-  compile "org.postgresql:postgresql:$postgresql_version"
+    // Postgres
+    compile "org.postgresql:postgresql:$postgresql_version"
 
-  // Redis
-  compile "redis.clients:jedis:$jedis_version"
+    // Redis
+    compile "redis.clients:jedis:$jedis_version"
 
-  // Provide runtime dependencies.
-  // Tomcat
+    // Provide runtime dependencies.
+    // Tomcat
 //  providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${spring_boot_version}"
-  // Undertow - Undertow is a lightweight servlet container from JBoss
+    // Undertow - Undertow is a lightweight servlet container from JBoss
 //  providedRuntime "org.springframework.boot:spring-boot-starter-undertow:${spring_boot_version}"
 
-  // Test dependencies.
-  testCompile "com.jayway.jsonpath:json-path:$json_path_version"
-  testCompile "com.jayway.jsonpath:json-path-assert:$json_path_version"
-  // Test
-  testCompile ("org.springframework.boot:spring-boot-starter-test") {
-    exclude group: 'junit'
-  }
-  testCompile "org.junit.jupiter:junit-jupiter-api:$jupiter_version"
+    // Test dependencies.
+    testCompile "com.jayway.jsonpath:json-path:$json_path_version"
+    testCompile "com.jayway.jsonpath:json-path-assert:$json_path_version"
+    testCompile("org.assertj:assertj-core:$assertj_version")
+    // Test
+    testCompile("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: 'junit'
+    }
+    testCompile "org.junit.jupiter:junit-jupiter-api:$jupiter_version"
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '4.3'
+    gradleVersion = '4.3'
 }
 
 task writeNewPom {
-  doLast {
-    pom {
-      project {
-        inceptionYear '2018'
-        licenses {
-          license {
-            name 'The Apache Software License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-            distribution 'repo'
-          }
-        }
-      }
-    }.writeTo("pom.xml")
-  }
+    doLast {
+        pom {
+            project {
+                inceptionYear '2018'
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution 'repo'
+                    }
+                }
+            }
+        }.writeTo("pom.xml")
+    }
 }
