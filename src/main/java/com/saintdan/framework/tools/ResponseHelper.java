@@ -2,6 +2,7 @@ package com.saintdan.framework.tools;
 
 import com.saintdan.framework.enums.ErrorType;
 import com.saintdan.framework.vo.ErrorVO;
+import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -14,6 +15,11 @@ public class ResponseHelper {
 
   public static ResponseEntity unknownError() {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(new ErrorVO(ErrorType.UNKNOWN_ERROR.code(), ErrorType.UNKNOWN_ERROR.msg()));
+  }
+
+  public static ResponseEntity unknownError(Logger logger, Throwable e) {
+    logger.error(e.toString(), e);
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(new ErrorVO(ErrorType.UNKNOWN_ERROR.code(), e.toString()));
   }
 
   public static ResponseEntity clientError(Integer code, String msg) {

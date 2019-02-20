@@ -31,7 +31,7 @@ public class LoginController {
   @RequestMapping(method = RequestMethod.POST)
   @ApiOperation(value = "Login", httpMethod = "POST", response = OAuth2AccessToken.class)
   @ApiImplicitParams({
-      @ApiImplicitParam(name = "Authorization", value = "token", paramType = "header", dataType = "string", required = true),
+      @ApiImplicitParam(name = "Authorization", value = "basic token", paramType = "header", dataType = "string", required = true),
   })
   public ResponseEntity login(HttpServletRequest request, @RequestBody LoginParam param) {
     try {
@@ -41,7 +41,7 @@ public class LoginController {
     } catch (InvalidGrantException e) {
       return ResponseHelper.clientError(Integer.valueOf(e.getMessage()), ErrorType.parse(Integer.valueOf(e.getMessage())).msg());
     } catch (Exception e) {
-      return ResponseHelper.unknownError();
+      return ResponseHelper.unknownError(log, e);
     }
   }
 

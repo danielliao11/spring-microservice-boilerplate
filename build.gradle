@@ -15,9 +15,9 @@ targetCompatibility = 1.8
 buildscript {
   ext {
     dependency_management_version = '1.0.6.RELEASE'
-    spring_boot_version = '2.1.1.RELEASE'
+    spring_boot_version = '2.1.3.RELEASE'
     spring_oauth2_version = '2.3.4.RELEASE'
-    tk_version = '2.1.2'
+    tk_version = '2.1.5'
     page_version = '5.1.8'
     lombok_version = '1.18.4'
     commons_text_version = '1.3'
