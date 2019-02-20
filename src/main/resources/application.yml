@@ -70,6 +70,18 @@ spring:
     port: 6379
 
 # ===============================
+# = MYBATIS
+# ===============================
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.saintdan.framework.po
+mapper:
+  mappers:
+    - tk.mybatis.mapper.common.Mapper
+    - com.saintdan.framework.mapper
+  notEmpty: true
+
+# ===============================
 # = SPRING BOOT ADMIN
 # ===============================
 management.security.enabled: true
