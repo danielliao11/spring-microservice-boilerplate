@@ -24,4 +24,8 @@
         <result property="version" column="version"/>
     </resultMap>
 
+    <select id="findByClient" resultMap="clientMap">
+        select * from clients where client = #{client} and status = #{status}
+    </select>
+
 </mapper>
