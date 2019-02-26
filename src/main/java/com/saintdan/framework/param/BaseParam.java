@@ -16,9 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Base param.
@@ -28,8 +25,6 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @since JDK1.8
  */
 @Data
-@EqualsAndHashCode(exclude = "currentUser")
-@ToString(exclude = "currentUser")
 public class BaseParam implements Serializable {
 
   private static final Set<String> baseFields = new HashSet<>();
@@ -41,7 +36,7 @@ public class BaseParam implements Serializable {
   private static final long serialVersionUID = -103658650614029839L;
 
   @ApiModelProperty(hidden = true)
-  private Integer pageNo;
+  private Integer pageNo = 1;
 
   @ApiModelProperty(hidden = true)
   private Integer pageSize = 20;
@@ -51,9 +46,6 @@ public class BaseParam implements Serializable {
 
   @ApiModelProperty(hidden = true)
   private String sign;
-
-  @ApiModelProperty(hidden = true)
-  private UserDetails currentUser;
 
   public boolean isSignValid(String publicKey) throws SignFailedException {
     String content = getSignContent();
@@ -66,7 +58,7 @@ public class BaseParam implements Serializable {
    * @param privateKey Local private key.
    */
   public void sign(String privateKey) throws SignFailedException {
-    String content = getSignContent();//JsonConverter.convertToJSON(this).toString();
+    String content = getSignContent(); //JsonConverter.convertToJSON(this).toString();
     this.sign = SignatureUtils.rsaSign(content, privateKey, SignatureConstant.CHARSET_UTF8);
   }
 

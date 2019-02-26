@@ -2,13 +2,16 @@ package com.saintdan.framework.domain;
 
 import com.github.pagehelper.PageHelper;
 import com.saintdan.framework.constant.CommonsConstant;
+import com.saintdan.framework.param.BaseParam;
 import com.saintdan.framework.po.User;
 import com.saintdan.framework.tools.CommonMapper;
 import com.saintdan.framework.tools.SpringSecurityUtils;
 import com.saintdan.framework.vo.Page;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
@@ -17,7 +20,7 @@ import tk.mybatis.mapper.entity.Example;
  * @date 2019/1/2
  * @since JDK1.8
  */
-public abstract class BaseDomain<M extends CommonMapper<T>, T>  {
+public abstract class BaseDomain<M extends CommonMapper<T>, Param extends BaseParam, T>  {
 
   // =====================
   // ====== Create =======
@@ -54,6 +57,15 @@ public abstract class BaseDomain<M extends CommonMapper<T>, T>  {
 
   public int count(Object example) {
     return mapper.selectCountByExample(example);
+  }
+
+  @SuppressWarnings("unchecked")
+  public Page<T> page(Param param) {
+    Class<T> clazz = (Class)((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+    Example example = new Example(clazz);
+    if (StringUtils.isNotBlank(param.getSortBy())) {
+
+    }
   }
 
   public Page<T> page(int pageNum, int pageSize, Example example) {
