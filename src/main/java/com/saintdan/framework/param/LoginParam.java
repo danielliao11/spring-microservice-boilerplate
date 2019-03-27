@@ -1,6 +1,7 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
+import java.io.Serializable;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,9 @@ import org.springframework.http.HttpMethod;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginParam {
+public class LoginParam implements Serializable {
+
+  private static final long serialVersionUID = 7458687134318597047L;
 
   @NotNullField(method = HttpMethod.POST, message = "usr cannot be null.")
   @Size(min = 4, max = 50, message = "usr must greater than or equal to 4 and less than or equal to 50.")

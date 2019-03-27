@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
+ * API of CRUD.
+ *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 2019/2/26
  * @since JDK1.8
  */
-public class CRUDController<Domain, Entity, PK> extends QueryController {
+public class CRUDController<Entity, PK> extends QueryController {
 
   public CRUDController() {
   }

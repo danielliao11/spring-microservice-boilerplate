@@ -12,9 +12,9 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import lombok.Data;
 
 /**
@@ -27,7 +27,7 @@ import lombok.Data;
 @Data
 public class BaseParam implements Serializable {
 
-  private static final Set<String> baseFields = new HashSet<>();
+  private static final Map<String, Object> baseFields = new HashMap<>();
 
   static {}
 
@@ -46,6 +46,14 @@ public class BaseParam implements Serializable {
 
   @ApiModelProperty(hidden = true)
   private String sign;
+
+  public Map<String, Object> getBaseFields() {
+    baseFields.put("pageNo", pageNo);
+    baseFields.put("pageSize", pageSize);
+    baseFields.put("sortBy", sortBy);
+    baseFields.put("sign", sign);
+    return baseFields;
+  }
 
   public boolean isSignValid(String publicKey) throws SignFailedException {
     String content = getSignContent();
@@ -82,8 +90,7 @@ public class BaseParam implements Serializable {
         Field field = null;
         String itemName = pd.getName();
         try {
-          field = baseFields.contains(itemName) ? BaseParam.class.getDeclaredField(itemName) :
-              this.getClass().getDeclaredField(itemName);
+          field = getBaseFields().containsKey(itemName) ? BaseParam.class.getDeclaredField(itemName) : this.getClass().getDeclaredField(itemName);
         } catch (Exception ignored) {}
         if (field == null || !field.isAnnotationPresent(SignField.class)) {
           continue; // Ignore field without ParamField annotation.

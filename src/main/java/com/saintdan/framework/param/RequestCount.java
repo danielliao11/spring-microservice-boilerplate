@@ -19,6 +19,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RequestCount implements Serializable {
 
+  private static final long serialVersionUID = -7842954563509005735L;
+
   private String key;
 
   @Builder.Default

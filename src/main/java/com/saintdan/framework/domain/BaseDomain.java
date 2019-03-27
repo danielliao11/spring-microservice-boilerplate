@@ -9,9 +9,9 @@ import com.saintdan.framework.tools.SpringSecurityUtils;
 import com.saintdan.framework.vo.Page;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
@@ -63,15 +63,46 @@ public abstract class BaseDomain<M extends CommonMapper<T>, Param extends BasePa
   public Page<T> page(Param param) {
     Class<T> clazz = (Class)((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     Example example = new Example(clazz);
-    if (StringUtils.isNotBlank(param.getSortBy())) {
-
-    }
+    param2Criteria(param, example);
+    return page(param.getPageNo(), param.getPageSize(), example);
   }
 
-  public Page<T> page(int pageNum, int pageSize, Example example) {
-    com.github.pagehelper.Page<Object> result = PageHelper.startPage(pageNum, pageSize);
+  public Page<T> page(int pageNo, int pageSize, Example example) {
+    com.github.pagehelper.Page<Object> result = PageHelper.startPage(pageNo, pageSize);
     List<T> list = this.findAllByExample(example);
     return Page.<T>builder().total(result.getTotal()).contents(list).build();
+  }
+
+  /**
+   * Convert param to query example
+   *
+   * @param param param
+   * @param example query example
+   */
+  public void param2Criteria(BaseParam param, Example example) {
+    if (param.getClass().getFields().length > 0) {
+      Example.Criteria criteria = example.createCriteria();
+      Arrays.stream(param.getClass().getFields())
+          .forEach(field -> {
+            if (param.getBaseFields().containsKey(field.getName())) {
+              String s = field.toString();
+              if (s.contains("[") || s.contains("]")) {
+                // sort field -> crtTime:[desc],id:[asc]
+                Arrays.asList(s.split(",")).forEach(sortStr -> {
+                  // sortStr -> crtTime:[desc]
+                  String[] sortArray = sortStr.split(":");
+                  if ("[desc]".equals(sortArray[1].trim())) {
+                    example.orderBy(sortArray[0].trim()).desc();
+                  } else if ("[asc]".equals(sortArray[1].trim())) {
+                    example.orderBy(sortArray[0].trim()).asc();
+                  }
+                });
+              }
+            } else {
+              criteria.andLike(field.getName(), "%" + field.toString() + "%");
+            }
+          });
+    }
   }
 
   // =====================

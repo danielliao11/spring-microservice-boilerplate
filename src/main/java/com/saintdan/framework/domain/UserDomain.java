@@ -1,6 +1,7 @@
 package com.saintdan.framework.domain;
 
 import com.saintdan.framework.mapper.UserMapper;
+import com.saintdan.framework.param.BaseParam;
 import com.saintdan.framework.po.User;
 import org.springframework.stereotype.Service;
 
@@ -10,5 +11,5 @@ import org.springframework.stereotype.Service;
  * @since JDK1.8
  */
 @Service
-public class UserDomain extends BaseDomain<UserMapper, User> {
+public class UserDomain extends BaseDomain<UserMapper, BaseParam, User> {
 }

@@ -1,6 +1,7 @@
 package com.saintdan.framework.domain;
 
 import com.saintdan.framework.mapper.ResourceMapper;
+import com.saintdan.framework.param.BaseParam;
 import com.saintdan.framework.po.Resource;
 import org.springframework.stereotype.Service;
 
@@ -10,5 +11,5 @@ import org.springframework.stereotype.Service;
  * @since JDK1.8
  */
 @Service
-public class ResourceDomain extends BaseDomain<ResourceMapper, Resource> {
+public class ResourceDomain extends BaseDomain<ResourceMapper, BaseParam, Resource> {
 }

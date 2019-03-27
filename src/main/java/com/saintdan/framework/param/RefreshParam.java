@@ -1,6 +1,7 @@
 package com.saintdan.framework.param;
 
 import com.saintdan.framework.annotation.NotNullField;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,9 @@ import org.springframework.http.HttpMethod;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RefreshParam {
+public class RefreshParam implements Serializable {
+
+  private static final long serialVersionUID = -4157650685957393436L;
 
   @NotNullField(method = HttpMethod.PUT, message = "refresh token cannot be null.")
   private String refreshToken;

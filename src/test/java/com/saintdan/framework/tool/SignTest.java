@@ -1,12 +1,12 @@
 package com.saintdan.framework.tool;
 
 import com.saintdan.framework.constant.SignatureConstant;
+import com.saintdan.framework.param.UserParam;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 /**
  * Test signature.
@@ -20,10 +20,10 @@ public class SignTest {
   @Test
   public void testSign() throws Exception {
     UserParam param = new UserParam();
-    param.setId(4L);
-        param.setName("jerry");
-        param.setUsr("tommy");
-        param.setPwd("tom54321");
+    param.setId("aabbcc");
+    param.setName("jerry");
+    param.setUsr("tommy");
+    param.setPwd("tom54321");
     System.out.println("Sign content is: " + param.getSignContent());
     param.sign(PRIVATE_KEY);
     String sign = param.getSign();
