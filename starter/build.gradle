@@ -1,0 +1,38 @@
+plugins {
+  id 'java'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+  implementation project(':common')
+
+  // Spring boot dependencies.
+  implementation "org.springframework.boot:spring-boot-starter-undertow:$spring_boot_version"
+  implementation "org.springframework.boot:spring-boot-starter-data-redis:$spring_boot_version"
+
+  // Postgres
+  implementation "org.postgresql:postgresql:$postgresql_version"
+
+  // Redis
+  implementation "redis.clients:jedis:$jedis_version"
+
+  // lombok
+  compileOnly "org.projectlombok:lombok:$lombok_version"
+  annotationProcessor "org.projectlombok:lombok:$lombok_version"
+  testCompileOnly "org.projectlombok:lombok:$lombok_version"
+  testAnnotationProcessor "org.projectlombok:lombok:$lombok_version"
+
+  // Test dependencies.
+  testImplementation "com.jayway.jsonpath:json-path:$json_path_version"
+  testImplementation "com.jayway.jsonpath:json-path-assert:$json_path_version"
+  // Test
+  testImplementation ("org.springframework.boot:spring-boot-starter-test:$spring_boot_version") {
+    exclude group: 'junit'
+  }
+  testImplementation "org.junit.jupiter:junit-jupiter-api:$jupiter_version"
+}

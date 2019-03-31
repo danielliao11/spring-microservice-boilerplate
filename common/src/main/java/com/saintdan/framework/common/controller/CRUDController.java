@@ -1,5 +1,6 @@
 package com.saintdan.framework.common.controller;
 
+import com.saintdan.framework.common.domain.BaseDomain;
 import com.saintdan.framework.common.tools.ResponseHelper;
 import io.swagger.annotations.ApiOperation;
 import java.lang.reflect.InvocationTargetException;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @date 2019/2/26
  * @since JDK1.8
  */
-public class CRUDController<Entity, PK> extends QueryController {
+public class CRUDController<Domain extends BaseDomain, Entity, PK> extends QueryController {
 
   public CRUDController() {
   }

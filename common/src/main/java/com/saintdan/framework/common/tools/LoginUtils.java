@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
 
+import static com.saintdan.framework.common.constant.AuthConstant.BASIC;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.security.web.server.ServerHttpBasicAuthenticationConverter.BASIC;
 
 /**
  * Login utils.

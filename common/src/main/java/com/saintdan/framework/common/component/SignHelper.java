@@ -8,7 +8,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
-import org.springframework.stereotype.Component;
 
 /**
  * Sign helper.
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Component;
  * @date 9/22/15
  * @since JDK1.8
  */
-@Component
 public class SignHelper {
 
   /**

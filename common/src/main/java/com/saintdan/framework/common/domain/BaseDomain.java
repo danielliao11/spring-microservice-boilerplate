@@ -11,7 +11,6 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
 /**
@@ -126,7 +125,7 @@ public abstract class BaseDomain<M extends CommonMapper<T>, T>  {
     return mapper.deleteByPrimaryKey(id);
   }
 
-  @Autowired protected M mapper;
+  protected M mapper;
 
   public BaseDomain() {
   }

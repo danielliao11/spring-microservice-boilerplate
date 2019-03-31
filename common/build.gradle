@@ -1,0 +1,42 @@
+plugins {
+  id 'java'
+  id 'org.springframework.boot' version '2.1.3.RELEASE'
+  id 'io.spring.dependency-management' version '1.0.7.RELEASE'
+}
+
+sourceCompatibility = 1.8
+
+dependencies {
+  // Spring boot dependencies.
+  compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
+  compile "org.springframework.boot:spring-boot-starter-security:$spring_boot_version"
+
+  // Spring oauth2 dependency.
+  compile ("org.springframework.security.oauth:spring-security-oauth2:$spring_oauth2_version") {
+    exclude group: 'org.codehaus.jackson'
+  }
+
+  // tk.mybatis
+  compile "tk.mybatis:mapper-spring-boot-starter:$tk_version"
+  compile "com.github.pagehelper:pagehelper:$page_version"
+
+  // Other dependencies.
+  compile "org.apache.commons:commons-lang3:$commons_lang3_version"
+  compile "org.apache.commons:commons-text:$commons_text_version"
+  compile "commons-beanutils:commons-beanutils:$commons_beanutils_version"
+  compile "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+
+  // lombok
+  compileOnly "org.projectlombok:lombok:$lombok_version"
+  annotationProcessor "org.projectlombok:lombok:$lombok_version"
+  testCompileOnly "org.projectlombok:lombok:$lombok_version"
+  testAnnotationProcessor "org.projectlombok:lombok:$lombok_version"
+
+  //swagger
+  compile ("com.spring4all:swagger-spring-boot-starter:$swagger_version") {
+    exclude module: 'swagger-annotations'
+    exclude module: 'swagger-models'
+  }
+  compile("io.swagger:swagger-annotations:$swagger_exclude_version")
+  compile("io.swagger:swagger-models:$swagger_exclude_version")
+}
