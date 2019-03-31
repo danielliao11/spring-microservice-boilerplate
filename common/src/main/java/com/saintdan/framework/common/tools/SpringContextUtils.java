@@ -43,10 +43,6 @@ public class SpringContextUtils {
     set(CommonsConstant.CURRENT_USER_NAME, name);
   }
 
-  public static void setToken(String token) {
-    set(CommonsConstant.CURRENT_USER_TOKEN, token);
-  }
-
   public static String getUserID() {
     Object value = get(CommonsConstant.CURRENT_USER_ID);
     return returnValue(value);
@@ -60,11 +56,6 @@ public class SpringContextUtils {
 
   public static String getName() {
     Object value = get(CommonsConstant.CURRENT_USER_NAME);
-    return returnValue(value);
-  }
-
-  public static String getToken() {
-    Object value = get(CommonsConstant.CURRENT_USER_TOKEN);
     return returnValue(value);
   }
 

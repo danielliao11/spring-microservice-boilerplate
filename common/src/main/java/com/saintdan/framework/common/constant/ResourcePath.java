@@ -22,4 +22,5 @@ public interface ResourcePath {
   String USERS = "/users";
   String ROLES = "/roles";
   String CLIENTS = "/clients";
+  String LOGS = "/logs";
 }

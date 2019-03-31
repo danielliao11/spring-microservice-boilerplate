@@ -54,7 +54,6 @@ public class CRUDController<Domain extends BaseDomain, Entity, PK> extends Query
 
   @DeleteMapping("{id}")
   @ApiOperation(value = "Delete object by ID")
-  @SuppressWarnings("unchecked")
   public ResponseEntity delete(@PathVariable PK id) {
     int result = this.domain.delete(id);
     if (result < 0) {

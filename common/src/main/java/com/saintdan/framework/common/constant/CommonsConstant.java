@@ -22,4 +22,5 @@ public interface CommonsConstant {
   String COMMA = ",";
   String COLON = ":";
   String UNDERLINE = "_";
+  String LINK = "-";
 }

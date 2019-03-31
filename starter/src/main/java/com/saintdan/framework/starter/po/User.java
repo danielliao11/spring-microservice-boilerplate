@@ -1,6 +1,7 @@
 package com.saintdan.framework.starter.po;
 
 import com.saintdan.framework.common.constant.CommonsConstant;
+import com.saintdan.framework.common.param.BaseParam;
 import com.saintdan.framework.common.tools.UUIDGenId;
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,6 +12,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,15 +24,16 @@ import tk.mybatis.mapper.annotation.KeySql;
  *
  * @author <a href="http://github.com/saintdan">Liao Yifan</a>
  * @date 6/23/15
- * @see {@link org.springframework.security.core.userdetails.UserDetails}
+ * @see {@link UserDetails}
  * @since JDK1.8
  */
 @Table(name = "users")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails {
+public class User extends BaseParam implements UserDetails {
 
   private static final long serialVersionUID = 2680591198337929454L;
 
@@ -96,13 +99,6 @@ public class User implements UserDetails {
 
   @Column(name = "version", nullable = false)
   private Integer version;
-
-  public User(User user) {
-    this.id = user.getId();
-    this.name = user.getName();
-    this.usr = user.getUsr();
-    this.pwd = user.getPwd();
-  }
 
   /**
    * Get the authorities.

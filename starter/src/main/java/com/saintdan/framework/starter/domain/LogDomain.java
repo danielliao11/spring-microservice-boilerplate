@@ -1,5 +1,7 @@
 package com.saintdan.framework.starter.domain;
 
+import com.saintdan.framework.common.domain.BaseDomain;
+import com.saintdan.framework.common.tools.SpringContextUtils;
 import com.saintdan.framework.starter.mapper.LogMapper;
 import com.saintdan.framework.starter.po.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,11 @@ import org.springframework.stereotype.Service;
  * @since JDK1.8
  */
 @Service
-public class LogDomain {
+public class LogDomain extends BaseDomain<LogMapper, Log> {
 
-  public int create(Log log) {
+  @Override public int create(Log log) {
+    log.setCreatedBy(SpringContextUtils.getUserID());
+    log.setCreatedAt(System.currentTimeMillis());
     return logMapper.insert(log);
   }
 
@@ -21,5 +25,6 @@ public class LogDomain {
 
   @Autowired public LogDomain(LogMapper logMapper) {
     this.logMapper = logMapper;
+    setMapper(logMapper);
   }
 }

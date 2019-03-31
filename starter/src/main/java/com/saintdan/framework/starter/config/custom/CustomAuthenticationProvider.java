@@ -8,6 +8,7 @@ import com.saintdan.framework.common.tools.Assert;
 import com.saintdan.framework.common.tools.LogUtils;
 import com.saintdan.framework.common.tools.LoginUtils;
 import com.saintdan.framework.common.tools.RemoteAddressUtils;
+import com.saintdan.framework.common.tools.SpringContextUtils;
 import com.saintdan.framework.starter.component.LogHelper;
 import com.saintdan.framework.starter.mapper.UserMapper;
 import com.saintdan.framework.starter.po.User;
@@ -71,12 +72,14 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     user.setLastLoginAt(System.currentTimeMillis());
     try {
       // Log login.
-      logHelper.logLogin(ip, user.getId(), usr, clientId);
+      logHelper.logLogin(ip);
     } catch (Exception e) {
       final String errMsg = "Log user login failed.";
       LogUtils.traceError(log, e, errMsg);
     }
-    //Authorize.
+    // Record context.
+    recordContext(user);
+    // Authorize.
     return new UsernamePasswordAuthenticationToken(user, user.getPwd(), user.getAuthorities());
   }
 
@@ -100,5 +103,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     this.userMapper = userMapper;
     this.logHelper = logHelper;
     this.customTokenStore = customTokenStore;
+  }
+
+  private void recordContext(User user) {
+    SpringContextUtils.setUsr(user.getUsr());
+    SpringContextUtils.setUserID(user.getId());
+    SpringContextUtils.setName(user.getName());
   }
 }

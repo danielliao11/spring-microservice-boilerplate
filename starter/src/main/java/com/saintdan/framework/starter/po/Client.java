@@ -2,6 +2,7 @@ package com.saintdan.framework.starter.po;
 
 import com.google.common.collect.Sets;
 import com.saintdan.framework.common.constant.CommonsConstant;
+import com.saintdan.framework.common.param.BaseParam;
 import com.saintdan.framework.common.tools.UUIDGenId;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,10 +33,11 @@ import tk.mybatis.mapper.annotation.KeySql;
  */
 @Table(name = "clients")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Client implements ClientDetails {
+public class Client extends BaseParam implements ClientDetails {
 
   private static final long serialVersionUID = 6500601540965188191L;
 

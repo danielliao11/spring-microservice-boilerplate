@@ -1,5 +1,6 @@
 package com.saintdan.framework.common.tools;
 
+import com.saintdan.framework.common.constant.CommonsConstant;
 import java.util.UUID;
 import tk.mybatis.mapper.genid.GenId;
 
@@ -11,6 +12,6 @@ import tk.mybatis.mapper.genid.GenId;
 public class UUIDGenId implements GenId<String> {
 
     @Override public String genId(String s, String s1) {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().replace(CommonsConstant.LINK, CommonsConstant.BLANK);
     }
 }

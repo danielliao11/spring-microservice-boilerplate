@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.Transient;
 import lombok.Data;
 
 /**
@@ -38,15 +39,19 @@ public class BaseParam implements Serializable {
   private static final long serialVersionUID = -103658650614029839L;
 
   @ApiModelProperty(hidden = true)
+  @Transient
   private Integer pageNo = 1;
 
   @ApiModelProperty(hidden = true)
+  @Transient
   private Integer pageSize = 20;
 
   @ApiModelProperty(hidden = true)
+  @Transient
   private String sortBy;
 
   @ApiModelProperty(hidden = true)
+  @Transient
   private String sign;
 
   public Map<String, Object> getBaseFields() {

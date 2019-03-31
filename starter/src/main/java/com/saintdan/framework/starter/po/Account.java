@@ -1,13 +1,14 @@
 package com.saintdan.framework.starter.po;
 
+import com.saintdan.framework.common.param.BaseParam;
 import com.saintdan.framework.common.tools.UUIDGenId;
-import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import tk.mybatis.mapper.annotation.KeySql;
 
@@ -20,10 +21,11 @@ import tk.mybatis.mapper.annotation.KeySql;
  */
 @Table(name = "accounts")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Account implements Serializable {
+public class Account extends BaseParam {
 
   private static final long serialVersionUID = -6004454109313475045L;
 

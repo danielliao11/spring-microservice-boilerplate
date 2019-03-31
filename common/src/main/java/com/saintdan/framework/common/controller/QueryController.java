@@ -24,7 +24,6 @@ public class QueryController<Domain extends BaseDomain, Param extends BaseParam,
 
   @GetMapping("page")
   @ApiOperation(value = "Get all objects")
-  @SuppressWarnings("unchecked")
   public ResponseEntity page(Param param) {
     return ResponseEntity.ok(this.domain.page(param));
   }

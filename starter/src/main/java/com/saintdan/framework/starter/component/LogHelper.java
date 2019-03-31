@@ -16,14 +16,11 @@ import org.springframework.stereotype.Component;
 public class LogHelper {
 
   @Async
-  public void logLogin(String ip, String userId, String usr, String clientId) {
+  public void logLogin(String ip) {
     final String LOGIN = "login";
     logDomain.create(
         Log.builder()
             .ip(ip)
-            .createdBy(userId)
-            .usr(usr)
-            .clientId(clientId)
             .path(LOGIN)
             .method(HttpMethod.POST.name())
             .build());

@@ -1,7 +1,7 @@
 package com.saintdan.framework.starter.tool;
 
 import com.saintdan.framework.common.constant.SignatureConstant;
-import com.saintdan.framework.starter.param.UserParam;
+import com.saintdan.framework.starter.po.User;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import org.apache.commons.codec.binary.Base64;
@@ -19,38 +19,40 @@ public class SignTest {
 
   @Test
   public void testSign() throws Exception {
-    UserParam param = new UserParam();
-    param.setId("aabbcc");
-    param.setName("jerry");
-    param.setUsr("tommy");
-    param.setPwd("tom54321");
-    System.out.println("Sign content is: " + param.getSignContent());
-    param.sign(PRIVATE_KEY);
-    String sign = param.getSign();
+    User user = new User();
+    user.setId("aabbcc");
+    user.setName("jerry");
+    user.setUsr("tommy");
+    user.setPwd("tom54321");
+    System.out.println("Sign content is: " + user.getSignContent());
+    user.sign(PRIVATE_KEY);
+    String sign = user.getSign();
     System.out.println("Sign is: " + sign);
     // Encode the sign.
     String encodeSign = new String(Base64.encodeBase64(URLEncoder.encode(sign, SignatureConstant.CHARSET_UTF8).getBytes()));
     System.out.println("Encode sign is: " + encodeSign);
     String decodeSign = URLDecoder.decode(new String(Base64.decodeBase64(encodeSign)), SignatureConstant.CHARSET_UTF8);
     System.out.println("Decode sign is: " + decodeSign);
-    Assert.assertTrue(param.isSignValid(PUBLIC_KEY));
+    Assert.assertTrue(user.isSignValid(PUBLIC_KEY));
     Assert.assertEquals(sign, decodeSign);
   }
 
   @Test
   public void testOppSign() throws Exception {
-    UserParam param = new UserParam(USR);
-    param.setSign(SIGN);
-    Assert.assertTrue(param.isSignValid(OPP_KEY));
+    User user = new User();
+    user.setUsr(USR);
+    user.setSign(SIGN);
+    Assert.assertTrue(user.isSignValid(OPP_KEY));
   }
 
   @Test
   public void testEncodeOppSign() throws Exception {
     // Decode the encoded sign.
     String decodeSign = URLDecoder.decode(new String(Base64.decodeBase64(ENCODE_SIGN.getBytes())), SignatureConstant.CHARSET_UTF8);
-    UserParam param = new UserParam(USR);
-    param.setSign(decodeSign);
-    Assert.assertTrue(param.isSignValid(OPP_KEY));
+    User user = new User();
+    user.setUsr(USR);
+    user.setSign(SIGN);
+    Assert.assertTrue(user.isSignValid(OPP_KEY));
   }
 
   private static final String PRIVATE_KEY = "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC+k7ozUaG/hh4R44UcHjUW3PAMsHj2i+uN9hTj5i9O9e/AvUB1WUmEp+n8y94wry3Mvk+vJrXWewhCfLP91V2JaG7vGoLp8T/FtazASyQFFr9BS84VoplLplF6cayy3thNCaIRaWFnB24O8Jw+vPikS6xGD4a0RN1tao7cPQ740X1uaQQZwq8cHUEcq/o2Pw9IvRm3yHZ9tktY1IRhY8sID6ieG0YvukCSkZDEC1kslNiGtPDiijv5txKOFr/YAd+ewJwxrrkShTUFKMPXxuMb4AATok1REfk2XY2BEvvBPgsfX/S8mlScLGORZY3jrrjyTbaiByINKvveawm4DOn3AgMBAAECggEBAKT1S+vV0fLszSRg0rv27a8fiG0DZ4DIthjIE2b8vKBVQrSLW7r3kSpRCbk2Ydm0GCmr5V9PW4AOOKUMOeQSBofErJksUnraxn+E9MXxhHkfKmcDjZuuhZA0ozwgHwMo3wM3vl/h3lyG0t39qNCpU3MqyTBPiiKJpTxrSsMZ2tbFRunHN1g4sCIOzm28TlBrzO+tSl1fKqwstlCAJlJ4zwMpKh7lmAPIYXlmCPfDiwqaKBJezCBtThLHKeEgJxTXbrJ1mZwvPaW3ZtZVFwQjJy4N8XM4B3q+IQRBndw7/FR1aLIcFIunOEW13ZPy1PIJ8O94BCb9+n627Gx8xFrq+hkCgYEA635aeLESPIlBQMvzQznLPkGS/ht/1XxJ+NqLZgLbwrL1Qyab2zOgfoXea1pSjFXKZx/OHG96A7Js0p2rsPjOHdydKb7uD7qRdV1foKg7OVKQVXufhGlIIQ3F0d3WbwZNPsHMvtrN6nF5DdhIfxKQMIiwCPtRTj1zcfs9WhaRhsUCgYEAzywXL6SQxAuPZL8FZ+Li+tCTfK7pCs6/Jztz7aHcxcN9rp/LT477mh74UTzzwb3FTMAzz+00vEmq0AYbVVJnWGJMQsoCUdEyzdl48CrBtSTuLFUv4zLB7zeq0TbWuCs5z5XZ59xWya5xfJaqRjL1TJRW14oUiB1G+7MOokdZmYsCgYEAonA3y8SohaVPo3iLRjXZYgotcKZbWVEwXT2yph0WpYh38WfyXhOQg3Wn5HkbM74BrXyc2bRzf5VVxzoHMj2NP7/rkN4orCTPLRvJWLJyl6nB8ZUihV1x6Yrsh0T0IwU/xyg7KPMY0ryO+ePUrgKJ/1BpzOg+Py/YMClTOo8SttkCgYARnfk2xvK8iRMfiRLnm6abl4MDNkiA78XXizm3em0wsAgPAm2ijVEd8QZCukEsN3wAo9OEGfLDFCyfVfWbEs/Q90Lu5wi9dmGwmY6sNaaVRdevE2toEZfmRMCU2+n0bVCUM3T9P4Jt0hS6eIFwSMMNSQv9djN6w6qWmspiyFh5MwKBgBUe9odIUmpCgQSny1VR0W2Okkn8KWmWVC/qksilIIMIOxT0v8d+/cs8P0k/uH4hIqyRuvuOqvR3p2myxKewczbt2bRfSCtgceVswMM8LacbkLuaIdWZtX4encyJVWgZXdzvSp011xwGCJ7t4KZ7G/VyLJwDLHRk7feROgqUUTsb";

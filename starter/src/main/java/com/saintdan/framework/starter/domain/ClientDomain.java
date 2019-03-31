@@ -1,8 +1,8 @@
 package com.saintdan.framework.starter.domain;
 
 import com.saintdan.framework.common.domain.BaseDomain;
-import com.saintdan.framework.starter.mapper.AccountMapper;
-import com.saintdan.framework.starter.po.Account;
+import com.saintdan.framework.starter.mapper.ClientMapper;
+import com.saintdan.framework.starter.po.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
  * @since JDK1.8
  */
 @Service
-public class AccountDomain extends BaseDomain<AccountMapper, Account> {
+public class ClientDomain extends BaseDomain<ClientMapper, Client> {
 
-  private final AccountMapper accountMapper;
+  private final ClientMapper clientMapper;
 
   @Autowired
-  public AccountDomain(AccountMapper accountMapper) {
-    this.accountMapper = accountMapper;
-    setMapper(accountMapper);
+  public ClientDomain(ClientMapper clientMapper) {
+    this.clientMapper = clientMapper;
+    setMapper(clientMapper);
   }
 }
