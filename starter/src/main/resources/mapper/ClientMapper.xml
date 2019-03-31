@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.saintdan.framework.starter.mapper.ClientMapper">
+
+    <resultMap type="com.saintdan.framework.starter.po.Client" id="clientMap">
+        <result property="id" column="id"/>
+        <result property="client" column="client"/>
+        <result property="resource" column="resource"/>
+        <result property="secret" column="secret"/>
+        <result property="scopeStr" column="scope_str"/>
+        <result property="grantType" column="grant_type"/>
+        <result property="redirectUri" column="redirect_uri"/>
+        <result property="authoritiesStr" column="authorities_str"/>
+        <result property="accessTokenSeconds" column="access_token_seconds"/>
+        <result property="refreshTokenSeconds" column="refresh_token_seconds"/>
+        <result property="additional" column="additional"/>
+        <result property="publicKey" column="public_key"/>
+        <result property="status" column="status"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="lastModifiedAt" column="last_modified_at"/>
+        <result property="lastModifiedBy" column="last_modified_by"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <select id="findByClient" resultMap="clientMap">
+        select * from clients where client = #{client} and status = #{status}
+    </select>
+
+</mapper>

@@ -1,1 +1,4 @@
 rootProject.name = 'spring-microservices-boilerplate'
+include 'common'
+include 'starter'
+
