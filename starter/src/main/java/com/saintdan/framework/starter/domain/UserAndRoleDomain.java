@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @since JDK1.8
  */
 @Service
-public class UserAndRoleDomain extends BaseDomain<UserAndRoleMapper, UserAndRole> {
+public class UserAndRoleDomain {
 
   public int batchInsert(List<UserAndRole> userAndRoleList) {
     return userAndRoleMapper.insertList(userAndRoleList);
@@ -32,6 +32,5 @@ public class UserAndRoleDomain extends BaseDomain<UserAndRoleMapper, UserAndRole
   @Autowired
   public UserAndRoleDomain(UserAndRoleMapper userAndRoleMapper) {
     this.userAndRoleMapper = userAndRoleMapper;
-    setMapper(userAndRoleMapper);
   }
 }

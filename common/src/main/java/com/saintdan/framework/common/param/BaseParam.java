@@ -1,5 +1,6 @@
 package com.saintdan.framework.common.param;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.saintdan.framework.common.annotation.SignField;
 import com.saintdan.framework.common.constant.SignatureConstant;
 import com.saintdan.framework.common.exception.SignFailedException;
@@ -40,20 +41,25 @@ public class BaseParam implements Serializable {
 
   @ApiModelProperty(hidden = true)
   @Transient
+  @JsonIgnore
   private Integer pageNo = 1;
 
   @ApiModelProperty(hidden = true)
   @Transient
+  @JsonIgnore
   private Integer pageSize = 20;
 
   @ApiModelProperty(hidden = true)
   @Transient
+  @JsonIgnore
   private String sortBy;
 
   @ApiModelProperty(hidden = true)
   @Transient
+  @JsonIgnore
   private String sign;
 
+  @JsonIgnore
   public Map<String, Object> getBaseFields() {
     baseFields.put("pageNo", pageNo);
     baseFields.put("pageSize", pageSize);
@@ -83,6 +89,7 @@ public class BaseParam implements Serializable {
    * @return signature content
    */
   @ApiModelProperty(hidden = true)
+  @JsonIgnore
   public String getSignContent() throws SignFailedException {
     StringBuffer buffer = new StringBuffer();
     try {

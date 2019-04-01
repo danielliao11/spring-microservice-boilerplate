@@ -1,6 +1,5 @@
 package com.saintdan.framework.starter.domain;
 
-import com.saintdan.framework.common.domain.BaseDomain;
 import com.saintdan.framework.starter.mapper.RoleAndResourceMapper;
 import com.saintdan.framework.starter.po.RoleAndResource;
 import java.util.List;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @since JDK1.8
  */
 @Service
-public class RoleAndResourceDomain extends BaseDomain<RoleAndResourceMapper, RoleAndResource> {
+public class RoleAndResourceDomain {
 
   public int batchInsert(List<RoleAndResource> roleAndResourceList) {
     return roleAndResourceMapper.insertList(roleAndResourceList);
@@ -32,6 +31,5 @@ public class RoleAndResourceDomain extends BaseDomain<RoleAndResourceMapper, Rol
   @Autowired
   public RoleAndResourceDomain(RoleAndResourceMapper roleAndResourceMapper) {
     this.roleAndResourceMapper = roleAndResourceMapper;
-    setMapper(roleAndResourceMapper);
   }
 }
