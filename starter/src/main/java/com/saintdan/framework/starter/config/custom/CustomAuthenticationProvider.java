@@ -70,15 +70,15 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     // Save user login info.
     user.setIp(ip);
     user.setLastLoginAt(System.currentTimeMillis());
+    // Record context.
+    recordContext(user);
     try {
       // Log login.
-      logHelper.logLogin(ip);
+      logHelper.logLogin(ip, user.getCreatedBy(), usr);
     } catch (Exception e) {
       final String errMsg = "Log user login failed.";
       LogUtils.traceError(log, e, errMsg);
     }
-    // Record context.
-    recordContext(user);
     // Authorize.
     return new UsernamePasswordAuthenticationToken(user, user.getPwd(), user.getAuthorities());
   }

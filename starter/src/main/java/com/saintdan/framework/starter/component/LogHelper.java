@@ -1,6 +1,6 @@
 package com.saintdan.framework.starter.component;
 
-import com.saintdan.framework.starter.domain.LogDomain;
+import com.saintdan.framework.starter.mapper.LogMapper;
 import com.saintdan.framework.starter.po.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -16,19 +16,22 @@ import org.springframework.stereotype.Component;
 public class LogHelper {
 
   @Async
-  public void logLogin(String ip) {
+  public void logLogin(String ip, String createdBy, String usr) {
     final String LOGIN = "login";
-    logDomain.create(
+    logMapper.insert(
         Log.builder()
             .ip(ip)
+            .createdBy(createdBy)
+            .usr(usr)
+            .createdAt(System.currentTimeMillis())
             .path(LOGIN)
             .method(HttpMethod.POST.name())
             .build());
   }
 
-  private final LogDomain logDomain;
+  private final LogMapper logMapper;
 
-  @Autowired public LogHelper(LogDomain logDomain) {
-    this.logDomain = logDomain;
+  @Autowired public LogHelper(LogMapper logMapper) {
+    this.logMapper = logMapper;
   }
 }

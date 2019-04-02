@@ -17,6 +17,7 @@ public class LogDomain extends BaseDomain<LogMapper, Log> {
 
   @Override public int create(Log log) {
     log.setCreatedBy(SpringContextUtils.getUserID());
+    log.setUsr(SpringContextUtils.getUsr());
     log.setCreatedAt(System.currentTimeMillis());
     return logMapper.insert(log);
   }
