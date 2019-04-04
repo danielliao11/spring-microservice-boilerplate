@@ -39,3 +39,6 @@ hs_err_pid*
 .svn/
 *.jks
 data/
+
+# JS
+node_modules/

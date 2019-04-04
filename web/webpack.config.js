@@ -1,0 +1,106 @@
+require('dotenv').config();
+
+const path = require('path');
+const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+const proxy = {};
+proxy[`/${process.env.API_PATH}`] = process.env.DEV_SERVER_PROXY;
+
+module.exports = env => ({
+  devtool: 'eval',
+  mode: 'dev',
+  entry: ['@babel/polyfill', './src'],
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/static/'
+  },
+  module: {
+    rules: [
+      {
+        enforce: 'pre',
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+        options: {
+          emitWarning: env === 'devt',
+        },
+      },
+      {
+        test: /\.js$|\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+      },
+      {
+        test: /\.css$|\.less$/,
+        use: [
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => [autoprefixer],
+            },
+          },
+          'less-loader',
+        ],
+      },
+      {
+        test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.eot$|\.woff$|\.ttf$/,
+        loader: 'url-loader',
+        options: {
+          limit: '10000',
+          name: '[name].[hash:5].[ext]',
+        },
+      },
+    ]
+  },
+  target: 'web',
+  devServer: {
+    proxy,
+    port: process.env.DEV_SERVER_PORT,
+    historyApiFallback: true,
+    hot: true,
+  },
+  resolve: {
+    modules: ['node_modules'],
+    extensions: ['.js', '.jsx'],
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new CleanWebpackPlugin({
+      verbose: env === 'prod',
+      dry: env === 'dev',
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      hash: env === 'prod',
+    }),
+    new MiniCssExtractPlugin({
+      filename: env === 'dev' ? '[name].css' : '[name].[hash].css',
+      chunkFilename: env === 'dev' ? '[id].css' : '[id].[hash].css',
+    }),
+  ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    },
+    minimizer: [new UglifyJsPlugin({
+      uglifyOptions: {
+        output: {
+          comments: false,
+        },
+      },
+    })],
+  },
+});

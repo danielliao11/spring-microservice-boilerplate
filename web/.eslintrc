@@ -1,0 +1,19 @@
+{
+  "parser": "babel-eslint",
+  "plugins": [
+    "react"
+  ],
+  "extends": [
+    "airbnb"
+  ],
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "jsx-a11y/href-no-hash": "off",
+    "jsx-a11y/anchor-is-valid": [ "error", {
+      "components": [ "Link" ],
+      "specialLink": [ "to" ]
+    }]
+  }
+}
