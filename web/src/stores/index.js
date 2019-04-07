@@ -1,7 +1,7 @@
 import { configure } from 'mobx';
 import { enableLogging } from 'mobx-logger';
 
-configure({ enforceActions: true });
+configure({ enforceActions: 'observed' });
 
 enableLogging({
   predicate: () => process.env.NODE_ENV !== 'production',

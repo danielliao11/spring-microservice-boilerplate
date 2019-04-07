@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const proxy = {};
@@ -16,9 +16,9 @@ module.exports = env => ({
   mode: 'dev',
   entry: ['@babel/polyfill', './src'],
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/static/'
+    path: `${__dirname}/dist`,
+    filename: '[name].js',
+    publicPath: '/',
   },
   module: {
     rules: [
@@ -28,7 +28,7 @@ module.exports = env => ({
         exclude: /node_modules/,
         loader: 'eslint-loader',
         options: {
-          emitWarning: env === 'devt',
+          emitWarning: env === 'dev',
         },
       },
       {
@@ -57,7 +57,7 @@ module.exports = env => ({
           name: '[name].[hash:5].[ext]',
         },
       },
-    ]
+    ],
   },
   target: 'web',
   devServer: {
@@ -91,9 +91,9 @@ module.exports = env => ({
         commons: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
-          chunks: 'all'
-        }
-      }
+          chunks: 'all',
+        },
+      },
     },
     minimizer: [new UglifyJsPlugin({
       uglifyOptions: {
