@@ -1,22 +1,25 @@
 import React from 'react';
 import { Provider } from 'mobx-react';
 import { Router, Switch, Route } from 'react-router';
-import { createBrowserHistory, createHashHistory } from 'history';
-import { supportsHistory } from 'history/DOMUtils';
+import { createBrowserHistory } from 'history';
 import * as stores from '../stores';
+import { authHydrate } from '../utils/localPersist';
 import Layout from '../components/common/Layout';
-import routes from '../routes';
+import Login from './login';
+import routers from '../routers';
 
-const history = supportsHistory() ? createBrowserHistory() : createHashHistory();
+const history = createBrowserHistory();
+
+authHydrate('Authorization', stores.authorization);
 
 const Container = () => (
   <Provider {...stores}>
     <Router history={history}>
       <Switch>
-        {/* <Route exact path="/login" component={Login} /> */}
+        <Route exact path="/login" component={Login} />
         <Layout>
           <Switch>
-            {routes.map(route => (
+            {routers.map(route => (
               <Route
                 location={history.location}
                 exact
