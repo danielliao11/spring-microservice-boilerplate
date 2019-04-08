@@ -59,7 +59,8 @@
     "react-dom": "^16.8.6",
     "react-router": "^5.0.0",
     "prop-types": "^15.7.2",
-    "@material-ui/core": "^3.9.3"
+    "@material-ui/core": "^3.9.3",
+    "@material-ui/icons": "^3.0.2"
   },
   "browserslist": [
     ">0.2%",
