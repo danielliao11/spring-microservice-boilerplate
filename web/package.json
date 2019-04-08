@@ -45,6 +45,8 @@
     "webpack-dev-server": "^3.2.1"
   },
   "dependencies": {
+    "@material-ui/core": "^3.9.3",
+    "@material-ui/icons": "^3.0.2",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
     "history": "^4.9.0",
@@ -55,12 +57,11 @@
     "mobx-react-devtools": "^6.0.1",
     "mobx-react-router": "^4.0.7",
     "mobx-persist": "^0.4.1",
+    "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router": "^5.0.0",
-    "prop-types": "^15.7.2",
-    "@material-ui/core": "^3.9.3",
-    "@material-ui/icons": "^3.0.2"
+    "typeface-roboto": "^0.0.54"
   },
   "browserslist": [
     ">0.2%",
