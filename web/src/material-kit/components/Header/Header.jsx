@@ -19,6 +19,9 @@ import headerStyle from '../../styles/components/headerStyle';
 class Header extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      mobileOpen: false,
+    };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
     this.headerColorChange = this.headerColorChange.bind(this);
   }
@@ -82,7 +85,7 @@ class Header extends React.Component {
 
     const brandComponent = <Button className={classes.title}>{brand}</Button>;
 
-    const { mobileOpen } = this.props;
+    const { mobileOpen } = this.state;
     return (
       <AppBar className={appBarClasses}>
         <Toolbar className={classes.container}>
@@ -132,12 +135,10 @@ class Header extends React.Component {
 
 Header.defaultProp = {
   color: 'white',
-  mobileOpen: false,
 };
 
 Header.propTypes = {
   classes: PropTypes.shape().isRequired,
-  mobileOpen: PropTypes.bool.isRequired,
   color: PropTypes.oneOf([
     'primary',
     'info',
@@ -172,7 +173,7 @@ Header.propTypes = {
       'white',
       'rose',
       'dark',
-    ]).isRequired
+    ]).isRequired,
   })
 };
 

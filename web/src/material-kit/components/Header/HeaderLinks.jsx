@@ -1,7 +1,7 @@
 import React from 'react';
 // react components for routing our app without refresh
-import { Link } from 'react-router';
-
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import List from '@material-ui/core/List';
@@ -110,5 +110,9 @@ function HeaderLinks({ ...props }) {
     </List>
   );
 }
+
+HeaderLinks.propTypes = {
+  classes: PropTypes.shape().isRequired,
+};
 
 export default withStyles(headerLinksStyle)(HeaderLinks);
