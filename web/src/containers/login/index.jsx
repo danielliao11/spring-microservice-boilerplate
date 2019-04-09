@@ -1,100 +1,168 @@
 import React from 'react';
 import ReactPropTypes from 'prop-types';
 import { observer, inject, PropTypes } from 'mobx-react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+// @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
-
-const styles = theme => ({
-  main: {
-    width: 'auto',
-    display: 'block',
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
-  },
-  paper: {
-    marginTop: theme.spacing.unit * 8,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
-  },
-  avatar: {
-    margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%',
-    marginTop: theme.spacing.unit,
-  },
-  submit: {
-    marginTop: theme.spacing.unit * 3,
-  },
-});
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Icon from '@material-ui/core/Icon';
+// @material-ui/icons
+import Email from '@material-ui/icons/Email';
+import People from '@material-ui/icons/People';
+// core components
+import Header from '../../material-kit/components/Header/Header';
+import HeaderLinks from '../../material-kit/components/Header/HeaderLinks';
+// style
+import loginStyle from '../../styles/jss/login';
 
 @inject('login', 'authorization')
 @observer
 class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    // we use this to make the card to appear after the page has been rendered
+    this.state = {
+      cardAnimaton: 'cardHidden',
+    };
+  }
+
+  componentDidMount() {
+    // we add a hidden class to the card and after 700 ms we delete it and the transition appears
+    setTimeout(() => {
+      this.setState({
+        cardAnimaton: '',
+      });
+    }, 700);
+  }
+
   render() {
-    const { classes, login } = this.props;
+    const { classes, ...rest } = this.props;
+    const { cardAnimaton } = this.state;
 
     return (
-      <main className={classes.main}>
-        <CssBaseline />
-        <Paper className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign In
-          </Typography>
-          <form className={classes.form}>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="email">Email Address</InputLabel>
-              <Input id="email" name="email" autoComplete="email" autoFocus />
-            </FormControl>
-            <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <Input name="password" type="password" id="password" autoComplete="current-password" />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Sign in
-            </Button>
-          </form>
-        </Paper>
-      </main>
+      <div>
+        <Header
+          absolute
+          color="transparent"
+          brand="Material Kit React"
+          rightLinks={<HeaderLinks />}
+          {...rest}
+        />
+        {/* <div
+          className={classes.pageHeader}
+          style={{
+            backgroundImage: '', // `url( ${image} )`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'top center',
+          }}
+        >
+          <div className={classes.container}>
+            <GridContainer justify="center">
+              <GridItem xs={12} sm={12} md={4}>
+                <Card className={classes[cardAnimaton]}>
+                  <form className={classes.form}>
+                    <CardHeader color="primary" className={classes.cardHeader}>
+                      <h4>Login</h4>
+                      <div className={classes.socialLine}>
+                        <Button
+                          justIcon
+                          href="#pablo"
+                          target="_blank"
+                          color="transparent"
+                          onClick={e => e.preventDefault()}
+                        >
+                          <i className="fab fa-twitter" />
+                        </Button>
+                        <Button
+                          justIcon
+                          href="#pablo"
+                          target="_blank"
+                          color="transparent"
+                          onClick={e => e.preventDefault()}
+                        >
+                          <i className="fab fa-facebook" />
+                        </Button>
+                        <Button
+                          justIcon
+                          href="#pablo"
+                          target="_blank"
+                          color="transparent"
+                          onClick={e => e.preventDefault()}
+                        >
+                          <i className="fab fa-google-plus-g" />
+                        </Button>
+                      </div>
+                    </CardHeader>
+                    <p className={classes.divider}>Or Be Classical</p>
+                    <CardBody>
+                      <CustomInput
+                        labelText="First Name..."
+                        id="first"
+                        formControlProps={{
+                          fullWidth: true,
+                        }}
+                        inputProps={{
+                          type: 'text',
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <People className={classes.inputIconsColor} />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                      <CustomInput
+                        labelText="Email..."
+                        id="email"
+                        formControlProps={{
+                          fullWidth: true,
+                        }}
+                        inputProps={{
+                          type: 'email',
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Email className={classes.inputIconsColor} />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                      <CustomInput
+                        labelText="Password"
+                        id="pass"
+                        formControlProps={{
+                          fullWidth: true,
+                        }}
+                        inputProps={{
+                          type: 'password',
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <Icon className={classes.inputIconsColor}>
+                                lock_outline
+                              </Icon>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </CardBody>
+                    <CardFooter className={classes.cardFooter}>
+                      <Button simple color="primary" size="lg">
+                        Get started
+                      </Button>
+                    </CardFooter>
+                  </form>
+                </Card>
+              </GridItem>
+            </GridContainer>
+          </div>
+          <Footer whiteFont />
+        </div> */}
+      </div>
     );
   }
 }
 
 Login.propTypes = {
   classes: ReactPropTypes.shape().isRequired,
-  login: PropTypes.observableObject.isRequired,
-  authorization: PropTypes.observableObject.isRequired,
+  // login: PropTypes.observableObject.isRequired,
+  // authorization: PropTypes.observableObject.isRequired,
 };
 
-export default withStyles(styles)(Login);
+export default withStyles(loginStyle)(Login);

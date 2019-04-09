@@ -4,7 +4,7 @@ import { Router, Switch, Route } from 'react-router';
 import { createBrowserHistory } from 'history';
 import * as stores from '../stores';
 import { authHydrate } from '../utils/localPersist';
-import Layout from '../components/common/Layout';
+import Layout from '../layouts/Layout';
 import Login from './login';
 import routers from '../routers';
 

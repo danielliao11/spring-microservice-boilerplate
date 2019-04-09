@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import theme from './styles/theme';
+import theme from './styles/jss/theme';
 import Container from './containers';
 
 function App() {

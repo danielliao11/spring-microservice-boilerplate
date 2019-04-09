@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-const path = require('path');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
