@@ -9,14 +9,24 @@ import Icon from '@material-ui/core/Icon';
 import Email from '@material-ui/icons/Email';
 import People from '@material-ui/icons/People';
 // core components
-import Header from '../../material-kit/components/Header/Header';
-import HeaderLinks from '../../material-kit/components/Header/HeaderLinks';
-// style
-import loginStyle from '../../styles/jss/login';
+import image from '../../material_kit/assets/img/bg7.jpg';
+import Header from '../../material_kit/components/Header/Header';
+import HeaderLinks from '../../material_kit/components/Header/HeaderLinks';
+import Footer from '../../material_kit/components/Footer/Footer';
+import GridContainer from '../../material_kit/components/Grid/GridContainer';
+import GridItem from '../../material_kit/components/Grid/GridItem';
+import Button from '../../material_kit/components/CustomButtons/Button';
+import Card from '../../material_kit/components/Card/Card';
+import CardBody from '../../material_kit/components/Card/CardBody';
+import CardHeader from '../../material_kit/components/Card/CardHeader';
+import CardFooter from '../../material_kit/components/Card/CardFooter';
+import CustomInput from '../../material_kit/components/CustomInput/CustomInput';
+
+import loginPageStyle from '../../material_kit/assets/jss/material-kit-react/views/loginPage';
 
 @inject('login', 'authorization')
 @observer
-class Login extends React.Component {
+class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     // we use this to make the card to appear after the page has been rendered
@@ -28,16 +38,13 @@ class Login extends React.Component {
   componentDidMount() {
     // we add a hidden class to the card and after 700 ms we delete it and the transition appears
     setTimeout(() => {
-      this.setState({
-        cardAnimaton: '',
-      });
+      this.setState({ cardAnimaton: '' });
     }, 700);
   }
 
   render() {
     const { classes, ...rest } = this.props;
     const { cardAnimaton } = this.state;
-
     return (
       <div>
         <Header
@@ -47,10 +54,10 @@ class Login extends React.Component {
           rightLinks={<HeaderLinks />}
           {...rest}
         />
-        {/* <div
+        <div
           className={classes.pageHeader}
           style={{
-            backgroundImage: '', // `url( ${image} )`,
+            backgroundImage: `url(${image})`,
             backgroundSize: 'cover',
             backgroundPosition: 'top center',
           }}
@@ -153,16 +160,16 @@ class Login extends React.Component {
             </GridContainer>
           </div>
           <Footer whiteFont />
-        </div> */}
+        </div>
       </div>
     );
   }
 }
 
-Login.propTypes = {
+LoginPage.propTypes = {
   classes: ReactPropTypes.shape().isRequired,
   // login: PropTypes.observableObject.isRequired,
   // authorization: PropTypes.observableObject.isRequired,
 };
 
-export default withStyles(loginStyle)(Login);
+export default withStyles(loginPageStyle)(LoginPage);

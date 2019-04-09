@@ -36,16 +36,22 @@ module.exports = env => ({
         loader: 'babel-loader',
       },
       {
-        test: /\.css$|\.less$/,
+        test: /\.css$|\.scss$/,
         use: [
           'css-loader',
           {
             loader: 'postcss-loader',
             options: {
+              sourceMap: true,
               plugins: () => [autoprefixer],
             },
           },
-          'less-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
         ],
       },
       {
@@ -66,8 +72,8 @@ module.exports = env => ({
     hot: true,
   },
   resolve: {
-    modules: ['node_modules'],
-    extensions: ['.js', '.jsx'],
+    modules: ['node_modules', 'material_kit'],
+    extensions: ['.js', '.jsx', '.scss'],
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
