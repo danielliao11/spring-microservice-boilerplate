@@ -36,8 +36,9 @@ module.exports = env => ({
         loader: 'babel-loader',
       },
       {
-        test: /\.css$|\.(scss|sass)$/,
+        test: /\.css$|\.s[ac]ss$/,
         use: [
+          'style-loader',
           'css-loader',
           {
             loader: 'postcss-loader',
@@ -67,6 +68,7 @@ module.exports = env => ({
   target: 'web',
   devServer: {
     proxy,
+    host: '0.0.0.0',
     port: process.env.DEV_SERVER_PORT,
     historyApiFallback: true,
     hot: true,

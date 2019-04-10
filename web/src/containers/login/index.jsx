@@ -4,10 +4,10 @@ import { observer, inject, PropTypes } from 'mobx-react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Icon from '@material-ui/core/Icon';
 // @material-ui/icons
 import Email from '@material-ui/icons/Email';
 import People from '@material-ui/icons/People';
+import Lock from '@material-ui/icons/Lock';
 // core components
 import image from '../../material_kit/assets/img/bg7.jpg';
 import Header from '../../material_kit/components/Header/Header';
@@ -50,7 +50,7 @@ class LoginPage extends React.Component {
         <Header
           absolute
           color="transparent"
-          brand="Material Kit React"
+          brand="Spring Microservice Boilerplate"
           rightLinks={<HeaderLinks />}
           {...rest}
         />
@@ -141,9 +141,7 @@ class LoginPage extends React.Component {
                           type: 'password',
                           endAdornment: (
                             <InputAdornment position="end">
-                              <Icon className={classes.inputIconsColor}>
-                                lock_outline
-                              </Icon>
+                              <Lock className={classes.inputIconsColor} />
                             </InputAdornment>
                           ),
                         }}

@@ -9,8 +9,7 @@ import Layout from './layouts/Layout';
 import Login from './containers/login';
 import routers from './routers';
 
-// import './material_kit/assets/scss/material-kit-react';
-import './styles/scss/test.scss';
+import './material_kit/assets/scss/material-kit-react.scss';
 
 const history = createBrowserHistory();
 
