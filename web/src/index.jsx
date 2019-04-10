@@ -6,7 +6,8 @@ import { createBrowserHistory } from 'history';
 import * as stores from './stores';
 import { authHydrate } from './utils/localPersist';
 import Layout from './layouts/Layout';
-import Login from './containers/login';
+// import Login from './containers/login';
+import Login from './material_kit/views/LoginPage/LoginPage';
 import routers from './routers';
 
 import './material_kit/assets/scss/material-kit-react.scss';

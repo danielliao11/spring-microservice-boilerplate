@@ -1,74 +1,71 @@
-import React from 'react';
-import ReactPropTypes from 'prop-types';
-import { observer, inject, PropTypes } from 'mobx-react';
+import React from "react";
 // @material-ui/core components
-import withStyles from '@material-ui/core/styles/withStyles';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import withStyles from "@material-ui/core/styles/withStyles";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
-import Email from '@material-ui/icons/Email';
-import People from '@material-ui/icons/People';
-import Lock from '@material-ui/icons/Lock';
+import Email from "@material-ui/icons/Email";
+import People from "@material-ui/icons/People";
 // core components
-import image from '../../material_kit/assets/img/bg7.jpg';
-import Header from '../../material_kit/components/Header/Header';
-import HeaderLinks from '../../material_kit/components/Header/HeaderLinks';
-import Footer from '../../material_kit/components/Footer/Footer';
-import GridContainer from '../../material_kit/components/Grid/GridContainer';
-import GridItem from '../../material_kit/components/Grid/GridItem';
-import Button from '../../material_kit/components/CustomButtons/Button';
-import Card from '../../material_kit/components/Card/Card';
-import CardBody from '../../material_kit/components/Card/CardBody';
-import CardHeader from '../../material_kit/components/Card/CardHeader';
-import CardFooter from '../../material_kit/components/Card/CardFooter';
-import CustomInput from '../../material_kit/components/CustomInput/CustomInput';
+import Header from "components/Header/Header.jsx";
+import HeaderLinks from "components/Header/HeaderLinks.jsx";
+import Footer from "components/Footer/Footer.jsx";
+import GridContainer from "components/Grid/GridContainer.jsx";
+import GridItem from "components/Grid/GridItem.jsx";
+import Button from "components/CustomButtons/Button.jsx";
+import Card from "components/Card/Card.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";
+import CustomInput from "components/CustomInput/CustomInput.jsx";
 
-import loginPageStyle from '../../styles/jss/containers/loginPageStyle';
+import loginPageStyle from "assets/jss/material-kit-react/views/loginPage.jsx";
 
-@inject('login', 'authorization')
-@observer
+import image from "assets/img/bg7.jpg";
+
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     // we use this to make the card to appear after the page has been rendered
     this.state = {
-      cardAnimaton: 'cardHidden',
+      cardAnimaton: "cardHidden"
     };
   }
-
   componentDidMount() {
     // we add a hidden class to the card and after 700 ms we delete it and the transition appears
-    setTimeout(() => {
-      this.setState({ cardAnimaton: '' });
-    }, 700);
+    setTimeout(
+      function() {
+        this.setState({ cardAnimaton: "" });
+      }.bind(this),
+      700
+    );
   }
-
   render() {
     const { classes, ...rest } = this.props;
-    const { cardAnimaton } = this.state;
     return (
       <div>
         <Header
           absolute
           color="transparent"
-          brand="Spring Microservice Boilerplate"
+          brand="Material Kit React"
           rightLinks={<HeaderLinks />}
           {...rest}
         />
         <div
           className={classes.pageHeader}
           style={{
-            backgroundImage: `url(${image})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'top center',
+            backgroundImage: "url(" + image + ")",
+            backgroundSize: "cover",
+            backgroundPosition: "top center"
           }}
         >
           <div className={classes.container}>
             <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={4}>
-                <Card className={classes[cardAnimaton]}>
+                <Card className={classes[this.state.cardAnimaton]}>
                   <form className={classes.form}>
                     <CardHeader color="primary" className={classes.cardHeader}>
-                      <h3>Login</h3>
+                      <h4>Login</h4>
                       <div className={classes.socialLine}>
                         <Button
                           justIcon
@@ -77,7 +74,7 @@ class LoginPage extends React.Component {
                           color="transparent"
                           onClick={e => e.preventDefault()}
                         >
-                          <i className="fab fa-twitter" />
+                          <i className={"fab fa-twitter"} />
                         </Button>
                         <Button
                           justIcon
@@ -86,7 +83,7 @@ class LoginPage extends React.Component {
                           color="transparent"
                           onClick={e => e.preventDefault()}
                         >
-                          <i className="fab fa-facebook" />
+                          <i className={"fab fa-facebook"} />
                         </Button>
                         <Button
                           justIcon
@@ -95,55 +92,57 @@ class LoginPage extends React.Component {
                           color="transparent"
                           onClick={e => e.preventDefault()}
                         >
-                          <i className="fab fa-google-plus-g" />
+                          <i className={"fab fa-google-plus-g"} />
                         </Button>
                       </div>
                     </CardHeader>
-                    <p className={classes.divider}>Welcome</p>
+                    <p className={classes.divider}>Or Be Classical</p>
                     <CardBody>
                       <CustomInput
                         labelText="First Name..."
                         id="first"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          type: 'text',
+                          type: "text",
                           endAdornment: (
                             <InputAdornment position="end">
                               <People className={classes.inputIconsColor} />
                             </InputAdornment>
-                          ),
+                          )
                         }}
                       />
                       <CustomInput
                         labelText="Email..."
                         id="email"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          type: 'email',
+                          type: "email",
                           endAdornment: (
                             <InputAdornment position="end">
                               <Email className={classes.inputIconsColor} />
                             </InputAdornment>
-                          ),
+                          )
                         }}
                       />
                       <CustomInput
                         labelText="Password"
                         id="pass"
                         formControlProps={{
-                          fullWidth: true,
+                          fullWidth: true
                         }}
                         inputProps={{
-                          type: 'password',
+                          type: "password",
                           endAdornment: (
                             <InputAdornment position="end">
-                              <Lock className={classes.inputIconsColor} />
+                              <Icon className={classes.inputIconsColor}>
+                                lock_outline
+                              </Icon>
                             </InputAdornment>
-                          ),
+                          )
                         }}
                       />
                     </CardBody>
@@ -163,11 +162,5 @@ class LoginPage extends React.Component {
     );
   }
 }
-
-LoginPage.propTypes = {
-  classes: ReactPropTypes.shape().isRequired,
-  // login: PropTypes.observableObject.isRequired,
-  // authorization: PropTypes.observableObject.isRequired,
-};
 
 export default withStyles(loginPageStyle)(LoginPage);
