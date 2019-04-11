@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactPropTypes from 'prop-types';
-import { observer, inject, PropTypes } from 'mobx-react';
+import { observer, inject /** , PropTypes */ } from 'mobx-react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import InputAdornment from '@material-ui/core/InputAdornment';

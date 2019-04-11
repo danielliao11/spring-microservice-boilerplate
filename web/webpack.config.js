@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -78,7 +77,6 @@ module.exports = env => ({
     extensions: ['.js', '.jsx', '.scss'],
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new CleanWebpackPlugin({
       verbose: env === 'prod',
       dry: env === 'dev',
