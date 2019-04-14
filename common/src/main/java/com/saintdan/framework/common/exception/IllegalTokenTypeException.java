@@ -13,6 +13,6 @@ public class IllegalTokenTypeException extends BaseException {
   private static final long serialVersionUID = -8476571357699322239L;
 
   public IllegalTokenTypeException() {
-    super(ErrorType.ILLEGAL_EXT_TYPE_ERROR);
+    super(ErrorType.ILLEGAL_TOKEN_TYPE_ERROR);
   }
 }

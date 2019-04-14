@@ -67,7 +67,7 @@ const signupPageStyle = {
     fontSize: '20px',
   },
   divider: {
-    marginTop: '30px',
+    marginTop: '20px',
     marginBottom: '0px',
     textAlign: 'center',
   },

@@ -8,19 +8,21 @@ const resource = axios.create({
 resource.interceptors.request.use(
   (config) => {
     // eslint-disable-next-line no-param-reassign
-    config.headers.common.Authorization = authorization.token;
+    config.headers.common.Authorization = authorization.getToken();
     return config;
   },
   error => Promise.reject(error),
 );
 
 resource.interceptors.response.use(
-  response => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      authorization.authFailed();
+  (response) => {
+    if (response.status.toString().startsWith('2')) {
+      return Promise.resolve(response);
     }
-    return Promise.reject(error);
+    if (response && response.status === 401) {
+      authorization.logout();
+    }
+    return Promise.reject(response);
   },
 );
 

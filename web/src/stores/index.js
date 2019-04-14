@@ -1,7 +1,6 @@
 import { configure } from 'mobx';
 import { enableLogging } from 'mobx-logger';
 import Authorization from './Authorization';
-import Login from './Login';
 
 configure({ enforceActions: 'observed' });
 
@@ -14,9 +13,7 @@ enableLogging({
 });
 
 const authorization = new Authorization();
-const login = new Login();
 
 export {
   authorization,
-  login,
 };

@@ -41,8 +41,4 @@ function App() {
 
 ReactDOM.render(<App />, document.querySelector('#app'));
 
-if (process.env.NODE_ENV !== 'prod') {
-  if (module.hot) {
-    module.hot.accept();
-  }
-}
+process.env.NODE_ENV !== 'prod' && module.hot && module.hot.accept();
