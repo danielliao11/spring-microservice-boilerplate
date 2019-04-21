@@ -20,7 +20,6 @@ import CardBody from '../../material_kit/components/Card/CardBody';
 import CardHeader from '../../material_kit/components/Card/CardHeader';
 import CardFooter from '../../material_kit/components/Card/CardFooter';
 import CustomInput from '../../material_kit/components/CustomInput/CustomInput';
-import resource from '../../utils/resource';
 
 import loginPageStyle from '../../styles/jss/containers/loginPageStyle';
 

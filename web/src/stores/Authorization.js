@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { persist } from 'mobx-persist';
 import resource from '../utils/resource';
 
@@ -85,19 +85,19 @@ export default class Authorization {
     return resource.post('/open/login', data);
   }
 
-  @action.bound getToken() {
-    if (this.bearerToken === '') {
+  @computed get getToken() {
+    if (this.bearerToken === '' || this.bearerToken.includes('undefined')) {
       return process.env.BASIC_TOKEN;
     }
     return this.bearerToken;
   }
 
-  @action.bound authorized() {
+  @computed get authorized() {
     return this.bearerToken !== '';
   }
 
   @action.bound setToken(res) {
-    this.bearerToken = `${res.token_type} ${res.access_token}`;
+    this.bearerToken = `${res.data.token_type} ${res.data.access_token}`;
   }
 
   @action.bound logout() {
