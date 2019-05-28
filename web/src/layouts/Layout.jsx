@@ -3,6 +3,9 @@ import ReactPropTypes from 'prop-types';
 import { observer, inject, PropTypes } from 'mobx-react';
 import { Redirect } from 'react-router-dom';
 
+// core components
+import Navbar from '../components/layout/NavBar';
+
 @inject('authorization')
 @observer
 class Layout extends React.Component {
@@ -11,16 +14,17 @@ class Layout extends React.Component {
       authorization, location, children,
     } = this.props;
     console.log(authorization.authorized);
-    if (!authorization.authorized) {
-      return <Redirect to="/login" />;
-    }
+    // if (!authorization.authorized) {
+    //   return <Redirect to="/login" />;
+    // }
     return (
       <div>
-        Hello World
+        <NavBar />
       </div>
     );
   }
 }
+
 Layout.propTypes = {
   children: ReactPropTypes.element.isRequired,
   location: ReactPropTypes.shape({
