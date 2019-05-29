@@ -1,4 +1,4 @@
-import { container } from '../../../material_kit/assets/jss/material-kit-react';
+import { container, whiteColor, darkGrayColor } from '../../../material_kit/assets/jss/material-kit-react';
 
 const loginPageStyle = {
   container: {
@@ -6,7 +6,7 @@ const loginPageStyle = {
     zIndex: '2',
     position: 'relative',
     paddingTop: '20vh',
-    color: '#FFFFFF',
+    color: whiteColor,
   },
   cardHidden: {
     opacity: '0',
@@ -35,7 +35,7 @@ const loginPageStyle = {
       content: '""',
     },
     '& footer li a,& footer li a:hover,& footer li a:active': {
-      color: '#FFFFFF',
+      color: whiteColor,
     },
     '& footer': {
       position: 'absolute',
@@ -83,7 +83,7 @@ const loginPageStyle = {
     padding: '0',
   },
   inputIconsColor: {
-    color: '#495057',
+    color: darkGrayColor,
   },
 };
 

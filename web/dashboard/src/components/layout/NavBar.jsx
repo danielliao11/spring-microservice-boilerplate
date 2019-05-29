@@ -1,43 +1,43 @@
 import React from 'react';
 import ReactPropTypes from 'prop-types';
-import { observer } from 'mobx-react';
 
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import {
   Avatar,
-  GridList,
-  GridListTileBar,
+  List,
+  ListItem,
+  ListItemText,
   Paper,
-} from '@material-ui/core/Avatar';
-
-// custom components
-import navbarStyle from '../../styles/jss/components/layout/navbar';
+} from '@material-ui/core';
 
 // static
-// import routes from '../../routers';
+import routes from '../../routers';
+import navbarStyle from '../../styles/jss/components/layout/navbar';
 import logo from '../../asserts/imgs/react-logo.png';
 
-@observer
-class NavBar extends React.Component {
-  render() {
-    const { classes } = this.props;
-    return (
-      <Paper className={classes.paper}>
+const NavBar = ({ ...props }) => {
+  const { classes } = props;
+  return (
+    <Paper className={classes.paper}>
+      <div className={classes.logoContainer}>
         <Avatar src={logo} className={classes.logo} />
-        {/* <GridList col="2">
-          {routes
-            .filter(route => route.show)
-            .map(route => (
-              <GridListTileBar
-                title={route.name}
-              />
-            ))}
-        </GridList> */}
-      </Paper>
-    );
-  }
-}
+        <div className={classes.logoText}>
+          Daniel Liao
+        </div>
+      </div>
+      <List component="nav">
+        {routes
+          .filter(route => route.show)
+          .map(route => (
+            <ListItem button>
+              <ListItemText primary={route.name} />
+            </ListItem>
+          ))}
+      </List>
+    </Paper>
+  );
+};
 
 NavBar.propTypes = {
   classes: ReactPropTypes.shape().isRequired,

@@ -3,6 +3,10 @@ import React from 'react';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 
+const styles = {
+
+};
+
 class HomePage extends React.Component {
   render() {
     return (
@@ -13,4 +17,4 @@ class HomePage extends React.Component {
   }
 }
 
-export default withStyles()(HomePage);
+export default withStyles(styles)(HomePage);

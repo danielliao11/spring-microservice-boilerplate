@@ -23,11 +23,11 @@ function Footer({ ...props }) {
         <div className={classes.right}>
           &copy; {1900 + new Date().getYear()} by
           <a
-            href="https://github.com/saintdan"
+            href="https://github.com/danielliao11"
             className={aClasses}
             target="_blank"
           >{" "}
-            SaintDan
+            Daniel Liao
           </a>
         </div>
       </div>

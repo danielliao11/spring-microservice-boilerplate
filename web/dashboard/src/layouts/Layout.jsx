@@ -47,6 +47,7 @@ class Layout extends React.Component {
     return (
       <div className={classes.layout}>
         <NavBar />
+        {children}
       </div>
     );
   }
@@ -57,6 +58,7 @@ Layout.propTypes = {
   location: ReactPropTypes.shape({
     pathname: ReactPropTypes.string,
   }).isRequired,
+  classes: ReactPropTypes.shape().isRequired,
 };
 
 Layout.wrappedComponent.propTypes = {

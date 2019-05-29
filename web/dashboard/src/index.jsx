@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
-import { Router, Switch, Route } from 'react-router';
+import { Router, Switch, Route } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import * as stores from './stores';
 import { authHydrate } from './utils/localPersist';
