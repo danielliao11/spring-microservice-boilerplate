@@ -1,10 +1,11 @@
-import Login from '../containers/login';
+import Home from '../containers/Home';
 
 const routes = [
   {
-    name: 'login',
-    path: '/login',
-    component: Login,
+    show: true,
+    name: 'home',
+    path: '/home',
+    component: Home,
   },
 ];
 

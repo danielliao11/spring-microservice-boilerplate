@@ -11,20 +11,21 @@ import Email from '@material-ui/icons/Email';
 import Lock from '@material-ui/icons/Lock';
 
 // core components
-import Header from '../../material_kit/components/Header/Header';
-import HeaderLinks from '../../material_kit/components/Header/HeaderLinks';
-import Footer from '../../material_kit/components/Footer/Footer';
-import GridContainer from '../../material_kit/components/Grid/GridContainer';
-import GridItem from '../../material_kit/components/Grid/GridItem';
-import Button from '../../material_kit/components/CustomButtons/Button';
-import Card from '../../material_kit/components/Card/Card';
-import CardBody from '../../material_kit/components/Card/CardBody';
-import CardHeader from '../../material_kit/components/Card/CardHeader';
-import CardFooter from '../../material_kit/components/Card/CardFooter';
-import CustomInput from '../../material_kit/components/CustomInput/CustomInput';
+import Header from '../material_kit/components/Header/Header';
+import HeaderLinks from '../material_kit/components/Header/HeaderLinks';
+import Footer from '../material_kit/components/Footer/Footer';
+import GridContainer from '../material_kit/components/Grid/GridContainer';
+import GridItem from '../material_kit/components/Grid/GridItem';
+import Button from '../material_kit/components/CustomButtons/Button';
+import Card from '../material_kit/components/Card/Card';
+import CardBody from '../material_kit/components/Card/CardBody';
+import CardHeader from '../material_kit/components/Card/CardHeader';
+import CardFooter from '../material_kit/components/Card/CardFooter';
+import CustomInput from '../material_kit/components/CustomInput/CustomInput';
 
-import bgImg from '../../asserts/imgs/bg.jpg';
-import loginPageStyle from '../../styles/jss/containers/loginPageStyle';
+// static
+import bgImg from '../asserts/imgs/bg.jpg';
+import loginPageStyle from '../styles/jss/containers/loginPageStyle';
 
 @inject('authorization')
 @observer
