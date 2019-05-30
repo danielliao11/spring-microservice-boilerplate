@@ -19,10 +19,14 @@ const navbarStyle = {
     height: 40,
   },
   logoText: {
-    marginTop: 28,
+    marginTop: 29,
     width: '100%',
     fontSize: 18,
     color: whiteColor,
+  },
+  divider: {
+    margin: '20px 0 0 0',
+    backgroundColor: 'rgba(216, 216, 216, 0.2)',
   },
   list: {
     marginTop: '',

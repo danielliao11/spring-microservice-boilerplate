@@ -5,6 +5,7 @@ import ReactPropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {
   Avatar,
+  Divider,
   List,
   ListItem,
   ListItemText,
@@ -26,6 +27,7 @@ const NavBar = ({ ...props }) => {
           Daniel Liao
         </div>
       </div>
+      <Divider className={classes.divider} variant="middle" light />
       <List component="nav">
         {routes
           .filter(route => route.show)
