@@ -4,6 +4,7 @@ const routes = [
   {
     show: true,
     name: 'HOME',
+    iconName: 'Home',
     path: '/home',
     component: Home,
   },

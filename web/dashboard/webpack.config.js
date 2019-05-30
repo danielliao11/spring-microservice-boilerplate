@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const path = require('path');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -74,7 +75,7 @@ module.exports = env => ({
     hot: true,
   },
   resolve: {
-    modules: ['node_modules', 'material_kit'],
+    modules: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'material_kit')],
     extensions: ['.js', '.jsx', '.scss'],
   },
   plugins: [
