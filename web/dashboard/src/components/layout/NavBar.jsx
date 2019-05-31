@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
 import React from 'react';
 import ReactPropTypes from 'prop-types';
 
@@ -13,18 +15,19 @@ import {
   Paper,
 } from '@material-ui/core';
 
-// @material-ui/icons
-import { asyncComponent } from 'react-async-component';
 // static
 import routes from '../../routers';
 import navbarStyle from '../../styles/jss/components/layout/navbar';
 import logo from '../../asserts/imgs/react-logo.png';
 
-const createIconAsync = (icon) => {
+const createIcon = (icon) => {
   const iconName = icon.replace(/Icon$/, '');
-  return React.createElement(asyncComponent({
-    resolve: () => import(`@material-ui/icons/${iconName}`),
-  }));
+  console.log(iconName);
+  const resolved = require(`@material-ui/icons/${iconName}`).default;
+  if (!resolved) {
+    throw Error(`Could not find @material-ui/icons/${iconName}`);
+  }
+  return React.createElement(resolved);
 };
 
 const NavBar = ({ ...props }) => {
@@ -38,15 +41,15 @@ const NavBar = ({ ...props }) => {
         </div>
       </div>
       <Divider className={classes.divider} variant="middle" light />
-      <List component="nav">
+      <List component="nav" className={classes.list}>
         {routes
           .filter(route => route.show)
           .map(route => (
-            <ListItem button>
-              <ListItemIcon>
-                {createIconAsync(route.iconName)}
+            <ListItem button className={classes.listItem}>
+              <ListItemIcon className={classes.listItemIcon}>
+                {createIcon(route.iconName)}
               </ListItemIcon>
-              <ListItemText primary={route.name} />
+              <ListItemText primary={route.name} className={classes.liteItemText} />
             </ListItem>
           ))}
       </List>

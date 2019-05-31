@@ -75,7 +75,7 @@ module.exports = env => ({
     hot: true,
   },
   resolve: {
-    modules: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'material_kit')],
+    modules: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/material_kit')],
     extensions: ['.js', '.jsx', '.scss'],
   },
   plugins: [
