@@ -17,7 +17,7 @@ import {
 } from '@material-ui/core';
 
 // static
-import navBarStyle from '../../styles/jss/components/layout/navBarStyle';
+import sideBarStyle from '../../styles/jss/components/layout/sideBarStyle';
 import logo from '../../asserts/imgs/react-logo.png';
 
 const createIcon = (icon) => {
@@ -61,4 +61,4 @@ NavBar.propTypes = {
   routes: ReactPropTypes.arrayOf(ReactPropTypes.shape()).isRequired,
 };
 
-export default withStyles(navBarStyle)(NavBar);
+export default withStyles(sideBarStyle)(NavBar);

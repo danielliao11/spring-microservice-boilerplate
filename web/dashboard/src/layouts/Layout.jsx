@@ -7,7 +7,7 @@ import { Redirect } from 'react-router-dom';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 // core components
-import NavBar from '../components/layout/NavBar';
+import SideBar from '../components/layout/SideBar';
 import TopBar from '../components/layout/TopBar';
 
 // static
@@ -26,7 +26,7 @@ class Layout extends React.Component {
     // }
     return (
       <div className={classes.layout}>
-        <NavBar routes={routes} className={classes.nav} />
+        <SideBar routes={routes} className={classes.nav} />
         <div className={classes.right}>
           <TopBar />
           {children}

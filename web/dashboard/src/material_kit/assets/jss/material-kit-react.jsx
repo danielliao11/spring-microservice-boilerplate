@@ -77,8 +77,8 @@ const infoColor = "#00acc1";
 const roseColor = "#e91e63";
 const grayColor = "#999999";
 const darkGrayColor = "#495057";
-const darkBlueColor = "#1f263e";
 const whiteColor = "#ffffff";
+const blackColor = '#000000';
 
 const primaryBoxShadow = {
   boxShadow:
@@ -199,8 +199,8 @@ export {
   roseColor,
   grayColor,
   darkGrayColor,
-  darkBlueColor,
   whiteColor,
+  blackColor,
   primaryBoxShadow,
   infoBoxShadow,
   successBoxShadow,
