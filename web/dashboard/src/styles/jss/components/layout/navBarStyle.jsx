@@ -4,7 +4,7 @@ const hoverColor = 'rgba(216, 216, 216, 0.2)';
 
 const navbarStyle = {
   paper: {
-    width: 218,
+    width: 220,
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -16,14 +16,13 @@ const navbarStyle = {
     width: '100%',
   },
   logo: {
-    margin: '19px 22px 0 22px',
+    margin: '19px 14px 0 20px',
     width: 40,
     height: 40,
   },
   logoText: {
-    marginTop: 29,
+    marginTop: 24,
     width: '100%',
-    fontSize: 18,
     color: whiteColor,
   },
   divider: {
@@ -42,12 +41,12 @@ const navbarStyle = {
     },
   },
   listItemIcon: {
-    marginRight: 0,
+    margin: '0 0 0 12px',
     color: whiteColor,
   },
   liteItemText: {
     marginTop: 3,
-    padding: '0 12px',
+    padding: '0 15px',
     '&>span': {
       color: whiteColor,
     },

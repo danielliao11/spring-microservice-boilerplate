@@ -8,31 +8,11 @@ import withStyles from '@material-ui/core/styles/withStyles';
 
 // core components
 import NavBar from '../components/layout/NavBar';
+import TopBar from '../components/layout/TopBar';
 
-const styles = {
-  '@global': {
-    html: {
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-    },
-    body: {
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-    },
-    '#app': {
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-    },
-  },
-  layout: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-  },
-};
+// static
+import routes from '../routers';
+import layoutStyle from '../styles/jss/components/layout/layoutStyle';
 
 @inject('authorization')
 @observer
@@ -46,8 +26,11 @@ class Layout extends React.Component {
     // }
     return (
       <div className={classes.layout}>
-        <NavBar />
-        {children}
+        <NavBar routes={routes} className={classes.nav} />
+        <div className={classes.right}>
+          <TopBar />
+          {children}
+        </div>
       </div>
     );
   }
@@ -65,4 +48,4 @@ Layout.wrappedComponent.propTypes = {
   authorization: PropTypes.observableObject.isRequired,
 };
 
-export default withStyles(styles)(Layout);
+export default withStyles(layoutStyle)(Layout);

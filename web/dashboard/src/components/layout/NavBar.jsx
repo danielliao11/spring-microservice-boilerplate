@@ -13,16 +13,15 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
+  Typography,
 } from '@material-ui/core';
 
 // static
-import routes from '../../routers';
-import navbarStyle from '../../styles/jss/components/layout/navbar';
+import navBarStyle from '../../styles/jss/components/layout/navBarStyle';
 import logo from '../../asserts/imgs/react-logo.png';
 
 const createIcon = (icon) => {
   const iconName = icon.replace(/Icon$/, '');
-  console.log(iconName);
   const resolved = require(`@material-ui/icons/${iconName}`).default;
   if (!resolved) {
     throw Error(`Could not find @material-ui/icons/${iconName}`);
@@ -31,21 +30,21 @@ const createIcon = (icon) => {
 };
 
 const NavBar = ({ ...props }) => {
-  const { classes } = props;
+  const { classes, routes } = props;
   return (
     <Paper className={classes.paper}>
       <div className={classes.logoContainer}>
         <Avatar src={logo} className={classes.logo} />
-        <div className={classes.logoText}>
+        <Typography variant="h6" className={classes.logoText}>
           Daniel Liao
-        </div>
+        </Typography>
       </div>
       <Divider className={classes.divider} variant="middle" light />
       <List component="nav" className={classes.list}>
         {routes
           .filter(route => route.show)
           .map(route => (
-            <ListItem button className={classes.listItem}>
+            <ListItem button className={classes.listItem} key={route.name}>
               <ListItemIcon className={classes.listItemIcon}>
                 {createIcon(route.iconName)}
               </ListItemIcon>
@@ -59,6 +58,7 @@ const NavBar = ({ ...props }) => {
 
 NavBar.propTypes = {
   classes: ReactPropTypes.shape().isRequired,
+  routes: ReactPropTypes.arrayOf(ReactPropTypes.shape()).isRequired,
 };
 
-export default withStyles(navbarStyle)(NavBar);
+export default withStyles(navBarStyle)(NavBar);
