@@ -26,12 +26,13 @@ import CustomInput from '../material_kit/components/CustomInput/CustomInput';
 import bgImg from '../asserts/imgs/bg.jpg';
 import loginPageStyle from '../styles/jss/containers/loginPageStyle';
 
-@inject('authorization')
+@inject('authorization', 'sign')
 @observer
 class LoginPage extends React.Component {
   componentWillMount() {
-    const { authorization } = this.props;
+    const { authorization, sign } = this.props;
     authorization.init();
+    sign.init();
   }
 
   componentDidMount() {
@@ -40,8 +41,8 @@ class LoginPage extends React.Component {
   }
 
   handleLogin() {
-    const { history, authorization } = this.props;
-    authorization.login()
+    const { authorization, history, sign } = this.props;
+    sign.signIn()
       .then((res) => {
         authorization.setToken(res);
         history.push('/dashboard');
@@ -49,7 +50,12 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    const { classes, authorization, ...rest } = this.props;
+    const {
+      classes,
+      authorization,
+      sign,
+      ...rest
+    } = this.props;
     return (
       <div>
         <Header
@@ -106,17 +112,17 @@ class LoginPage extends React.Component {
                   <p className={classes.divider}>Welcome</p>
                   <CardBody>
                     <CustomInput
-                      labelText={authorization.hints.email}
+                      labelText={sign.hints.email}
                       id="email"
-                      error={authorization.error.email}
-                      success={authorization.hints.email === 'success'}
+                      error={sign.error.email}
+                      success={sign.hints.email === 'success'}
                       formControlProps={{
                         fullWidth: true,
                       }}
                       inputProps={{
                         type: 'email',
-                        value: authorization.email,
-                        onChange: e => authorization.setParam('email', e),
+                        value: sign.params.email,
+                        onChange: e => sign.setParam('email', e),
                         endAdornment: (
                           <InputAdornment position="end">
                             <Email className={classes.inputIconsColor} />
@@ -125,17 +131,17 @@ class LoginPage extends React.Component {
                       }}
                     />
                     <CustomInput
-                      labelText={authorization.hints.password}
+                      labelText={sign.hints.password}
                       id="pass"
-                      error={authorization.error.password}
-                      success={authorization.hints.password === 'success'}
+                      error={sign.error.password}
+                      success={sign.hints.password === 'success'}
                       formControlProps={{
                         fullWidth: true,
                       }}
                       inputProps={{
                         type: 'password',
-                        value: authorization.password,
-                        onChange: e => authorization.setParam('password', e),
+                        value: sign.params.password,
+                        onChange: e => sign.setParam('password', e),
                         endAdornment: (
                           <InputAdornment position="end">
                             <Lock className={classes.inputIconsColor} />
@@ -169,6 +175,7 @@ LoginPage.propTypes = {
 
 LoginPage.wrappedComponent.propTypes = {
   authorization: PropTypes.observableObject.isRequired,
+  sign: PropTypes.observableObject.isRequired,
 };
 
 export default withStyles(loginPageStyle)(LoginPage);

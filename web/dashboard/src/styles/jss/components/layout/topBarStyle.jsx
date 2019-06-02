@@ -1,10 +1,20 @@
+import theme from '../../theme';
+
 const topBarStyle = {
   container: {
     width: '100%',
-    height: '100%',
   },
   typography: {
     marginLeft: 30,
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  section: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+    },
   },
 };
 

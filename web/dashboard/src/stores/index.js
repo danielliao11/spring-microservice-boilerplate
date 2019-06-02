@@ -1,6 +1,8 @@
 import { configure } from 'mobx';
 import { enableLogging } from 'mobx-logger';
 import Authorization from './Authorization';
+import Notification from './Notification';
+import Sign from './Sign';
 
 configure({ enforceActions: 'observed' });
 
@@ -13,7 +15,11 @@ enableLogging({
 });
 
 const authorization = new Authorization();
+const notification = new Notification();
+const sign = new Sign();
 
 export {
   authorization,
+  notification,
+  sign,
 };
