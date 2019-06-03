@@ -14,12 +14,12 @@ import TopBar from '../components/layout/TopBar';
 import routes from '../routers';
 import layoutStyle from '../styles/jss/components/layout/layoutStyle';
 
-@inject('authorization', 'notification')
+@inject('authorization', 'configuration', 'notification')
 @observer
 class Layout extends React.Component {
   render() {
     const {
-      location, children, classes, authorization, notification,
+      location, children, classes, authorization, configuration, notification,
     } = this.props;
     // if (!authorization.authorized) {
     //   return <Redirect to="/login" />;
@@ -46,6 +46,7 @@ Layout.propTypes = {
 
 Layout.wrappedComponent.propTypes = {
   authorization: PropTypes.observableObject.isRequired,
+  configuration: PropTypes.observableObject.isRequired,
   notification: PropTypes.observableObject.isRequired,
 };
 
