@@ -1,4 +1,5 @@
 import Home from '../containers/Home';
+import Resource from '../containers/Resource';
 
 const routes = [
   {
@@ -7,6 +8,13 @@ const routes = [
     iconName: 'Home',
     path: '/home',
     component: Home,
+  },
+  {
+    show: true,
+    name: 'RESOURCE',
+    iconName: 'LocalFlorist',
+    path: '/resource',
+    component: Resource,
   },
 ];
 

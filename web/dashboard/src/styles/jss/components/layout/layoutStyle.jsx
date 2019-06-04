@@ -9,6 +9,7 @@ const layoutStyle = {
       width: '100%',
       height: '100%',
       display: 'flex',
+      margin: 0,
     },
     '#app': {
       width: '100%',

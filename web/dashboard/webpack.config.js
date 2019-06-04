@@ -25,7 +25,7 @@ module.exports = env => ({
       {
         enforce: 'pre',
         test: /\.jsx?$/,
-        exclude: /node_modules/,
+        exclude: path.resolve(__dirname, 'node_modules'),
         loader: 'eslint-loader',
         options: {
           emitWarning: env === 'dev',
@@ -33,11 +33,12 @@ module.exports = env => ({
       },
       {
         test: /\.js$|\.jsx?$/,
-        exclude: /node_modules/,
+        include: path.resolve(__dirname, 'src'),
+        exclude: path.resolve(__dirname, 'node_modules'),
         loader: 'babel-loader',
       },
       {
-        test: /\.css$|\.s[ac]ss$/,
+        test: /\.css$/,
         use: [
           'style-loader',
           'css-loader',
@@ -46,12 +47,6 @@ module.exports = env => ({
             options: {
               sourceMap: true,
               plugins: () => [autoprefixer],
-            },
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true,
             },
           },
         ],
@@ -76,7 +71,7 @@ module.exports = env => ({
   },
   resolve: {
     modules: [path.resolve(__dirname, 'node_modules'), path.resolve(__dirname, 'src/material_kit')],
-    extensions: ['.js', '.jsx', '.scss'],
+    extensions: ['.js', '.jsx'],
   },
   plugins: [
     new webpack.EnvironmentPlugin(Object.keys(process.env)),

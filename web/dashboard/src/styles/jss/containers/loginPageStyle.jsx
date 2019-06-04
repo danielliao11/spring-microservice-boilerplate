@@ -1,6 +1,11 @@
 import { container, whiteColor, darkGrayColor } from '../../../material_kit/assets/jss/material-kit-react';
 
 const loginPageStyle = {
+  '@global': {
+    body: {
+      margin: 0,
+    },
+  },
   container: {
     ...container,
     zIndex: '2',

@@ -9,8 +9,6 @@ import Layout from './layouts/Layout';
 import Login from './containers/Login';
 import routers from './routers';
 
-import './material_kit/assets/scss/material-kit-react.scss';
-
 const history = createBrowserHistory();
 
 authHydrate('Authorization', stores.authorization);
