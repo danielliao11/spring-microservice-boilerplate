@@ -1,24 +1,23 @@
 import React from 'react';
 import ReactPropTypes from 'prop-types';
+
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-import { Email, Lock } from '@material-ui/icons';
-// core components
+
+// static
 import tableStyle from '../../styles/jss/components/commons/tableStyle';
 
-const email = <Email />;
-
-function CustomTable({ ...props }) {
+const CustomTable = ({ ...props }) => {
   const {
     classes,
     tableHead,
-    tableData,
+    tableBody,
     tableHeaderColor,
+    tablePagination,
   } = props;
   return (
     <div className={classes.tableResponsive}>
@@ -37,29 +36,18 @@ function CustomTable({ ...props }) {
             </TableRow>
           </TableHead>
         ) : null}
-        <TableBody>
-          {tableData.map((tableBody, bodyKey) => (
-            <TableRow key={bodyKey}>
-              {tableBody.map((rowData, rowKey) => {
-                console.log(rowData);
-                return (
-                  <TableCell className={classes.tableCell} key={rowKey}>
-                    {rowData}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableBody>
+        {tableBody}
+        {tablePagination}
       </Table>
     </div>
   );
-}
+};
 
 CustomTable.defaultProps = {
   tableHeaderColor: 'gray',
-  tableHead: 'undefined',
-  tableData: [],
+  tableHead: [],
+  tableBody: (<div />),
+  tablePagination: (<div />),
 };
 
 CustomTable.propTypes = {
@@ -74,7 +62,8 @@ CustomTable.propTypes = {
     'gray',
   ]),
   tableHead: ReactPropTypes.arrayOf(ReactPropTypes.string),
-  tableData: ReactPropTypes.arrayOf(ReactPropTypes.arrayOf(ReactPropTypes.string)),
+  tableBody: ReactPropTypes.element,
+  tablePagination: ReactPropTypes.element,
 };
 
 export default withStyles(tableStyle)(CustomTable);
