@@ -2,6 +2,7 @@
 /* eslint-disable import/no-dynamic-require */
 import React from 'react';
 import ReactPropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -44,12 +45,14 @@ const NavBar = ({ ...props }) => {
         {routes
           .filter(route => route.show)
           .map(route => (
-            <ListItem button className={classes.listItem} key={route.name}>
-              <ListItemIcon className={classes.listItemIcon}>
-                {createIcon(route.iconName)}
-              </ListItemIcon>
-              <ListItemText primary={route.name} className={classes.liteItemText} />
-            </ListItem>
+            <Link to={route.path} className={classes.link}>
+              <ListItem button className={classes.listItem} key={route.name}>
+                <ListItemIcon className={classes.listItemIcon}>
+                  {createIcon(route.iconName)}
+                </ListItemIcon>
+                <ListItemText primary={route.name} className={classes.liteItemText} />
+              </ListItem>
+            </Link>
           ))}
       </List>
     </Paper>

@@ -7,8 +7,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import { Email, Lock } from '@material-ui/icons';
 // core components
 import tableStyle from '../../styles/jss/components/commons/tableStyle';
+
+const email = <Email />;
 
 function CustomTable({ ...props }) {
   const {
@@ -37,11 +40,14 @@ function CustomTable({ ...props }) {
         <TableBody>
           {tableData.map((tableBody, bodyKey) => (
             <TableRow key={bodyKey}>
-              {tableBody.map((rowData, rowKey) => (
-                <TableCell className={classes.tableCell} key={rowKey}>
-                  {rowData}
-                </TableCell>
-              ))}
+              {tableBody.map((rowData, rowKey) => {
+                console.log(rowData);
+                return (
+                  <TableCell className={classes.tableCell} key={rowKey}>
+                    {rowData}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           ))}
         </TableBody>

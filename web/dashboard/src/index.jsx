@@ -6,7 +6,7 @@ import { createBrowserHistory } from 'history';
 import * as stores from './stores';
 import { authHydrate } from './utils/localPersist';
 import Layout from './layouts/Layout';
-import Login from './containers/Login';
+import Login from './containers/LoginPage';
 import routers from './routers';
 
 const history = createBrowserHistory();

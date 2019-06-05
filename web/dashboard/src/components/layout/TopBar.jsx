@@ -16,7 +16,7 @@ import {
 } from '@material-ui/icons';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-// custom components
+// core components
 import SearchBar from './SearchBar';
 
 // static

@@ -1,37 +1,22 @@
 const layoutStyle = {
   '@global': {
-    html: {
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-    },
     body: {
-      width: '100%',
-      height: '100%',
-      display: 'flex',
       margin: 0,
-    },
-    '#app': {
-      width: '100%',
-      height: '100%',
-      display: 'flex',
     },
   },
   layout: {
+    top: 0,
     width: '100%',
-    height: '100%',
-    display: 'flex',
+    height: '100vh',
   },
   nav: {
-    flex: 1,
     width: '100%',
     height: '100%',
   },
   right: {
-    flex: 6,
-    flexDirection: 'column',
-    width: '100%',
-    height: '100%',
+    float: 'right',
+    width: 'calc(100% - 260px)',
+    position: 'relative',
   },
 };
 

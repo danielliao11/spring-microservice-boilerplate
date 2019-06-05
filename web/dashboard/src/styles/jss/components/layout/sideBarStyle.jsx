@@ -14,6 +14,7 @@ const sideBarStyle = {
     backgroundImage: `url(${bgImg})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
+    position: 'fixed',
     '&:after': {
       top: 0,
       left: 0,
@@ -50,6 +51,9 @@ const sideBarStyle = {
   list: {
     marginTop: 20,
     zIndex: 3,
+  },
+  link: {
+    textDecoration: 'none',
   },
   listItem: {
     '&:hover': {

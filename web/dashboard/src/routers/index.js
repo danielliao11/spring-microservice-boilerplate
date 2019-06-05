@@ -1,5 +1,5 @@
-import Home from '../containers/Home';
-import Resource from '../containers/Resource';
+import Home from '../containers/HomePage';
+import Resource from '../containers/ResourcePage';
 
 const routes = [
   {
