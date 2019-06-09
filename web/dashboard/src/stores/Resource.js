@@ -3,10 +3,19 @@ import resource from '../utils/resource';
 
 export default class Resource {
   @observable queryParam = {
-    pageNo: 1,
-    pageSize: 10,
+    pageNumber: 1,
+    pageSize: 20,
     sortedBy: '',
   }
+
+  tableHead = ['Name', 'CreatedAt']
+
+  @observable page = {
+    total: 0,
+    pages: 1,
+  }
+
+  @observable content = []
 
   @action.bound fetchPage(queryParam) {
     const data = {
@@ -18,6 +27,15 @@ export default class Resource {
   }
 
   @action.bound fetchPageSuccess(res) {
-    console.log(res);
+    this.page = res.data;
+    this.content = res.data.list;
+  }
+
+  @action.bound handleChangeRowsPerPage(e) {
+    this.queryParam.pageSize = e.target.value;
+  }
+
+  @action.bound handleChangePage(e, page) {
+    this.queryParam.pageNumber = page;
   }
 }

@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactPropTypes from 'prop-types';
+import { PropTypes } from 'mobx-react';
 
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
+import { TableFooter, TableRow, TablePagination } from '@material-ui/core';
 
 // core components
 import Card from '../../material_kit/components/Card/Card';
@@ -15,14 +17,34 @@ import Table from './Table';
 // static
 import tableCardStyle from '../../styles/jss/components/commons/tableCardStyle';
 
+const TableCardPagination = ({ ...props }) => {
+  const { tablePaginationStore } = props;
+  return (
+    <TableFooter>
+      <TableRow>
+        <TablePagination
+          rowsPerPageOptions={[10, 20, 50]}
+          component="div"
+          count={tablePaginationStore.page.total}
+          rowsPerPage={tablePaginationStore.queryParam.pageSize}
+          page={tablePaginationStore.page.pages - 1}
+          backIconButtonProps={{
+            'aria-label': 'Previous Page',
+          }}
+          nextIconButtonProps={{
+            'aria-label': 'Next Page',
+          }}
+          onChangePage={(e, page) => tablePaginationStore.handleChangePage(e, page)}
+          onChangeRowsPerPage={e => tablePaginationStore.handleChangeRowsPerPage(e)}
+        />
+      </TableRow>
+    </TableFooter>
+  );
+};
+
 const TableCard = ({ ...props }) => {
   const {
-    classes,
-    cardTitle,
-    cardComment,
-    tableHead,
-    tableBody,
-    tablePagination,
+    classes, cardTitle, cardDescription, tableBody, tablePaginationStore,
   } = props;
   return (
     <GridContainer className={classes.tableContainer}>
@@ -31,15 +53,15 @@ const TableCard = ({ ...props }) => {
           <CardHeader color="primary">
             <h4 className={classes.cardTitleWhite}>{cardTitle}</h4>
             <p className={classes.cardCategoryWhite}>
-              {cardComment}
+              {cardDescription}
             </p>
           </CardHeader>
           <CardBody>
             <Table
               tableHeaderColor="primary"
-              tableHead={tableHead}
+              tableHead={tablePaginationStore.tableHead}
               tableBody={tableBody}
-              tablePagination={tablePagination}
+              tablePagination={<TableCardPagination tablePaginationStore={tablePaginationStore} />}
             />
           </CardBody>
         </Card>
@@ -50,19 +72,20 @@ const TableCard = ({ ...props }) => {
 
 TableCard.defaultProps = {
   cardTitle: 'Title',
-  cardComment: 'This is comment',
-  tableHead: [],
+  cardDescription: 'This is comment',
   tableBody: (<div />),
-  tablePagination: (<div />),
 };
 
 TableCard.propTypes = {
   cardTitle: ReactPropTypes.string,
-  cardComment: ReactPropTypes.string,
+  cardDescription: ReactPropTypes.string,
   classes: ReactPropTypes.shape().isRequired,
-  tableHead: ReactPropTypes.arrayOf(ReactPropTypes.string),
   tableBody: ReactPropTypes.element,
-  tablePagination: ReactPropTypes.element,
+  tablePaginationStore: PropTypes.observableObject.isRequired,
+};
+
+TableCardPagination.propTypes = {
+  tablePaginationStore: PropTypes.observableObject.isRequired,
 };
 
 export default withStyles(tableCardStyle)(TableCard);

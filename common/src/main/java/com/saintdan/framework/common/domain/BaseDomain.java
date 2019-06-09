@@ -62,7 +62,7 @@ public abstract class BaseDomain<M extends CommonMapper<T>, T>  {
     Class<T> clazz = (Class)((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     Example example = new Example(clazz);
     param2Criteria(param, example);
-    PageHelper.startPage(param.getPageNo(), param.getPageSize());
+    PageHelper.startPage(param.getPageNumber(), param.getPageSize());
     List<T> list = this.findAllByExample(example);
     return new PageInfo<>(list);
   }

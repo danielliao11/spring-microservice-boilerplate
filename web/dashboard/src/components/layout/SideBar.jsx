@@ -7,14 +7,7 @@ import { Link } from 'react-router-dom';
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
 import {
-  Avatar,
-  Divider,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-  Typography,
+  Avatar, Divider, List, ListItem, ListItemIcon, ListItemText, Paper, Typography,
 } from '@material-ui/core';
 
 // static

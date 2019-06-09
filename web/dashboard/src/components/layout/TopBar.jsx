@@ -3,16 +3,10 @@ import ReactPropTypes from 'prop-types';
 
 // @material-ui/core components
 import {
-  AppBar,
-  Badge,
-  IconButton,
-  Toolbar,
-  Typography,
+  AppBar, Badge, IconButton, Toolbar, Typography,
 } from '@material-ui/core';
 import {
-  AccountCircle,
-  Mail,
-  Notifications,
+  AccountCircle, Mail, Notifications,
 } from '@material-ui/icons';
 import withStyles from '@material-ui/core/styles/withStyles';
 

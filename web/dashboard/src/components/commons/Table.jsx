@@ -3,32 +3,27 @@ import ReactPropTypes from 'prop-types';
 
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
+import {
+  Table, TableHead, TableRow, TableCell,
+} from '@material-ui/core';
 
 // static
 import tableStyle from '../../styles/jss/components/commons/tableStyle';
 
 const CustomTable = ({ ...props }) => {
   const {
-    classes,
-    tableHead,
-    tableBody,
-    tableHeaderColor,
-    tablePagination,
+    classes, tableHead, tableBody, tableHeaderColor, tablePagination,
   } = props;
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
         {tableHead !== undefined ? (
-          <TableHead className={classes[`${tableHeaderColor}'TableHeader'`]}>
+          <TableHead className={classes[`${tableHeaderColor}TableHeader`]}>
             <TableRow>
-              {tableHead.map((head, headKey) => (
+              {tableHead.map(head => (
                 <TableCell
-                  className={`${classes.tableCell}' '${classes.tableHeadCell}`}
-                  key={headKey}
+                  className={`${classes.tableCell} ${classes.tableHeadCell}`}
+                  key={head}
                 >
                   {head}
                 </TableCell>
