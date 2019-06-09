@@ -15,6 +15,7 @@ public interface CommonsConstant {
   String CURRENT_USER_NAME = "currentUserName";
   String CREATED_BY = "createdBy";
   String CREATED_AT = "createdAt";
+  String SORTED_BY = "sortedBy";
   String VERSION = "version";
   String LAST_MODIFIED_BY = "lastModifiedBy";
   String LAST_MODIFIED_At = "lastModifiedAt";

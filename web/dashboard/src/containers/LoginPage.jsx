@@ -46,7 +46,8 @@ class LoginPage extends React.Component {
       .then((res) => {
         authorization.setToken(res);
         history.push('/dashboard');
-      });
+      })
+      .catch(error => console.log(error.code));
   }
 
   render() {

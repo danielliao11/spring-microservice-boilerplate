@@ -11,7 +11,14 @@ import TableCard from '../components/commons/TableCard';
 // static
 import resourcePageStyle from '../styles/jss/containers/resourcePageStyle';
 
+@inject('resource')
+@observer
 class ResourcePage extends React.Component {
+  componentDidMount() {
+    const { resource } = this.props;
+    setTimeout(() => resource.fetchPage(), 500);
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -22,6 +29,10 @@ class ResourcePage extends React.Component {
 
 ResourcePage.propTypes = {
   classes: ReactPropTypes.shape().isRequired,
+};
+
+ResourcePage.wrappedComponent.propTypes = {
+  resource: PropTypes.observableObject.isRequired,
 };
 
 export default withStyles(resourcePageStyle)(ResourcePage);

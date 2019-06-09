@@ -52,7 +52,7 @@ public class BaseParam implements Serializable {
   @ApiModelProperty(hidden = true)
   @Transient
   @JsonIgnore
-  private String sortBy;
+  private String sortedBy;
 
   @ApiModelProperty(hidden = true)
   @Transient
@@ -63,7 +63,7 @@ public class BaseParam implements Serializable {
   public Map<String, Object> getBaseFields() {
     baseFields.put("pageNo", pageNo);
     baseFields.put("pageSize", pageSize);
-    baseFields.put("sortBy", sortBy);
+    baseFields.put("sortedBy", sortedBy);
     baseFields.put("sign", sign);
     return baseFields;
   }

@@ -11,7 +11,7 @@ import routers from './routers';
 
 const history = createBrowserHistory();
 
-authHydrate('Authorization', stores.authorization);
+authHydrate('Authorization', stores.authorization).then(() => stores.authorization.init());
 
 function App() {
   return (

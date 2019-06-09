@@ -8,6 +8,9 @@ export default class Authorization {
   @observable cardAnimaton = '';
 
   @action.bound init() {
+    if (this.bearerToken !== '' && !this.bearerToken.includes('undefined')) {
+      cache.setToken(this.bearerToken);
+    }
     this.cardAnimaton = 'cardHidden';
   }
 

@@ -1,11 +1,11 @@
 package com.saintdan.framework.common.domain;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.saintdan.framework.common.constant.CommonsConstant;
 import com.saintdan.framework.common.mapper.CommonMapper;
 import com.saintdan.framework.common.param.BaseParam;
 import com.saintdan.framework.common.tools.SpringContextUtils;
-import com.saintdan.framework.common.vo.Page;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
@@ -58,17 +58,13 @@ public abstract class BaseDomain<M extends CommonMapper<T>, T>  {
   }
 
   @SuppressWarnings("unchecked")
-  public Page<T> page(BaseParam param) {
+  public PageInfo<T> page(BaseParam param) {
     Class<T> clazz = (Class)((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     Example example = new Example(clazz);
     param2Criteria(param, example);
-    return page(param.getPageNo(), param.getPageSize(), example);
-  }
-
-  public Page<T> page(int pageNo, int pageSize, Example example) {
-    com.github.pagehelper.Page<Object> result = PageHelper.startPage(pageNo, pageSize);
+    PageHelper.startPage(param.getPageNo(), param.getPageSize());
     List<T> list = this.findAllByExample(example);
-    return Page.<T>builder().total(result.getTotal()).contents(list).build();
+    return new PageInfo<>(list);
   }
 
   /**
@@ -83,8 +79,8 @@ public abstract class BaseDomain<M extends CommonMapper<T>, T>  {
       Arrays.stream(param.getClass().getFields())
           .forEach(field -> {
             if (param.getBaseFields().containsKey(field.getName())) {
-              String s = field.toString();
-              if (s.contains("[") || s.contains("]")) {
+              if (field.getName().equals(CommonsConstant.SORTED_BY)) {
+                String s = field.toString();
                 // sort field -> crtTime:[desc],id:[asc]
                 Arrays.asList(s.split(",")).forEach(sortStr -> {
                   // sortStr -> crtTime:[desc]

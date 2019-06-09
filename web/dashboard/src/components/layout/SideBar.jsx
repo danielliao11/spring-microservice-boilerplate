@@ -30,7 +30,7 @@ const createIcon = (icon) => {
   return React.createElement(resolved);
 };
 
-const NavBar = ({ ...props }) => {
+const SideBar = ({ ...props }) => {
   const { classes, routes } = props;
   return (
     <Paper className={classes.paper}>
@@ -45,7 +45,7 @@ const NavBar = ({ ...props }) => {
         {routes
           .filter(route => route.show)
           .map(route => (
-            <Link to={route.path} className={classes.link}>
+            <Link to={route.path} className={classes.link} key={route.name}>
               <ListItem button className={classes.listItem} key={route.name}>
                 <ListItemIcon className={classes.listItemIcon}>
                   {createIcon(route.iconName)}
@@ -59,9 +59,9 @@ const NavBar = ({ ...props }) => {
   );
 };
 
-NavBar.propTypes = {
+SideBar.propTypes = {
   classes: ReactPropTypes.shape().isRequired,
   routes: ReactPropTypes.arrayOf(ReactPropTypes.shape()).isRequired,
 };
 
-export default withStyles(sideBarStyle)(NavBar);
+export default withStyles(sideBarStyle)(SideBar);
