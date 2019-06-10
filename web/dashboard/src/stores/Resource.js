@@ -8,7 +8,7 @@ export default class Resource {
     sortedBy: '',
   }
 
-  tableHead = ['Name', 'CreatedAt']
+  tableHeaderData = ['Name', 'Description', 'Status', 'CreatedAt']
 
   @observable page = {
     total: 0,
@@ -21,9 +21,9 @@ export default class Resource {
     const data = {
       param: queryParam,
     };
-    resource
-      .get('/management/resources/page', data)
-      .then(this.fetchPageSuccess);
+    // resource
+    //   .get('/management/resources/page', data)
+    //   .then(this.fetchPageSuccess);
   }
 
   @action.bound fetchPageSuccess(res) {

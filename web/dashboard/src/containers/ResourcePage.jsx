@@ -19,6 +19,8 @@ const ResourceTableBody = ({ ...props }) => {
       {resource.content.map(row => (
         <TableRow key={row.id}>
           <TableCell>{row.name}</TableCell>
+          <TableCell>{row.description}</TableCell>
+          <TableCell>{row.status}</TableCell>
           <TableCell>{row.createdAt}</TableCell>
         </TableRow>
       ))}
@@ -35,21 +37,17 @@ class ResourcePage extends React.Component {
   }
 
   render() {
-    const { classes, resource } = this.props;
+    const { resource } = this.props;
     return (
       <TableCard
         cardTitle="Resource"
         cardDescription="Access resource"
         tableBody={<ResourceTableBody resource={resource} />}
-        tablePaginationStore={resource}
+        tableStore={resource}
       />
     );
   }
 }
-
-ResourcePage.propTypes = {
-  classes: ReactPropTypes.shape().isRequired,
-};
 
 ResourcePage.wrappedComponent.propTypes = {
   resource: PropTypes.observableObject.isRequired,

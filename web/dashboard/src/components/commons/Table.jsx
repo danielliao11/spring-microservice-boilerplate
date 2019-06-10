@@ -10,26 +10,37 @@ import {
 // static
 import tableStyle from '../../styles/jss/components/commons/tableStyle';
 
+const CustomTableHeader = ({ ...props }) => {
+  const { classes, tableHeaderColor, tableHeaderData } = props;
+  return (
+    <TableHead className={classes[`${tableHeaderColor}TableHeader`]}>
+      <TableRow>
+        {tableHeaderData.map(head => (
+          <TableCell
+            className={`${classes.tableCell} ${classes.tableHeadCell}`}
+            key={head}
+          >
+            {head}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+};
+
 const CustomTable = ({ ...props }) => {
   const {
-    classes, tableHead, tableBody, tableHeaderColor, tablePagination,
+    classes, tableHeaderData, tableBody, tableHeaderColor, tablePagination,
   } = props;
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
-        {tableHead !== undefined ? (
-          <TableHead className={classes[`${tableHeaderColor}TableHeader`]}>
-            <TableRow>
-              {tableHead.map(head => (
-                <TableCell
-                  className={`${classes.tableCell} ${classes.tableHeadCell}`}
-                  key={head}
-                >
-                  {head}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
+        {tableHeaderData !== undefined ? (
+          <CustomTableHeader
+            classes={classes}
+            tableHeaderColor={tableHeaderColor}
+            tableHeaderData={tableHeaderData}
+          />
         ) : null}
         {tableBody}
         {tablePagination}
@@ -38,9 +49,28 @@ const CustomTable = ({ ...props }) => {
   );
 };
 
+CustomTableHeader.defaultProps = {
+  tableHeaderColor: 'gray',
+  tableHeaderData: [],
+};
+
+CustomTableHeader.propTypes = {
+  classes: ReactPropTypes.shape().isRequired,
+  tableHeaderColor: ReactPropTypes.oneOf([
+    'warning',
+    'primary',
+    'danger',
+    'success',
+    'info',
+    'rose',
+    'gray',
+  ]),
+  tableHeaderData: ReactPropTypes.arrayOf(ReactPropTypes.string),
+};
+
 CustomTable.defaultProps = {
   tableHeaderColor: 'gray',
-  tableHead: [],
+  tableHeaderData: [],
   tableBody: (<div />),
   tablePagination: (<div />),
 };
@@ -56,7 +86,7 @@ CustomTable.propTypes = {
     'rose',
     'gray',
   ]),
-  tableHead: ReactPropTypes.arrayOf(ReactPropTypes.string),
+  tableHeaderData: ReactPropTypes.arrayOf(ReactPropTypes.string),
   tableBody: ReactPropTypes.element,
   tablePagination: ReactPropTypes.element,
 };
