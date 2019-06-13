@@ -43,7 +43,7 @@ class ResourcePage extends React.Component {
         cardTitle="Resource"
         cardDescription="Access resource"
         tableBody={<ResourceTableBody resource={resource} />}
-        tableStore={resource}
+        store={resource}
       />
     );
   }

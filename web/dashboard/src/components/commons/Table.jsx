@@ -43,8 +43,8 @@ const CustomTable = ({ ...props }) => {
           />
         ) : null}
         {tableBody}
-        {tablePagination}
       </Table>
+      {tablePagination}
     </div>
   );
 };

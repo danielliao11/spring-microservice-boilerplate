@@ -8,7 +8,7 @@ package com.saintdan.framework.common.enums;
 public enum ObjectStatus implements EnumWithCode {
 
   INVALID(0),
-  VALID(1);
+  VALID(10);
 
   private final Integer code;
 

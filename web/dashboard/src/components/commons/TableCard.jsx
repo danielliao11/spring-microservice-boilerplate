@@ -20,7 +20,7 @@ import tableCardStyle from '../../styles/jss/components/commons/tableCardStyle';
 
 const TableCard = ({ ...props }) => {
   const {
-    classes, cardTitle, cardDescription, tableBody, tableStore,
+    classes, cardTitle, cardDescription, tableBody, store,
   } = props;
   return (
     <GridContainer className={classes.tableContainer}>
@@ -33,12 +33,12 @@ const TableCard = ({ ...props }) => {
             </p>
           </CardHeader>
           <CardBody>
-            <TableToolBar />
+            <TableToolBar store={store} />
             <Table
               tableHeaderColor="primary"
-              tableHeaderData={tableStore.tableHeaderData}
+              tableHeaderData={store.tableHeaderData}
               tableBody={tableBody}
-              tablePagination={<TableCardPagination tableStore={tableStore} />}
+              tablePagination={<TableCardPagination tableStore={store} />}
             />
           </CardBody>
         </Card>
@@ -58,7 +58,7 @@ TableCard.propTypes = {
   cardDescription: ReactPropTypes.string,
   classes: ReactPropTypes.shape().isRequired,
   tableBody: ReactPropTypes.element,
-  tableStore: PropTypes.observableObject.isRequired,
+  store: PropTypes.observableObject.isRequired,
 };
 
 export default withStyles(tableCardStyle)(TableCard);
