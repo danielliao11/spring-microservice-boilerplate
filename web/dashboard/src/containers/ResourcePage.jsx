@@ -4,29 +4,13 @@ import { observer, inject, PropTypes } from 'mobx-react';
 
 // @material-ui/core components
 import withStyles from '@material-ui/core/styles/withStyles';
-import { TableBody, TableRow, TableCell } from '@material-ui/core';
 
 // core
 import TableCard from '../components/commons/TableCard';
+import TableBody from '../components/resource/Body';
 
 // static
 import resourcePageStyle from '../styles/jss/containers/resourcePageStyle';
-
-const ResourceTableBody = ({ ...props }) => {
-  const { resource } = props;
-  return (
-    <TableBody>
-      {resource.content.map(row => (
-        <TableRow key={row.id}>
-          <TableCell>{row.name}</TableCell>
-          <TableCell>{row.description}</TableCell>
-          <TableCell>{row.status}</TableCell>
-          <TableCell>{row.createdAt}</TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-  );
-};
 
 @inject('resource')
 @observer
@@ -42,7 +26,7 @@ class ResourcePage extends React.Component {
       <TableCard
         cardTitle="Resource"
         cardDescription="Access resource"
-        tableBody={<ResourceTableBody resource={resource} />}
+        tableBody={<TableBody content={resource.content} />}
         store={resource}
       />
     );
@@ -50,10 +34,6 @@ class ResourcePage extends React.Component {
 }
 
 ResourcePage.wrappedComponent.propTypes = {
-  resource: PropTypes.observableObject.isRequired,
-};
-
-ResourceTableBody.propTypes = {
   resource: PropTypes.observableObject.isRequired,
 };
 
