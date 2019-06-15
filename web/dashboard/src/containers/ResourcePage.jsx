@@ -8,8 +8,10 @@ import withStyles from '@material-ui/core/styles/withStyles';
 // core
 import TableCard from '../components/commons/TableCard';
 import TableBody from '../components/resource/Body';
+import SearchBar from '../components/resource/Tool';
 
 // static
+import ObjectStatus from '../constants/ObjectStatus';
 import resourcePageStyle from '../styles/jss/containers/resourcePageStyle';
 
 @inject('resource')
@@ -27,6 +29,7 @@ class ResourcePage extends React.Component {
         cardTitle="Resource"
         cardDescription="Access resource"
         tableBody={<TableBody content={resource.content} />}
+        searchBar={<SearchBar array={ObjectStatus.array} />}
         store={resource}
       />
     );

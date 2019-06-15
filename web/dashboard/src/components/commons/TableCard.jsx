@@ -20,7 +20,7 @@ import tableCardStyle from '../../styles/jss/components/commons/tableCardStyle';
 
 const TableCard = ({ ...props }) => {
   const {
-    classes, cardTitle, cardDescription, tableBody, store,
+    classes, cardTitle, cardDescription, tableBody, searchBar, store,
   } = props;
   return (
     <GridContainer className={classes.tableContainer}>
@@ -33,7 +33,7 @@ const TableCard = ({ ...props }) => {
             </p>
           </CardHeader>
           <CardBody>
-            <TableToolBar store={store} />
+            <TableToolBar store={store} searchBar={searchBar} />
             <Table
               tableHeaderColor="primary"
               tableHeaderData={store.tableHeaderData}
@@ -51,6 +51,7 @@ TableCard.defaultProps = {
   cardTitle: 'Title',
   cardDescription: 'This is comment',
   tableBody: (<div />),
+  searchBar: (<div />),
 };
 
 TableCard.propTypes = {
@@ -58,6 +59,7 @@ TableCard.propTypes = {
   cardDescription: ReactPropTypes.string,
   classes: ReactPropTypes.shape().isRequired,
   tableBody: ReactPropTypes.element,
+  searchBar: ReactPropTypes.element,
   store: PropTypes.observableObject.isRequired,
 };
 

@@ -7,15 +7,6 @@ const TableToolBarStyle = {
   addBtn: {
     color: primaryColor,
   },
-  searchGroup: {
-    display: 'flex',
-    marginLeft: 32,
-    flexWrap: 'wrap',
-    width: '100%',
-  },
-  searchItem: {
-    marginLeft: 32,
-  },
 };
 
 export default TableToolBarStyle;
