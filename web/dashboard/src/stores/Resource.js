@@ -3,6 +3,8 @@ import resource from '../utils/resource';
 
 export default class Resource {
   @observable queryParam = {
+    name: '',
+    status: '',
     pageNumber: 1,
     pageSize: 20,
     sortedBy: '',
@@ -33,9 +35,15 @@ export default class Resource {
 
   @action.bound handleChangeRowsPerPage(e) {
     this.queryParam.pageSize = e.target.value;
+    this.fetchPage(this.queryParam);
   }
 
   @action.bound handleChangePage(e, page) {
     this.queryParam.pageNumber = page;
+    this.fetchPage(this.queryParam);
+  }
+
+  @action.bound handParamSearch(e) {
+    console.log(e);
   }
 }

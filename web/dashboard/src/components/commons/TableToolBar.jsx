@@ -3,21 +3,33 @@ import ReactPropTypes from 'prop-types';
 import { PropTypes } from 'mobx-react';
 
 // @material-ui/core components
-import withStyles from '@material-ui/core/styles/withStyles';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import { Fab, Toolbar } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 
-// static
-import TableToolBarStyle from '../../styles/jss/components/commons/tableToolBarStyle';
+const useStyles = makeStyles(theme => ({
+  toolBar: {
+    padding: 0,
+  },
+  fab: {
+    marginTop: theme.spacing(2.5),
+  },
+  searchBar: {
+    marginLeft: theme.spacing(1.5),
+  },
+}));
 
 const TableToolBar = ({ ...props }) => {
-  const { classes, store, searchBar } = props;
+  const classes = useStyles();
+  const { store, searchBar } = props;
   return (
     <Toolbar className={classes.toolBar}>
-      <Fab size="small" color="primary" aria-label="Add" className={classes.margin}>
+      <Fab size="small" color="primary" aria-label="Add" className={classes.fab}>
         <Add />
       </Fab>
-      {searchBar}
+      <div className={classes.searchBar}>
+        {searchBar}
+      </div>
     </Toolbar>
   );
 };
@@ -27,9 +39,8 @@ TableToolBar.defaultProps = {
 };
 
 TableToolBar.propTypes = {
-  classes: ReactPropTypes.shape().isRequired,
   searchBar: ReactPropTypes.element,
   store: PropTypes.observableObject.isRequired,
 };
 
-export default withStyles(TableToolBarStyle)(TableToolBar);
+export default TableToolBar;

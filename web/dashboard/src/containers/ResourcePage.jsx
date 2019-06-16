@@ -29,7 +29,7 @@ class ResourcePage extends React.Component {
         cardTitle="Resource"
         cardDescription="Access resource"
         tableBody={<TableBody content={resource.content} />}
-        searchBar={<SearchBar array={ObjectStatus.array} />}
+        searchBar={<SearchBar array={ObjectStatus.array} store={resource} />}
         store={resource}
       />
     );
