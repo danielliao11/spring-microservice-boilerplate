@@ -28,13 +28,13 @@ const TableToolBar = ({ ...props }) => {
   const { store, searchBar } = props;
   return (
     <Toolbar className={classes.toolBar}>
-      <Fab size="small" color="primary" aria-label="Add" className={classes.fab}>
+      <Fab size="small" color="primary" aria-label="Add" className={classes.fab} onClick={() => store.handleModal(true)}>
         <Add />
       </Fab>
       <div className={classes.searchBar}>
         {searchBar}
       </div>
-      <IconButton color="inherit" className={classes.clear} aria-label="Clear search items" onClick={() => store.clearSearch()}>
+      <IconButton color="inherit" className={classes.clear} onClick={() => store.clearSearch()}>
         <Clear />
       </IconButton>
     </Toolbar>

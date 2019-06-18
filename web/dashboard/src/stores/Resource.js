@@ -19,6 +19,8 @@ export default class Resource {
 
   @observable content = []
 
+  @observable modalOpen = false;
+
   @action.bound fetchPage() {
     const data = {
       param: this.queryParam,
@@ -57,5 +59,9 @@ export default class Resource {
       pageSize: 20,
       sortedBy: '',
     };
+  }
+
+  @action.bound handleModal(open) {
+    this.modalOpen = open;
   }
 }

@@ -20,7 +20,7 @@ import tableCardStyle from '../../styles/jss/components/commons/tableCardStyle';
 
 const TableCard = ({ ...props }) => {
   const {
-    classes, cardTitle, cardDescription, tableBody, searchBar, store,
+    classes, cardTitle, cardDescription, edit, tableBody, searchBar, store,
   } = props;
   return (
     <GridContainer className={classes.tableContainer}>
@@ -43,6 +43,7 @@ const TableCard = ({ ...props }) => {
           </CardBody>
         </Card>
       </GridItem>
+      {edit}
     </GridContainer>
   );
 };
