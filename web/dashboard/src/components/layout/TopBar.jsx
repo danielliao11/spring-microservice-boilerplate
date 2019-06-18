@@ -12,16 +12,17 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import SearchBar from './SearchBar';
 
 // static
+import routes from '../../routers';
 import topBarStyle from '../../styles/jss/components/layout/topBarStyle';
 
 const TopBar = ({ ...props }) => {
-  const { classes, notification } = props;
+  const { classes, location, notification } = props;
   return (
     <div className={classes.container}>
       <AppBar position="static" color="default">
         <Toolbar>
           <Typography variant="h5" className={classes.typography}>
-            Dashboard
+            {routes.find(r => r.path === location.pathname).name}
           </Typography>
           <div className={classes.grow} />
           <SearchBar />
@@ -48,6 +49,9 @@ const TopBar = ({ ...props }) => {
 
 TopBar.propTypes = {
   classes: ReactPropTypes.shape().isRequired,
+  location: ReactPropTypes.shape({
+    pathname: ReactPropTypes.string,
+  }).isRequired,
   notification: ReactPropTypes.shape().isRequired,
 };
 

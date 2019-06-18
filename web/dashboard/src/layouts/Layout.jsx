@@ -21,7 +21,6 @@ class Layout extends React.Component {
     const {
       location, children, classes, authorization, configuration, notification,
     } = this.props;
-    console.log(location);
     // if (!authorization.authorized) {
     //   return <Redirect to="/login" />;
     // }
@@ -29,7 +28,7 @@ class Layout extends React.Component {
       <div className={classes.layout}>
         <SideBar routes={routes} className={classes.nav} />
         <div className={classes.right}>
-          <TopBar notification={notification} />
+          <TopBar notification={notification} location={location} />
           {children}
         </div>
       </div>
