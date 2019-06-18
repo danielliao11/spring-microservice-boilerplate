@@ -5,7 +5,7 @@ import { PropTypes } from 'mobx-react';
 // @material-ui/core components
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import {
-  FormControl, FormHelperText, InputLabel, MenuItem, Select,
+  FormControl, InputLabel, MenuItem, Select,
 } from '@material-ui/core';
 
 // core component

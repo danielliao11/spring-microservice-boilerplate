@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactPropTypes from 'prop-types';
 import { observer, inject, PropTypes } from 'mobx-react';
 
 // @material-ui/core components
