@@ -5,7 +5,7 @@ import { PropTypes } from 'mobx-react';
 // @material-ui/core components
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import {
-  FormControl, InputLabel, MenuItem, Select,
+  FormControl, FormHelperText, InputLabel, MenuItem, Select,
 } from '@material-ui/core';
 
 // core component
@@ -18,6 +18,7 @@ const useStyles = makeStyles(theme => ({
   },
   margin: {
     margin: theme.spacing(1),
+    minWidth: 100,
   },
 }));
 
@@ -27,13 +28,13 @@ const Tool = ({ ...props }) => {
   return (
     <form className={classes.root} autoComplete="off">
       <FormControl className={classes.margin}>
-        <InputLabel htmlFor="name-input">Name</InputLabel>
-        <BootstrapInput id="name-input" value={store.queryParam.name} onChange={e => store.handParamSearch(e)} />
+        <InputLabel htmlFor="name-input" shrink>Name</InputLabel>
+        <BootstrapInput id="name-input" name="name" onChange={e => store.handParamSearch(e)} />
       </FormControl>
       <FormControl className={classes.margin}>
-        <InputLabel htmlFor="status-select">Status</InputLabel>
+        <InputLabel htmlFor="status-select" shrink>Status</InputLabel>
         <Select
-          value=""
+          value={store.queryParam.status}
           onChange={e => store.handParamSearch(e)}
           input={<BootstrapInput name="status" id="status-select" />}
         >

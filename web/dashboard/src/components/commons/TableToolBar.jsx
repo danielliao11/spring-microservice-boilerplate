@@ -4,8 +4,8 @@ import { PropTypes } from 'mobx-react';
 
 // @material-ui/core components
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { Fab, Toolbar } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { Fab, IconButton, Toolbar } from '@material-ui/core';
+import { Add, Clear } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   toolBar: {
@@ -16,6 +16,10 @@ const useStyles = makeStyles(theme => ({
   },
   searchBar: {
     marginLeft: theme.spacing(1.5),
+  },
+  clear: {
+    marginLeft: theme.spacing(1),
+    marginTop: theme.spacing(2.5),
   },
 }));
 
@@ -30,6 +34,9 @@ const TableToolBar = ({ ...props }) => {
       <div className={classes.searchBar}>
         {searchBar}
       </div>
+      <IconButton color="inherit" className={classes.clear} aria-label="Clear search items" onClick={() => store.clearSearch()}>
+        <Clear />
+      </IconButton>
     </Toolbar>
   );
 };

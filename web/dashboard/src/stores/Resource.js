@@ -19,9 +19,9 @@ export default class Resource {
 
   @observable content = []
 
-  @action.bound fetchPage(queryParam) {
+  @action.bound fetchPage() {
     const data = {
-      param: queryParam,
+      param: this.queryParam,
     };
     // resource
     //   .get('/management/resources/page', data)
@@ -44,6 +44,18 @@ export default class Resource {
   }
 
   @action.bound handParamSearch(e) {
-    console.log(e);
+    e.persist();
+    this.queryParam[e.target.name] = e.target.value;
+    this.fetchPage(this.queryParam);
+  }
+
+  @action.bound clearSearch() {
+    this.queryParam = {
+      name: '',
+      status: '',
+      pageNumber: 1,
+      pageSize: 20,
+      sortedBy: '',
+    };
   }
 }

@@ -21,6 +21,7 @@ class Layout extends React.Component {
     const {
       location, children, classes, authorization, configuration, notification,
     } = this.props;
+    console.log(location);
     // if (!authorization.authorized) {
     //   return <Redirect to="/login" />;
     // }
