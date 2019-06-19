@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactPropTypes from 'prop-types';
+import { observer, inject, PropTypes } from 'mobx-react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Modal, Typography } from '@material-ui/core';
-import { PropTypes } from 'mobx-react';
 
 const getModalStyle = () => {
   const top = 50;
@@ -26,28 +25,31 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Edit = ({ ...props }) => {
-  const { store } = props;
-  const [modalStyle] = React.useState(getModalStyle);
-  const classes = useStyles();
-  console.log(store.modalOpen);
-  return (
-    <Modal open={store.modalOpen}>
-      <div style={modalStyle} className={classes.paper}>
-        <Typography variant="h6" id="modal-title">
-          Text in a modal
-        </Typography>
-        <Typography variant="subtitle1" id="simple-modal-description">
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
-        <Button onClick={() => store.handleModal(false)}>Close</Button>
-      </div>
-    </Modal>
-  );
-};
+@inject('resource')
+@observer
+class Edit extends React.Component {
+  render() {
+    const { resource } = this.props;
+    const [modalStyle] = React.useState(getModalStyle);
+    const classes = useStyles();
+    return (
+      <Modal open={resource.modalOpen}>
+        <div style={modalStyle} className={classes.paper}>
+          <Typography variant="h6" id="modal-title">
+            Text in a modal
+          </Typography>
+          <Typography variant="subtitle1" id="simple-modal-description">
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+          <Button onClick={() => resource.handleModal(false)}>Close</Button>
+        </div>
+      </Modal>
+    );
+  }
+}
 
 Edit.propTypes = {
-  store: PropTypes.observableObject.isRequired,
+  resource: PropTypes.observableObject.isRequired,
 };
 
 export default Edit;
