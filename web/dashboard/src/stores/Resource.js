@@ -10,6 +10,13 @@ export default class Resource {
     sortedBy: '',
   }
 
+  @observable form = {
+    id: 0,
+    name: '',
+    description: '',
+    status: 0,
+  }
+
   tableHeaderData = ['Name', 'Description', 'Status', 'CreatedAt']
 
   @observable page = {
@@ -63,5 +70,19 @@ export default class Resource {
 
   @action.bound handleModal(open) {
     this.modalOpen = open;
+  }
+
+  @action.bound handleSubmit() {
+    if (this.form.id) {
+      resource
+        .put(`/management/resources${this.form.id}`, this.form)
+        .then(() => this.fetchPage())
+        .catch();
+    } else {
+      resource
+        .post('/management/resources', this.form)
+        .then(() => this.fetchPage())
+        .catch();
+    }
   }
 }

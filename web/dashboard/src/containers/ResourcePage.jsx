@@ -30,7 +30,15 @@ class ResourcePage extends React.Component {
         cardDescription="Access resource"
         tableBody={<TableBody content={resource.content} />}
         searchBar={<SearchBar array={ObjectStatus.array} store={resource} />}
-        edit={<Edit handleModal={resource.handleModal} modalOpen={resource.modalOpen} />}
+        edit={
+          (
+            <Edit
+              handleModal={resource.handleModal}
+              handleSubmit={resource.handleSubmit}
+              modalOpen={resource.modalOpen}
+            />
+          )
+        }
         store={resource}
       />
     );
